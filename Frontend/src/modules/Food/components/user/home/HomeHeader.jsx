@@ -32,12 +32,12 @@ import useNotificationInbox from "@food/hooks/useNotificationInbox";
 const tabs = [
   {
     id: "food",
-    name: "Food",
+    name: "Chotuu FoodWala",
     icon: "https://cdn-icons-png.flaticon.com/512/3075/3075977.png",
   },
   {
     id: "quick",
-    name: "Instamart",
+    name: "ChotuuMart",
     icon: "https://cdn-icons-png.flaticon.com/512/3724/3724720.png",
     badge: "15 mins",
   },
@@ -87,8 +87,8 @@ const isMeaningfulLocationValue = (value) => {
   const normalized = String(value || "").trim().toLowerCase();
   return Boolean(
     normalized &&
-      normalized !== "select location" &&
-      normalized !== "current location"
+    normalized !== "select location" &&
+    normalized !== "current location"
   );
 };
 
@@ -185,7 +185,7 @@ export default function HomeHeader({
     if (isFood) {
       const playPromise = video.play();
       if (playPromise?.catch) {
-        playPromise.catch(() => {});
+        playPromise.catch(() => { });
       }
       return;
     }
@@ -203,12 +203,12 @@ export default function HomeHeader({
       source: "broadcast",
       time: item.createdAt
         ? new Date(item.createdAt).toLocaleString("en-IN", {
-            day: "2-digit",
-            month: "short",
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: true,
-          })
+          day: "2-digit",
+          month: "short",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+        })
         : "Just now",
     }));
     return [...remoteItems, ...localItems].sort(
@@ -265,16 +265,15 @@ export default function HomeHeader({
 
   return (
     <motion.div
-      className={`relative transition-all duration-400 ${
-        isFood
+      className={`relative transition-all duration-400 ${isFood
           ? "min-h-[280px] overflow-hidden"
           : "min-h-[120px] overflow-visible"
-      }`}
+        }`}
       style={{ background: theme.topBg, color: theme.text }}
     >
       {headerVideoUrl && (
         <div className="absolute inset-0 z-0 flex justify-center overflow-hidden">
-            {/* Video temporarily removed to improve loading time
+          {/* Video temporarily removed to improve loading time
             <video
               ref={videoRef}
               src={headerVideoUrl}
@@ -289,13 +288,13 @@ export default function HomeHeader({
               }`}
             />
             */}
-          <div 
-            className="absolute inset-0 transition-colors duration-700" 
-            style={{ 
-              background: `linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 100%), ${theme.accent}` 
-            }} 
+          <div
+            className="absolute inset-0 transition-colors duration-700"
+            style={{
+              background: `linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 100%), ${theme.accent}`
+            }}
           />
-          <div 
+          <div
             className="absolute inset-0 transition-colors duration-700 opacity-30"
             style={{
               background: `radial-gradient(circle at 20% 30%, ${withAlpha(theme.accent, 0.4)}, transparent 70%)`
@@ -474,7 +473,7 @@ export default function HomeHeader({
                   {tab.badge}
                 </div>
               )}
-              
+
               <div
                 className={cn(
                   "absolute inset-x-0 bottom-0 transition-all duration-300",
@@ -490,13 +489,13 @@ export default function HomeHeader({
                 {/* Continuous Curve Effect (Swiggy Style) */}
                 {isActive && (
                   <>
-                    <div 
+                    <div
                       className="absolute bottom-0 -left-[14px] w-[14px] h-[14px] pointer-events-none"
                       style={{
                         background: `radial-gradient(circle at 0 0, transparent 14px, ${theme.activeBg} 0)`
                       }}
                     />
-                    <div 
+                    <div
                       className="absolute bottom-0 -right-[14px] w-[14px] h-[14px] pointer-events-none"
                       style={{
                         background: `radial-gradient(circle at 100% 0, transparent 14px, ${theme.activeBg} 0)`
