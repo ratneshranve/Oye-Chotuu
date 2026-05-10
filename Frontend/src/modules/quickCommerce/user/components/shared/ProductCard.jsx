@@ -159,11 +159,12 @@ const ProductCard = React.memo(
           className,
         )}
         onClick={handleProductClick}>
-        <div className={cn(
-          "flex flex-col h-full w-full rounded-xl overflow-hidden transition-all duration-500 product-card-container premium-wave-shimmer",
-          "bg-[#EBF2FF] border border-blue-100/50 shadow-sm",
-          "hover:shadow-md"
-        )}>
+        <div
+          className={cn(
+            "flex flex-col h-full w-full rounded-xl overflow-hidden transition-all duration-500 product-card-container premium-wave-shimmer",
+            "bg-[#FFF5F5] border border-red-100/50 shadow-sm",
+            "hover:shadow-md",
+          )}>
           {/* Top Image Section */}
           <div className="relative overflow-hidden w-full h-[90px] md:h-[110px] p-1 md:p-2">
             {/* Badge (Professional Tag) */}
@@ -220,7 +221,7 @@ const ProductCard = React.memo(
 
           {/* Content Section */}
           <div className={cn(
-            "flex flex-col flex-1 px-1.5 py-1 space-y-0.5 bg-[#EBF2FF] border-t border-blue-100/30 relative product-content-area transition-all duration-300",
+            "flex flex-col flex-1 px-1.5 py-1 space-y-0.5 bg-[#FFF5F5] border-t border-red-100/30 relative product-content-area transition-all duration-300",
           )}>
             <div className="space-y-0">
               <div className="flex items-center gap-1 text-[7.5px] md:text-[8px] text-slate-500 font-bold uppercase tracking-wider">
@@ -248,7 +249,7 @@ const ProductCard = React.memo(
               </div>
 
               {quantity > 0 ? (
-                <div className="flex items-center bg-[#0c831f] text-white rounded-lg md:rounded-xl shadow-md h-6 md:h-7.5 overflow-hidden ring-1 ring-[#0c831f]/20">
+                <div className="flex items-center bg-[#cc2532] text-white rounded-lg md:rounded-xl shadow-md h-6 md:h-7.5 overflow-hidden ring-1 ring-[#cc2532]/20">
                   <button
                     onClick={handleDecrement}
                     className="w-6 md:w-7.5 h-full hover:bg-black/10 transition-colors flex items-center justify-center border-r border-white/10">
@@ -267,8 +268,8 @@ const ProductCard = React.memo(
                 <button
                   onClick={handleAddToCart}
                   className={cn(
-                    "w-6 h-6 md:w-7.5 md:h-7.5 flex items-center justify-center bg-white border-[1px] border-[#0c831f] text-[#0c831f] rounded-lg md:rounded-xl shadow-sm transition-all duration-300 active:scale-95 font-bold",
-                    "hover:bg-[#0c831f] hover:text-white"
+                    "w-6 h-6 md:w-7.5 md:h-7.5 flex items-center justify-center bg-white border-[1px] border-[#cc2532] text-[#cc2532] rounded-lg md:rounded-xl shadow-sm transition-all duration-300 active:scale-95 font-bold",
+                    "hover:bg-[#cc2532] hover:text-white"
                   )}>
                   <Plus size={14} strokeWidth={3} />
                 </button>

@@ -172,7 +172,7 @@ export default function Home() {
   const [availabilityTick, setAvailabilityTick] = useState(Date.now());
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
   const [activeTab, setActiveTab] = useState("food");
-  const [quickThemeColor, setQuickThemeColor] = useState("#67c6f5");
+  const [quickThemeColor, setQuickThemeColor] = useState("#cc2532");
   const [showToast, setShowToast] = useState(false);
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
 

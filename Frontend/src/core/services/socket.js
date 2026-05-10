@@ -1,11 +1,25 @@
 import { io } from "socket.io-client";
 
-const SOCKET_URL = (
-    import.meta.env.VITE_SOCKET_URL ||
-    import.meta.env.VITE_API_BASE_URL ||
-    import.meta.env.VITE_API_URL ||
-    "http://localhost:5000/api/v1"
-).replace(/\/api(?:\/v\d+)?\/?$/, "");
+const getSocketUrl = () => {
+    const url = (
+        import.meta.env.VITE_SOCKET_URL ||
+        import.meta.env.VITE_API_BASE_URL ||
+        import.meta.env.VITE_API_URL ||
+        "http://localhost:5000/api/v1"
+    );
+
+    // If it's a relative URL (like /api/v1), we should use the current origin but with port 5000 (standard backend port in this project)
+    // or just default to localhost:5000 if we're in dev.
+    if (url.startsWith("/")) {
+        const port = import.meta.env.DEV ? "5000" : window.location.port;
+        return `${window.location.protocol}//${window.location.hostname}${port ? ":" + port : ""}`;
+    }
+
+    // Strip /api/v1 or similar from the end
+    return url.replace(/\/api(?:\/v\d+)?\/?$/, "");
+};
+
+const SOCKET_URL = getSocketUrl();
 
 class SocketService {
     socket = null;

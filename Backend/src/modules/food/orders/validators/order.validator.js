@@ -48,7 +48,7 @@ const pricingSchema = z.object({
 
 export function validateCalculateOrderDto(body) {
     const schema = z.object({
-        orderType: z.enum(['food', 'quick', 'mixed']).optional().default('food'),
+        orderType: z.enum(['food', 'quick', 'mixed']).optional(),
         items: z.array(orderItemSchema).min(1, 'At least one item required'),
         address: addressSchema.optional(),
         restaurantId: z.string().optional(),
@@ -61,28 +61,36 @@ export function validateCalculateOrderDto(body) {
         const hasFoodItems = data.items.some((item) => item.type === 'food');
         const hasQuickItems = data.items.some((item) => item.type === 'quick');
 
-        if (data.orderType === 'mixed' && (!hasFoodItems || !hasQuickItems)) {
+        // Auto-correct orderType if it's missing or inconsistent
+        let effectiveType = data.orderType;
+        if (!effectiveType) {
+            if (hasFoodItems && hasQuickItems) effectiveType = 'mixed';
+            else if (hasQuickItems) effectiveType = 'quick';
+            else effectiveType = 'food';
+        }
+
+        if (effectiveType === 'mixed' && (!hasFoodItems || !hasQuickItems)) {
             ctx.addIssue({
                 code: z.ZodIssueCode.custom,
                 path: ['items'],
                 message: 'Mixed orders must include both food and quick items'
             });
         }
-        if (data.orderType === 'food' && hasQuickItems) {
+        if (effectiveType === 'food' && hasQuickItems) {
             ctx.addIssue({
                 code: z.ZodIssueCode.custom,
                 path: ['items'],
-                message: 'Food orders cannot include quick items'
+                message: 'Food orders cannot include quick items. Use mixed order type.'
             });
         }
-        if (data.orderType === 'quick' && hasFoodItems) {
+        if (effectiveType === 'quick' && hasFoodItems) {
             ctx.addIssue({
                 code: z.ZodIssueCode.custom,
                 path: ['items'],
-                message: 'Quick orders cannot include food items'
+                message: 'Quick orders cannot include food items. Use mixed order type.'
             });
         }
-        if (data.orderType === 'food' && !data.restaurantId) {
+        if (effectiveType === 'food' && !data.restaurantId) {
             ctx.addIssue({
                 code: z.ZodIssueCode.custom,
                 path: ['restaurantId'],
@@ -102,7 +110,7 @@ export function validateCalculateOrderDto(body) {
 
 export function validateCreateOrderDto(body) {
     const schema = z.object({
-        orderType: z.enum(['food', 'quick', 'mixed']).optional().default('food'),
+        orderType: z.enum(['food', 'quick', 'mixed']).optional(),
         items: z.array(orderItemSchema).min(1, 'At least one item required'),
         address: addressSchema.optional(),
         restaurantId: z.string().optional(),
@@ -121,35 +129,43 @@ export function validateCreateOrderDto(body) {
         const hasFoodItems = data.items.some((item) => item.type === 'food');
         const hasQuickItems = data.items.some((item) => item.type === 'quick');
 
-        if (data.orderType === 'mixed' && (!hasFoodItems || !hasQuickItems)) {
+        // Auto-correct orderType if it's missing or inconsistent
+        let effectiveType = data.orderType;
+        if (!effectiveType) {
+            if (hasFoodItems && hasQuickItems) effectiveType = 'mixed';
+            else if (hasQuickItems) effectiveType = 'quick';
+            else effectiveType = 'food';
+        }
+
+        if (effectiveType === 'mixed' && (!hasFoodItems || !hasQuickItems)) {
             ctx.addIssue({
                 code: z.ZodIssueCode.custom,
                 path: ['items'],
                 message: 'Mixed orders must include both food and quick items'
             });
         }
-        if (data.orderType === 'food' && hasQuickItems) {
+        if (effectiveType === 'food' && hasQuickItems) {
             ctx.addIssue({
                 code: z.ZodIssueCode.custom,
                 path: ['items'],
-                message: 'Food orders cannot include quick items'
+                message: 'Food orders cannot include quick items. Use mixed order type.'
             });
         }
-        if (data.orderType === 'quick' && hasFoodItems) {
+        if (effectiveType === 'quick' && hasFoodItems) {
             ctx.addIssue({
                 code: z.ZodIssueCode.custom,
                 path: ['items'],
-                message: 'Quick orders cannot include food items'
+                message: 'Quick orders cannot include food items. Use mixed order type.'
             });
         }
-        if (data.orderType === 'food' && !data.restaurantId) {
+        if (effectiveType === 'food' && !data.restaurantId) {
             ctx.addIssue({
                 code: z.ZodIssueCode.custom,
                 path: ['restaurantId'],
                 message: 'Restaurant id required'
             });
         }
-        if ((data.orderType === 'food' || data.orderType === 'mixed' || data.orderType === 'quick') && !data.address) {
+        if ((effectiveType === 'food' || effectiveType === 'mixed' || effectiveType === 'quick') && !data.address) {
             ctx.addIssue({
                 code: z.ZodIssueCode.custom,
                 path: ['address'],

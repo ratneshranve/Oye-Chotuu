@@ -2560,7 +2560,7 @@ const CheckoutPage = () => {
                       </div>
                     )}
                     <div className="flex items-start gap-3">
-                      <div className={`p-3 rounded-2xl flex-shrink-0 ${selectedCoupon?.code === coupon.code ? "bg-[#0c831f]/10 text-[#0c831f]" : "bg-orange-50 text-orange-500"}`}>
+                      <div className={`p-3 rounded-2xl flex-shrink-0 ${selectedCoupon?.code === coupon.code ? "bg-[#0c831f]/10 text-[#0c831f]" : "bg-red-50 text-red-500"}`}>
                         <Tag size={20} />
                       </div>
                       <div className="flex-1">

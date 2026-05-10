@@ -71,7 +71,7 @@ const quickTheme = (baseColor) => {
 };
 
 const foodTheme = (vegMode) => {
-  const base = vegMode ? "#2f7a46" : "#F6881F";
+  const base = vegMode ? "#2f7a46" : "#cc2532";
   return {
     topBg: `linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 100%), ${base}`,
     accent: base,
@@ -384,12 +384,12 @@ export default function HomeHeader({
                   <h3 className="font-bold text-gray-900 flex items-center gap-2">
                     Notifications
                     {unreadCount > 0 && (
-                      <Badge variant="secondary" className="bg-orange-100 text-orange-600 border-none text-[10px] h-4">
+                      <Badge variant="secondary" className="bg-red-100 text-red-600 border-none text-[10px] h-4">
                         {unreadCount} New
                       </Badge>
                     )}
                   </h3>
-                  <Link to="/food/user/notifications" className="text-xs font-bold text-orange-600">
+                  <Link to="/food/user/notifications" className="text-xs font-bold text-red-600">
                     {mergedNotifications.length > 0 ? "View All" : ""}
                   </Link>
                 </div>
@@ -397,7 +397,7 @@ export default function HomeHeader({
                   {mergedNotifications.length > 0 ? (
                     mergedNotifications.slice(0, 5).map((item, index) => (
                       <div key={item.id || `notif-${index}`} className="p-4 flex items-start gap-3 border-b border-gray-50 last:border-0">
-                        <div className="mt-1 p-2 rounded-full bg-orange-100/50 text-orange-600">
+                        <div className="mt-1 p-2 rounded-full bg-red-100/50 text-red-600">
                           <Bell className="h-4 w-4" />
                         </div>
                         <div className="flex-1 min-w-0">
@@ -470,7 +470,7 @@ export default function HomeHeader({
               className={`relative flex flex-col items-center justify-start flex-1 min-w-0 h-[64px] transition-all duration-300 ${isActive ? "z-20" : "z-10"}`}
             >
               {tab.badge && (
-                <div className="absolute -top-[10px] left-1/2 -translate-x-1/2 z-30 rounded-full bg-gradient-to-r from-orange-500 to-orange-400 px-2 py-0.5 text-[7.5px] font-black uppercase text-white shadow-lg">
+                <div className="absolute -top-[10px] left-1/2 -translate-x-1/2 z-30 rounded-full bg-gradient-to-r from-red-500 to-red-400 px-2 py-0.5 text-[7.5px] font-black uppercase text-white shadow-lg">
                   {tab.badge}
                 </div>
               )}
@@ -510,11 +510,11 @@ export default function HomeHeader({
                 <img
                   src={tab.icon}
                   alt={tab.name}
-                  className={`object-contain transition-transform duration-300 ${isActive ? "h-[28px] w-[28px] scale-110" : "h-[24px] w-[24px] brightness-[1.2]"}`}
+                  className={`object-contain transition-transform duration-300 ${isActive ? "h-[28px] w-[28px] scale-110" : "h-[24px] w-[24px] brightness-0 invert opacity-80"}`}
                 />
                 <span
-                  style={{ color: isActive ? theme.activeText : "#ffffff" }}
-                  className={`text-[10px] font-black tracking-tight ${isActive ? "" : "drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)] opacity-90"}`}
+                  style={{ color: "#ffffff" }}
+                  className={`text-[10px] font-black tracking-tight ${isActive ? "opacity-100" : "opacity-80"}`}
                 >
                   {tab.name}
                 </span>
@@ -524,15 +524,15 @@ export default function HomeHeader({
         })}
       </div>
 
-      <div className="relative z-10 pt-0 pb-0 px-3 -mt-[1px] overflow-visible">
+      <div className={cn("relative z-10 pb-0 px-3 overflow-visible", isFood ? "pt-3" : "pt-0")}>
         {isFood && (
           <div className="flex items-center gap-2 mb-2">
             <div
               className="flex-1 rounded-[12px] h-[46px] flex items-center px-3 cursor-pointer relative overflow-hidden bg-white shadow-[0_6px_18px_rgba(15,23,42,0.10)] border-0 text-left"
               onClick={handleSearchFocus}
             >
-              <div className="absolute left-0 top-0 bottom-0 w-[2.5px] rounded-l-[12px] bg-gradient-to-b from-[#F6881F] to-[#FF5E3A]" />
-              <Search className="h-[16px] w-[16px] ml-1.5 mr-2 flex-shrink-0 text-[#F6881F]" strokeWidth={2.3} />
+              <div className="absolute left-0 top-0 bottom-0 w-[2.5px] rounded-l-[12px] bg-gradient-to-b from-[#cc2532] to-[#a81e29]" />
+              <Search className="h-[16px] w-[16px] ml-1.5 mr-2 flex-shrink-0 text-[#cc2532]" strokeWidth={2.3} />
               <div className="flex-1 overflow-hidden relative h-[20px]">
                 <AnimatePresence mode="wait">
                   <motion.span
@@ -548,24 +548,24 @@ export default function HomeHeader({
                 </AnimatePresence>
               </div>
               <div className="flex items-center gap-1.5">
-                <div className="w-[1px] h-[16px] bg-orange-200" />
+                <div className="w-[1px] h-[16px] bg-red-200" />
                 <button
                   type="button"
                   onClick={handleVoiceSearch}
                   className={cn(
                     "h-[28px] w-[28px] rounded-full flex items-center justify-center transition-all",
-                    isListening ? "bg-orange-500 scale-110 animate-pulse" : "bg-orange-50 hover:bg-orange-100"
+                    isListening ? "bg-red-500 scale-110 animate-pulse" : "bg-red-50 hover:bg-red-100"
                   )}
                 >
-                  <Mic className={cn("h-[14px] w-[14px]", isListening ? "text-white" : "text-[#F6881F]")} strokeWidth={2.3} />
+                  <Mic className={cn("h-[14px] w-[14px]", isListening ? "text-white" : "text-[#cc2532]")} strokeWidth={2.3} />
                 </button>
               </div>
             </div>
 
             <div className="px-2 flex flex-col items-center justify-center min-w-[64px]">
               <div className="flex flex-col items-center mb-1">
-                <span className="text-[9px] font-black tracking-[0.5px] text-black dark:text-white leading-none">VEG</span>
-                <span className="text-[7px] font-black tracking-[0.5px] text-black/60 dark:text-white/60 leading-none mt-0.5">MODE</span>
+                <span className="text-[9px] font-black tracking-[0.5px] text-white leading-none">VEG</span>
+                <span className="text-[7px] font-black tracking-[0.5px] text-white/70 leading-none mt-0.5">MODE</span>
               </div>
               <div className="scale-[0.80]">
                 <Switch

@@ -30,8 +30,8 @@ const helpCategories = [
     id: "ordering",
     title: "Ordering",
     icon: Package,
-    color: "text-[#EB590E]",
-    bgColor: "bg-orange-50",
+    color: "text-[#cc2532]",
+    bgColor: "bg-red-50",
     description: "Learn how to place and manage orders",
     topics: [
       {
@@ -56,8 +56,8 @@ const helpCategories = [
     id: "payments",
     title: "Payments",
     icon: CreditCard,
-    color: "text-[#EB590E]",
-    bgColor: "bg-orange-50",
+    color: "text-[#cc2532]",
+    bgColor: "bg-red-50",
     description: "Payment methods and billing questions",
     topics: [
       {
@@ -82,8 +82,8 @@ const helpCategories = [
     id: "delivery",
     title: "Delivery",
     icon: Truck,
-    color: "text-orange-600",
-    bgColor: "bg-orange-50",
+    color: "text-red-600",
+    bgColor: "bg-red-50",
     description: "Delivery times, fees, and tracking",
     topics: [
       {
@@ -108,8 +108,8 @@ const helpCategories = [
     id: "account",
     title: "Account & Profile",
     icon: User,
-    color: "text-[#EB590E]",
-    bgColor: "bg-orange-50",
+    color: "text-[#cc2532]",
+    bgColor: "bg-red-50",
     description: "Manage your account and preferences",
     topics: [
       {
@@ -134,8 +134,8 @@ const helpCategories = [
     id: "refunds",
     title: "Refunds & Returns",
     icon: Shield,
-    color: "text-[#EB590E]",
-    bgColor: "bg-orange-50",
+    color: "text-[#cc2532]",
+    bgColor: "bg-red-50",
     description: "Refund policy and return process",
     topics: [
       {
@@ -207,7 +207,7 @@ export default function Help() {
   }
 
   return (
-    <AnimatedPage className="min-h-screen bg-gradient-to-b from-yellow-50/30 via-white to-orange-50/20 dark:from-[#0a0a0a] dark:via-[#0a0a0a] dark:to-[#0a0a0a] p-4 md:p-6 lg:p-8">
+    <AnimatedPage className="min-h-screen bg-gradient-to-b from-yellow-50/30 via-white to-red-50/20 dark:from-[#0a0a0a] dark:via-[#0a0a0a] dark:to-[#0a0a0a] p-4 md:p-6 lg:p-8">
       <div className="max-w-md md:max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto space-y-4 md:space-y-5 lg:space-y-6">
         <ScrollReveal>
           <div className="text-center space-y-3 md:space-y-4 mb-6 md:mb-8">
@@ -255,8 +255,8 @@ export default function Help() {
             <Link to="/user/profile">
               <CardContent className="p-4 md:p-5 lg:p-6">
                 <div className="flex items-center gap-3 md:gap-4">
-                  <div className="p-2 md:p-3 bg-orange-100 rounded-lg">
-                    <User className="h-5 w-5 md:h-6 md:w-6 text-[#EB590E]" />
+                  <div className="p-2 md:p-3 bg-red-100 rounded-lg">
+                    <User className="h-5 w-5 md:h-6 md:w-6 text-[#cc2532]" />
                   </div>
                   <div>
                     <h3 className="text-sm md:text-base font-semibold">Manage Account</h3>
@@ -267,8 +267,8 @@ export default function Help() {
             </Link>
             <CardContent className="p-4 md:p-5 lg:p-6">
               <div className="flex items-center gap-3 md:gap-4">
-                <div className="p-2 md:p-3 bg-orange-100 rounded-lg">
-                  <MessageCircle className="h-5 w-5 md:h-6 md:w-6 text-[#EB590E]" />
+                <div className="p-2 md:p-3 bg-red-100 rounded-lg">
+                  <MessageCircle className="h-5 w-5 md:h-6 md:w-6 text-[#cc2532]" />
                 </div>
                 <div>
                   <h3 className="text-sm md:text-base font-semibold">Contact Support</h3>
@@ -367,7 +367,7 @@ export default function Help() {
 
         {/* Contact Support Section */}
         <ScrollReveal delay={0.4}>
-          <Card className="bg-gradient-to-br from-yellow-50 to-orange-50 border-yellow-200 shadow-lg">
+          <Card className="bg-gradient-to-br from-red-50 to-red-100 border-red-200 shadow-lg">
             <CardHeader className="p-4 md:p-5 lg:p-6">
               <CardTitle className="text-xl md:text-2xl lg:text-3xl flex items-center gap-2">
                 <MessageCircle className="h-5 w-5 md:h-6 md:w-6 text-primary-orange" />
@@ -380,8 +380,8 @@ export default function Help() {
             <CardContent className="space-y-4 md:space-y-5 lg:space-y-6 p-4 md:p-5 lg:p-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5 lg:gap-6">
                 <div className="flex items-start gap-3 p-4 bg-white rounded-lg">
-                  <div className="p-2 bg-orange-100 rounded-lg">
-                    <Phone className="h-5 w-5 text-[#EB590E]" />
+                  <div className="p-2 bg-red-100 rounded-lg">
+                    <Phone className="h-5 w-5 text-[#cc2532]" />
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">Phone Support</h3>
@@ -397,8 +397,8 @@ export default function Help() {
                   </div>
                 </div>
                 <div className="flex items-start gap-3 p-4 bg-white rounded-lg">
-                  <div className="p-2 bg-orange-100 rounded-lg">
-                    <Mail className="h-5 w-5 text-[#EB590E]" />
+                  <div className="p-2 bg-red-100 rounded-lg">
+                    <Mail className="h-5 w-5 text-[#cc2532]" />
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">Email Support</h3>
@@ -414,8 +414,8 @@ export default function Help() {
                   </div>
                 </div>
                 <div className="flex items-start gap-3 p-4 bg-white rounded-lg">
-                  <div className="p-2 bg-orange-100 rounded-lg">
-                    <MessageCircle className="h-5 w-5 text-[#EB590E]" />
+                  <div className="p-2 bg-red-100 rounded-lg">
+                    <MessageCircle className="h-5 w-5 text-[#cc2532]" />
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">Live Chat</h3>

@@ -133,7 +133,7 @@ export default function UserOrderDetails() {
           <p className="text-gray-700 text-sm font-medium">Order not found</p>
           <button
             onClick={() => navigate("/user/orders")}
-            className="px-4 py-2 rounded-lg bg-[#EB590E] text-white text-sm font-semibold"
+            className="px-4 py-2 rounded-lg bg-[#cc2532] text-white text-sm font-semibold"
           >
             Back to Orders
           </button>
@@ -484,7 +484,7 @@ export default function UserOrderDetails() {
               const isQuick = source.pickupType === "quick"
               const badgeClasses = isQuick
                 ? "bg-sky-50 text-sky-700 border-sky-200"
-                : "bg-orange-50 text-orange-700 border-orange-200"
+                : "bg-red-50 text-red-700 border-red-200"
 
               return (
                 <div
@@ -517,7 +517,7 @@ export default function UserOrderDetails() {
                       <button
                         type="button"
                         onClick={() => handleCallPickupSource(source.phone)}
-                        className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-[#EB590E] hover:bg-orange-50 shrink-0"
+                        className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-[#cc2532] hover:bg-red-50 shrink-0"
                       >
                         <Phone className="w-4 h-4" />
                       </button>
@@ -541,7 +541,7 @@ export default function UserOrderDetails() {
             <span
               className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${sendsCutlery
                   ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                  : "bg-orange-50 text-orange-700 border border-orange-200"
+                  : "bg-red-50 text-red-700 border border-red-200"
                 }`}
             >
               {sendsCutlery ? "Send cutlery" : "Don't send cutlery"}
@@ -584,7 +584,7 @@ export default function UserOrderDetails() {
             <button
               type="button"
               onClick={handleDownloadSummary}
-              className="w-7 h-7 rounded-full bg-orange-50 flex items-center justify-center text-[#EB590E] hover:bg-orange-100"
+              className="w-7 h-7 rounded-full bg-red-50 flex items-center justify-center text-[#cc2532] hover:bg-red-100"
             >
               <Download className="w-4 h-4" />
             </button>
@@ -613,11 +613,11 @@ export default function UserOrderDetails() {
             <div className="flex justify-between">
               <span className="text-gray-400 font-medium">Delivery fee</span>
               {pricing.deliveryFee === 0 && (
-                <span className="text-[#EB590E] text-[10px] font-bold border border-[#EB590E] px-1 rounded ml-1">
+                <span className="text-[#cc2532] text-[10px] font-bold border border-[#cc2532] px-1 rounded ml-1">
                   FREE
                 </span>
               )}
-              <span className="text-[#EB590E] font-medium uppercase">
+              <span className="text-[#cc2532] font-medium uppercase">
                 {pricing.deliveryFee ? `₹${Number(pricing.deliveryFee).toFixed(2)}` : "Free"}
               </span>
             </div>
@@ -644,7 +644,7 @@ export default function UserOrderDetails() {
 
           {/* Savings Banner */}
           {savings > 0 && (
-            <div className="relative bg-orange-50 p-3 pb-4 mt-2">
+            <div className="relative bg-red-50 p-3 pb-4 mt-2">
               <div className="absolute -top-1.5 left-0 w-full overflow-hidden leading-none">
                 <svg
                   className="relative block w-[calc(100%+1.3px)] h-[8px]"
@@ -660,7 +660,7 @@ export default function UserOrderDetails() {
                 </svg>
               </div>
 
-              <div className="flex items-center justify-center gap-2 pt-1 text-[#EB590E] font-bold text-sm">
+              <div className="flex items-center justify-center gap-2 pt-1 text-[#cc2532] font-bold text-sm">
                 <span>??</span>
                 <span>
                   You saved ₹{Number(savings).toFixed(2)} on this order!
@@ -735,7 +735,7 @@ export default function UserOrderDetails() {
         <button
           type="button"
           onClick={() => handleReorder(order)}
-          className="flex-1 bg-[#EB590E] text-white py-3 rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-[#D94F0C] transition-colors"
+          className="flex-1 bg-[#cc2532] text-white py-3 rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-[#a81e29] transition-colors"
         >
           <RotateCcw className="w-4 h-4" />
           Reorder
@@ -743,7 +743,7 @@ export default function UserOrderDetails() {
         <button
           type="button"
           onClick={handleDownloadSummary}
-          className="flex-1 bg-white border border-[#EB590E] text-[#EB590E] py-3 rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-orange-50 transition-colors"
+          className="flex-1 bg-white border border-[#cc2532] text-[#cc2532] py-3 rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-red-50 transition-colors"
         >
           <Download className="w-4 h-4" />
           Invoice
@@ -777,7 +777,7 @@ export default function UserOrderDetails() {
               debugLog("Navigating to complaint page with orderId:", orderIdString)
               navigate(`/user/complaints/submit/${encodeURIComponent(orderIdString)}`)
             }}
-            className="w-full bg-orange-50 border border-orange-200 text-orange-700 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-orange-100 transition-colors"
+            className="w-full bg-red-50 border border-red-200 text-red-700 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-red-100 transition-colors"
           >
             <FileText className="w-4 h-4" />
             Restaurant Complaint

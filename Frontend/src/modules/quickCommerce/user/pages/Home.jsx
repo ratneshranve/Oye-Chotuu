@@ -96,9 +96,9 @@ const CATEGORY_METADATA = {
   Grocery: {
     icon: LocalGroceryStoreIcon,
     theme: {
-      gradient: "linear-gradient(to bottom, #FF9F1C, #FFBF69)",
-      shadow: "shadow-orange-500/20",
-      accent: "text-orange-900",
+      gradient: "linear-gradient(to bottom, #cc2532, #ff5252)",
+      shadow: "shadow-red-500/20",
+      accent: "text-red-900",
     },
     banner: {
       title: "SUPERSAVER",
@@ -219,9 +219,9 @@ const categories = [
     name: "Grocery",
     icon: LocalGroceryStoreIcon,
     theme: {
-      gradient: "linear-gradient(to bottom, #FF9F1C, #FFBF69)",
-      shadow: "shadow-orange-500/20",
-      accent: "text-orange-900",
+      gradient: "linear-gradient(to bottom, #cc2532, #ff5252)",
+      shadow: "shadow-red-500/20",
+      accent: "text-red-900",
     },
     banner: {
       title: "SUPERSAVER",
@@ -1125,7 +1125,7 @@ const Home = ({ embedded = false, onThemeChange, embeddedHeaderColor = null }) =
                               <div className="absolute -bottom-6 -right-6 w-16 h-16 rounded-full bg-amber-400/60 blur-xl mix-blend-screen" />
                             </>
                           ) : (
-                            <div className="absolute inset-0 bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500" />
+                            <div className="absolute inset-0 bg-gradient-to-br from-red-400 via-red-500 to-rose-500" />
                           )}
 
                           {/* Top-left pill with items count */}

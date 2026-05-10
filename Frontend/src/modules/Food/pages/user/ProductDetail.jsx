@@ -258,7 +258,7 @@ export default function ProductDetail() {
 
   if (!product) {
     return (
-      <AnimatedPage className="min-h-screen bg-gradient-to-b from-yellow-50/30 via-white to-orange-50/20 dark:from-[#0a0a0a] dark:via-[#0a0a0a] dark:to-[#0a0a0a]">
+      <AnimatedPage className="min-h-screen bg-gradient-to-b from-yellow-50/30 via-white to-red-50/20 dark:from-[#0a0a0a] dark:via-[#0a0a0a] dark:to-[#0a0a0a]">
         <div className="max-w-4xl mx-auto px-4 py-20 text-center">
           <h1 className="text-2xl font-bold mb-4">Product Not Found</h1>
           <Link to="/user">
@@ -270,7 +270,7 @@ export default function ProductDetail() {
   }
 
   return (
-    <AnimatedPage className="min-h-screen bg-gradient-to-b from-yellow-50/30 via-white to-orange-50/20 dark:from-[#0a0a0a] dark:via-[#0a0a0a] dark:to-[#0a0a0a]">
+    <AnimatedPage className="min-h-screen bg-gradient-to-b from-yellow-50/30 via-white to-red-50/20 dark:from-[#0a0a0a] dark:via-[#0a0a0a] dark:to-[#0a0a0a]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12">
 
         {/* Hero Image Section */}
@@ -294,7 +294,7 @@ export default function ProductDetail() {
 
           {/* Rating Badge - Top Right */}
           <div className="absolute top-4 right-4 z-10">
-            <Badge className="bg-primary-orange text-white shadow-lg">
+            <Badge className="bg-[#cc2532] text-white shadow-lg">
               <Star className="h-3 w-3 fill-white text-white mr-1" />
               {averageRating}
             </Badge>
@@ -328,7 +328,7 @@ export default function ProductDetail() {
                 </div>
               </div>
               <div className="flex-shrink-0 text-right">
-                <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-primary-orange">
+                <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#cc2532]">
                   ₹{(product.price * 83).toFixed(0)}
                 </div>
                 <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">per serving</p>
@@ -344,7 +344,7 @@ export default function ProductDetail() {
             <div className="space-y-4">
               {/* Breadcrumb */}
               <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground flex-wrap">
-                <Link to="/user" className="hover:text-primary-orange transition-colors">Home</Link>
+                <Link to="/user" className="hover:text-[#cc2532] transition-colors">Home</Link>
                 <span>/</span>
                 <span className="text-foreground font-medium truncate">{restaurant?.name || "Restaurant"}</span>
                 <span>/</span>
@@ -360,11 +360,11 @@ export default function ProductDetail() {
               <h2 className="text-xl font-bold">Order</h2>
               {inCart ? (
                 <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-2 border border-[#EB590E] rounded-lg">
+                  <div className="flex items-center gap-2 border border-[#cc2532] rounded-lg">
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-10 w-10 hover:bg-[#FFF2EB]"
+                      className="h-10 w-10 hover:bg-[#FFF5F5]"
                       onClick={handleDecrease}
                     >
                       <Minus className="h-5 w-5" />
@@ -375,7 +375,7 @@ export default function ProductDetail() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-10 w-10 hover:bg-[#FFF2EB]"
+                      className="h-10 w-10 hover:bg-[#FFF5F5]"
                       onClick={handleIncrease}
                     >
                       <Plus className="h-5 w-5" />
@@ -383,7 +383,7 @@ export default function ProductDetail() {
                   </div>
                   <div className="flex-1">
                     <p className="text-sm text-muted-foreground">In cart</p>
-                    <p className="text-lg font-bold text-primary-orange">
+                    <p className="text-lg font-bold text-[#cc2532]">
                       ₹{(product.price * 83 * (cartItem?.quantity || 0)).toFixed(0)}
                     </p>
                   </div>
@@ -416,7 +416,7 @@ export default function ProductDetail() {
                   >
                     <Button
                       onClick={handleAddToCart}
-                      className="bg-primary-orange hover:opacity-90 text-white"
+                      className="bg-[#cc2532] hover:opacity-90 text-white"
                     >
                       <ShoppingBag className="h-5 w-5 mr-2" />
                       Add to Cart - ₹{(product.price * 83 * quantity).toFixed(0)}
@@ -438,7 +438,7 @@ export default function ProductDetail() {
                     </h3>
                     <p className="text-sm md:text-base text-muted-foreground">{restaurant.cuisine}</p>
                   </div>
-                  <Badge className="bg-primary-orange text-white text-sm md:text-base">{restaurant.priceRange}</Badge>
+                  <Badge className="bg-[#cc2532] text-white text-sm md:text-base">{restaurant.priceRange}</Badge>
                 </div>
                 <div className="flex items-center gap-4 md:gap-6 flex-wrap text-sm md:text-base">
                   <div className="flex items-center gap-1.5">
@@ -531,7 +531,7 @@ export default function ProductDetail() {
                 {!showReviewForm && (
                   <Button
                     onClick={() => setShowReviewForm(true)}
-                    className="bg-primary-orange hover:opacity-90 text-white"
+                    className="bg-[#cc2532] hover:opacity-90 text-white"
                   >
                     <MessageCircle className="h-4 w-4 mr-2" />
                     Write a Review
@@ -586,7 +586,7 @@ export default function ProductDetail() {
                       </Button>
                       <Button
                         type="submit"
-                        className="flex-1 bg-gradient-to-r bg-primary-orange hover:from-yellow-600 hover:to-orange-600"
+                        className="flex-1 bg-gradient-to-r bg-[#cc2532] hover:from-red-600 hover:to-red-600"
                       >
                         <Send className="h-4 w-4 mr-2" />
                         Submit Review
@@ -640,7 +640,7 @@ export default function ProductDetail() {
                               <button
                                 onClick={() => handleHelpful(review.id)}
                                 className={`flex items-center gap-2 text-sm transition-colors ${helpfulVotes.has(review.id)
-                                    ? "text-primary-orange font-semibold"
+                                    ? "text-[#cc2532] font-semibold"
                                     : "text-muted-foreground hover:text-foreground"
                                   }`}
                               >
@@ -650,7 +650,7 @@ export default function ProductDetail() {
                               <button
                                 onClick={() => handleReplyClick(review.id)}
                                 className={`flex items-center gap-2 text-sm transition-colors ${replyStates[review.id]
-                                    ? "text-primary-orange font-semibold"
+                                    ? "text-[#cc2532] font-semibold"
                                     : "text-muted-foreground hover:text-foreground"
                                   }`}
                               >
@@ -685,7 +685,7 @@ export default function ProductDetail() {
                                       <Button
                                         type="button"
                                         size="sm"
-                                        className="bg-primary-orange hover:opacity-90 text-white"
+                                        className="bg-[#cc2532] hover:opacity-90 text-white"
                                         onClick={() => {
                                           const textarea = document.getElementById(`reply-${review.id}`)
                                           if (textarea) {

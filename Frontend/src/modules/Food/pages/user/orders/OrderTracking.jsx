@@ -48,7 +48,7 @@ import { RESTAURANT_PIN_SVG, CUSTOMER_PIN_SVG, RIDER_BIKE_SVG } from "@food/cons
 // Fallback definitions in case imports fail at runtime or are shadowed
 const DEFAULT_CUSTOMER_PIN = `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="#10B981"><path d="M12 2C8.13 2 5 5.13 5 9c0 4.17 4.42 9.92 6.24 12.11.4.48 1.08.48 1.52 0C14.58 18.92 19 13.17 19 9c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5 14.5 7.62 14.5 9 13.38 11.5 12 11.5z"/><circle cx="12" cy="9" r="3" fill="#FFFFFF"/></svg>`;
 const SAFE_CUSTOMER_PIN = typeof CUSTOMER_PIN_SVG !== 'undefined' ? CUSTOMER_PIN_SVG : DEFAULT_CUSTOMER_PIN;
-const DEFAULT_RESTAURANT_PIN = `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2C8.13 2 5 5.13 5 9c0 4.17 4.42 9.92 6.24 12.11.4.48 1.08.48 1.52 0C14.58 18.92 19 13.17 19 9c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5 14.5 7.62 14.5 9 13.38 11.5 12 11.5z"/><circle cx="12" cy="9" r="3" fill="#FFFFFF"/></svg>`;
+const DEFAULT_RESTAURANT_PIN = `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="#cc2532"><path d="M12 2C8.13 2 5 5.13 5 9c0 4.17 4.42 9.92 6.24 12.11.4.48 1.08.48 1.52 0C14.58 18.92 19 13.17 19 9c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5 14.5 7.62 14.5 9 13.38 11.5 12 11.5z"/><circle cx="12" cy="9" r="3" fill="#FFFFFF"/></svg>`;
 const SAFE_RESTAURANT_PIN = typeof RESTAURANT_PIN_SVG !== 'undefined' ? RESTAURANT_PIN_SVG : DEFAULT_RESTAURANT_PIN;
 
 const debugLog = (...args) => console.log('[OrderTracking]', ...args)
@@ -2140,7 +2140,7 @@ export default function OrderTracking() {
                 transition={{ delay: 1.5 }}
                 className="mt-8"
               >
-                <div className="w-8 h-8 border-2 border-[#EB590E] border-t-transparent rounded-full animate-spin mx-auto" />
+                <div className="w-8 h-8 border-2 border-[#cc2532] border-t-transparent rounded-full animate-spin mx-auto" />
                 <p className="text-sm text-gray-500 mt-3">Loading order details...</p>
               </motion.div>
             </motion.div>
@@ -2253,7 +2253,7 @@ export default function OrderTracking() {
               <div className="mt-5 rounded-2xl border border-white/70 bg-white/90 p-4">
                 <div className="flex items-start gap-3">
                   <div className="flex flex-col items-center pt-1">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-100 text-[#EB590E]">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 text-[#cc2532]">
                       <MapPin className="h-5 w-5" />
                     </div>
                     <div className="my-2 h-10 w-px border-l-2 border-dashed border-emerald-200" />
@@ -2331,7 +2331,7 @@ export default function OrderTracking() {
               currentStatus.iconType === 'rider' ? 'bg-blue-50' : 
               currentStatus.iconType === 'cancelled' ? 'bg-red-50' : 
               currentStatus.iconType === 'delivered' ? 'bg-green-50' : 
-              'bg-orange-50'
+              'bg-red-50'
             }`}>
               {currentStatus.iconType === 'rider' ? (
                 <div 
@@ -2587,11 +2587,11 @@ export default function OrderTracking() {
               </div>
               {pickupSources.length === 1 && (
                 <motion.button
-                  className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center"
+                  className="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center"
                   onClick={handleCallRestaurant}
                   whileTap={{ scale: 0.9 }}
                 >
-                  <Phone className="w-5 h-5 text-[#EB590E]" />
+                  <Phone className="w-5 h-5 text-[#cc2532]" />
                 </motion.button>
               )}
             </div>
@@ -2601,7 +2601,7 @@ export default function OrderTracking() {
                 const isQuick = source.pickupType === 'quick'
                 const badgeClasses = isQuick
                   ? 'bg-sky-50 text-sky-700 border-sky-200'
-                  : 'bg-orange-50 text-orange-700 border-orange-200'
+                  : 'bg-red-50 text-orange-700 border-orange-200'
 
                 return (
                   <div
@@ -2609,7 +2609,7 @@ export default function OrderTracking() {
                     className="rounded-2xl border border-gray-100 bg-gray-50/80 p-4"
                   >
                     <div className="flex items-start gap-3">
-                      <div className={`inline-flex h-12 w-12 items-center justify-center rounded-full ${isQuick ? 'bg-sky-100' : 'bg-orange-100'} flex-shrink-0`}>
+                      <div className={`inline-flex h-12 w-12 items-center justify-center rounded-full ${isQuick ? 'bg-sky-100' : 'bg-red-100'} flex-shrink-0`}>
                         <div
                           dangerouslySetInnerHTML={{ __html: SAFE_RESTAURANT_PIN }}
                           className="w-7 h-7 [&_svg]:w-full [&_svg]:h-full [&_svg]:block"
@@ -2624,11 +2624,11 @@ export default function OrderTracking() {
                       </div>
                       {source.phone ? (
                         <motion.button
-                          className={`w-10 h-10 rounded-full flex items-center justify-center ${isQuick ? 'bg-sky-50' : 'bg-orange-50'}`}
+                          className={`w-10 h-10 rounded-full flex items-center justify-center ${isQuick ? 'bg-sky-50' : 'bg-red-50'}`}
                           onClick={(e) => handleCallPickupSource(source.phone, e)}
                           whileTap={{ scale: 0.9 }}
                         >
-                          <Phone className={`w-5 h-5 ${isQuick ? 'text-sky-600' : 'text-[#EB590E]'}`} />
+                          <Phone className={`w-5 h-5 ${isQuick ? 'text-sky-600' : 'text-[#cc2532]'}`} />
                         </motion.button>
                       ) : null}
                     </div>
@@ -2727,7 +2727,7 @@ export default function OrderTracking() {
                     disabled={isCancelling}
                     className={`rounded-xl border px-4 py-3 text-left transition ${
                       refundDestination === "gateway"
-                        ? "border-orange-500 bg-orange-50 text-orange-900"
+                        ? "border-orange-500 bg-red-50 text-orange-900"
                         : "border-gray-200 bg-white text-gray-700 hover:border-gray-300"
                     } ${isCancelling ? "cursor-not-allowed opacity-60" : ""}`}
                   >
@@ -2740,7 +2740,7 @@ export default function OrderTracking() {
                     disabled={isCancelling}
                     className={`rounded-xl border px-4 py-3 text-left transition ${
                       refundDestination === "wallet"
-                        ? "border-orange-500 bg-orange-50 text-orange-900"
+                        ? "border-orange-500 bg-red-50 text-orange-900"
                         : "border-gray-200 bg-white text-gray-700 hover:border-gray-300"
                     } ${isCancelling ? "cursor-not-allowed opacity-60" : ""}`}
                   >
@@ -2820,7 +2820,7 @@ export default function OrderTracking() {
 
             {/* Delivery Instructions Section */}
             {order?.note && (
-              <div className="bg-orange-50/50 rounded-xl p-4 border border-orange-100 flex gap-3">
+              <div className="bg-red-50/50 rounded-xl p-4 border border-orange-100 flex gap-3">
                 <MessageSquare className="w-5 h-5 text-orange-500 shrink-0 mt-0.5" />
                 <div>
                   <p className="text-xs text-orange-600 font-bold uppercase tracking-wider mb-1">Delivery Instructions</p>

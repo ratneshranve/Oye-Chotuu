@@ -333,10 +333,16 @@ async function evaluateCombinedPickupEligibility(pickupPoints = [], deliveryAddr
 
   const pickupDistanceKm = haversineKm(foodPoint.lat, foodPoint.lng, quickPoint.lat, quickPoint.lng);
   const angle = angleBetweenPickupVectors(userPoint, foodPoint, quickPoint);
-  const sameDirection = angle == null ? false : angle <= angleLimit;
+  
+  // If pickups are very close to each other (e.g. < 200m), they are definitely in the same direction for practical purposes
+  const isVeryClose = pickupDistanceKm <= 0.2;
+  const sameDirection = isVeryClose || (angle == null ? false : angle <= angleLimit);
+  
   const eligible = pickupDistanceKm <= distLimit && sameDirection;
   return {
     eligible,
+    distanceLimitKm: Number(distLimit),
+    angleLimitDeg: Number(angleLimit),
     pickupDistanceKm: Number.isFinite(pickupDistanceKm) ? Number(pickupDistanceKm.toFixed(2)) : null,
     sameDirection,
     reason: eligible
@@ -1493,13 +1499,29 @@ export async function calculateOrder(userId, dto) {
   const feeDoc = await FoodFeeSettings.findOne({ isActive: true })
     .sort({ createdAt: -1 })
     .lean();
-  const feeSettings = feeDoc || {
+  
+  const defaultFeeSettings = {
     deliveryFee: 25,
     deliveryFeeRanges: [],
     freeDeliveryThreshold: 149,
     platformFee: 5,
     gstRate: 5,
+    mixedOrderDistanceLimit: 2,
+    mixedOrderAngleLimit: 35
   };
+
+  const feeSettings = {
+    ...defaultFeeSettings,
+    ...(feeDoc || {})
+  };
+
+  // Ensure individual fields are numbers and not NaN/undefined even if feeDoc exists
+  feeSettings.platformFee = Number(feeSettings.platformFee ?? defaultFeeSettings.platformFee);
+  feeSettings.gstRate = Number(feeSettings.gstRate ?? defaultFeeSettings.gstRate);
+  feeSettings.deliveryFee = Number(feeSettings.deliveryFee ?? defaultFeeSettings.deliveryFee);
+  feeSettings.freeDeliveryThreshold = Number(feeSettings.freeDeliveryThreshold ?? defaultFeeSettings.freeDeliveryThreshold);
+  feeSettings.mixedOrderDistanceLimit = Number(feeSettings.mixedOrderDistanceLimit ?? defaultFeeSettings.mixedOrderDistanceLimit);
+  feeSettings.mixedOrderAngleLimit = Number(feeSettings.mixedOrderAngleLimit ?? defaultFeeSettings.mixedOrderAngleLimit);
 
   const sourceMap = await fetchPickupSourcesByType(items);
   const pickupPoints = buildPickupPointsFromItems(items, sourceMap);
@@ -1515,9 +1537,9 @@ export async function calculateOrder(userId, dto) {
 
   if (orderType === "quick") {
     const packagingFee = 0;
-    const platformFee = Number(feeSettings.platformFee || 0);
-    const deliveryFee = Number(feeSettings.deliveryFee || 25);
-    const gstRate = Number(feeSettings.gstRate || 0);
+    const platformFee = feeSettings.platformFee;
+    const deliveryFee = feeSettings.deliveryFee;
+    const gstRate = feeSettings.gstRate;
     const tax =
       Number.isFinite(gstRate) && gstRate > 0
         ? Math.round(subtotal * (gstRate / 100))
@@ -1570,10 +1592,10 @@ export async function calculateOrder(userId, dto) {
   }
 
   const packagingFee = 0;
-  const platformFee = Number(feeSettings.platformFee || 0);
+  const platformFee = feeSettings.platformFee;
 
   // Delivery fee by subtotal range (fallback to flat fee; free above threshold).
-  const freeThreshold = Number(feeSettings.freeDeliveryThreshold || 0);
+  const freeThreshold = feeSettings.freeDeliveryThreshold;
   let deliveryFee = 0;
   if (
     Number.isFinite(freeThreshold) &&
@@ -1610,13 +1632,13 @@ export async function calculateOrder(userId, dto) {
       }
       deliveryFee = Number.isFinite(matched)
         ? matched
-        : Number(feeSettings.deliveryFee || 0);
+        : feeSettings.deliveryFee;
     } else {
-      deliveryFee = Number(feeSettings.deliveryFee || 0);
+      deliveryFee = feeSettings.deliveryFee;
     }
   }
 
-  const gstRate = Number(feeSettings.gstRate || 0);
+  const gstRate = feeSettings.gstRate;
   const tax =
     Number.isFinite(gstRate) && gstRate > 0
       ? Math.round(subtotal * (gstRate / 100))
@@ -1752,15 +1774,18 @@ export async function calculateOrder(userId, dto) {
       discount,
       total,
       currency: "INR",
-      couponCode: appliedCoupon?.code || codeRaw || null,
-      appliedCoupon,
-      deliveryOptions,
-      pickupDistanceKm: eligibility.pickupDistanceKm,
-      combinedPickupEligible: eligibility.eligible,
-      sameDirection: eligibility.sameDirection,
-      pickupPoints,
-    },
-  };
+        couponCode: appliedCoupon?.code || codeRaw || null,
+        appliedCoupon,
+        deliveryOptions,
+        pickupDistanceKm: eligibility.pickupDistanceKm,
+        combinedPickupEligible: eligibility.eligible,
+        mixedOrderDistanceLimit: eligibility.distanceLimitKm,
+        mixedOrderAngleLimit: eligibility.angleLimitDeg,
+        sameDirection: eligibility.sameDirection,
+        eligibilityReason: eligibility.reason,
+        pickupPoints,
+      },
+    };
 }
 
 // ----- Create order -----

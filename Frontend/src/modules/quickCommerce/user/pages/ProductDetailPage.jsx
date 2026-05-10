@@ -370,7 +370,7 @@ const ProductDetailPage = () => {
               <span className="rounded-full border border-[#0c831f]/20 bg-[#0c831f]/10 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#0c831f]">
                 {product.category}
               </span>
-              <div className="flex items-center gap-1 rounded-full bg-orange-50 dark:bg-orange-950/30 px-3 py-1 text-xs font-bold text-orange-500">
+              <div className="flex items-center gap-1 rounded-full bg-red-50 dark:bg-red-950/30 px-3 py-1 text-xs font-bold text-red-500">
                 <Star size={12} fill="currentColor" />
                 {averageRating} ({reviews.length || "0"})
               </div>
@@ -521,7 +521,7 @@ const ProductDetailPage = () => {
                         className={cn(
                           "flex h-12 w-12 items-center justify-center rounded-xl transition-all",
                           newReview.rating >= star
-                            ? "bg-orange-50 dark:bg-orange-950/30 text-orange-500"
+                            ? "bg-red-50 dark:bg-red-950/30 text-red-500"
                             : "bg-card dark:bg-background text-slate-300 dark:text-slate-600",
                         )}
                       >
@@ -610,7 +610,7 @@ const ProductDetailPage = () => {
                                 size={12}
                                 className={cn(
                                   index < review.rating
-                                    ? "fill-orange-400 text-orange-400"
+                                    ? "fill-red-400 text-red-400"
                                     : "text-slate-200 dark:text-slate-700",
                                 )}
                               />

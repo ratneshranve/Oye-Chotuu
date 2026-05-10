@@ -1,4 +1,4 @@
-﻿import { Link } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { useState } from "react"
 
 import { Heart, Star, Clock, MapPin, ArrowRight, ArrowLeft, Bookmark } from "lucide-react"
@@ -37,7 +37,7 @@ export default function Favorites() {
 
   if (totalFavorites === 0) {
     return (
-      <><AnimatedPage className="min-h-screen bg-gradient-to-b from-yellow-50/30 via-white to-orange-50/20 dark:from-[#0a0a0a] dark:via-[#0a0a0a] dark:to-[#0a0a0a] p-4">
+      <><AnimatedPage className="min-h-screen bg-gradient-to-b from-yellow-50/30 via-white to-red-50/20 dark:from-[#0a0a0a] dark:via-[#0a0a0a] dark:to-[#0a0a0a] p-4">
         <div className="max-w-4xl mx-auto space-y-6">
           <ScrollReveal>
             <div className="flex items-center gap-3 sm:gap-4">
@@ -66,7 +66,7 @@ export default function Favorites() {
   }
 
   return (
-    <AnimatedPage className="min-h-screen bg-gradient-to-b from-yellow-50/30 via-white to-orange-50/20 dark:from-[#0a0a0a] dark:via-[#0a0a0a] dark:to-[#0a0a0a] p-4">
+    <AnimatedPage className="min-h-screen bg-gradient-to-b from-yellow-50/30 via-white to-red-50/20 dark:from-[#0a0a0a] dark:via-[#0a0a0a] dark:to-[#0a0a0a] p-4">
       <div className="max-w-6xl mx-auto space-y-6">
         <ScrollReveal>
           <div className="flex items-center justify-between mb-4">
@@ -246,8 +246,8 @@ export default function Favorites() {
                                   <div className="w-1.5 h-1.5 bg-green-600 rounded-full"></div>
                                 </div>
                               ) : (
-                                <div className="w-3 h-3 border-2 border-orange-600 flex items-center justify-center rounded-sm">
-                                  <div className="w-1.5 h-1.5 bg-orange-600 rounded-full"></div>
+                                <div className="w-3 h-3 border-2 border-red-600 flex items-center justify-center rounded-sm">
+                                  <div className="w-1.5 h-1.5 bg-red-600 rounded-full"></div>
                                 </div>
                               )}
                               <span className="text-muted-foreground font-medium text-xs">{dish.foodType || "N/A"}</span>

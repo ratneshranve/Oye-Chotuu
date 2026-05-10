@@ -132,8 +132,8 @@ const Dashboard = () => {
       change: "-3",
       changeType: "decrease",
       icon: Clock,
-      iconBg: "bg-orange-50",
-      iconColor: "text-orange-600",
+      iconBg: "bg-red-50",
+      iconColor: "text-red-600",
       description: "need attention",
     },
   ];

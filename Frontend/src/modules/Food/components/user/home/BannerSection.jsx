@@ -114,7 +114,7 @@ const BannerSection = memo(({
                       {/* Left Side: Text Content */}
                       <div className="relative z-10 flex flex-col justify-center h-full text-white w-[60%] sm:w-[65%] mt-2 pl-4 sm:pl-8">
                         <div className="flex items-center gap-1.5 mb-1">
-                           <span className="text-[10px] sm:text-xs font-black italic tracking-wider text-[#ffb885] uppercase flex items-center gap-1">
+                           <span className="text-[10px] sm:text-xs font-black italic tracking-wider text-red-200 uppercase flex items-center gap-1">
                              <TypewriterText text={bannerData?.title || "A SIX IS HIT! 🏏"} isActive={isActive} delay={0.1} />
                            </span>
                         </div>
@@ -135,7 +135,7 @@ const BannerSection = memo(({
                           }}
                           className="w-fit"
                         >
-                          <button className="bg-gradient-to-r from-[#FF5E3A] to-[#F6881F] hover:brightness-110 transition-all text-white text-[11px] sm:text-xs font-bold px-4 py-1.5 rounded-full shadow-[0_4px_12px_rgba(246,136,31,0.5)] flex items-center gap-1">
+                          <button className="bg-[#cc2532] hover:bg-[#a81e29] shadow-[0_4px_12px_rgba(204,37,50,0.5)] flex items-center gap-1">
                             {bannerData?.action || "Order Now"} <span className="font-black tracking-tighter">&gt;&gt;</span>
                           </button>
                         </motion.div>

@@ -131,7 +131,7 @@ const FilterSidebar = ({
               </button>
               <button 
                 onClick={onApply}
-                className="flex-[2] py-3 bg-primary-orange text-white text-sm font-bold rounded-xl shadow-lg shadow-orange-500/20 hover:bg-orange-600 transition-all active:scale-95"
+                className="flex-[2] py-3 bg-primary-orange text-white text-sm font-bold rounded-xl shadow-lg shadow-red-500/20 hover:bg-red-600 transition-all active:scale-95"
               >
                 Apply Filters
               </button>

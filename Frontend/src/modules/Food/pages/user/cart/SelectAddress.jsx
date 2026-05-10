@@ -11,7 +11,7 @@ import { Badge } from "@food/components/ui/badge"
 import { useProfile } from "@food/context/ProfileContext"
 import { toast } from "sonner"
 
-const ORANGE = "#EB590E"
+const BRAND_RED = "#cc2532"
 
 const getAddressId = (address) => address?.id || address?._id || ""
 
@@ -130,7 +130,7 @@ export default function SelectAddress() {
   }
 
   return (
-    <AnimatedPage className="min-h-screen bg-linear-to-b from-orange-50/30 via-white to-orange-50/20 dark:from-[#0a0a0a] dark:via-[#1a1a1a] dark:to-[#0a0a0a] p-4 sm:p-6 md:p-8">
+    <AnimatedPage className="min-h-screen bg-linear-to-b from-red-50/30 via-white to-red-50/20 dark:from-[#0a0a0a] dark:via-[#1a1a1a] dark:to-[#0a0a0a] p-4 sm:p-6 md:p-8">
       <div className="max-w-3xl mx-auto space-y-6 md:space-y-8">
         <ScrollReveal>
           <div className="flex items-center gap-4">
@@ -158,7 +158,7 @@ export default function SelectAddress() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <MapPin className="h-5 w-5" style={{ color: ORANGE }} />
+                  <MapPin className="h-5 w-5" style={{ color: BRAND_RED }} />
                   Save as
                 </CardTitle>
               </CardHeader>
@@ -173,7 +173,7 @@ export default function SelectAddress() {
                         variant={active ? "default" : "outline"}
                         onClick={() => setLabel(x)}
                         className={active ? "text-white" : ""}
-                        style={active ? { backgroundColor: ORANGE } : undefined}
+                        style={active ? { backgroundColor: BRAND_RED } : undefined}
                       >
                         {x}
                       </Button>
@@ -191,7 +191,7 @@ export default function SelectAddress() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Search className="h-5 w-5" style={{ color: ORANGE }} />
+                  <Search className="h-5 w-5" style={{ color: BRAND_RED }} />
                   Autocomplete
                 </CardTitle>
               </CardHeader>
@@ -224,7 +224,7 @@ export default function SelectAddress() {
                                 key={id || formatAddressLine(addr)}
                                 type="button"
                                 onClick={() => onPickSuggestion(addr)}
-                                className="w-full text-left px-4 py-3 hover:bg-orange-50/60 dark:hover:bg-white/5 transition-colors border-b border-gray-100 dark:border-gray-800 last:border-b-0"
+                                className="w-full text-left px-4 py-3 hover:bg-red-50/60 dark:hover:bg-white/5 transition-colors border-b border-gray-100 dark:border-gray-800 last:border-b-0"
                               >
                                 <div className="flex items-start justify-between gap-3">
                                   <div className="min-w-0">
@@ -233,7 +233,7 @@ export default function SelectAddress() {
                                         {String(addr?.label || "Saved").toLowerCase() === "office" ? "Work" : (addr?.label || "Saved")}
                                       </p>
                                       {addr?.isDefault && (
-                                        <Badge className="bg-orange-100 text-orange-800 dark:bg-orange-500/15 dark:text-orange-200">
+                                        <Badge className="bg-red-100 text-red-800 dark:bg-red-500/15 dark:text-red-200">
                                           Default
                                         </Badge>
                                       )}
@@ -244,7 +244,7 @@ export default function SelectAddress() {
                                   </div>
                                   {selected && (
                                     <div className="pt-1">
-                                      <Check className="h-5 w-5" style={{ color: ORANGE }} />
+                                      <Check className="h-5 w-5" style={{ color: BRAND_RED }} />
                                     </div>
                                   )}
                                 </div>
@@ -348,7 +348,7 @@ export default function SelectAddress() {
             <Button
               type="submit"
               className="w-full h-12 text-base font-semibold text-white"
-              style={{ backgroundColor: ORANGE }}
+              style={{ backgroundColor: BRAND_RED }}
               disabled={isSaving}
             >
               {isSaving ? "Saving..." : "Save address"}

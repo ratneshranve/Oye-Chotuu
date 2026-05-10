@@ -280,8 +280,8 @@ function CompletedOrders({ onSelectOrder, refreshToken = 0 }) {
                       </div>
 
                       <div className="flex flex-col items-end gap-1">
-                        <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-medium border border-green-500 text-green-600">
-                          <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
+                        <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-medium border border-[#49AB14]/40 text-[#49AB14]">
+                          <span className="h-1.5 w-1.5 rounded-full bg-[#49AB14]" />
                           Delivered
                         </span>
                         <span className="text-[11px] text-gray-500 text-right">
@@ -633,7 +633,7 @@ function TableBookings() {
                 <span
                   className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
                     booking.status === "confirmed"
-                      ? "bg-green-100 text-green-700"
+                      ? "bg-[#49AB14] text-white"
                       : booking.status === "pending"
                         ? "bg-[#FFF9E7] text-[#D97706]"
                         : booking.status === "checked-in"
@@ -699,7 +699,7 @@ function TableBookings() {
                 {String(booking.status || "").toLowerCase() === "pending" && (
                   <button
                     onClick={() => handleUpdateStatus(booking._id, "confirmed")}
-                    className="flex-1 bg-[#059669] text-white py-3 rounded-2xl text-[13px] font-bold hover:bg-[#047857] transition-all active:scale-[0.98] shadow-sm shadow-emerald-100 uppercase tracking-wide">
+                    className="flex-1 bg-[#49AB14] text-white py-3 rounded-2xl text-[13px] font-bold hover:bg-[#3d8f11] transition-all active:scale-[0.98] shadow-sm shadow-[#49AB14]/10 uppercase tracking-wide">
                     Accept
                   </button>
                 )}
@@ -2047,7 +2047,7 @@ export default function OrdersMain() {
                 {isActive && (
                   <motion.div
                     layoutId="activeFilterBackground"
-                    className="absolute inset-0 bg-black rounded-full -z-10"
+                    className="absolute inset-0 bg-[#49AB14] rounded-full -z-10"
                     initial={false}
                     transition={{
                       type: "spring",
@@ -2296,10 +2296,10 @@ export default function OrdersMain() {
                         <Calendar className="w-4 h-4 text-green-600" />
                       </div>
                       <div>
-                        <p className="text-[10px] font-bold text-green-800 uppercase tracking-wider">
+                        <p className="text-[10px] font-bold text-[#49AB14] uppercase tracking-wider">
                           Scheduled Order
                         </p>
-                        <p className="text-sm font-semibold text-green-900 mt-0.5">
+                        <p className="text-sm font-semibold text-[#49AB14] mt-0.5">
                           For{" "}
                           {new Date(
                             currentPopupOrder.scheduledAt,
@@ -3015,12 +3015,12 @@ function OrderCard({
                   <span
                     className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium ${
                       deliveryPartnerId
-                        ? "bg-green-100 text-green-700 border border-green-300"
+                        ? "bg-[#49AB14]/10 text-[#49AB14] border border-[#49AB14]/30"
                         : "bg-orange-100 text-orange-700 border border-orange-300"
                     }`}>
                     <span
                       className={`h-1.5 w-1.5 rounded-full ${
-                        deliveryPartnerId ? "bg-green-500" : "bg-orange-500"
+                        deliveryPartnerId ? "bg-[#49AB14]" : "bg-orange-500"
                       }`}
                     />
                     {deliveryPartnerId ? "Assigned" : "Not Assigned"}
@@ -3044,7 +3044,7 @@ function OrderCard({
                     onMarkReady({ orderId, mongoId, customerName });
                   }}
                   disabled={isMarkingReady}
-                  className="px-2.5 py-1 rounded-lg text-[11px] font-semibold border border-green-600 text-green-700 bg-green-50 hover:bg-green-100 disabled:opacity-60 disabled:cursor-not-allowed transition-colors">
+                  className="px-2.5 py-1 rounded-lg text-[11px] font-semibold border border-[#49AB14] text-[#49AB14] bg-[#49AB14]/5 hover:bg-[#49AB14]/10 disabled:opacity-60 disabled:cursor-not-allowed transition-colors">
                   {isMarkingReady ? "Marking..." : "Mark Ready"}
                 </button>
               )}

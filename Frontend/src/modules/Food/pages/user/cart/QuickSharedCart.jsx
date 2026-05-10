@@ -90,7 +90,7 @@ const mapCartItemsToPayload = (cart) =>
     notes: sanitizeOrderNotes(item.notes || ""),
   }));
 
-export default function QuickSharedCart() {
+export default function QuickSharedCart({ initialAddress = null, addressMode = "saved" }) {
   const navigate = useNavigate();
   const { cart, updateQuantity, clearCart } = useCart();
   const { addresses = [], getDefaultAddress, userProfile } = useProfile();
@@ -109,20 +109,26 @@ export default function QuickSharedCart() {
 
   const savedAddress = getDefaultAddress?.() || null;
 
+  const defaultAddress = useMemo(() => {
+    if (initialAddress) return initialAddress;
+    return savedAddress;
+  }, [initialAddress, savedAddress]);
+
   useEffect(() => {
-    const defaultId = getAddressId(savedAddress);
+    const defaultId = getAddressId(defaultAddress);
     if (defaultId && !selectedAddressId) {
       setSelectedAddressId(defaultId);
     }
-  }, [savedAddress, selectedAddressId]);
+  }, [defaultAddress, selectedAddressId]);
 
   const selectedAddress = useMemo(() => {
+    if (initialAddress) return initialAddress;
     if (!selectedAddressId) return savedAddress;
     return (
       addresses.find((address) => getAddressId(address) === selectedAddressId) ||
       savedAddress
     );
-  }, [addresses, savedAddress, selectedAddressId]);
+  }, [addresses, savedAddress, selectedAddressId, initialAddress]);
 
   useEffect(() => {
     if (quickCart.length === 0) {

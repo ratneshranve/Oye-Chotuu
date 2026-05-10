@@ -44,18 +44,7 @@ const BottomNav = () => {
                     >
                         <div className="flex flex-col items-center justify-center relative">
                             {/* Active Indicator Background (Subtle Glow) */}
-                            <AnimatePresence>
-                                {isActive && (
-                                    <motion.div
-                                        layoutId="activeTab"
-                                        initial={{ opacity: 0, scale: 0.8 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        exit={{ opacity: 0, scale: 0.8 }}
-                                        className="absolute -inset-y-2 -inset-x-4 bg-[#0c831f]/5 dark:bg-[#0c831f]/20 rounded-[20px] -z-10"
-                                        transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                                    />
-                                )}
-                            </AnimatePresence>
+                            {/* Active indicator background removed */}
 
                             <motion.div
                                 animate={{
@@ -69,7 +58,7 @@ const BottomNav = () => {
                                     strokeWidth={isActive ? 2.5 : 2}
                                     className={cn(
                                         "transition-colors duration-300",
-                                        isActive ? "text-[#0c831f]" : "text-gray-400 dark:text-slate-500"
+                                    isActive ? "text-[#cc2532]" : "text-gray-400 dark:text-slate-500"
                                     )}
                                 />
                             </motion.div>
@@ -80,7 +69,7 @@ const BottomNav = () => {
                                 }}
                                 className={cn(
                                     "text-[10px] font-bold tracking-tight mt-1 transition-colors duration-300",
-                                    isActive ? "text-[#0c831f]" : "text-gray-400 dark:text-slate-500"
+                                    isActive ? "text-[#cc2532]" : "text-gray-400 dark:text-slate-500"
                                 )}
                             >
                                 {item.label}
@@ -89,11 +78,11 @@ const BottomNav = () => {
 
                         {/* Top Accent Line for Active State */}
                         {isActive && (
-                            <motion.div
-                                layoutId="topLine"
-                                className="absolute -top-[1px] w-8 h-[3px] bg-[#0c831f] rounded-full"
-                                transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                            />
+                                <motion.div
+                                    layoutId="topLine"
+                                    className="absolute -top-[1px] w-8 h-[3px] bg-[#cc2532] rounded-full"
+                                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                                />
                         )}
                     </Link>
                 );

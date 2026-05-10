@@ -463,7 +463,7 @@ export default function Profile() {
               <motion.div
                 whileHover={{ scale: 1.1, rotate: 5 }}
                 transition={{ duration: 0.3, type: "spring", stiffness: 300 }}>
-                <Avatar className="h-16 w-16 bg-blue-300 border-0">
+                <Avatar className="h-16 w-16 bg-red-100 border-0">
                   {userProfile?.profileImage && (
                     <AvatarImage
                       src={
@@ -474,7 +474,7 @@ export default function Profile() {
                       alt={displayName}
                     />
                   )}
-                  <AvatarFallback className="bg-blue-300 text-white text-2xl font-semibold">
+                  <AvatarFallback className="bg-red-100 text-red-600 text-2xl font-semibold">
                     {avatarInitial}
                   </AvatarFallback>
                 </Avatar>
@@ -531,7 +531,7 @@ export default function Profile() {
                     <motion.span
                       className={`text-xs font-medium px-2 py-1 rounded ${isComplete
                           ? "bg-green-100 text-green-700 border border-green-300"
-                          : "bg-orange-100 text-orange-800"
+                          : "bg-red-50 text-red-700"
                         }`}
                       whileHover={{ scale: 1.1 }}
                       transition={{ duration: 0.2 }}>
@@ -670,7 +670,7 @@ export default function Profile() {
                       e.stopPropagation();
                       handleShareReferral();
                     }}
-                    className="inline-flex items-center gap-1 text-xs text-[#EB590E] font-medium ml-2 px-2 py-1 rounded-md"
+                    className="inline-flex items-center gap-1 text-xs text-[#cc2532] font-medium ml-2 px-2 py-1 rounded-md"
                     disabled={!referralLink}>
                     <Share2 className="h-3.5 w-3.5" />
                     Refer
@@ -792,7 +792,7 @@ export default function Profile() {
         {/* Food Section */}
         <div className="mb-3">
           <div className="flex items-center gap-2 mb-2 px-1">
-            <div className="w-1 h-4 bg-[#EB590E] rounded"></div>
+            <div className="w-1 h-4 bg-[#cc2532] rounded"></div>
             <h3 className="text-base font-semibold text-gray-900 dark:text-white">
               Food
             </h3>
@@ -857,7 +857,7 @@ export default function Profile() {
         {/* Dining Section */}
         <div className="mb-3">
           <div className="flex items-center gap-2 mb-2 px-1">
-            <div className="w-1 h-4 bg-[#EB590E] rounded"></div>
+            <div className="w-1 h-4 bg-[#cc2532] rounded"></div>
             <h3 className="text-base font-semibold text-gray-900 dark:text-white">
               Dining
             </h3>
@@ -983,7 +983,7 @@ export default function Profile() {
         {/* More Section */}
         <div className="mb-8 pb-8">
           <div className="flex items-center gap-2 mb-2 px-1">
-            <div className="w-1 h-4 bg-[#EB590E] rounded"></div>
+            <div className="w-1 h-4 bg-[#cc2532] rounded"></div>
             <h3 className="text-base font-semibold text-gray-900 dark:text-white">
               More
             </h3>

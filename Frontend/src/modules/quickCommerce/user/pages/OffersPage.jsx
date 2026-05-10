@@ -30,7 +30,7 @@ const OffersPage = () => {
   const styleToBg = {
     blue: "bg-blue-600",
     green: "bg-[#0c831f]",
-    orange: "bg-orange-500",
+    red: "bg-red-500",
   };
   const iconFor = (icon) => {
     if (icon === "clock") return <Clock className="text-white" size={32} />;

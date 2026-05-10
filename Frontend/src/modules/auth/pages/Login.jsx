@@ -5,6 +5,7 @@ import { Phone, Lock, ArrowRight, ShieldCheck, Loader2, UserRound } from "lucide
 import { toast } from "sonner"
 import { authAPI, userAPI } from "@food/api"
 import { isModuleAuthenticated, setAuthData } from "@food/utils/auth"
+import zozomenLogo from "@/assets/zozomenLogo.png"
 
 export default function UnifiedOTPFastLogin() {
   const RESEND_COOLDOWN_SECONDS = 60
@@ -289,16 +290,16 @@ export default function UnifiedOTPFastLogin() {
           <motion.div 
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center mb-3 shadow-xl"
+            className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center mb-3 shadow-xl overflow-hidden"
           >
-             <span className="text-[#CB202D] text-3xl font-black">A</span>
+             <img src={zozomenLogo} alt="Zozomen" className="w-full h-full object-contain p-2" />
           </motion.div>
           <motion.h1 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-2xl md:text-5xl font-black tracking-tight mb-1"
           >
-            AppZeto <span className="text-white/80 font-normal">Master</span>
+            Zozomen
           </motion.h1>
           <p className="text-xs md:text-base font-bold text-white/90 tracking-[0.2em] uppercase">
             Taste the best, forget the rest

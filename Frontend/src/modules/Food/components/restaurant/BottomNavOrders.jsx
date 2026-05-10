@@ -53,7 +53,7 @@ export default function BottomNavOrders() {
     <div className="fixed bottom-0 left-0 right-0 z-[60] px-2 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
       <div className="mx-auto flex w-full max-w-md items-end gap-2">
         <div className="flex-1 min-w-0">
-          <div className="relative overflow-visible rounded-[30px] bg-black py-2 pl-3 pr-2 shadow-[0_16px_40px_rgba(0,0,0,0.28)]">
+          <div className="relative overflow-visible rounded-[30px] bg-[#49AB14] py-2 pl-3 pr-2 shadow-[0_16px_40px_rgba(73,171,20,0.3)]">
             <div className="relative flex items-end justify-around gap-1">
               {tabs.map((tab) => {
                 const Icon = tab.icon
@@ -67,22 +67,14 @@ export default function BottomNavOrders() {
                     className="relative z-10 flex min-w-0 flex-1 flex-col items-center justify-center gap-1 overflow-visible rounded-full px-2 py-2"
                     whileTap={{ scale: 0.95 }}
                   >
-                    {isActive && (
-                      <motion.div
-                        layoutId="bottomNavActive"
-                        className="absolute inset-0 -z-10 rounded-full bg-white/16"
-                        initial={false}
-                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                      />
-                    )}
                     <Icon
-                      className={`relative z-10 h-[18px] w-[18px] transition-colors duration-300 ease-in-out ${
-                        isActive ? "text-white" : "text-white/78"
+                      className={`relative z-10 h-[20px] w-[20px] transition-all duration-300 ${
+                        isActive ? "text-white scale-110" : "text-white/60"
                       }`}
                     />
                     <span
-                      className={`relative z-10 whitespace-nowrap text-[11px] leading-none transition-colors duration-300 ease-in-out ${
-                        isActive ? "text-white" : "text-white/78"
+                      className={`relative z-10 whitespace-nowrap text-[10px] font-bold transition-all duration-300 ${
+                        isActive ? "text-white" : "text-white/60"
                       }`}
                     >
                       {tab.label}

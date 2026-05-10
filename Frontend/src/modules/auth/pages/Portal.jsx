@@ -157,7 +157,7 @@ export default function SuperAppPortal() {
             transition={isNativeLikeShell ? undefined : { duration: 4, repeat: Infinity }}
             className="w-5 h-5 bg-gradient-to-br from-[#CB202D] to-red-700 rounded-md flex items-center justify-center shadow-md flex-shrink-0"
           >
-             <span className="text-white text-[9px] font-black italic">A</span>
+             <span className="text-white text-[9px] font-black italic">Z</span>
           </motion.div>
           <span className="text-[9px] sm:text-[10px] font-black tracking-[0.18em] text-[#BABCBD] uppercase whitespace-nowrap overflow-hidden text-ellipsis">
             Everything you need, delivered
@@ -171,7 +171,7 @@ export default function SuperAppPortal() {
           className="text-4xl sm:text-5xl md:text-7xl font-black text-[#1A202C] tracking-tight leading-[0.95]"
         >
           Welcome to <br />
-          <span className={`text-transparent bg-clip-text bg-gradient-to-r from-[#CB202D] via-rose-500 to-[#CB202D] bg-[length:200%_auto] block mt-1 sm:mt-2 ${isNativeLikeShell ? "" : "animate-gradient"}`}>AppZeto</span>
+          <span className={`text-transparent bg-clip-text bg-gradient-to-r from-[#CB202D] via-rose-500 to-[#CB202D] bg-[length:200%_auto] block mt-1 sm:mt-2 ${isNativeLikeShell ? "" : "animate-gradient"}`}>Zozomen</span>
         </motion.h1>
 
         <motion.p 
@@ -291,7 +291,7 @@ export default function SuperAppPortal() {
       <div className="mt-4 hidden sm:flex flex-col items-center gap-3 opacity-50">
          <div className="flex items-center gap-1.5 grayscale">
             <ShieldCheck className="w-4 h-4" />
-            <span className="text-[10px] font-black uppercase tracking-widest">Secure by AppZeto</span>
+            <span className="text-[10px] font-black uppercase tracking-widest">Secure by Zozomen</span>
          </div>
       </div>
     </div>

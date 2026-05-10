@@ -31,6 +31,36 @@ const formatFullAddress = (address) => {
     .join(", ");
 };
 
+const normalizeAddressLabel = (label) => {
+  const value = String(label || "").trim().toLowerCase();
+  if (value === "home") return "Home";
+  if (value === "office" || value === "work") return "Office";
+  return "Other";
+};
+
+const buildOrderAddress = (address, userProfile) => ({
+  label: normalizeAddressLabel(address?.label),
+  name: userProfile?.name || "Customer",
+  street:
+    address?.street ||
+    address?.address ||
+    address?.formattedAddress ||
+    "Address unavailable",
+  additionalDetails: address?.additionalDetails || "",
+  city: address?.city || address?.area || "NA",
+  state: address?.state || address?.city || "NA",
+  zipCode: address?.zipCode || address?.postalCode || "",
+  phone: address?.phone || userProfile?.phone || "",
+  ...(Array.isArray(address?.location?.coordinates)
+    ? {
+        location: {
+          type: "Point",
+          coordinates: address.location.coordinates,
+        },
+      }
+    : {}),
+});
+
 const mapCartItemsToPayload = (cart) =>
   cart.map((item) => {
     const type = getOrderType(item);
@@ -90,27 +120,47 @@ function DeliveryOptionCard({ option, active, onSelect, description }) {
   );
 }
 
-export default function MixedSharedCart() {
+export default function MixedSharedCart({ initialAddress = null, addressMode = "saved" }) {
   const navigate = useNavigate();
   const companyName = useCompanyName();
   const { cart, updateQuantity, clearCart } = useCart();
-  const { getDefaultAddress, userProfile } = useProfile();
+  const { addresses = [], getDefaultAddress, userProfile } = useProfile();
 
   const [pricing, setPricing] = useState(null);
   const [isPricingLoading, setIsPricingLoading] = useState(false);
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("cash");
   const [selectedDeliveryMode, setSelectedDeliveryMode] = useState("normal");
+  const [selectedAddressId, setSelectedAddressId] = useState(null);
 
   const foodItems = cart.filter((item) => getOrderType(item) === "food");
   const quickItems = cart.filter((item) => getOrderType(item) === "quick");
-  const defaultAddress = getDefaultAddress?.() || null;
+  
+  const savedAddress = getDefaultAddress?.() || null;
+
+  // Use initialAddress if provided, otherwise fallback to profile default or saved
+  const defaultAddress = useMemo(() => {
+    if (initialAddress) return initialAddress;
+    
+    if (addressMode === "current") {
+      // For mixed cart, we might not have currentLocationAddress directly here
+      // but if it's passed via initialAddress, we're good.
+      return savedAddress;
+    }
+    
+    return savedAddress;
+  }, [initialAddress, savedAddress, addressMode]);
+
   const addressText = formatFullAddress(defaultAddress);
+  const deliveryAddress = useMemo(
+    () => (defaultAddress ? buildOrderAddress(defaultAddress, userProfile) : null),
+    [defaultAddress, userProfile],
+  );
 
   const mappedItems = useMemo(() => mapCartItemsToPayload(cart), [cart]);
 
   useEffect(() => {
-    if (foodItems.length === 0 || quickItems.length === 0 || !defaultAddress) {
+    if (foodItems.length === 0 || quickItems.length === 0 || !deliveryAddress) {
       setPricing(null);
       return;
     }
@@ -122,37 +172,23 @@ export default function MixedSharedCart() {
         const response = await orderAPI.calculateOrder({
           orderType: "mixed",
           items: mappedItems,
-          address: {
-            label: defaultAddress.label || "Home",
-            street: defaultAddress.street || defaultAddress.address || defaultAddress.formattedAddress || "",
-            additionalDetails: defaultAddress.additionalDetails || "",
-            city: defaultAddress.city || "",
-            state: defaultAddress.state || "",
-            zipCode: defaultAddress.zipCode || "",
-            phone: defaultAddress.phone || userProfile?.phone || "",
-            location: Array.isArray(defaultAddress?.location?.coordinates)
-              ? { type: "Point", coordinates: defaultAddress.location.coordinates }
-              : undefined,
-          },
+          address: deliveryAddress,
         });
 
         if (!cancelled) {
           const nextPricing = response?.data?.data?.pricing || null;
           setPricing(nextPricing);
-          if (Array.isArray(nextPricing?.deliveryOptions) && nextPricing.deliveryOptions.length > 0) {
-            setSelectedDeliveryMode((prev) =>
-              nextPricing.deliveryOptions.some((option) => option.code === prev)
-                ? prev
-                : nextPricing.deliveryOptions[0].code,
-            );
-          } else {
-            setSelectedDeliveryMode("normal");
-          }
+          // Always default to "normal" delivery mode and hide express options in UI
+          setSelectedDeliveryMode("normal");
         }
       } catch (error) {
         if (!cancelled) {
           console.error("Mixed order pricing failed", error);
-          toast.error("Couldn't load mixed delivery options");
+          toast.error(
+            error?.response?.data?.message ||
+              error?.response?.data?.error?.message ||
+              "Couldn't load mixed delivery options",
+          );
           setPricing(null);
         }
       } finally {
@@ -164,21 +200,21 @@ export default function MixedSharedCart() {
     return () => {
       cancelled = true;
     };
-  }, [defaultAddress, foodItems.length, quickItems.length, mappedItems, userProfile?.phone]);
+  }, [deliveryAddress, foodItems.length, quickItems.length, mappedItems]);
 
   const selectedDeliveryOption =
     pricing?.deliveryOptions?.find((option) => option.code === selectedDeliveryMode) || null;
   const subtotal =
     pricing?.subtotal ||
     cart.reduce((sum, item) => sum + Number(item.price || 0) * Number(item.quantity || 1), 0);
-  const tax = pricing?.tax || 0;
-  const platformFee = pricing?.platformFee || 0;
+  const tax = pricing?.tax ?? (isPricingLoading ? 0 : null);
+  const platformFee = pricing?.platformFee ?? (isPricingLoading ? 0 : null);
   const discount = pricing?.discount || 0;
-  const deliveryFee = selectedDeliveryOption?.deliveryFee ?? pricing?.deliveryFee ?? 0;
+  const deliveryFee = selectedDeliveryOption?.deliveryFee ?? pricing?.deliveryFee ?? (isPricingLoading ? 0 : null);
   const total =
     selectedDeliveryOption?.total ??
     pricing?.total ??
-    Math.max(0, subtotal + tax + platformFee + deliveryFee - discount);
+    (tax === null ? subtotal : Math.max(0, subtotal + tax + platformFee + (deliveryFee || 0) - discount));
 
   const increment = (item) => updateQuantity(item.id, Number(item.quantity || 1) + 1);
   const decrement = (item) => updateQuantity(item.id, Number(item.quantity || 1) - 1);
@@ -199,18 +235,7 @@ export default function MixedSharedCart() {
       const orderPayload = {
         orderType: "mixed",
         items: mappedItems,
-        address: {
-          label: defaultAddress.label || "Home",
-          street: defaultAddress.street || defaultAddress.address || defaultAddress.formattedAddress || "",
-          additionalDetails: defaultAddress.additionalDetails || "",
-          city: defaultAddress.city || "",
-          state: defaultAddress.state || "",
-          zipCode: defaultAddress.zipCode || "",
-          phone: defaultAddress.phone || userProfile?.phone || "",
-          location: Array.isArray(defaultAddress?.location?.coordinates)
-            ? { type: "Point", coordinates: defaultAddress.location.coordinates }
-            : undefined,
-        },
+        address: deliveryAddress,
         restaurantId: foodItems[0]?.restaurantId,
         restaurantName: foodItems[0]?.restaurant || undefined,
         pricing: {
@@ -388,21 +413,28 @@ export default function MixedSharedCart() {
                       onSelect={setSelectedDeliveryMode}
                       description="One rider can collect both pickups because the restaurant and store are close and aligned."
                     />
-                    {pricing.deliveryOptions[1] && (
+                    {/* Express delivery option hidden as per request */}
+                    {/* {pricing.deliveryOptions[1] && (
                       <DeliveryOptionCard
                         option={pricing.deliveryOptions[1]}
                         active={selectedDeliveryMode === pricing.deliveryOptions[1].code}
                         onSelect={setSelectedDeliveryMode}
                         description="Two nearby riders will handle the food and quick pickups separately for a faster drop."
                       />
-                    )}
+                    )} */}
                     <p className="text-xs font-medium text-slate-500">
                       Pickup gap {Number(pricing?.pickupDistanceKm || 0).toFixed(1)} km. Same direction routing is available.
                     </p>
                   </>
                 ) : (
                   <div className="rounded-2xl bg-slate-100 p-4 text-sm text-slate-600">
-                    Separate deliveries will be assigned automatically because these pickups are either farther than 2 km apart or not in the same direction.
+                    {!deliveryAddress 
+                      ? "Please select a delivery address to see your delivery plan."
+                      : isPricingLoading 
+                        ? "Calculating best delivery plan..."
+                        : pricing?.eligibilityReason
+                          ? `${pricing.eligibilityReason}. Separate deliveries will be assigned automatically.`
+                          : `Separate deliveries will be assigned automatically because these pickups are either farther than ${Number(pricing?.mixedOrderDistanceLimit ?? 2).toFixed(1)} km apart or not in the same direction.`}
                   </div>
                 )}
               </div>
@@ -484,15 +516,15 @@ export default function MixedSharedCart() {
                 </div>
                 <div className="flex items-center justify-between text-slate-600">
                   <span>Delivery fee</span>
-                  <span>{RUPEE_SYMBOL}{deliveryFee.toFixed(0)}</span>
+                  <span>{deliveryFee === null ? "--" : `${RUPEE_SYMBOL}${deliveryFee.toFixed(0)}`}</span>
                 </div>
                 <div className="flex items-center justify-between text-slate-600">
                   <span>Platform fee</span>
-                  <span>{RUPEE_SYMBOL}{platformFee.toFixed(0)}</span>
+                  <span>{platformFee === null ? "--" : `${RUPEE_SYMBOL}${platformFee.toFixed(0)}`}</span>
                 </div>
                 <div className="flex items-center justify-between text-slate-600">
                   <span>Tax</span>
-                  <span>{RUPEE_SYMBOL}{tax.toFixed(0)}</span>
+                  <span>{tax === null ? "--" : `${RUPEE_SYMBOL}${tax.toFixed(0)}`}</span>
                 </div>
                 {discount > 0 && (
                   <div className="flex items-center justify-between text-emerald-600">
@@ -512,10 +544,10 @@ export default function MixedSharedCart() {
                 disabled={isPlacingOrder || isPricingLoading || !defaultAddress}
                 className="h-12 w-full rounded-2xl bg-slate-900 text-white hover:bg-slate-800"
               >
-                {isPlacingOrder ? "Placing order..." : selectedDeliveryMode === "express" ? "Pay for express mixed order" : "Place mixed order"}
+                {isPlacingOrder ? "Placing order..." : "Place mixed order"}
               </Button>
 
-              {selectedDeliveryMode === "express" && (
+              {/* {selectedDeliveryMode === "express" && (
                 <div className="rounded-2xl bg-amber-50 p-3 text-sm text-amber-900">
                   <p className="flex items-center gap-2 font-bold">
                     <Zap className="h-4 w-4" />
@@ -525,7 +557,7 @@ export default function MixedSharedCart() {
                     Food and quick pickups will be assigned to separate nearby riders when available.
                   </p>
                 </div>
-              )}
+              )} */}
             </div>
           </aside>
         </div>
