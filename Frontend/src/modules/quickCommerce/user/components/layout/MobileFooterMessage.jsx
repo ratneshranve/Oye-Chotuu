@@ -3,7 +3,7 @@ import { useSettings } from '@core/context/SettingsContext';
 
 const MobileFooterMessage = () => {
     const { settings } = useSettings();
-    const appName = settings?.appName || 'App';
+    const appName = settings?.appName || 'ChotuuMart';
     return (
         <div className="md:hidden w-full flex flex-col items-center -mt-8 pt-0 pb-28 px-6 bg-transparent">
             <div className="w-full flex flex-col">
