@@ -36,7 +36,7 @@ export default function BottomNavigation() {
       className="md:hidden fixed bottom-0 left-0 right-0 z-50"
     >
       <Link
-        to="/user/auth/portal"
+        to="/food/user"
         state={{ redirectTo }}
         className="relative z-10 mb-0.5 ml-4 mr-auto flex h-9 w-fit items-center gap-2 rounded-t-[16px] rounded-b-[8px] border border-gray-200 bg-white px-3 pb-2 pt-1.5 shadow-[0_-1px_0_rgba(255,255,255,0.9),0_-6px_18px_-10px_rgba(0,0,0,0.12)]"
       >
