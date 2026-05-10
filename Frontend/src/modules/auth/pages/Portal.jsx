@@ -59,6 +59,8 @@ export default function SuperAppPortal() {
 
     quickCommerce: true,
   })
+  const [logoUrl, setLogoUrl] = React.useState(null)
+  const [companyName, setCompanyName] = React.useState("OyeChotuu")
 
   React.useEffect(() => {
     const loadSettings = async () => {
@@ -71,6 +73,8 @@ export default function SuperAppPortal() {
         if (settings?.modules) {
           setEnabledModules(settings.modules)
         }
+        if (settings?.logo?.url) setLogoUrl(settings.logo.url)
+        if (settings?.companyName) setCompanyName(settings.companyName)
       } catch (err) {
         console.error("Failed to load settings in Portal:", err)
       }
@@ -152,13 +156,13 @@ export default function SuperAppPortal() {
           animate={isNativeLikeShell ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 }}
           className="bg-white border border-gray-200 rounded-full px-4 py-2 flex items-center gap-2 shadow-lg shadow-gray-200/40 max-w-full"
         >
-          <motion.div
-            animate={isNativeLikeShell ? undefined : { rotate: [0, 10, -10, 0] }}
-            transition={isNativeLikeShell ? undefined : { duration: 4, repeat: Infinity }}
-            className="w-5 h-5 bg-gradient-to-br from-[#CB202D] to-red-700 rounded-md flex items-center justify-center shadow-md flex-shrink-0"
-          >
-            <span className="text-white text-[9px] font-black italic">Z</span>
-          </motion.div>
+            <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center shadow-md flex-shrink-0 overflow-hidden">
+              {logoUrl ? (
+                <img src={logoUrl} alt="Logo" className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-[#CB202D] text-[9px] font-black italic">{companyName?.charAt(0) || "O"}</span>
+              )}
+            </div>
           <span className="text-[9px] sm:text-[10px] font-black tracking-[0.18em] text-[#BABCBD] uppercase whitespace-nowrap overflow-hidden text-ellipsis">
             Everything you need, delivered
           </span>
@@ -171,7 +175,7 @@ export default function SuperAppPortal() {
           className="text-4xl sm:text-5xl md:text-7xl font-black text-[#1A202C] tracking-tight leading-[0.95]"
         >
           Welcome to <br />
-          <span className={`text-transparent bg-clip-text bg-gradient-to-r from-[#CB202D] via-rose-500 to-[#CB202D] bg-[length:200%_auto] block mt-1 sm:mt-2 ${isNativeLikeShell ? "" : "animate-gradient"}`}>OyeChotuu</span>
+          <span className={`text-transparent bg-clip-text bg-gradient-to-r from-[#CB202D] via-rose-500 to-[#CB202D] bg-[length:200%_auto] block mt-1 sm:mt-2 ${isNativeLikeShell ? "" : "animate-gradient"}`}>{companyName}</span>
         </motion.h1>
 
         <motion.p

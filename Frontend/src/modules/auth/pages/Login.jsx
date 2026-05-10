@@ -6,6 +6,7 @@ import { toast } from "sonner"
 import { authAPI, userAPI } from "@food/api"
 import { isModuleAuthenticated, setAuthData } from "@food/utils/auth"
 import zozomenLogo from "@/assets/zozomenLogo.png"
+import { loadBusinessSettings, getCachedSettings } from "@common/utils/businessSettings"
 
 export default function UnifiedOTPFastLogin() {
   const RESEND_COOLDOWN_SECONDS = 60
@@ -22,6 +23,7 @@ export default function UnifiedOTPFastLogin() {
   const navigate = useNavigate()
   const searchParams = new URLSearchParams(location.search)
   const referralCode = searchParams.get("ref") || ""
+  const [logoUrl, setLogoUrl] = useState(() => getCachedSettings()?.logo?.url || null)
 
   const submitting = useRef(false)
   const redirectTo = typeof location.state?.redirectTo === "string" && location.state.redirectTo.trim()
@@ -38,6 +40,16 @@ export default function UnifiedOTPFastLogin() {
     setName("")
     setNameError("")
   }
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const settings = await loadBusinessSettings()
+        if (settings?.logo?.url) setLogoUrl(settings.logo.url)
+      } catch (e) {}
+    }
+    fetchSettings()
+  }, [])
 
   const normalizedPhone = () => {
     const digits = String(phoneNumber).replace(/\D/g, "").slice(-15)
@@ -288,11 +300,11 @@ export default function UnifiedOTPFastLogin() {
 
         <div className="relative z-10 flex flex-col items-center">
           <motion.div
-            initial={{ scale: 0 }}
+            initial={{ scale: 0.8 }}
             animate={{ scale: 1 }}
-            className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center mb-3 shadow-xl overflow-hidden"
+            className="w-12 h-12 bg-white rounded-full flex items-center justify-center mb-3 shadow-xl overflow-hidden"
           >
-            <img src={zozomenLogo} alt="Zozomen" className="w-full h-full object-contain p-2" />
+            <img src={logoUrl || zozomenLogo} alt="Logo" className="w-full h-full object-cover" />
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
