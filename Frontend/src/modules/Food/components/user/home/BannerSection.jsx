@@ -105,61 +105,18 @@ const BannerSection = memo(({
                     loop
                     muted
                     playsInline
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-contain"
                     style={{ filter: "brightness(0.95)" }}
                   />
                 ) : (
-                  <>
-                    <div className="relative h-full w-full flex items-center justify-between px-2 sm:px-6">
-                      {/* Left Side: Text Content */}
-                      <div className="relative z-10 flex flex-col justify-center h-full text-white w-[60%] sm:w-[65%] mt-2 pl-4 sm:pl-8">
-                        <div className="flex items-center gap-1.5 mb-1">
-                           <span className="text-[10px] sm:text-xs font-black italic tracking-wider text-red-200 uppercase flex items-center gap-1">
-                             <TypewriterText text={bannerData?.title || "A SIX IS HIT! 🏏"} isActive={isActive} delay={0.1} />
-                           </span>
-                        </div>
-                        <h3 className="text-xl sm:text-2xl lg:text-3xl font-black leading-[1.1] mb-3 text-white uppercase italic drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]">
-                          <TypewriterText text={bannerData?.subtitle || "66% OFF FOR 10 MIN!"} isActive={isActive} delay={0.4} />
-                        </h3>
-                        <motion.div
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={
-                            isActive
-                              ? { opacity: 1, scale: 1, y: [0, -4, 0, -2, 0] }
-                              : { opacity: 0, scale: 0.8, y: 0 }
-                          }
-                          transition={{
-                            opacity: { delay: 0.8, duration: 0.4 },
-                            scale: { delay: 0.8, duration: 0.4, type: "spring" },
-                            y: { delay: 1.5, duration: 1.2, ease: "easeInOut", repeat: Infinity, repeatDelay: 2.5 }
-                          }}
-                          className="w-fit"
-                        >
-                          <button className="bg-[#cc2532] hover:bg-[#a81e29] shadow-[0_4px_12px_rgba(204,37,50,0.5)] flex items-center gap-1">
-                            {bannerData?.action || "Order Now"} <span className="font-black tracking-tighter">&gt;&gt;</span>
-                          </button>
-                        </motion.div>
-                      </div>
-
-                      {/* Right Side: Image Content */}
-                      <motion.div 
-                          initial={{ opacity: 0, x: 20, scale: 0.9 }}
-                          animate={{ opacity: currentBannerIndex === index ? 1 : 0, x: currentBannerIndex === index ? 0 : 20, scale: currentBannerIndex === index ? 1 : 0.9 }}
-                          transition={{ delay: 0.2, duration: 0.6, type: "spring", bounce: 0.4 }}
-                          className="absolute right-0 bottom-0 h-[120%] w-[45%] sm:w-[40%] flex items-end justify-end pointer-events-none"
-                      >
-                         <img src={image} className="max-h-full w-auto object-contain object-bottom drop-shadow-2xl translate-y-2 sm:translate-y-4 translate-x-2 sm:translate-x-4" alt="Banner Graphic" />
-                      </motion.div>
-                    </div>
                     <OptimizedImage
                       src={image}
                       alt={`Hero Banner ${index + 1}`}
-                      className="h-full w-full object-cover"
+                      className="h-full w-full object-contain"
                       priority={index === currentBannerIndex}
                       backendOrigin={backendOrigin}
                       draggable={false}
                     />
-                  </>
                 )}
               </div>
             );
