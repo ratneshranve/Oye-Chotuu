@@ -105,44 +105,44 @@ export default function SuperAppPortal() {
 
       {/* Lining Effect & Pattern Background */}
       {!isNativeLikeShell && (
-      <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.03] dark:opacity-[0.05]">
-          <div className="absolute inset-0" style={{ 
+        <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.03] dark:opacity-[0.05]">
+          <div className="absolute inset-0" style={{
             backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`,
             backgroundSize: `40px 40px`
           }} />
-          <div className="absolute inset-0 animate-scanline" style={{ 
+          <div className="absolute inset-0 animate-scanline" style={{
             backgroundImage: `linear-gradient(transparent 0%, #000 50%, transparent 100%)`,
             backgroundSize: `100% 200px`,
             opacity: 0.5
           }} />
-      </div>
+        </div>
       )}
 
       {/* Dynamic Background Particles */}
       {!isNativeLikeShell && (
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
           {particlePositions.map((particle, i) => (
-             <motion.div
-               key={particle.id}
-               animate={{
-                 y: [0, -100, 0],
-                 x: [0, 50, 0],
-                 scale: [1, 1.2, 1],
-                 opacity: [0.1, 0.2, 0.1]
-               }}
-               transition={{
-                 duration: 10 + i * 2,
-                 repeat: Infinity,
-                 ease: "linear"
-               }}
-               className="absolute w-64 h-64 bg-[#CB202D]/5 rounded-full blur-3xl"
-               style={{
-                 left: particle.left,
-                 top: particle.top,
-               }}
-             />
+            <motion.div
+              key={particle.id}
+              animate={{
+                y: [0, -100, 0],
+                x: [0, 50, 0],
+                scale: [1, 1.2, 1],
+                opacity: [0.1, 0.2, 0.1]
+              }}
+              transition={{
+                duration: 10 + i * 2,
+                repeat: Infinity,
+                ease: "linear"
+              }}
+              className="absolute w-64 h-64 bg-[#CB202D]/5 rounded-full blur-3xl"
+              style={{
+                left: particle.left,
+                top: particle.top,
+              }}
+            />
           ))}
-      </div>
+        </div>
       )}
 
       {/* Top Header Section */}
@@ -152,29 +152,29 @@ export default function SuperAppPortal() {
           animate={isNativeLikeShell ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 }}
           className="bg-white border border-gray-200 rounded-full px-4 py-2 flex items-center gap-2 shadow-lg shadow-gray-200/40 max-w-full"
         >
-          <motion.div 
+          <motion.div
             animate={isNativeLikeShell ? undefined : { rotate: [0, 10, -10, 0] }}
             transition={isNativeLikeShell ? undefined : { duration: 4, repeat: Infinity }}
             className="w-5 h-5 bg-gradient-to-br from-[#CB202D] to-red-700 rounded-md flex items-center justify-center shadow-md flex-shrink-0"
           >
-             <span className="text-white text-[9px] font-black italic">Z</span>
+            <span className="text-white text-[9px] font-black italic">Z</span>
           </motion.div>
           <span className="text-[9px] sm:text-[10px] font-black tracking-[0.18em] text-[#BABCBD] uppercase whitespace-nowrap overflow-hidden text-ellipsis">
             Everything you need, delivered
           </span>
         </motion.div>
 
-        <motion.h1 
+        <motion.h1
           initial={isNativeLikeShell ? false : { opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={isNativeLikeShell ? { duration: 0.2 } : { type: "spring", damping: 12 }}
           className="text-4xl sm:text-5xl md:text-7xl font-black text-[#1A202C] tracking-tight leading-[0.95]"
         >
           Welcome to <br />
-          <span className={`text-transparent bg-clip-text bg-gradient-to-r from-[#CB202D] via-rose-500 to-[#CB202D] bg-[length:200%_auto] block mt-1 sm:mt-2 ${isNativeLikeShell ? "" : "animate-gradient"}`}>Zozomen</span>
+          <span className={`text-transparent bg-clip-text bg-gradient-to-r from-[#CB202D] via-rose-500 to-[#CB202D] bg-[length:200%_auto] block mt-1 sm:mt-2 ${isNativeLikeShell ? "" : "animate-gradient"}`}>OyeChotuu</span>
         </motion.h1>
 
-        <motion.p 
+        <motion.p
           initial={isNativeLikeShell ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={isNativeLikeShell ? { duration: 0.2 } : { delay: 0.3 }}
@@ -193,9 +193,9 @@ export default function SuperAppPortal() {
               key={service.id}
               initial={isNativeLikeShell ? false : { opacity: 0, y: 20, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={isNativeLikeShell ? { duration: 0.18 } : { 
-                delay: 0.15 + idx * 0.06, 
-                type: "spring", 
+              transition={isNativeLikeShell ? { duration: 0.18 } : {
+                delay: 0.15 + idx * 0.06,
+                type: "spring",
                 stiffness: 120,
                 damping: 18
               }}
@@ -206,9 +206,9 @@ export default function SuperAppPortal() {
               <div className={`relative h-[175px] sm:h-[205px] w-full rounded-[1.5rem] overflow-hidden shadow-xl bg-white border border-white/30 ${isNativeLikeShell ? "" : "transition-all duration-500"}`}>
                 {/* Image Base */}
                 <div className="absolute inset-0 bg-gray-50 overflow-hidden">
-                  <img 
-                    src={service.image} 
-                    alt={service.name} 
+                  <img
+                    src={service.image}
+                    alt={service.name}
                     className={`w-full h-full object-cover ${isNativeLikeShell ? "" : "transition-transform duration-700 group-hover:scale-110"}`}
                   />
                   <div className={`absolute inset-0 bg-gradient-to-tr ${service.color.replace('from-', 'from-black/40 to-')} opacity-25`} />
@@ -217,7 +217,7 @@ export default function SuperAppPortal() {
 
                 {/* Service Icon floating */}
                 <div className="absolute top-3 left-3 z-30">
-                  <motion.div 
+                  <motion.div
                     animate={isNativeLikeShell ? undefined : { y: [0, -4, 0] }}
                     transition={isNativeLikeShell ? undefined : { duration: 3, repeat: Infinity, delay: idx * 0.3 }}
                     className={`p-2.5 rounded-xl border border-white/30 shadow-lg ${isNativeLikeShell ? "bg-white/25" : "bg-white/20 backdrop-blur-xl"}`}
@@ -238,15 +238,15 @@ export default function SuperAppPortal() {
 
                 {/* Corner Badge */}
                 <div className="absolute top-0 right-0 z-30">
-                   <motion.div 
-                     initial={isNativeLikeShell ? false : { x: 12, opacity: 0 }}
-                     animate={{ x: 0, opacity: 1 }}
-                     transition={isNativeLikeShell ? { duration: 0.18 } : { delay: 0.25 + idx * 0.05 }}
-                     className={`px-3 py-1.5 rounded-bl-2xl border-l border-b border-white/20 shadow-lg flex items-center gap-1.5 ${isNativeLikeShell ? "bg-black/75" : "bg-black/80 backdrop-blur-xl"}`}
-                   >
-                      <span className="text-[9px] scale-110">{service.badgeIcon}</span>
-                      <span className="text-[9px] font-black text-white uppercase tracking-widest">{service.badge}</span>
-                   </motion.div>
+                  <motion.div
+                    initial={isNativeLikeShell ? false : { x: 12, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={isNativeLikeShell ? { duration: 0.18 } : { delay: 0.25 + idx * 0.05 }}
+                    className={`px-3 py-1.5 rounded-bl-2xl border-l border-b border-white/20 shadow-lg flex items-center gap-1.5 ${isNativeLikeShell ? "bg-black/75" : "bg-black/80 backdrop-blur-xl"}`}
+                  >
+                    <span className="text-[9px] scale-110">{service.badgeIcon}</span>
+                    <span className="text-[9px] font-black text-white uppercase tracking-widest">{service.badge}</span>
+                  </motion.div>
                 </div>
               </div>
 
@@ -259,7 +259,8 @@ export default function SuperAppPortal() {
         </div>
       </div>
 
-      {!isNativeLikeShell && <style dangerouslySetInnerHTML={{ __html: `
+      {!isNativeLikeShell && <style dangerouslySetInnerHTML={{
+        __html: `
         .perspective {
           perspective: 1000px;
         }
@@ -289,10 +290,10 @@ export default function SuperAppPortal() {
 
       {/* Trust Badge at bottom */}
       <div className="mt-4 hidden sm:flex flex-col items-center gap-3 opacity-50">
-         <div className="flex items-center gap-1.5 grayscale">
-            <ShieldCheck className="w-4 h-4" />
-            <span className="text-[10px] font-black uppercase tracking-widest">Secure by Zozomen</span>
-         </div>
+        <div className="flex items-center gap-1.5 grayscale">
+          <ShieldCheck className="w-4 h-4" />
+          <span className="text-[10px] font-black uppercase tracking-widest">Secure by OyeChotuu</span>
+        </div>
       </div>
     </div>
   )
