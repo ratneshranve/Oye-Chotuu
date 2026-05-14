@@ -70,7 +70,8 @@ const DeliverymanBonus = lazy(() => import("@food/pages/admin/delivery-partners/
 const EarningAddon = lazy(() => import("@food/pages/admin/delivery-partners/EarningAddon"));
 const EarningAddonHistory = lazy(() => import("@food/pages/admin/delivery-partners/EarningAddonHistory"));
 const DeliveryEarnings = lazy(() => import("@food/pages/admin/delivery-partners/DeliveryEarnings"));
-const MixedOrderEligibility = lazy(() => import("@food/pages/admin/MixedOrderEligibility"));
+// const MixedOrderEligibility = lazy(() => import("@food/pages/admin/MixedOrderEligibility"));
+
 // Disbursement Management
 // Report Management
 const TransactionReport = lazy(() => import("@food/pages/admin/reports/TransactionReport"));
@@ -131,6 +132,15 @@ const AdminLogin = lazy(() => import("@food/pages/admin/auth/AdminLogin"));
 const AdminSignup = lazy(() => import("@food/pages/admin/auth/AdminSignup"));
 const AdminForgotPassword = lazy(() => import("@food/pages/admin/auth/AdminForgotPassword"));
 const QuickCommerceAdminRoutes = lazy(() => import("@/modules/quickCommerce/admin/routes"));
+const DudhwalaPlanDetails = lazy(() => import("@/modules/Dudhwala/admin/pages/PlanDetails"));
+const DudhwalaDashboard = lazy(() => import("@/modules/Dudhwala/admin/pages/DudhwalaDashboard"));
+const MilkOrdersList = lazy(() => import("@/modules/Dudhwala/admin/pages/MilkOrdersList"));
+const ActivePlans = lazy(() => import("@/modules/Dudhwala/admin/pages/ActivePlans"));
+const PausedPlans = lazy(() => import("@/modules/Dudhwala/admin/pages/PausedPlans"));
+const ExpiredPlans = lazy(() => import("@/modules/Dudhwala/admin/pages/ExpiredPlans"));
+const RejectedPlans = lazy(() => import("@/modules/Dudhwala/admin/pages/RejectedPlans"));
+const DropdownManagement = lazy(() => import("@/modules/Dudhwala/admin/pages/DropdownManagement"));
+const WhyChotuuManagement = lazy(() => import("@/modules/Dudhwala/admin/pages/WhyChotuuManagement"));
 
 
 const GlobalApplicationSettings = lazy(() => import("@/modules/common/admin/pages/GlobalApplicationSettings"));
@@ -161,6 +171,19 @@ export default function AdminRouter() {
 
           {/* Quick Commerce Admin Routes */}
           <Route path="quick-commerce/*" element={<QuickCommerceAdminRoutes />} />
+
+          {/* Dudhwala Admin Routes */}
+          <Route path="dudhwala">
+            <Route index element={<DudhwalaDashboard />} />
+            <Route path="new-orders" element={<MilkOrdersList />} />
+            <Route path="active-plans" element={<ActivePlans />} />
+            <Route path="paused-plans" element={<PausedPlans />} />
+            <Route path="expired-plans" element={<ExpiredPlans />} />
+            <Route path="rejected-plans" element={<RejectedPlans />} />
+            <Route path="dropdowns" element={<DropdownManagement />} />
+            <Route path="why-chotuu" element={<WhyChotuuManagement />} />
+            <Route path="plans/:id" element={<DudhwalaPlanDetails />} />
+          </Route>
 
 
 
@@ -261,7 +284,8 @@ export default function AdminRouter() {
             <Route path="delivery-partners/earning-addon" element={<EarningAddon />} />
             <Route path="delivery-partners/earning-addon-history" element={<EarningAddonHistory />} />
             <Route path="delivery-partners/earnings" element={<DeliveryEarnings />} />
-            <Route path="mixed-order-eligibility" element={<MixedOrderEligibility />} />
+            {/* <Route path="mixed-order-eligibility" element={<MixedOrderEligibility />} /> */}
+
 
 
             {/* REPORTS & SETTINGS */}

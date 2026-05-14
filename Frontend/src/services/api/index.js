@@ -165,6 +165,46 @@ export const notificationAPI = {
     apiClient.delete("/food/notifications/inbox/all", config),
 };
 
+export const dudhwalaAPI = {
+  getConfig: (params = {}) =>
+    apiClient.get("/dudhwala/config", { params }),
+  getBootstrap: () =>
+    apiClient.get("/dudhwala/config/public/bootstrap"),
+  createOrder: (body = {}) =>
+    apiClient.post("/dudhwala/orders", body),
+  verifyPayment: (body = {}) =>
+    apiClient.post("/dudhwala/orders/verify-payment", body),
+  getMyPlans: (params = {}) =>
+    apiClient.get("/dudhwala/orders/my-plans", { params }),
+  // Admin APIs
+  adminGetAllPlans: (params = {}) =>
+    apiClient.get("/dudhwala/admin/plans", { params, contextModule: 'admin' }),
+  adminGetPlanDetails: (id) =>
+    apiClient.get(`/dudhwala/admin/plans/${id}`, { contextModule: 'admin' }),
+  adminUpdatePlanStatus: (id, body = {}) =>
+    apiClient.patch(`/dudhwala/admin/plans/${id}/status`, body, { contextModule: 'admin' }),
+  // Address APIs
+  getAddresses: () => apiClient.get('/dudhwala/addresses'),
+  addAddress: (body) => apiClient.post('/dudhwala/addresses', body),
+  updateAddress: (id, body) => apiClient.patch(`/dudhwala/addresses/${id}`, body),
+  deleteAddress: (id) => apiClient.delete(`/dudhwala/addresses/${id}`),
+  setDefaultAddress: (id) => apiClient.patch(`/dudhwala/addresses/${id}/default`),
+  adminGetDashboardStats: () =>
+    apiClient.get("/dudhwala/admin/stats", { contextModule: 'admin' }),
+  adminGetConfigs: (params = {}) =>
+    apiClient.get("/dudhwala/admin/configs", { params, contextModule: 'admin' }),
+  adminUpsertConfig: (body = {}) =>
+    apiClient.post("/dudhwala/admin/configs", body, { contextModule: 'admin' }),
+  adminDeleteConfig: (id) =>
+    apiClient.delete(`/dudhwala/admin/configs/${id}`, { contextModule: 'admin' }),
+  adminGetPricing: () =>
+    apiClient.get("/dudhwala/admin/pricing", { contextModule: 'admin' }),
+  adminUpsertPricing: (body = {}) =>
+    apiClient.post("/dudhwala/admin/pricing", body, { contextModule: 'admin' }),
+  adminDeletePricing: (id) =>
+    apiClient.delete(`/dudhwala/admin/pricing/${id}`, { contextModule: 'admin' }),
+};
+
 /** Admin API - new backend only (GET /auth/me, PATCH /auth/admin/profile, POST /auth/admin/change-password) */
 export const adminAPI = {
   getSidebarBadges: () =>

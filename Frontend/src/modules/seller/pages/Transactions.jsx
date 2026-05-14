@@ -137,8 +137,8 @@ const Transactions = () => {
     }
   };
 
-  if (loading) {
-    return <div className="flex items-center justify-center h-screen font-black text-slate-600">LOADING TRANSACTIONS...</div>;
+  if (loading && !ledger.length && Object.keys(data?.balances || {}).length === 0) {
+    return <div className="flex items-center justify-center h-screen font-black text-slate-600 uppercase tracking-widest">LOADING TRANSACTIONS...</div>;
   }
 
   return (

@@ -117,6 +117,7 @@ const ExploreMoreSection = lazy(() => import("@food/components/user/home/Explore
 const MiniCart = lazy(() => import("@food/components/user/MiniCart"));
 const OrderTrackingCard = lazy(() => import("@food/components/user/OrderTrackingCard"));
 const QuickCommerceHomePage = lazy(() => import("../../../quickCommerce/user/pages/Home"));
+const DudhwalaHomeScreen = lazy(() => import("../../../Dudhwala/screens/HomeScreen"));
 
 // Animated placeholder for search - moved outside component to prevent recreation
 const placeholders = [
@@ -260,15 +261,22 @@ export default function Home() {
 
   // Sync activeTab with URL
   useEffect(() => {
-    const isQuick = routerLocation.pathname.endsWith("/quick");
-    const targetTab = isQuick ? "quick" : "food";
+    const path = routerLocation.pathname;
+    const isQuick = path.endsWith("/quick") || path.includes("/quick/");
+    const isMilk = path.endsWith("/dudhwala") || path.includes("/dudhwala/");
+
+    let targetTab = "food";
+    if (isQuick) targetTab = "quick";
+    else if (isMilk) targetTab = "milk";
+
     if (activeTab !== targetTab) setActiveTab(targetTab);
-  }, [routerLocation.pathname]);
+  }, [routerLocation.pathname, activeTab]);
 
   // --- Handlers ---
   const handleTabChange = (tab) => {
     startTransition(() => setActiveTab(tab));
     if (tab === "quick") navigate("/quick");
+    else if (tab === "milk") navigate("/dudhwala");
     else navigate("/food/user");
   };
 
@@ -416,7 +424,7 @@ export default function Home() {
               />
             </Suspense>
           </motion.div>
-        ) : (
+        ) : activeTab === "quick" ? (
           <motion.div
             key="quick-content"
             initial={{ opacity: 0 }}
@@ -442,6 +450,19 @@ export default function Home() {
                 </QuickWishlistProvider>
               </QuickCartProvider>
             </QuickLocationProvider>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="milk-content"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.16, ease: "easeOut" }}
+            className="bg-white dark:bg-[#0a0a0a]"
+          >
+            <Suspense fallback={<div className="h-screen w-full bg-white dark:bg-[#0a0a0a]" />}>
+              <DudhwalaHomeScreen />
+            </Suspense>
           </motion.div>
         )}
       </AnimatePresence>
@@ -487,7 +508,7 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      {hasFoodCartItems && <Suspense fallback={null}><MiniCart /></Suspense>}
+      {activeTab === "food" && hasFoodCartItems && <Suspense fallback={null}><MiniCart /></Suspense>}
       <Suspense fallback={null}><OrderTrackingCard hasBottomNav /></Suspense>
     </div>
   );

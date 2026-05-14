@@ -17,6 +17,7 @@ import {
   ChefHat,
   Soup,
   Coffee,
+  Milk,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Switch } from "@food/components/ui/switch";
@@ -32,7 +33,7 @@ import useNotificationInbox from "@food/hooks/useNotificationInbox";
 const tabs = [
   {
     id: "food",
-    name: "Chotuu FoodWala",
+    name: "ChotuuFood",
     icon: "https://cdn-icons-png.flaticon.com/512/3075/3075977.png",
   },
   {
@@ -41,7 +42,11 @@ const tabs = [
     icon: "https://cdn-icons-png.flaticon.com/512/3724/3724720.png",
     badge: "15 mins",
   },
-
+  {
+    id: "milk",
+    name: "ChotuuDudhwala",
+    icon: "https://cdn-icons-png.flaticon.com/512/933/933854.png",
+  },
 ];
 
 const normalizeHex = (hex, fallback = "#8e24aa") => {
@@ -74,6 +79,19 @@ const foodTheme = (vegMode) => {
   const base = vegMode ? "#2f7a46" : "#cc2532";
   return {
     topBg: `linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 100%), ${base}`,
+    accent: base,
+    text: "#ffffff",
+    activeBg: base,
+    activeText: "#ffffff",
+    inactiveBg: "rgba(0,0,0,0.25)",
+    inactiveBorder: "rgba(255,255,255,0.08)",
+  };
+};
+
+const milkTheme = () => {
+  const base = "#0ea5e9"; // Dairy themed light blue
+  return {
+    topBg: `linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) 100%), ${base}`,
     accent: base,
     text: "#ffffff",
     activeBg: base,
@@ -170,7 +188,11 @@ export default function HomeHeader({
     return () => window.removeEventListener("notificationsUpdated", sync);
   }, []);
 
-  const theme = activeTab === "quick" ? quickTheme(quickThemeColor) : foodTheme(vegMode);
+  const theme = useMemo(() => {
+    if (activeTab === "quick") return quickTheme(quickThemeColor);
+    if (activeTab === "milk") return milkTheme();
+    return foodTheme(vegMode);
+  }, [activeTab, quickThemeColor, vegMode]);
   const isFood = activeTab === "food";
   const walletPath = isFood ? "/food/user/wallet" : "/quick/wallet";
   const { title: locationTitle, subtitle: locationSubtitle } = useMemo(
@@ -499,11 +521,17 @@ export default function HomeHeader({
               </div>
 
               <div className={`absolute inset-x-0 bottom-0 z-10 flex flex-col items-center justify-center gap-[4px] px-1 ${isActive ? "top-0" : "top-[10px]"}`}>
-                <img
-                  src={tab.icon}
-                  alt={tab.name}
-                  className={`object-contain transition-transform duration-300 ${isActive ? "h-[28px] w-[28px] scale-110" : "h-[24px] w-[24px] brightness-0 invert opacity-80"}`}
-                />
+                {tab.id === 'milk' ? (
+                  <Milk
+                    className={`transition-transform duration-300 ${isActive ? "h-[28px] w-[28px] scale-110 text-white" : "h-[24px] w-[24px] brightness-0 invert opacity-80"}`}
+                  />
+                ) : (
+                  <img
+                    src={tab.icon}
+                    alt={tab.name}
+                    className={`object-contain transition-transform duration-300 ${isActive ? "h-[28px] w-[28px] scale-110" : "h-[24px] w-[24px] brightness-0 invert opacity-80"}`}
+                  />
+                )}
                 <span
                   style={{ color: "#ffffff" }}
                   className={`text-[10px] font-black tracking-tight ${isActive ? "opacity-100" : "opacity-80"}`}

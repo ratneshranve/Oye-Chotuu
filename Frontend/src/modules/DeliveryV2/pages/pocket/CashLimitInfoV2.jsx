@@ -29,14 +29,31 @@ export const CashLimitInfoV2 = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const profileRes = await deliveryAPI.getProfile();
-        const profile = profileRes?.data?.data?.profile || {};
+        const [profileRes, walletRes] = await Promise.all([
+          deliveryAPI.getProfile(),
+          deliveryAPI.getWallet()
+        ]);
         
-        const totalLimit = profile.totalCashLimit || 0;
-        const cashInHand = profile.cashInHand || 0;
-        const deductions = profile.deductions || 0;
-        const withdrawals = profile.totalWithdrawn || 0;
-        const available = profile.availableCashLimit || 0;
+        const profile = profileRes?.data?.data?.profile || profileRes?.data?.profile || profileRes?.data || {};
+        
+        // Extract wallet data robustly
+        let wallet = {};
+        if (walletRes?.data?.success && walletRes?.data?.data?.wallet) {
+          wallet = walletRes.data.data.wallet;
+        } else if (walletRes?.data?.wallet) {
+          wallet = walletRes.data.wallet;
+        } else if (walletRes?.data?.data) {
+          wallet = walletRes.data.data;
+        } else if (walletRes?.data) {
+          wallet = walletRes.data;
+        }
+        
+        // Priority for wallet fields, fallback to profile
+        const totalLimit = Number(wallet.totalCashLimit ?? profile.totalCashLimit) || 0;
+        const cashInHand = Number(wallet.cashInHand ?? profile.cashInHand) || 0;
+        const deductions = Number(wallet.deductions ?? profile.deductions) || 0;
+        const withdrawals = Number(wallet.totalWithdrawn ?? profile.totalWithdrawn) || 0;
+        const available = Number(wallet.availableCashLimit ?? profile.availableCashLimit) || 0;
 
         setWalletState({
            totalCashLimit: totalLimit,

@@ -80,11 +80,55 @@ const ICON_COMPONENTS = {
 };
 
 const serviceTabs = [
-  { name: "Food" },
-  { name: "Quick" },
-  { name: "Instamart" },
-  { name: "Dineout" },
+  { name: "Chotuu FoodWala" },
+  { name: "ChotuuMart" },
+  { name: "Chotuu Dudhwala" },
 ];
+
+const isMeaningfulLocationValue = (value) => {
+  const normalized = String(value || "").trim().toLowerCase();
+  return Boolean(
+    normalized &&
+    normalized !== "select location" &&
+    normalized !== "current location"
+  );
+};
+
+const buildLocationDisplay = (addressText, currentLocation) => {
+  if (isMeaningfulLocationValue(addressText)) {
+    const parts = String(addressText)
+      .split(",")
+      .map((part) => part.trim())
+      .filter(Boolean);
+
+    if (parts.length >= 3) {
+      return {
+        title: parts.slice(0, 2).join(", "),
+        subtitle: parts.slice(2).join(", "),
+      };
+    }
+
+    if (parts.length === 2) {
+      return {
+        title: parts.join(", "),
+        subtitle: "Tap to choose delivery location",
+      };
+    }
+
+    return {
+      title: String(addressText).trim(),
+      subtitle: "Tap to choose delivery location",
+    };
+  }
+
+  const fallbackTitle = currentLocation?.city || "Select Location";
+  const fallbackSubtitle = currentLocation?.name || "Tap to choose delivery location";
+
+  return {
+    title: fallbackTitle,
+    subtitle: fallbackSubtitle,
+  };
+};
 
 const lightenHex = (hex, amount = 0.18) => {
   const normalized = String(hex || "").replace("#", "");
@@ -232,7 +276,7 @@ const MainLocationHeader = ({
   const { isOpen: isProductDetailOpen } = useProductDetail();
   const { cartCount } = useCart();
   const { settings } = useSettings();
-  const appName = settings?.appName || "App";
+  const appName = settings?.appName || "ChotuuMart";
   const logoUrl = settings?.logoUrl || LogoImage;
   const navigate = useNavigate();
   const routerLocation = useRouterLocation();
@@ -240,6 +284,11 @@ const MainLocationHeader = ({
   const homePath = getQuickHomePath(routerLocation.pathname);
   const searchPath = getQuickSearchPath(routerLocation.pathname);
   const wishlistPath = getQuickWishlistPath();
+
+  const { title: locationTitle, subtitle: locationSubtitle } = React.useMemo(
+    () => buildLocationDisplay(currentLocation.name, currentLocation),
+    [currentLocation],
+  );
 
   const [internalCategories, setInternalCategories] = useState([]);
 
@@ -480,32 +529,23 @@ const MainLocationHeader = ({
                 </div>
 
                 {/* Location Block (Desktop inline row) */}
-                <div className="flex flex-col border-l border-black/10 pl-4 lg:pl-8 h-10 justify-center">
-                  <div className="flex items-center gap-1.5 opacity-70">
-                    <AccessTimeIcon sx={{ fontSize: 13, color: "#111827" }} />
-                    <span className="text-[11px] font-black text-slate-900 uppercase tracking-widest leading-none">
-                      {currentLocation.time}
+                <button
+                  type="button"
+                  onClick={() => setIsLocationOpen(true)}
+                  className="flex flex-col border-l border-black/10 pl-4 lg:pl-8 h-10 justify-center border-0 bg-transparent p-0 text-left cursor-pointer group active:scale-95 transition-all"
+                >
+                  <div className="flex items-center gap-[3px]">
+                    <span className="truncate text-[15px] font-black text-slate-900 tracking-tight">
+                      {locationTitle}
                     </span>
-                  </div>
-                  <button
-                    type="button"
-                    data-lenis-prevent
-                    data-lenis-prevent-touch
-                    onClick={() => {
-                      setIsLocationOpen(true);
-                    }}
-                    className="flex items-center gap-1 text-slate-900 hover:text-slate-700 cursor-pointer group active:scale-95 transition-all border-0 bg-transparent p-0 text-left">
-                    <LocationOnIcon sx={{ fontSize: 14, color: "inherit" }} />
-                    <div className="text-[13px] font-bold leading-tight max-w-[250px] lg:max-w-[320px] truncate">
-                      {isFetchingLocation
-                        ? "Detecting location..."
-                        : currentLocation.name}
-                    </div>
                     <ChevronDownIcon
-                      sx={{ fontSize: 12, opacity: 0.5, color: "#111827" }}
+                      sx={{ fontSize: 14, color: "#111827", opacity: 0.7 }}
                     />
-                  </button>
-                </div>
+                  </div>
+                  <span className="max-w-[250px] lg:max-w-[320px] truncate text-[11px] font-medium text-slate-500">
+                    {locationSubtitle}
+                  </span>
+                </button>
               </div>
 
               {/* Center Section: Empty (Search moved to categories) */}
@@ -583,12 +623,6 @@ const MainLocationHeader = ({
               </div>
               <div className="flex justify-between items-start">
                 <div className="flex flex-col">
-                  <div className="flex items-center gap-1.5 mb-0.5">
-                    <AccessTimeIcon sx={{ fontSize: 16, color: "#111827" }} />
-                    <span className="text-base font-bold text-slate-900 tracking-tight leading-none">
-                      {currentLocation.time}
-                    </span>
-                  </div>
                   <button
                     type="button"
                     data-lenis-prevent
@@ -596,16 +630,23 @@ const MainLocationHeader = ({
                     onClick={() => {
                       setIsLocationOpen(true);
                     }}
-                    className="flex items-center gap-1 text-slate-800 cursor-pointer group active:scale-95 transition-transform border-0 bg-transparent p-0 text-left">
-                    <LocationOnIcon sx={{ fontSize: 14, color: "#111827" }} />
-                    <div className="text-[10px] font-medium leading-tight max-w-[280px] truncate">
-                      {isFetchingLocation
-                        ? "Detecting location..."
-                        : currentLocation.name}
-                    </div>
-                    <ChevronDownIcon
-                      sx={{ fontSize: 12, opacity: 0.5, color: "#111827" }}
+                    className="flex items-start gap-1 cursor-pointer flex-1 min-w-0 bg-transparent border-0 p-0 text-left outline-none"
+                  >
+                    <LocationOnIcon
+                      className="h-[14px] w-[14px] mt-[5px] shrink-0"
+                      sx={{ color: "#111827" }}
                     />
+                    <div className="flex min-w-0 max-w-[190px] flex-col">
+                      <div className="flex items-center gap-[3px]">
+                        <span className="truncate text-[16px] font-extrabold tracking-[-0.3px] text-slate-900">
+                          {locationTitle}
+                        </span>
+                        <ChevronDownIcon className="h-[14px] w-[14px] shrink-0 opacity-80 text-slate-900" />
+                      </div>
+                      <span className="max-w-[190px] truncate text-[11px] font-medium text-slate-600">
+                        {locationSubtitle}
+                      </span>
+                    </div>
                   </button>
                 </div>
               </div>

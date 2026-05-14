@@ -95,7 +95,7 @@ const ProductCard = React.memo(
     );
 
     const handleAddToCart = React.useCallback(
-      (e) => {
+      async (e) => {
         e.preventDefault();
         e.stopPropagation();
         const stock = Number(product.stock ?? Infinity);
@@ -103,6 +103,13 @@ const ProductCard = React.memo(
           showToast("This product is out of stock", "error");
           return;
         }
+
+        const result = await addToCart(product);
+        if (result?.ok === false) {
+          showToast(result.error || "Cannot add item to cart", "error");
+          return;
+        }
+
         if (imageRef.current) {
           const resolvedSrc = resolveQuickImageUrl(product.image || product.mainImage) || product.image || product.mainImage;
           animateAddToCart(
@@ -110,9 +117,8 @@ const ProductCard = React.memo(
             resolvedSrc,
           );
         }
-        addToCart(product);
       },
-      [animateAddToCart, product, addToCart],
+      [animateAddToCart, product, addToCart, showToast],
     );
 
     const handleIncrement = React.useCallback(

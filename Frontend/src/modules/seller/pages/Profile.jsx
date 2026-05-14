@@ -207,11 +207,11 @@ const SellerProfile = () => {
         </div>
 
         {/* Profile Info Row */}
-        <div className="absolute bottom-8 left-12 right-12 flex flex-col md:flex-row items-center md:items-end gap-10">
+        <div className="absolute bottom-8 left-4 right-4 md:left-12 md:right-12 flex flex-col md:flex-row items-center md:items-end gap-6 md:gap-10">
           {/* Avatar Container */}
-          <div className="h-44 w-44 rounded-full bg-white p-2 shadow-[0_30px_70px_rgba(0,0,0,0.15)] flex-shrink-0">
+          <div className="h-32 w-32 md:h-44 md:w-44 rounded-full bg-white p-2 shadow-[0_30px_70px_rgba(0,0,0,0.15)] flex-shrink-0">
             <div className="h-full w-full rounded-full bg-slate-50 flex items-center justify-center border-4 border-slate-50">
-              <span className="text-7xl font-black text-slate-900">
+              <span className="text-5xl md:text-7xl font-black text-slate-900">
                 {profile?.name?.charAt(0)}
               </span>
             </div>
@@ -229,7 +229,7 @@ const SellerProfile = () => {
                 {profile?.isActive ? "Active" : "Inactive"}
               </span>
             </div>
-            <h1 className="text-6xl font-black text-white tracking-tighter drop-shadow-sm mb-1">
+            <h1 className="text-3xl md:text-6xl font-black text-white tracking-tighter drop-shadow-sm mb-1">
               {profile?.name}
             </h1>
             <p className="text-white/60 font-black tracking-[1px] text-lg">
@@ -243,7 +243,7 @@ const SellerProfile = () => {
               <Button
                 type="button"
                 onClick={() => setIsEditing(true)}
-                className="bg-white/10 backdrop-blur-md text-white border border-white/20 hover:bg-white hover:text-slate-950 transition-all rounded-lg px-12 py-5 flex items-center gap-4 font-black tracking-[3px] text-xs shadow-[0_20px_40px_rgba(0,0,0,0.1)] hover:scale-[1.05] active:scale-[0.95]">
+                className="bg-white/10 backdrop-blur-md text-white border border-white/20 hover:bg-white hover:text-slate-950 transition-all rounded-lg px-6 md:px-12 py-3 md:py-5 flex items-center gap-4 font-black tracking-[3px] text-[10px] md:text-xs shadow-[0_20px_40px_rgba(0,0,0,0.1)] hover:scale-[1.05] active:scale-[0.95]">
                 <Edit2 size={18} /> EDIT PROFILE
               </Button>
             ) : (
@@ -259,7 +259,7 @@ const SellerProfile = () => {
                   type="button"
                   onClick={handleSubmit}
                   disabled={isSaving}
-                  className="bg-white text-slate-950 hover:bg-slate-100 rounded-lg px-12 py-5 font-black tracking-[3px] text-xs flex items-center gap-4 shadow-[0_25px_50px_rgba(0,0,0,0.15)] h-[64px]">
+                  className="bg-white text-slate-950 hover:bg-slate-100 rounded-lg px-6 md:px-12 py-3 md:py-5 font-black tracking-[3px] text-[10px] md:text-xs flex items-center gap-4 shadow-[0_25px_50px_rgba(0,0,0,0.15)] h-auto md:h-[64px]">
                   {isSaving ? (
                     "UPDATING..."
                   ) : (
@@ -277,7 +277,7 @@ const SellerProfile = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Main Info Card */}
         <div className="md:col-span-2 space-y-8">
-          <Card className="p-8 border-none shadow-[0_20px_50px_rgba(0,0,0,0.05)] rounded-lg">
+          <Card className="p-4 md:p-8 border-none shadow-[0_20px_50px_rgba(0,0,0,0.05)] rounded-lg">
             <h3 className="text-xl font-black text-slate-900 mb-8 border-b border-slate-50 pb-4">
               Business Profile
             </h3>
@@ -364,7 +364,7 @@ const SellerProfile = () => {
           </Card>
 
           {/* Location & Radius Settings Card */}
-          <Card className="p-8 border-none shadow-[0_20px_50px_rgba(0,0,0,0.05)] rounded-lg">
+          <Card className="p-4 md:p-8 border-none shadow-[0_20px_50px_rgba(0,0,0,0.05)] rounded-lg">
             <div className="flex justify-between items-center mb-8 border-b border-slate-50 pb-4">
               <h3 className="text-xl font-black text-slate-900">
                 Location & Service Settings
@@ -464,7 +464,7 @@ const SellerProfile = () => {
 
         {/* Sidebar Card */}
         <div className="space-y-8">
-          <Card className="p-8 border-none shadow-[0_20px_50px_rgba(0,0,0,0.05)] rounded-[40px] bg-gradient-to-br from-slate-900 via-slate-900/95 to-slate-800 text-white">
+          <Card className="p-6 md:p-8 border-none shadow-[0_20px_50px_rgba(0,0,0,0.05)] rounded-[30px] md:rounded-[40px] bg-gradient-to-br from-slate-900 via-slate-900/95 to-slate-800 text-white">
             <h4 className="text-[10px] font-black uppercase tracking-[4px] text-white/40 mb-6">
               Security & Trust
             </h4>

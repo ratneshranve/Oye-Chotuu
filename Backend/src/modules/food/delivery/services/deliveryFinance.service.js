@@ -45,6 +45,7 @@ export const getDeliveryPartnerWalletEnhanced = async (deliveryPartnerId) => {
     pendingWithdrawalsAgg,
     transactionsResult,
     totalDeliveries,
+    totalEarningsAgg,
   ] = await Promise.all([
     getDeliveryCashLimitSettings(),
     FoodDeliveryWallet.findOne({ deliveryPartnerId: partnerId }).lean(),
@@ -121,6 +122,15 @@ export const getDeliveryPartnerWalletEnhanced = async (deliveryPartnerId) => {
       "dispatch.deliveryPartnerId": partnerId,
       orderStatus: "delivered",
     }),
+    FoodOrder.aggregate([
+      {
+        $match: {
+          "dispatch.deliveryPartnerId": partnerId,
+          orderStatus: "delivered",
+        },
+      },
+      { $group: { _id: null, total: { $sum: { $ifNull: ["$riderEarning", 0] } } } },
+    ]),
   ]);
 
   const wallet = walletDoc || {
@@ -129,6 +139,12 @@ export const getDeliveryPartnerWalletEnhanced = async (deliveryPartnerId) => {
     totalBonus: 0,
     totalSettled: 0,
   };
+
+  // Real-time earnings from orders (handles lag in wallet document updates)
+  const aggregatedEarnings = Number(totalEarningsAgg?.[0]?.total) || 0;
+  const effectiveTotalEarnings = Math.max(Number(wallet.totalEarnings || 0), aggregatedEarnings);
+  const missingEarningsBalance = Math.max(0, aggregatedEarnings - Number(wallet.totalEarnings || 0));
+
   const recordedBonus = Number(wallet.totalBonus || 0);
   const aggregatedBonus = Number(totalBonusAgg?.[0]?.total) || 0;
   const effectiveBonus = Math.max(recordedBonus, aggregatedBonus);
@@ -145,7 +161,7 @@ export const getDeliveryPartnerWalletEnhanced = async (deliveryPartnerId) => {
     Number(cashLimitSettings.deliveryWithdrawalLimit) || 100;
 
   const effectiveWalletBalance =
-    Number(wallet.balance || 0) + missingBonusBalance;
+    Number(wallet.balance || 0) + missingBonusBalance + missingEarningsBalance;
   const pocketBalance = Math.max(
     0,
     effectiveWalletBalance - pendingWithdrawals,
@@ -173,12 +189,12 @@ export const getDeliveryPartnerWalletEnhanced = async (deliveryPartnerId) => {
   }));
 
   return {
-    totalBalance: (wallet.totalEarnings || 0) + effectiveBonus,
+    totalBalance: effectiveTotalEarnings + effectiveBonus,
     pocketBalance,
     cashInHand,
     totalWithdrawn: wallet.totalSettled || 0,
     pendingWithdrawals,
-    totalEarned: wallet.totalEarnings || 0,
+    totalEarned: effectiveTotalEarnings,
     totalBonus: effectiveBonus,
     totalCashLimit,
     availableCashLimit: Math.max(0, totalCashLimit - cashInHand),

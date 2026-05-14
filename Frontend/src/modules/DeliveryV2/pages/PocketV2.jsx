@@ -57,39 +57,57 @@ export const PocketV2 = () => {
           deliveryAPI.getWallet()
         ]);
 
-        const profile = profileRes?.data?.data?.profile || {};
-        const summary = earningsRes?.data?.data?.summary || {};
-        const wallet = walletRes?.data?.data?.wallet || {};
+        const profile = profileRes?.data?.data?.profile || profileRes?.data?.profile || profileRes?.data?.data || profileRes?.data || {};
+        const summary = earningsRes?.data?.data?.summary || earningsRes?.data?.summary || earningsRes?.data?.data || earningsRes?.data || {};
+        
+        // Use more robust wallet data extraction
+        let wallet = {};
+        if (walletRes?.data?.success && walletRes?.data?.data?.wallet) {
+          wallet = walletRes.data.data.wallet;
+        } else if (walletRes?.data?.wallet) {
+          wallet = walletRes.data.wallet;
+        } else if (walletRes?.data?.data) {
+          wallet = walletRes.data.data;
+        } else if (walletRes?.data) {
+          wallet = walletRes.data;
+        }
+
         const activeAddonsRes = await deliveryAPI.getActiveEarningAddons().catch(() => null);
         const activeOfferPayload =
           activeAddonsRes?.data?.data?.activeOffer ||
           activeAddonsRes?.data?.activeOffer ||
           null;
         
-        const bankDetails = profile?.documents?.bankDetails;
-        const isFilled = !!(bankDetails?.accountNumber);
+        const bankDetails = profile?.documents?.bankDetails || profile?.bankDetails;
+        const isFilled = !!(bankDetails?.accountNumber || profile?.bankAccountNumber);
+
+        const walletEarnings = Number(wallet.totalEarned || wallet.totalBalance || 0);
+        const walletBonus = Number(wallet.totalBonus || wallet.bonus || 0);
+        const combinedPocketBalance = walletEarnings + walletBonus;
 
         setWalletState({
-          totalBalance: Number(wallet.pocketBalance) || 0,
-          cashInHand: Number(wallet.cashInHand) || 0,
+          totalBalance: combinedPocketBalance,
+          cashInHand: Number(wallet.cashInHand ?? wallet.cash_in_hand) || 0,
           availableCashLimit: Number(wallet.availableCashLimit) || 0,
           totalCashLimit: Number(wallet.totalCashLimit) || 0,
-          weeklyEarnings: Number(summary.totalEarnings) || 0,
-          weeklyOrders: Number(summary.totalOrders) || 0,
+          weeklyEarnings: Number(summary.totalEarnings || summary.earnings || 0),
+          weeklyOrders: Number(summary.totalOrders || summary.orders || 0),
           payoutAmount: Number(wallet.lastPayout?.amount || wallet.totalWithdrawn || 0),
           payoutPeriod: wallet.lastPayout ? new Date(wallet.lastPayout.date).toLocaleDateString() : 'No recent payout',
-          totalBonus: Number(wallet.totalBonus) || 0,
+          totalBonus: walletBonus,
           bankDetailsFilled: isFilled
         });
 
-        setActiveOffer({
-           targetAmount: Number(activeOfferPayload?.targetAmount) || 0,
-           targetOrders: Number(activeOfferPayload?.targetOrders) || 0,
-           currentOrders: Number(activeOfferPayload?.currentOrders) || 0,
-           currentEarnings: Number(activeOfferPayload?.currentEarnings) || 0,
-           validTill: activeOfferPayload?.validTill || '',
-           isLive: Boolean(activeOfferPayload)
-        });
+        if (activeOfferPayload) {
+          setActiveOffer({
+             targetAmount: Number(activeOfferPayload?.targetAmount) || 0,
+             targetOrders: Number(activeOfferPayload?.targetOrders) || 0,
+             currentOrders: Number(activeOfferPayload?.currentOrders) || 0,
+             currentEarnings: Number(activeOfferPayload?.currentEarnings) || 0,
+             validTill: activeOfferPayload?.validTill || '',
+             isLive: true
+          });
+        }
 
       } catch (err) {
         toast.error('Failed to load wallet data');

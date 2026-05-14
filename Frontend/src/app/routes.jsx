@@ -36,6 +36,10 @@ const SharedProfilePrivacyPage = lazy(() => import('../modules/Food/pages/user/p
 const SharedProfileRefundPage = lazy(() => import('../modules/Food/pages/user/profile/Refund'))
 const SharedProfileShippingPage = lazy(() => import('../modules/Food/pages/user/profile/Shipping'))
 const SharedProfileCancellationPage = lazy(() => import('../modules/Food/pages/user/profile/Cancellation'))
+const DudhwalaSubscriptionFlow = lazy(() => import('../modules/Dudhwala/screens/SubscriptionFlow'))
+const DudhwalaMyPlans = lazy(() => import('../modules/Dudhwala/screens/MyPlans'))
+const DudhwalaSelectAddress = lazy(() => import('../modules/Dudhwala/screens/SelectAddress'))
+const DudhwalaNotifications = lazy(() => import('../modules/Dudhwala/screens/Notifications'))
 
 const RouteAwarePageLoader = () => {
   const location = useLocation()
@@ -162,6 +166,11 @@ const AppRoutes = () => {
 
         {/* Quick storefront landing keeps the shared food layout */}
         <Route path="/quick" element={<SharedFoodHomeRoute />} />
+        <Route path="/dudhwala" element={<SharedFoodHomeRoute />} />
+        <Route path="/dudhwala/subscribe" element={<DudhwalaSubscriptionFlow />} />
+        <Route path="/dudhwala/select-address" element={<DudhwalaSelectAddress />} />
+        <Route path="/dudhwala/my-plans" element={<DudhwalaMyPlans />} />
+        <Route path="/dudhwala/notifications" element={<DudhwalaNotifications />} />
 
         {/* Global shared cart */}
         <Route

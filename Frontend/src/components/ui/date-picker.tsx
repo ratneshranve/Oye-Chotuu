@@ -13,6 +13,7 @@ interface DatePickerProps {
   placeholder?: string;
   align?: "left" | "right";
   popupClassName?: string;
+  className?: string;
   disabled?: boolean;
 }
 
@@ -24,6 +25,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   placeholder = "dd-mm-yyyy",
   align = "left",
   popupClassName,
+  className,
   disabled = false,
 }) => {
   const [open, setOpen] = React.useState(false);
@@ -104,9 +106,10 @@ export const DatePicker: React.FC<DatePickerProps> = ({
         type="button"
         variant="outline"
         className={cn(
-          "w-full justify-start text-left font-semibold text-[11px] h-9 px-3 rounded-lg border border-slate-200 bg-slate-50",
+          "w-full justify-start text-left font-bold text-xs h-11 px-3 rounded-xl border border-slate-200 bg-slate-50",
           !value && "text-slate-400",
-          disabled && "opacity-60 cursor-not-allowed"
+          disabled && "opacity-60 cursor-not-allowed",
+          className
         )}
         disabled={disabled}
         onClick={() => {
@@ -128,25 +131,37 @@ export const DatePicker: React.FC<DatePickerProps> = ({
           : placeholder}
       </Button>
       {open && (
-        <div
-          className={cn(
-            "absolute z-50 top-full mt-2 w-[280px] max-w-[90vw] rounded-xl border border-slate-200 bg-white shadow-xl",
-            align === "right" ? "right-0" : "left-0",
-            popupClassName
-          )}
-        >
-          <Calendar
-            mode="single"
-            selected={selectedDate}
-            onSelect={handleSelect}
-            disabled={isDisabled}
-            onDayClick={(_day, _modifiers, e) => {
-              e.preventDefault();
-            }}
-            captionLayout="dropdown"
-            className="rounded-lg border"
+        <>
+          {/* Backdrop for mobile */}
+          <div 
+            className="fixed inset-0 z-40 bg-black/20 backdrop-blur-[2px] md:hidden" 
+            onClick={() => setOpen(false)}
           />
-        </div>
+          <div
+            className={cn(
+              "z-50 rounded-xl border border-slate-200 bg-white shadow-2xl",
+              // Mobile: Centered modal-like
+              "fixed left-1/2 top-1/2 w-[90vw] max-w-[320px] -translate-x-1/2 -translate-y-1/2",
+              // Desktop: Absolute below trigger
+              "md:absolute md:top-full md:mt-2 md:w-[280px] md:translate-x-0 md:translate-y-0",
+              align === "right" ? "md:right-0 md:left-auto" : "md:left-0 md:right-auto",
+              popupClassName
+            )}
+          >
+            <div className="p-1">
+              <Calendar
+                mode="single"
+                selected={selectedDate}
+                onSelect={handleSelect}
+                disabled={isDisabled}
+                onDayClick={(_day, _modifiers, e) => {
+                  e.preventDefault();
+                }}
+                className="rounded-lg border-none"
+              />
+            </div>
+          </div>
+        </>
       )}
     </div>
   );

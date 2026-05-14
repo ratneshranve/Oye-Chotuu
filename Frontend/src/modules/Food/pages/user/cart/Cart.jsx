@@ -11,7 +11,8 @@ import { useCart } from "@food/context/CartContext"
 import { useProfile } from "@food/context/ProfileContext"
 import { useOrders } from "@food/context/OrdersContext"
 import QuickSharedCart from "@food/pages/user/cart/QuickSharedCart"
-import MixedSharedCart from "@food/pages/user/cart/MixedSharedCart"
+
+
 import { useLocation as useUserLocation } from "@food/hooks/useLocation"
 import { useZone } from "@food/hooks/useZone"
 import { useLocationSelector } from "@food/components/user/UserLayout"
@@ -169,10 +170,23 @@ export default function Cart() {
     );
   }
 
-  const { cart, updateQuantity, addToCart, getCartCount, clearCart, cleanCartForRestaurant } = cartContext;
-  const hasQuickItems = cart.some((item) => (item?.orderType || "food") === "quick")
-  const hasFoodItems = cart.some((item) => (item?.orderType || "food") === "food")
-  const isQuickCart = cart.length > 0 && cart.every((item) => (item?.orderType || "food") === "quick")
+  const { 
+    cart: masterCart, 
+    foodItems, 
+    quickItems, 
+    updateQuantity, 
+    addToCart, 
+    getCartCount, 
+    clearCart, 
+    cleanCartForRestaurant 
+  } = cartContext;
+
+  // For the Food Cart page, we only care about food items
+  const cart = foodItems;
+  const displayItems = foodItems;
+  const hasFoodItems = foodItems.length > 0;
+  const hasQuickItems = quickItems.length > 0;
+  const isQuickCart = false; // This page is always a food cart view
 
   const { getDefaultAddress, getDefaultPaymentMethod, setDefaultAddress, addresses, paymentMethods, userProfile } = useProfile()
   const { createOrder } = useOrders()
@@ -1935,14 +1949,7 @@ export default function Cart() {
     })
   }
 
-  if (hasQuickItems && hasFoodItems) {
-    return (
-      <MixedSharedCart 
-        initialAddress={defaultAddress} 
-        addressMode={deliveryAddressMode} 
-      />
-    )
-  }
+
 
   if (isQuickCart) {
     return (

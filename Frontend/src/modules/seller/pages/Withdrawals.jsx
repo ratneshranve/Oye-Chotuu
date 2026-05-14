@@ -116,8 +116,8 @@ const Withdrawals = () => {
         }
     };
 
-    if (loading) {
-        return <div className="flex items-center justify-center h-screen font-black text-slate-600">LOADING WITHDRAWALS...</div>;
+    if (loading && !data?.ledger?.length && Object.keys(data?.balances || {}).length === 0) {
+        return <div className="flex items-center justify-center h-screen font-black text-slate-600 uppercase tracking-widest">LOADING WITHDRAWALS...</div>;
     }
 
     const balances = {

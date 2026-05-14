@@ -182,7 +182,7 @@ const StockManagement = () => {
             {activeView === 'inventory' ? (
                 <>
                     {/* Quick Stats */}
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         {stats.map((stat, i) => (
                             <BlurFade key={i} delay={0.1 + (i * 0.05)}>
                                 <div onClick={() => setFilterStatus(stat.status)} className="cursor-pointer">

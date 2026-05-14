@@ -9,6 +9,7 @@ import {
     getQuickOrdersPath,
     getQuickProfilePath,
 } from '../../utils/routes';
+import DraggableModuleSwitcher from "../../../../common/components/DraggableModuleSwitcher";
 
 const BottomNav = () => {
     const location = useLocation();
@@ -32,61 +33,60 @@ const BottomNav = () => {
     };
 
     return (
-        <div className="fixed bottom-0 left-0 right-0 z-[500] bg-white/80 dark:bg-card/80 backdrop-blur-xl border-t border-gray-100 dark:border-border flex items-center justify-around h-[70px] md:hidden shadow-[0_-8px_30px_rgba(0,0,0,0.06)] px-4 pb-[env(safe-area-inset-bottom)] transition-all duration-300">
-            {navItems.map((item) => {
-                const isActive = isActivePath(item.path);
+        <div className="fixed bottom-0 left-0 right-0 z-[500] md:hidden transition-all duration-300">
+            <DraggableModuleSwitcher />
+            <div className="bg-white/80 dark:bg-card/80 backdrop-blur-xl border-t border-gray-100 dark:border-border flex items-center justify-around h-[70px] shadow-[0_-8px_30px_rgba(0,0,0,0.06)] px-4 pb-[env(safe-area-inset-bottom)]">
+                {navItems.map((item) => {
+                    const isActive = isActivePath(item.path);
 
-                return (
-                    <Link
-                        key={item.path}
-                        to={item.path}
-                        className="flex-1 flex flex-col items-center justify-center h-full relative group transition-all"
-                    >
-                        <div className="flex flex-col items-center justify-center relative">
-                            {/* Active Indicator Background (Subtle Glow) */}
-                            {/* Active indicator background removed */}
+                    return (
+                        <Link
+                            key={item.path}
+                            to={item.path}
+                            className="flex-1 flex flex-col items-center justify-center h-full relative group transition-all"
+                        >
+                            <div className="flex flex-col items-center justify-center relative">
+                                <motion.div
+                                    animate={{
+                                        y: isActive ? -2 : 0,
+                                        scale: isActive ? 1.1 : 1
+                                    }}
+                                    transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                                >
+                                    <item.icon
+                                        size={24}
+                                        strokeWidth={isActive ? 2.5 : 2}
+                                        className={cn(
+                                            "transition-colors duration-300",
+                                            isActive ? "text-[#cc2532]" : "text-gray-400 dark:text-slate-500"
+                                        )}
+                                    />
+                                </motion.div>
 
-                            <motion.div
-                                animate={{
-                                    y: isActive ? -2 : 0,
-                                    scale: isActive ? 1.1 : 1
-                                }}
-                                transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                            >
-                                <item.icon
-                                    size={24}
-                                    strokeWidth={isActive ? 2.5 : 2}
+                                <motion.span
+                                    animate={{
+                                        y: isActive ? 1 : 0
+                                    }}
                                     className={cn(
-                                        "transition-colors duration-300",
-                                    isActive ? "text-[#cc2532]" : "text-gray-400 dark:text-slate-500"
+                                        "text-[10px] font-bold tracking-tight mt-1 transition-colors duration-300",
+                                        isActive ? "text-[#cc2532]" : "text-gray-400 dark:text-slate-500"
                                     )}
-                                />
-                            </motion.div>
+                                >
+                                    {item.label}
+                                </motion.span>
+                            </div>
 
-                            <motion.span
-                                animate={{
-                                    y: isActive ? 1 : 0
-                                }}
-                                className={cn(
-                                    "text-[10px] font-bold tracking-tight mt-1 transition-colors duration-300",
-                                    isActive ? "text-[#cc2532]" : "text-gray-400 dark:text-slate-500"
-                                )}
-                            >
-                                {item.label}
-                            </motion.span>
-                        </div>
-
-                        {/* Top Accent Line for Active State */}
-                        {isActive && (
+                            {isActive && (
                                 <motion.div
                                     layoutId="topLine"
                                     className="absolute -top-[1px] w-8 h-[3px] bg-[#cc2532] rounded-full"
                                     transition={{ type: "spring", stiffness: 400, damping: 30 }}
                                 />
-                        )}
-                    </Link>
-                );
-            })}
+                            )}
+                        </Link>
+                    );
+                })}
+            </div>
         </div>
     );
 };

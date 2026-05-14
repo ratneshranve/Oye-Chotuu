@@ -385,9 +385,9 @@ export default function AddToCartAnimation({
             objectFit: 'cover',
           }}
         >
-          {removedProduct.product?.imageUrl ? (
+          {(removedProduct.product?.imageUrl || removedProduct.product?.image || removedProduct.product?.image_url) ? (
             <img
-              src={removedProduct.product.imageUrl}
+              src={removedProduct.product.imageUrl || removedProduct.product.image || removedProduct.product.image_url}
               alt={removedProduct.product.name}
               className="w-full h-full object-cover rounded-full"
             />
@@ -409,9 +409,9 @@ export default function AddToCartAnimation({
             objectFit: 'cover',
           }}
         >
-          {flyingProduct?.product?.imageUrl ? (
+          {(flyingProduct?.product?.imageUrl || flyingProduct?.product?.image || flyingProduct?.product?.image_url) ? (
             <img
-              src={flyingProduct.product.imageUrl}
+              src={flyingProduct.product.imageUrl || flyingProduct.product.image || flyingProduct.product.image_url}
               alt={flyingProduct?.product?.name || 'Item'}
               className="w-full h-full object-cover rounded-full"
             />
@@ -471,10 +471,10 @@ export default function AddToCartAnimation({
                     }}
                     className="w-7 h-7 rounded-full border-2 border-white/90 overflow-hidden bg-white flex-shrink-0 shadow-md"
                   >
-                    {item?.product?.imageUrl ? (
+                    {(item?.product?.imageUrl || item?.imageUrl || item?.image || item?.product?.image) ? (
                       <img
-                        src={item.product.imageUrl}
-                        alt={item?.product?.name || 'Item'}
+                        src={item?.product?.imageUrl || item?.imageUrl || item?.image || item?.product?.image}
+                        alt={item?.product?.name || item?.name || 'Item'}
                         className="w-full h-full object-cover"
                       />
                     ) : (

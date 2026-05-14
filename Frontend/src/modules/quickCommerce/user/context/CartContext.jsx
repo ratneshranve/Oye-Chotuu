@@ -476,19 +476,12 @@ export const CartProvider = ({ children }) => {
 
     const addToCart = async (product) => {
       const normalizedProduct = normalizeQuickProductForSharedCart(product);
-      const existingItem = quickItemsFromFoodCart.find(
-        (item) => getProductId(item) === normalizedProduct.id,
-      );
-      const nextQuickItems = existingItem
-        ? quickItemsFromFoodCart.map((item) =>
-            getProductId(item) === normalizedProduct.id
-              ? { ...item, quantity: Number(item.quantity || 0) + 1 }
-              : item,
-          )
-        : [...quickItemsFromFoodCart, { ...normalizedProduct, quantity: 1 }];
-
-      persistQuickCartSnapshot(nextQuickItems);
-      foodCart.addToCart(normalizedProduct);
+      
+      // Call foodCart.addToCart and check the result for type mismatch
+      const result = foodCart.addToCart(normalizedProduct);
+      if (result?.ok === false) {
+        return result;
+      }
 
       if (isAuthenticated) {
         try {
@@ -500,6 +493,8 @@ export const CartProvider = ({ children }) => {
           console.error("Failed to sync bridged addToCart to backend", error);
         }
       }
+
+      return { ok: true };
     };
 
     const removeFromCart = async (productId) => {

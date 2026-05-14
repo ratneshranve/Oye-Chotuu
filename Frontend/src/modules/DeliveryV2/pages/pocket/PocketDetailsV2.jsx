@@ -56,10 +56,14 @@ export const PocketDetailsV2 = () => {
         setOrders(Array.isArray(trips) ? trips : []);
         setPaymentTransactions(Array.isArray(payments) ? payments : []);
         setBonusTransactions(Array.isArray(bonuses) ? bonuses : []);
+        const totalEarning = Number(summary.totalEarning || summary.totalEarnings || summary.earnings || 0);
+        const totalBonus = Number(summary.totalBonus || summary.bonus || 0);
+        const grandTotal = Number(summary.grandTotal || (totalEarning + totalBonus));
+
         setSummaryData({
-          totalEarning: Number(summary.totalEarning) || 0,
-          totalBonus: Number(summary.totalBonus) || 0,
-          grandTotal: Number(summary.grandTotal) || 0,
+          totalEarning,
+          totalBonus,
+          grandTotal,
         });
       } catch (error) {
         setOrders([]);

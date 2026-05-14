@@ -5,6 +5,7 @@ import { Phone, Lock, ArrowRight, ShieldCheck, Loader2, UserRound } from "lucide
 import { toast } from "sonner"
 import { authAPI, userAPI } from "@food/api"
 import { isModuleAuthenticated, setAuthData } from "@food/utils/auth"
+import { useAuth } from "@core/context/AuthContext"
 import zozomenLogo from "@/assets/zozomenLogo.png"
 import { loadBusinessSettings, getCachedSettings } from "@common/utils/businessSettings"
 
@@ -21,14 +22,15 @@ export default function UnifiedOTPFastLogin() {
   const [nameError, setNameError] = useState("")
   const location = useLocation()
   const navigate = useNavigate()
+  const { login: globalLogin } = useAuth()
+  const submitting = useRef(false)
   const searchParams = new URLSearchParams(location.search)
   const referralCode = searchParams.get("ref") || ""
   const [logoUrl, setLogoUrl] = useState(() => getCachedSettings()?.logo?.url || null)
 
-  const submitting = useRef(false)
-  const redirectTo = typeof location.state?.redirectTo === "string" && location.state.redirectTo.trim()
-    ? location.state.redirectTo.trim()
-    : "/portal"
+  const fromPath = location.state?.from?.pathname || location.state?.from || "/portal"
+  const fromSearch = location.state?.from?.search || ""
+  const redirectTo = fromPath + fromSearch
 
   useEffect(() => {
     if (!isModuleAuthenticated("user")) return
@@ -189,6 +191,7 @@ export default function UnifiedOTPFastLogin() {
       }
 
       setAuthData("user", accessToken, user, refreshToken)
+      globalLogin({ ...user, token: accessToken, role: 'customer' })
       window.dispatchEvent(new Event("userAuthChanged"))
       toast.success("Login successful!")
       navigate(redirectTo, { replace: true })
@@ -243,6 +246,7 @@ export default function UnifiedOTPFastLogin() {
       }
 
       setAuthData("user", storedToken, updatedUser, storedRefreshToken)
+      globalLogin({ ...updatedUser, token: storedToken, role: 'customer' })
       window.dispatchEvent(new Event("userAuthChanged"))
       clearNameFlow()
       toast.success("Profile saved successfully!")

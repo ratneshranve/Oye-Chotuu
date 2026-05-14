@@ -5,10 +5,11 @@ import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 
 export default function StickyCartCard() {
-  const { cart, getCartCount } = useCart()
+  const { foodItems, getCartCount } = useCart()
   const [isVisible, setIsVisible] = useState(true)
   const [bottomPosition, setBottomPosition] = useState("bottom-[70px]") // Fixed above bottom navigation
   const cartCount = getCartCount()
+  const cart = foodItems; // Local mask for easier replacement
 
   // Set fixed position above bottom navigation (no scroll-based movement)
   useEffect(() => {
