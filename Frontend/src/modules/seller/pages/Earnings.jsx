@@ -70,8 +70,8 @@ const Earnings = () => {
     alert("Exporting monthly earnings report as PDF (Simulation)");
   };
 
-  if (loading) {
-    return <div className="flex items-center justify-center h-screen font-black text-slate-600">LOADING EARNINGS...</div>;
+  if (loading && !data?.ledger?.length && Object.keys(data?.balances || {}).length === 0) {
+    return <div className="flex items-center justify-center h-screen font-black text-slate-600 uppercase tracking-widest">LOADING EARNINGS...</div>;
   }
   return (
     <div className="space-y-8 pb-16">
