@@ -105,6 +105,8 @@ import VegModePopups from "@food/components/user/VegModePopups";
 
 import * as imgUtils from "@food/utils/imageUtils";
 import { useFoodHomeData } from "@food/hooks/useFoodHomeData";
+import { getCachedSettings } from "@/modules/common/utils/businessSettings";
+import bakeryIcon from "@food/assets/explore more icons/bakery.png";
 
 // Extracted Sub-components
 const BannerSection = lazy(() => import("@food/components/user/home/BannerSection"));
@@ -213,6 +215,27 @@ export default function Home() {
     backendOrigin: BACKEND_ORIGIN,
     availabilityTick
   });
+
+  const finalExploreItemsFiltered = useMemo(() => {
+    const items = landing?.exploreMore || [];
+    const settings = getCachedSettings();
+    const isHomeBakeryEnabled = settings?.modules?.homeBakery;
+    if (isHomeBakeryEnabled) {
+      const hasBakery = items.some(item => item.id === "home-bakery" || item.href?.includes("bakery"));
+      if (!hasBakery) {
+        return [
+          ...items,
+          {
+            id: "home-bakery",
+            label: "Home Bakery",
+            href: "/food/user/bakery/list",
+            image: bakeryIcon,
+          }
+        ];
+      }
+    }
+    return items;
+  }, [landing?.exploreMore]);
 
   // --- UI Effects ---
   useEffect(() => {
@@ -395,7 +418,7 @@ export default function Home() {
               <ExploreMoreSection
                 exploreMoreHeading={landing.heading}
                 showExploreSkeleton={landing.loading}
-                finalExploreItems={landing.exploreMore}
+                finalExploreItems={finalExploreItemsFiltered}
                 backendOrigin={BACKEND_ORIGIN}
               />
             </Suspense>

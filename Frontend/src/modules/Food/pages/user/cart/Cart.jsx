@@ -106,6 +106,8 @@ const mapOrderItem = (item) => ({
   isVeg: item.isVeg !== false,
   notes: sanitizeOrderNotes(item.notes || ""),
   preparationTime: item.preparationTime,
+  isCustomCake: item.isCustomCake || undefined,
+  customCakeRequestId: item.customCakeRequestId || undefined,
 })
 
 const normalizeOrderAddress = (address, { recipientName = "", recipientPhone = "" } = {}) => {
@@ -957,12 +959,17 @@ export default function Cart() {
         const resolvedRestaurantId = restaurantData?.restaurantId || restaurantData?._id || restaurantId || undefined
         const resolvedCouponCode = appliedCoupon?.code || couponCode || undefined
 
+        const customCakeItem = cart.find(i => i.isCustomCake)
+        const isCustomCake = !!customCakeItem
+        const customCakeRequestId = customCakeItem?.customCakeRequestId
+
         const response = await orderAPI.calculateOrder({
           orderType: "food",
           items,
           restaurantId: resolvedRestaurantId,
           address: defaultAddress,
-          couponCode: resolvedCouponCode
+          couponCode: resolvedCouponCode,
+          ...(isCustomCake ? { isCustomCake, customCakeRequestId } : {})
         })
 
         if (response?.data?.success && response?.data?.data?.pricing) {
@@ -1671,6 +1678,10 @@ export default function Cart() {
         recipientPhone: recipientPhone || defaultAddress?.phone || "",
       })
 
+      const customCakeItem = cart.find(i => i.isCustomCake)
+      const isCustomCake = !!customCakeItem
+      const customCakeRequestId = customCakeItem?.customCakeRequestId
+
       const orderPayload = {
         items: orderItems,
         address: normalizedAddress,
@@ -1685,6 +1696,7 @@ export default function Cart() {
         // `useZone()` can return `null`. Zod expects string/undefined, not null.
         zoneId: zoneId || undefined,
         scheduledAt: isScheduled ? new Date(`${scheduledDate}T${scheduledTime}:00`).toISOString() : undefined,
+        ...(isCustomCake ? { isCustomCake, customCakeRequestId } : {})
       };
       // Log final order details (including paymentMethod for COD debugging)
       debugLog('?? FINAL: Sending order to backend with:', {
@@ -2062,23 +2074,37 @@ export default function Cart() {
 
                       <div className="flex shrink-0 items-center gap-2 md:gap-4">
                         {/* Quantity controls */}
-                        <div className="flex items-center border border-[#cc2532] dark:border-[#cc2532]/50 rounded">
-                          <button
-                            className="px-2 md:px-3 py-1 text-[#cc2532] dark:text-[#cc2532] hover:bg-orange-50 dark:hover:bg-[#cc2532]/10"
-                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                          >
-                            <Minus className="h-3 w-3 md:h-4 md:w-4" />
-                          </button>
-                          <span className="px-2 md:px-3 text-sm md:text-base font-semibold text-[#cc2532] dark:text-[#cc2532] min-w-[20px] md:min-w-[24px] text-center">
-                            {item.quantity}
-                          </span>
-                          <button
-                            className="px-2 md:px-3 py-1 text-[#cc2532] dark:text-[#cc2532] hover:bg-orange-50 dark:hover:bg-[#cc2532]/10"
-                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                          >
-                            <Plus className="h-3 w-3 md:h-4 md:w-4" />
-                          </button>
-                        </div>
+                        {item.isCustomCake ? (
+                          <div className="flex items-center border border-red-500 rounded">
+                            <button
+                              className="px-2 md:px-3 py-1 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20"
+                              onClick={() => updateQuantity(item.id, 0)}
+                            >
+                              <X className="h-3 w-3 md:h-4 md:w-4" />
+                            </button>
+                            <span className="px-2 md:px-3 text-sm md:text-base font-semibold text-red-500 min-w-[20px] md:min-w-[24px] text-center">
+                              {item.quantity}
+                            </span>
+                          </div>
+                        ) : (
+                          <div className="flex items-center border border-[#cc2532] dark:border-[#cc2532]/50 rounded">
+                            <button
+                              className="px-2 md:px-3 py-1 text-[#cc2532] dark:text-[#cc2532] hover:bg-orange-50 dark:hover:bg-[#cc2532]/10"
+                              onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                            >
+                              <Minus className="h-3 w-3 md:h-4 md:w-4" />
+                            </button>
+                            <span className="px-2 md:px-3 text-sm md:text-base font-semibold text-[#cc2532] dark:text-[#cc2532] min-w-[20px] md:min-w-[24px] text-center">
+                              {item.quantity}
+                            </span>
+                            <button
+                              className="px-2 md:px-3 py-1 text-[#cc2532] dark:text-[#cc2532] hover:bg-orange-50 dark:hover:bg-[#cc2532]/10"
+                              onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                            >
+                              <Plus className="h-3 w-3 md:h-4 md:w-4" />
+                            </button>
+                          </div>
+                        )}
 
                         <p className="text-sm md:text-base font-medium text-gray-800 dark:text-gray-200 min-w-[50px] md:min-w-[70px] text-right">
                           {RUPEE_SYMBOL}{((item.price || 0) * (item.quantity || 1)).toFixed(0)}
@@ -2089,13 +2115,15 @@ export default function Cart() {
                 </div>
 
                 {/* Add more items */}
-                <button
-                  onClick={handleBack}
-                  className="flex items-center gap-2 mt-4 md:mt-6 text-[#cc2532] dark:text-[#cc2532]"
-                >
-                  <Plus className="h-4 w-4 md:h-5 md:w-5" />
-                  <span className="text-sm md:text-base font-medium">Add more items</span>
-                </button>
+                {!cart.some(item => item.isCustomCake) && (
+                  <button
+                    onClick={handleBack}
+                    className="flex items-center gap-2 mt-4 md:mt-6 text-[#cc2532] dark:text-[#cc2532]"
+                  >
+                    <Plus className="h-4 w-4 md:h-5 md:w-5" />
+                    <span className="text-sm md:text-base font-medium">Add more items</span>
+                  </button>
+                )}
               </div>
 
               {/* Delivery Time */}
@@ -2236,7 +2264,7 @@ export default function Cart() {
               )}
 
               {/* Complete your meal section - Approved Addons */}
-              {addons.length > 0 && (
+              {addons.length > 0 && !cart.some(item => item.isCustomCake) && (
                 <div className="bg-white dark:bg-[#1a1a1a] px-4 md:px-6 py-5 rounded-2xl shadow-sm border border-slate-100 dark:border-gray-800">
                   <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
                     <div className="w-6 h-6 md:w-8 md:h-8 bg-gray-100 dark:bg-gray-800 rounded flex items-center justify-center">

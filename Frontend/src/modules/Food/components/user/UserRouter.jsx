@@ -18,6 +18,8 @@ const Categories = lazy(() => import("@food/pages/user/Categories"))
 const CategoryPage = lazy(() => import("@food/pages/user/CategoryPage"))
 const Restaurants = lazy(() => import("@food/pages/user/restaurants/Restaurants"))
 const RestaurantDetails = lazy(() => import("@food/pages/user/restaurants/RestaurantDetails"))
+const BakeryList = lazy(() => import("@food/pages/user/restaurants/BakeryList"))
+const CustomCakeRequestForm = lazy(() => import("@food/pages/user/restaurants/CustomCakeRequestForm"))
 const DiningRestaurantDetails = lazy(() => import("@food/pages/user/dining/DiningRestaurantDetails"))
 const TableBooking = lazy(() => import("@food/pages/user/dining/TableBooking"))
 const TableBookingConfirmation = lazy(() => import("@food/pages/user/dining/TableBookingConfirmation"))
@@ -116,6 +118,8 @@ export default function UserRouter() {
           <Route path="category/:category" element={<CategoryPage />} />
           <Route path="restaurants" element={<Restaurants />} />
           <Route path="restaurants/:slug" element={<RestaurantDetails />} />
+          <Route path="bakery/list" element={<BakeryList />} />
+          <Route path="bakery/:restaurantId/custom-request" element={<CustomCakeRequestForm />} />
           <Route path="search" element={<SearchResults />} />
           <Route path="product/:id" element={<ProductDetail />} />
 

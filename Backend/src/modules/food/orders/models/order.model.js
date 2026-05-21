@@ -374,6 +374,16 @@ const orderSchema = new mongoose.Schema(
         lastRiderLocation: {
             type: geoPointSchema,
             default: undefined
+        },
+        isCustomCake: {
+            type: Boolean,
+            default: false,
+            index: true
+        },
+        customCakeRequestId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'FoodCustomCakeRequest',
+            default: null
         }
     },
     {

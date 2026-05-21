@@ -5,6 +5,7 @@ import { orderAPI } from "@food/api"
 import { useCart } from "@food/context/CartContext"
 import { toast } from "sonner"
 import { getCompanyNameAsync } from "@common/utils/businessSettings"
+import CustomCakeRequests from "./CustomCakeRequests"
 const debugLog = (...args) => {}
 const debugWarn = (...args) => {}
 const debugError = (...args) => {}
@@ -14,6 +15,7 @@ export default function Orders() {
   const navigate = useNavigate()
   const { replaceCart } = useCart()
   const [orders, setOrders] = useState([])
+  const [activeTab, setActiveTab] = useState("food")
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
   const [ratingModal, setRatingModal] = useState({ open: false, order: null })
@@ -664,32 +666,13 @@ Order again from this restaurant in the ${companyName} app.`
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-[#0a0a0a] pb-10">
         <div className="bg-white dark:bg-[#111111] p-4 flex items-center shadow-sm sticky top-0 z-10 border-b border-transparent dark:border-gray-800">
-          <Link to="/user">
+          <Link to="/food/user">
             <ArrowLeft className="w-6 h-6 text-gray-700 dark:text-white cursor-pointer" />
           </Link>
           <h1 className="ml-4 text-xl font-semibold text-gray-800 dark:text-white">Your Orders</h1>
         </div>
         <div className="flex items-center justify-center py-20">
           <Loader2 className="w-8 h-8 text-[#cc2532] animate-spin" />
-        </div>
-      </div>
-    )
-  }
-
-  if (orders.length === 0) {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-[#0a0a0a] pb-10">
-        <div className="bg-white dark:bg-[#111111] p-4 flex items-center shadow-sm sticky top-0 z-10 border-b border-transparent dark:border-gray-800">
-          <Link to="/user">
-            <ArrowLeft className="w-6 h-6 text-gray-700 dark:text-white cursor-pointer" />
-          </Link>
-          <h1 className="ml-4 text-xl font-semibold text-gray-800 dark:text-white">Your Orders</h1>
-        </div>
-        <div className="px-4 py-8 text-center">
-          <p className="text-gray-600 dark:text-gray-300">You haven't placed any orders yet</p>
-          <Link to="/user">
-            <button className="mt-4 text-[#cc2532] font-medium">Start Ordering</button>
-          </Link>
         </div>
       </div>
     )
@@ -705,28 +688,61 @@ Order again from this restaurant in the ${companyName} app.`
         <h1 className="ml-4 text-xl font-semibold text-gray-800 dark:text-white">Your Orders</h1>
       </div>
 
-      {/* Search Bar */}
-      <div className="p-4 bg-white dark:bg-[#111111] mt-1">
-        <div className="flex items-center bg-white dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 shadow-sm">
-          <Search className="w-5 h-5 text-[#cc2532]" />
-          <input
-            type="text"
-            placeholder="Search by restaurant or dish"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="flex-1 ml-3 outline-none bg-transparent text-gray-600 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500"
-          />
-        </div>
+      {/* Tabs */}
+      <div className="flex border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-[#111111] px-4 mb-2">
+        <button
+          onClick={() => setActiveTab("food")}
+          className={`flex-1 py-3 text-sm font-semibold text-center border-b-2 transition-all ${
+            activeTab === "food"
+              ? "border-[#cc2532] text-[#cc2532] dark:text-white font-bold"
+              : "border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+          }`}
+        >
+          Food Orders
+        </button>
+        <button
+          onClick={() => setActiveTab("custom_cakes")}
+          className={`flex-1 py-3 text-sm font-semibold text-center border-b-2 transition-all ${
+            activeTab === "custom_cakes"
+              ? "border-[#cc2532] text-[#cc2532] dark:text-white font-bold"
+              : "border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+          }`}
+        >
+          Custom Cake Requests
+        </button>
       </div>
 
-      {/* Orders List */}
-      <div className="px-4 py-2 space-y-4">
-        {filteredOrders.length === 0 ? (
-          <div className="bg-white dark:bg-[#111111] rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 p-8 text-center">
-            <p className="text-gray-600 dark:text-gray-300">No orders found matching your search</p>
+      {activeTab === "food" ? (
+        <>
+          {/* Search Bar */}
+          <div className="p-4 bg-white dark:bg-[#111111] mt-1">
+            <div className="flex items-center bg-white dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 shadow-sm">
+              <Search className="w-5 h-5 text-[#cc2532]" />
+              <input
+                type="text"
+                placeholder="Search by restaurant or dish"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="flex-1 ml-3 outline-none bg-transparent text-gray-600 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500"
+              />
+            </div>
           </div>
-        ) : (
-          filteredOrders.map((order) => {
+
+          {/* Orders List */}
+          <div className="px-4 py-2 space-y-4">
+            {orders.length === 0 ? (
+              <div className="bg-white dark:bg-[#111111] rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 p-8 text-center mt-4">
+                <p className="text-gray-600 dark:text-gray-300">You haven't placed any orders yet</p>
+                <Link to="/food/user">
+                  <button className="mt-4 text-[#cc2532] font-medium">Start Ordering</button>
+                </Link>
+              </div>
+            ) : filteredOrders.length === 0 ? (
+              <div className="bg-white dark:bg-[#111111] rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 p-8 text-center">
+                <p className="text-gray-600 dark:text-gray-300">No orders found matching your search</p>
+              </div>
+            ) : (
+              filteredOrders.map((order) => {
             // Check payment method - COD/wallet orders have 'pending' status which is normal
             const isCodOrWallet = order.payment?.method === 'cash' ||
               order.payment?.method === 'cod' ||
@@ -1068,6 +1084,12 @@ Order again from this restaurant in the ${companyName} app.`
           })
         )}
       </div>
+        </>
+      ) : (
+        <div className="px-4 py-4 max-w-3xl mx-auto">
+          <CustomCakeRequests />
+        </div>
+      )}
 
       {/* Footer Branding */}
       <div className="flex justify-center mt-8 mb-4">

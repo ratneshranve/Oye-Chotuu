@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, Component, useMemo } from "react"
 import { createPortal } from "react-dom"
 import { motion, AnimatePresence } from "framer-motion"
-import { useParams, useNavigate, useSearchParams } from "react-router-dom"
+import { useParams, useNavigate, useSearchParams, Link } from "react-router-dom"
 import { restaurantAPI, diningAPI, orderAPI } from "@food/api"
 import { API_BASE_URL } from "@food/api/config"
 import { toast } from "sonner"
@@ -37,6 +37,7 @@ import {
   MessageCircle,
   Send,
   Mail,
+  Cake,
 } from "lucide-react"
 import { Button } from "@food/components/ui/button"
 import { Badge } from "@food/components/ui/badge"
@@ -484,7 +485,7 @@ function RestaurantDetailsContent() {
           // Transform API data to match expected format with comprehensive fallbacks
           // Handle both dining restaurant and regular restaurant data structures
           const transformedRestaurant = {
-            id: actualRestaurant?.restaurantId || actualRestaurant?._id || actualRestaurant?.id || apiRestaurant?.restaurantId || apiRestaurant?._id || null,
+            id: actualRestaurant?._id || actualRestaurant?.id || actualRestaurant?.restaurantId || apiRestaurant?._id || apiRestaurant?.id || apiRestaurant?.restaurantId || null,
             mongoId: actualRestaurant?._id || apiRestaurant?._id || null,
             name:
               actualRestaurant?.name ||
@@ -529,7 +530,7 @@ function RestaurantDetailsContent() {
             categories: Array.isArray(actualRestaurant?.categories) ? actualRestaurant.categories : (Array.isArray(apiRestaurant?.categories) ? apiRestaurant.categories : []),
             menu: Array.isArray(actualRestaurant?.menu) ? actualRestaurant.menu : (Array.isArray(apiRestaurant?.menu) ? apiRestaurant.menu : []),
             slug: actualRestaurant?.slug || apiRestaurant?.slug || actualRestaurant?.name?.toLowerCase().replace(/\s+/g, '-') || apiRestaurant?.name?.toLowerCase().replace(/\s+/g, '-') || slug || "unknown",
-            restaurantId: actualRestaurant?.restaurantId || actualRestaurant?._id || actualRestaurant?.id || apiRestaurant?.restaurantId || apiRestaurant?._id || apiRestaurant?.id || null,
+            restaurantId: actualRestaurant?._id || actualRestaurant?.id || actualRestaurant?.restaurantId || apiRestaurant?._id || apiRestaurant?.id || apiRestaurant?.restaurantId || null,
             // Add other fields with defaults
             featuredDish: actualRestaurant?.featuredDish || apiRestaurant?.featuredDish || onboardingStep4?.featuredDish || "Special Dish",
             featuredPrice: actualRestaurant?.featuredPrice || apiRestaurant?.featuredPrice || onboardingStep4?.featuredPrice || 249,
@@ -546,6 +547,7 @@ function RestaurantDetailsContent() {
             profileImage: normalizedProfileImage,
             coverImages: normalizedCoverImages,
             menuImages: normalizedMenuImages,
+            businessType: actualRestaurant?.businessType || apiRestaurant?.businessType || "restaurant",
             // Menu sections for display (will be populated from menu API)
             menuSections: [],
             // Onboarding data including FSSAI license
@@ -2107,6 +2109,35 @@ function RestaurantDetailsContent() {
             <span>{restaurant?.deliveryTime || "25-30 mins"}</span>
           </div>
         </div>
+
+        {/* Custom Cake Quote Request for Home Bakeries */}
+        {restaurant?.businessType === 'home_bakery' && (
+          <div className="max-w-7xl mx-auto mt-4 bg-gradient-to-r from-pink-500/10 to-amber-500/10 dark:from-pink-950/30 dark:to-amber-950/20 rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-pink-200/50 dark:border-pink-800/30 p-5 relative overflow-hidden">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="h-12 w-12 rounded-full bg-pink-100 dark:bg-pink-900/40 flex items-center justify-center flex-shrink-0">
+                  <Cake className="h-6 w-6 text-pink-600 dark:text-pink-400" />
+                </div>
+                <div>
+                  <h3 className="text-base font-black text-gray-900 dark:text-white uppercase tracking-tight">
+                    Order a Custom Cake
+                  </h3>
+                  <p className="text-xs font-medium text-gray-600 dark:text-gray-400">
+                    Design your dream cake! Submit specs & reference images for a custom quote.
+                  </p>
+                </div>
+              </div>
+              <Link 
+                to={`/food/user/bakery/${restaurant.mongoId || restaurant._id || restaurant.restaurantId || restaurant.id}/custom-request`}
+                className="w-full sm:w-auto"
+              >
+                <Button className="w-full sm:w-auto bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-700 hover:to-rose-700 text-white font-bold px-6 py-2.5 rounded-full transition-all duration-300 shadow-md shadow-pink-500/20">
+                  Request Quote
+                </Button>
+              </Link>
+            </div>
+          </div>
+        )}
 
         {/* Offer Card */}
         <div className="max-w-7xl mx-auto mt-4 bg-white dark:bg-[#1a1a1a] rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 dark:border-gray-800 p-4 relative overflow-hidden">

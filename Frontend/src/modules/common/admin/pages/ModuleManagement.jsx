@@ -64,7 +64,7 @@ const ModuleManagement = () => {
   const [saving, setSaving] = useState(false);
   const [modules, setModules] = useState({
     food: true,
-
+    homeBakery: false,
     quickCommerce: true,
   });
 
@@ -77,7 +77,7 @@ const ModuleManagement = () => {
       if (settings?.modules) {
         setModules({
           food: settings.modules.food ?? true,
-
+          homeBakery: settings.modules.homeBakery ?? false,
           quickCommerce: settings.modules.quickCommerce ?? true,
         });
       }
@@ -166,6 +166,15 @@ const ModuleManagement = () => {
                 enabled={modules.quickCommerce} 
                 onToggle={() => handleToggle('quickCommerce')}
                 color="green"
+              />
+
+              <ModuleCard 
+                title="Home Bakery" 
+                description="Manage home bakeries, custom cakes, and custom orders." 
+                icon={Zap} 
+                enabled={modules.homeBakery} 
+                onToggle={() => handleToggle('homeBakery')}
+                color="pink"
               />
 
             </div>

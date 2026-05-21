@@ -146,7 +146,6 @@ export default function AdminSidebar({ isOpen = false, onClose, onCollapseChange
     return {
       food: true,
       quickCommerce: true,
-      dudhwala: true,
       ...cached,
       dudhwala: true // Force it to true for now
     };

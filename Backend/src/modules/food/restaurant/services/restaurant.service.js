@@ -274,6 +274,7 @@ export const registerRestaurant = async (payload, files) => {
         ownerPhone,
         primaryContactNumber,
         pureVegRestaurant,
+        businessType,
         addressLine1,
         addressLine2,
         area,
@@ -383,6 +384,7 @@ export const registerRestaurant = async (payload, files) => {
             restaurantNameNormalized,
             ownerName,
             ownerEmail,
+            businessType: businessType || 'restaurant',
             // Store phone in a consistent digits-only format to match OTP login flow.
             ownerPhone: ownerPhoneDigits,
             ownerPhoneDigits,
@@ -502,6 +504,7 @@ export const getCurrentRestaurantProfile = async (restaurantId) => {
                 'upiId',
                 'upiQrImage',
                 'pureVegRestaurant',
+                'businessType',
                 'zoneId',
                 'profileImage',
                 'coverImages',
@@ -609,7 +612,7 @@ export const updateRestaurantProfile = async (restaurantId, body = {}) => {
     }
 
     const currentRestaurant = await FoodRestaurant.findById(restaurantId)
-        .select('restaurantName restaurantNameNormalized ownerPhone ownerPhoneDigits ownerPhoneLast10 primaryContactNumber status fssaiNumber fssaiImage zoneId')
+        .select('restaurantName restaurantNameNormalized ownerPhone ownerPhoneDigits ownerPhoneLast10 primaryContactNumber status fssaiNumber fssaiImage zoneId businessType')
         .lean();
 
     if (!currentRestaurant) {
@@ -617,6 +620,15 @@ export const updateRestaurantProfile = async (restaurantId, body = {}) => {
     }
 
     const update = {};
+
+    if (body.businessType !== undefined) {
+        const businessType = String(body.businessType || '').trim();
+        if (businessType && ['restaurant', 'home_bakery'].includes(businessType)) {
+            update.businessType = businessType;
+        } else if (businessType) {
+            throw new ValidationError('Invalid business type');
+        }
+    }
 
     // Owner/contact fields (used by restaurant Contact Details screens)
     if (body.ownerName !== undefined) {
@@ -1245,6 +1257,11 @@ export const listApprovedRestaurants = async (query = {}) => {
     const skip = (page - 1) * limit;
 
     const filter = { status: 'approved' };
+    if (query.businessType === 'home_bakery') {
+        filter.businessType = 'home_bakery';
+    } else {
+        filter.businessType = { $ne: 'home_bakery' };
+    }
 
     if (query.city && String(query.city).trim()) {
         const city = String(query.city).trim().slice(0, 80);

@@ -5,6 +5,7 @@ import { FoodOrder, FoodSettings } from '../models/order.model.js';
 import { logger } from '../../../../utils/logger.js';
 import { FoodUser } from '../../../../core/users/user.model.js';
 import { FoodRestaurant } from '../../restaurant/models/restaurant.model.js';
+import { FoodCustomCakeRequest } from '../../restaurant/models/customCakeRequest.model.js';
 import { FoodDeliveryPartner } from '../../delivery/models/deliveryPartner.model.js';
 import { FoodZone } from '../../admin/models/zone.model.js';
 import { FoodFeeSettings } from '../../admin/models/feeSettings.model.js';
@@ -1482,6 +1483,30 @@ export async function updateDispatchSettings(dispatchMode, adminId) {
 // ----- Calculate (validation + return pricing from payload) -----
 export async function calculateOrder(userId, dto) {
   const items = normalizeOrderItems(dto.items, dto.orderType);
+
+  if (dto.isCustomCake) {
+    if (!dto.customCakeRequestId) {
+      throw new ValidationError("Custom cake request ID is required for custom cakes.");
+    }
+    const requestDoc = await FoodCustomCakeRequest.findById(dto.customCakeRequestId);
+    if (!requestDoc) {
+      throw new NotFoundError("Custom cake request not found.");
+    }
+    if (String(requestDoc.userId) !== String(userId)) {
+      throw new ValidationError("Unauthorized order for this request.");
+    }
+    if (!['quoted', 'confirmed'].includes(requestDoc.status)) {
+      throw new ValidationError("This custom request does not have a confirmed quote.");
+    }
+    if (items.length !== 1) {
+      throw new ValidationError("Cart must contain exactly one custom cake for custom cake checkouts.");
+    }
+    const customItem = items[0];
+    if (Number(customItem.price) !== requestDoc.quotePrice) {
+      throw new ValidationError("Order price must match the quoted price exactly.");
+    }
+  }
+
   const hasFoodItems = items.some((item) => item.type === "food");
   const hasQuickItems = items.some((item) => item.type === "quick");
   const orderType =
@@ -1791,6 +1816,30 @@ export async function calculateOrder(userId, dto) {
 // ----- Create order -----
 export async function createOrder(userId, dto) {
   const items = normalizeOrderItems(dto.items, dto.orderType);
+
+  if (dto.isCustomCake) {
+    if (!dto.customCakeRequestId) {
+      throw new ValidationError("Custom cake request ID is required for custom cakes.");
+    }
+    const requestDoc = await FoodCustomCakeRequest.findById(dto.customCakeRequestId);
+    if (!requestDoc) {
+      throw new NotFoundError("Custom cake request not found.");
+    }
+    if (String(requestDoc.userId) !== String(userId)) {
+      throw new ValidationError("Unauthorized order for this request.");
+    }
+    if (!['quoted', 'confirmed'].includes(requestDoc.status)) {
+      throw new ValidationError("This custom request does not have a confirmed quote.");
+    }
+    if (items.length !== 1) {
+      throw new ValidationError("Cart must contain exactly one custom cake for custom cake checkouts.");
+    }
+    const customItem = items[0];
+    if (Number(customItem.price) !== requestDoc.quotePrice) {
+      throw new ValidationError("Order price must match the quoted price exactly.");
+    }
+  }
+
   const hasFoodItems = items.some((item) => item.type === "food");
   const hasQuickItems = items.some((item) => item.type === "quick");
   const orderType =
@@ -2016,6 +2065,8 @@ export async function createOrder(userId, dto) {
   const order = new FoodOrder({
     orderType,
     orderId,
+    isCustomCake: dto.isCustomCake || false,
+    customCakeRequestId: dto.isCustomCake ? new mongoose.Types.ObjectId(dto.customCakeRequestId) : null,
     userId: new mongoose.Types.ObjectId(userId),
     restaurantId:
       hasFoodItems && primaryRestaurantId ? new mongoose.Types.ObjectId(primaryRestaurantId) : null,
@@ -2083,6 +2134,13 @@ export async function createOrder(userId, dto) {
   }
 
   await order.save();
+
+  if (order.isCustomCake && (isCash || isWallet)) {
+    await FoodCustomCakeRequest.findByIdAndUpdate(order.customCakeRequestId, {
+      status: 'ordered',
+      orderId: order._id
+    });
+  }
 
   await foodTransactionService.createInitialTransaction(order);
   const sellerOrders = hasQuickItems
@@ -2177,6 +2235,7 @@ export async function createOrder(userId, dto) {
   if (
     (orderType === "food" || (orderType === "mixed" && dispatchStrategy === "single")) &&
     dispatchMode === "auto" &&
+    !order.isCustomCake &&
     (isCash ||
       order.payment.status === "paid" ||
       order.payment.status === "cod_pending")
@@ -2223,6 +2282,13 @@ export async function verifyPayment(userId, dto) {
     note: "Payment verified",
   });
   await order.save();
+
+  if (order.isCustomCake) {
+    await FoodCustomCakeRequest.findByIdAndUpdate(order.customCakeRequestId, {
+      status: 'ordered',
+      orderId: order._id
+    });
+  }
 
   await foodTransactionService.updateTransactionStatus(order._id, 'captured', {
     status: 'captured',
@@ -2273,7 +2339,7 @@ export async function verifyPayment(userId, dto) {
     (order.orderType === "mixed" && order.dispatchPlan?.strategy === "single")
       ? await getDispatchSettings()
       : null;
-  if (settings?.dispatchMode === "auto") {
+  if (settings?.dispatchMode === "auto" && !order.isCustomCake) {
     try {
       await tryAutoAssign(order._id);
     } catch {}
@@ -2926,10 +2992,11 @@ export async function updateOrderStatusRestaurant(
     const io = getIO();
     if (io) {
       // On accept (confirmed or preparing) -> request delivery partners.
-      if (
-        (String(orderStatus) === "preparing" || String(orderStatus) === "confirmed") && 
-        (String(from) !== "preparing" && String(from) !== "confirmed")
-      ) {
+      const isInitialDispatchTrigger = order.isCustomCake
+        ? ((String(orderStatus) === "ready_for_pickup" || String(orderStatus) === "ready") && (String(from) !== "ready_for_pickup" && String(from) !== "ready"))
+        : ((String(orderStatus) === "preparing" || String(orderStatus) === "confirmed") && (String(from) !== "preparing" && String(from) !== "confirmed"));
+
+      if (isInitialDispatchTrigger) {
         console.log(
           `[DEBUG] Order ${order.orderId} status changed to '${orderStatus}'. Triggering delivery dispatch.`,
         );
@@ -3035,7 +3102,7 @@ export async function updateOrderStatusRestaurant(
       }
 
             // When ready for pickup -> ping assigned delivery partner.
-            if (String(orderStatus) === 'ready_for_pickup' && String(from) !== 'ready_for_pickup') {
+            if (String(orderStatus) === 'ready_for_pickup' && String(from) !== 'ready_for_pickup' && !order.isCustomCake) {
                 console.log(`[DEBUG] Order ${order.orderId} changed to 'ready_for_pickup'.`);
                 const assignedId = order.dispatch?.deliveryPartnerId?.toString?.() || order.dispatch?.deliveryPartnerId;
                 if (assignedId) {

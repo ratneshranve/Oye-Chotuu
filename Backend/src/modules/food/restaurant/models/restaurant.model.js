@@ -205,6 +205,12 @@ const restaurantSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    businessType: {
+      type: String,
+      enum: ["restaurant", "home_bakery"],
+      default: "restaurant",
+      index: true,
+    },
     panImage: {
       type: String,
     },

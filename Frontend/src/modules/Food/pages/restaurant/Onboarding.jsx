@@ -453,6 +453,7 @@ export default function RestaurantOnboarding() {
 
   const [step1, setStep1] = useState({
     restaurantName: "",
+    businessType: "restaurant",
     pureVegRestaurant: null,
     ownerName: "",
     ownerEmail: "",
@@ -635,6 +636,7 @@ export default function RestaurantOnboarding() {
       if (localData.step1) {
         setStep1({
           restaurantName: localData.step1.restaurantName || "",
+          businessType: localData.step1.businessType || "restaurant",
           pureVegRestaurant:
             typeof localData.step1.pureVegRestaurant === "boolean"
               ? localData.step1.pureVegRestaurant
@@ -793,6 +795,7 @@ export default function RestaurantOnboarding() {
           // Map Step 1
           setStep1((prev) => ({
             restaurantName: data.name || data.restaurantName || "",
+            businessType: data.businessType || "restaurant",
             pureVegRestaurant: typeof data.pureVegRestaurant === "boolean" ? data.pureVegRestaurant : null,
             ownerName: data.ownerName || "",
             ownerEmail: data.ownerEmail || "",
@@ -899,6 +902,9 @@ export default function RestaurantOnboarding() {
 
     if (!step1.restaurantName?.trim()) {
       errors.push("Restaurant name is required")
+    }
+    if (!step1.businessType?.trim()) {
+      errors.push("Business type is required")
     }
     if (typeof step1.pureVegRestaurant !== "boolean") {
       errors.push("Please select whether your restaurant is pure veg")
@@ -1185,6 +1191,7 @@ export default function RestaurantOnboarding() {
 
         // Step 1
         formData.append("restaurantName", step1.restaurantName || "")
+        formData.append("businessType", step1.businessType || "restaurant")
         formData.append(
           "pureVegRestaurant",
           step1.pureVegRestaurant === true ? "true" : "false",
@@ -1316,6 +1323,24 @@ export default function RestaurantOnboarding() {
               placeholder="Customers will see this name"
               disabled={!isEditing}
             />
+          </div>
+          <div>
+            <Label className="text-xs text-gray-700">Business Type*</Label>
+            <div className="mt-1">
+              <Select
+                value={step1.businessType || "restaurant"}
+                onValueChange={(val) => setStep1({ ...step1, businessType: val })}
+                disabled={!isEditing}
+              >
+                <SelectTrigger className="w-full bg-white text-sm text-black">
+                  <SelectValue placeholder="Select business type" />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  <SelectItem value="restaurant">Restaurant</SelectItem>
+                  <SelectItem value="home_bakery">Home Bakery</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
           <div>
             <Label className="text-xs text-gray-700">Pure veg restaurant?*</Label>
