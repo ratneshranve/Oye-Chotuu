@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 import { Button } from "@food/components/ui/button";
 import { useCompanyName } from "@food/hooks/useCompanyName";
+import { setAuthData } from "@food/utils/auth";
 import { useAuth } from "@core/context/AuthContext";
 import { sellerApi } from "../services/sellerApi";
 
@@ -85,11 +86,14 @@ export default function SellerAuth() {
       const response = await sellerApi.verifyOtp(verifyPhone, code);
       const data = response?.data?.result || response?.data?.data || response?.data || {};
       const accessToken = data?.accessToken || data?.token;
+      const refreshToken = data?.refreshToken || null;
       const sellerUser = data?.seller || data?.user || data?.data?.seller || data?.data?.user;
 
       if (!accessToken) {
         throw new Error("Login succeeded but no access token was returned");
       }
+
+      setAuthData("seller", accessToken, sellerUser, refreshToken);
 
       login({
         ...sellerUser,

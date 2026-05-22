@@ -10,7 +10,6 @@ const axiosInstance = axios.create({
 const getCustomerToken = () =>
     localStorage.getItem('auth_customer') ||
     localStorage.getItem('user_accessToken') ||
-    localStorage.getItem('accessToken') ||
     null;
 
 // Request interceptor for API calls

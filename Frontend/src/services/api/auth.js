@@ -205,7 +205,6 @@ function getAccessTokenForModule(module) {
       return (
         localStorage.getItem("user_accessToken") ||
         localStorage.getItem("auth_customer") ||
-        localStorage.getItem("accessToken") ||
         null
       );
     }
