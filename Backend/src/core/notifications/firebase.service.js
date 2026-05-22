@@ -3,6 +3,7 @@ import { readFileSync, existsSync } from 'fs';
 import { resolve } from 'path';
 import { FoodUser } from '../users/user.model.js';
 import { FoodRestaurant } from '../../modules/food/restaurant/models/restaurant.model.js';
+import { Seller } from '../../modules/quick-commerce/seller/models/seller.model.js';
 import { FoodDeliveryPartner } from '../../modules/food/delivery/models/deliveryPartner.model.js';
 import { FoodAdmin } from '../admin/admin.model.js';
 import { config } from '../../config/env.js';
@@ -15,6 +16,7 @@ const FCM_SEND_URL = (projectId) =>
 const OWNER_MODELS = {
     USER: FoodUser,
     RESTAURANT: FoodRestaurant,
+    SELLER: Seller,
     DELIVERY_PARTNER: FoodDeliveryPartner,
     ADMIN: FoodAdmin
 };
@@ -25,6 +27,7 @@ const OWNER_TOKEN_FIELDS = {
 const OWNER_APP_PREFIXES = {
     USER: '👤 [User]',
     RESTAURANT: '🏪 [Shop]',
+    SELLER: '🏪 [Shop]',
     DELIVERY_PARTNER: '🛵 [Rider]',
     ADMIN: '🛡️ [Admin]'
 };
