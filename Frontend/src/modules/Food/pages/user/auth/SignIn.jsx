@@ -230,8 +230,8 @@ export default function SignIn() {
                 Privacy Policy
               </Link>
               <span className="text-gray-300 dark:text-gray-700">•</span>
-              <Link to="/profile/refund" className="underline hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
-                Content Policy
+              <Link to="/profile/support" className="underline hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
+                Support
               </Link>
             </div>
           </div>

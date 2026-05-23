@@ -10,6 +10,7 @@ const OrderDetails = lazy(() => import("@food/pages/restaurant/OrderDetails"))
 const OrdersMain = lazy(() => import("@food/pages/restaurant/OrdersMain"))
 const RestaurantOnboarding = lazy(() => import("@food/pages/restaurant/Onboarding"))
 const TermsAndConditionsPage = lazy(() => import("@food/pages/restaurant/TermsAndConditionsPage"))
+const SupportPage = lazy(() => import("@food/pages/restaurant/SupportPage"))
 const PrivacyPolicyPage = lazy(() => import("@food/pages/restaurant/PrivacyPolicyPage"))
 const MenuCategoriesPage = lazy(() => import("@food/pages/restaurant/MenuCategoriesPage"))
 const RestaurantStatus = lazy(() => import("@food/pages/restaurant/RestaurantStatus"))
@@ -69,6 +70,7 @@ export default function RestaurantRouter() {
         <Route element={<ProtectedRoute requiredRole="restaurant" loginPath="/food/restaurant/login"><DeliverySettings /></ProtectedRoute>} path="delivery-settings" />
         <Route element={<ProtectedRoute requiredRole="restaurant" loginPath="/food/restaurant/login"><RushHour /></ProtectedRoute>} path="rush-hour" />
         <Route path="terms" element={<TermsAndConditionsPage />} />
+        <Route path="support" element={<SupportPage />} />
         <Route path="privacy" element={<PrivacyPolicyPage />} />
         <Route element={<ProtectedRoute requiredRole="restaurant" loginPath="/food/restaurant/login"><MenuCategoriesPage /></ProtectedRoute>} path="menu-categories" />
         <Route element={<ProtectedRoute requiredRole="restaurant" loginPath="/food/restaurant/login"><RestaurantStatus /></ProtectedRoute>} path="status" />

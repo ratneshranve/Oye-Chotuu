@@ -97,6 +97,7 @@ const ThemeSettings = lazy(() => import("@food/pages/admin/settings/ThemeSetting
 const Gallery = lazy(() => import("@food/pages/admin/settings/Gallery"));
 const LoginSetup = lazy(() => import("@food/pages/admin/settings/LoginSetup"));
 const TermsAndCondition = lazy(() => import("@food/pages/admin/settings/TermsAndCondition"));
+const Support = lazy(() => import("@food/pages/admin/settings/Support"));
 const PrivacyPolicy = lazy(() => import("@food/pages/admin/settings/PrivacyPolicy"));
 const AboutUs = lazy(() => import("@food/pages/admin/settings/AboutUs"));
 const RefundPolicy = lazy(() => import("@food/pages/admin/settings/RefundPolicy"));
@@ -314,6 +315,7 @@ export default function AdminRouter() {
             <Route path="login-setup" element={<LoginSetup />} />
             <Route path="business-settings/fcm-index" element={<FirebaseNotification />} />
             <Route path="pages-social-media/terms" element={<TermsAndCondition />} />
+            <Route path="pages-social-media/support" element={<Support />} />
             <Route path="pages-social-media/privacy" element={<PrivacyPolicy />} />
             <Route path="pages-social-media/about" element={<AboutUs />} />
             <Route path="pages-social-media/refund" element={<RefundPolicy />} />

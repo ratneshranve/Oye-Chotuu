@@ -502,7 +502,7 @@ export default function UnifiedOTPFastLogin() {
         <div className="mt-6 text-center space-y-2">
           <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] leading-relaxed">
             By continuing, you agree to our <br />
-            <Link to="/food/user/profile/terms" className="text-gray-900 dark:text-white underline cursor-pointer hover:text-[#CB202D] transition-colors">Terms of Service</Link> & <Link to="/food/user/profile/privacy" className="text-gray-900 dark:text-white underline cursor-pointer hover:text-[#CB202D] transition-colors">Privacy Policy</Link>
+            <Link to="/food/user/profile/terms" className="text-gray-900 dark:text-white underline cursor-pointer hover:text-[#CB202D] transition-colors">Terms of Service</Link>, <Link to="/food/user/profile/privacy" className="text-gray-900 dark:text-white underline cursor-pointer hover:text-[#CB202D] transition-colors">Privacy Policy</Link> & <Link to="/food/user/profile/support" className="text-gray-900 dark:text-white underline cursor-pointer hover:text-[#CB202D] transition-colors">Support</Link>
           </p>
         </div>
       </div>

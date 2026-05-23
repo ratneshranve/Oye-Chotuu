@@ -20,6 +20,7 @@ const QuickCommerceApp = lazy(() => import('../modules/quickCommerce/routes'))
 const SellerApp = lazy(() => import('../modules/seller/routes'))
 const SellerTermsPage = lazy(() => import('../modules/seller/pages/Terms'))
 const SellerPrivacyPage = lazy(() => import('../modules/seller/pages/Privacy'))
+const SellerSupportPage = lazy(() => import('../modules/seller/pages/Support'))
 
 
 const FoodUserLayout = lazy(() => import('../modules/Food/components/user/UserLayout'))
@@ -204,11 +205,7 @@ const AppRoutes = () => {
           />
           <Route
             path="/profile/support"
-            element={
-              <ProtectedRoute>
-                <SharedProfileSupportPage />
-              </ProtectedRoute>
-            }
+            element={<SharedProfileSupportPage />}
           />
           <Route
             path="/profile/coupons"
@@ -273,6 +270,11 @@ const AppRoutes = () => {
         <Route path="/seller/privacy" element={
           <Suspense fallback={<PageLoader />}>
             <SellerPrivacyPage />
+          </Suspense>
+        } />
+        <Route path="/seller/support" element={
+          <Suspense fallback={<PageLoader />}>
+            <SellerSupportPage />
           </Suspense>
         } />
         <Route path="/seller/*" element={<SellerAppWrapper />} />

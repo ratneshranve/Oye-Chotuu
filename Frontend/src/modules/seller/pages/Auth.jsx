@@ -212,10 +212,14 @@ export default function SellerAuth() {
                       I agree to the{" "}
                       <a href="/seller/terms" className="text-[#16a34a] underline font-bold hover:text-[#15803d]">
                         Terms and Conditions
-                      </a>{" "}
-                      and{" "}
+                      </a>
+                      ,{" "}
                       <a href="/seller/privacy" className="text-[#16a34a] underline font-bold hover:text-[#15803d]">
                         Privacy Policy
+                      </a>
+                      {" "}and{" "}
+                      <a href="/seller/support" className="text-[#16a34a] underline font-bold hover:text-[#15803d]">
+                        Support
                       </a>
                     </label>
                   </div>

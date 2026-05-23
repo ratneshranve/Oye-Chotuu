@@ -221,6 +221,14 @@ export default function RestaurantLogin() {
               >
                 Privacy Policy
               </button>
+              {" "}and{" "}
+              <button
+                type="button"
+                onClick={() => navigate("/food/restaurant/support")}
+                className="bg-transparent border-0 p-0 text-[#49AB14] font-bold hover:underline cursor-pointer"
+              >
+                Support
+              </button>
             </p>
           </div>
         </div>
