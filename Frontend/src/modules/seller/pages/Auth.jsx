@@ -56,15 +56,9 @@ export default function SellerAuth() {
       const deliveryMode = payload?.deliveryMode || "sms";
       const resolvedPhone = String(payload?.phone || fullPhone).trim();
 
-      toast.success(
-        devOtp
-          ? `OTP ready for localhost testing. Use OTP: ${devOtp}`
-          : deliveryMode === "sms"
-            ? "OTP sent to your seller number."
-            : "OTP generated, but no debug code was returned.",
-      );
+      toast.success("OTP sent to your seller number.");
       setOtpPhone(resolvedPhone);
-      setOtp(devOtp ? String(devOtp) : "");
+      setOtp("");
       setStep("otp");
     } catch (error) {
       toast.error(error?.response?.data?.message || "Failed to send OTP");
