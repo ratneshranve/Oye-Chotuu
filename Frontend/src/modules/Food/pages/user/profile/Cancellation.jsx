@@ -36,11 +36,7 @@ export default function Cancellation() {
   }
 
   const handleBack = () => {
-    if (window.history.length > 2) {
-      goBack()
-    } else {
-      navigate('/food/user')
-    }
+    goBack()
   }
 
   if (loading) {
@@ -108,5 +104,6 @@ export default function Cancellation() {
     </AnimatedPage>
   )
 }
+
 
 

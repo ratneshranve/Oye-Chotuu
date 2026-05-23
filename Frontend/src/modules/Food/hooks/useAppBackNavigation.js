@@ -36,7 +36,7 @@ const resolveBackPath = ({ pathname, search, state }) => {
   }
 
   if (
-    /^\/user\/profile\/(edit|favorites|support|coupons|about|report-safety-emergency|accessibility|logout|refer-earn|payments)$/.test(
+    /^\/(user\/)?profile\/(edit|favorites|coupons|about|report-safety-emergency|accessibility|logout|refer-earn|payments)$/.test(
       normalizedPath,
     )
   ) {
@@ -44,7 +44,7 @@ const resolveBackPath = ({ pathname, search, state }) => {
   }
 
   if (
-    /^\/user\/profile\/(terms|privacy|refund|shipping|cancellation)$/.test(
+    /^\/(user\/)?profile\/(terms|privacy|support|refund|shipping|cancellation)$/.test(
       normalizedPath,
     )
   ) {
