@@ -532,10 +532,11 @@ const Home = ({ embedded = false, onThemeChange, embeddedHeaderColor = null }) =
     });
   }, [activeCategory, onThemeChange]);
 
-  const isInitialPageLoading = !isBootstrapped || isLoading;
-  const hasHeroBanners = (heroConfig.banners?.items || []).length > 0;
-  const shouldShowHeroFallback = !isInitialPageLoading && !hasHeroBanners;
-
+  const isInitialPageLoading = !isBootstrapped;
+  const hasHeroBanners = (heroConfig?.banners?.items || []).length > 0;
+  const isBannersLoading = isLoading && !hasHeroBanners;
+  const shouldShowHeroFallback = !isInitialPageLoading && !isLoading && !hasHeroBanners;
+  const isProductsLoading = isLoading && products.length === 0;
 
   // Autoplay for Mobile Banner Carousel
   useEffect(() => {
@@ -689,7 +690,9 @@ const Home = ({ embedded = false, onThemeChange, embeddedHeaderColor = null }) =
                 <div
                   className="relative w-full overflow-hidden"
                   style={embedded ? { backgroundColor: activeCategory?.headerColor || ALL_CATEGORY.headerColor } : undefined}>
-                  {hasHeroBanners ? (
+                  {isBannersLoading ? (
+                    <div className="w-full h-[190px] bg-slate-200/60 dark:bg-slate-800/60 animate-pulse" />
+                  ) : hasHeroBanners ? (
                     <ExperienceBannerCarousel
                       section={{ title: "" }}
                       items={heroConfig.banners.items}
@@ -989,7 +992,11 @@ const Home = ({ embedded = false, onThemeChange, embeddedHeaderColor = null }) =
                 </div>
 
                 <div className="relative z-10 flex overflow-x-auto gap-3 md:gap-4 pb-5 md:pb-6 no-scrollbar -mx-4 px-4 md:mx-0 md:px-0 snap-x snap-mandatory scroll-smooth">
-                  {products.slice(0, 12).map((product) => (
+                  {isProductsLoading ? (
+                    Array(5).fill(0).map((_, i) => (
+                      <div key={i} className="w-[125px] md:w-[155px] lg:w-[175px] h-[220px] shrink-0 bg-white dark:bg-slate-800/60 rounded-[20px] animate-pulse border border-blue-50/50" />
+                    ))
+                  ) : products.slice(0, 12).map((product) => (
                     <div
                       key={product.id}
                       className="w-[125px] md:w-[155px] lg:w-[175px] shrink-0 snap-start">

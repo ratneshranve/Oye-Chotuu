@@ -96,7 +96,8 @@ export default function TermsAndCondition() {
             {[
               { id: "user", label: "Customer" },
               { id: "restaurant", label: "Restaurant" },
-              { id: "delivery", label: "Delivery Boy" }
+              { id: "delivery", label: "Delivery Boy" },
+              { id: "vendor", label: "Vendor" }
             ].map((r) => (
               <button
                 key={r.id}

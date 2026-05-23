@@ -170,16 +170,7 @@ export const useQuickHomeData = ({ currentLocation }) => {
         productParams.lng = currentLocation.longitude;
       }
 
-      const [catRes, prodRes, expRes, sectionsRes, heroRes] = await Promise.all([
-        customerApi.getCategories(),
-        hasValidLocation ? customerApi.getProducts(productParams) : Promise.resolve({ data: { success: true, result: { items: [] } } }),
-        customerApi.getExperienceSections({ pageType: "home" }).catch(() => null),
-        hasValidLocation ? customerApi.getOfferSections({ lat: currentLocation.latitude, lng: currentLocation.longitude }).catch(() => ({ data: {} })) : Promise.resolve({ data: { results: [] } }),
-        customerApi.getHeroConfig({ pageType: "home" }).catch(() => null),
-      ]);
-
-      if (seq !== fetchDataSeqRef.current) return;
-
+      // Initialize cache object
       const newDataCache = {
         categories: [ALL_CATEGORY],
         activeCategory: ALL_CATEGORY,
@@ -192,95 +183,122 @@ export const useQuickHomeData = ({ currentLocation }) => {
         subcategoryMap: {},
       };
 
-      if (catRes.data.success) {
-        const dbCats = catRes.data.results || catRes.data.result || [];
-        const catMap = {};
-        const subMap = {};
-        dbCats.forEach((c) => {
-          if (c.type === "category") catMap[c._id] = c;
-          else if (c.type === "subcategory") subMap[c._id] = c;
-        });
-        setCategoryMap(catMap);
-        setSubcategoryMap(subMap);
-        newDataCache.categoryMap = catMap;
-        newDataCache.subcategoryMap = subMap;
-
-        const formattedHeaders = dbCats.filter((cat) => cat.type === "header").map((cat) => {
-          const catName = cat.name;
-          const meta = CATEGORY_METADATA[catName] || CATEGORY_METADATA[catName.charAt(0).toUpperCase() + catName.slice(1).toLowerCase()] || CATEGORY_METADATA[catName.toUpperCase()] || {
-            icon: Sparkles, theme: DEFAULT_CATEGORY_THEME, banner: { title: catName.toUpperCase(), subtitle: "TOP PICKS", floatingElements: "sparkles" }
-          };
-          const IconComp = (cat.iconId && ICON_COMPONENTS[cat.iconId]) || meta.icon || Sparkles;
-          return { ...cat, id: cat._id, iconId: cat.iconId, icon: IconComp, theme: meta.theme, headerColor: cat.headerColor || null, banner: { ...meta.banner, textColor: "text-white" } };
-        });
-
-        const allHeaderFromAdmin = formattedHeaders.find(h => (h.slug?.toLowerCase() === "all") || (h.name?.toLowerCase() === "all"));
-        const mergedAllCategory = allHeaderFromAdmin ? { ...ALL_CATEGORY, headerColor: allHeaderFromAdmin.headerColor || ALL_CATEGORY.headerColor, icon: allHeaderFromAdmin.icon || ALL_CATEGORY.icon } : ALL_CATEGORY;
-        const headersWithoutAll = formattedHeaders.filter(h => !((h.slug?.toLowerCase() === "all") || (h.name?.toLowerCase() === "all")));
-        
-        const finalCategories = [mergedAllCategory, ...headersWithoutAll];
-        setCategories(finalCategories);
-        newDataCache.categories = finalCategories;
-
-        // Restore active category if stored
-        let initialActive = mergedAllCategory;
-        const storedHeaderReturn = window.sessionStorage.getItem(QUICK_HEADER_RETURN_STORAGE_KEY);
-        const storedExpReturn = window.sessionStorage.getItem("experienceReturn");
-        
-        const restoreId = (storedHeaderReturn && JSON.parse(storedHeaderReturn)?.headerId) || (storedExpReturn && JSON.parse(storedExpReturn)?.headerId);
-        if (restoreId) {
-            const match = finalCategories.find(h => h._id === restoreId || h.id === restoreId);
-            if (match) initialActive = match;
+      let pendingTasks = 5;
+      const checkDone = () => {
+        pendingTasks--;
+        if (pendingTasks <= 0) {
+          globalQuickHomeCache.data = newDataCache;
+          globalQuickHomeCache.lastFetched = Date.now();
+          if (seq === fetchDataSeqRef.current) setIsLoading(false);
         }
-        setActiveCategory(initialActive);
-        newDataCache.activeCategory = initialActive;
+      };
 
-        const formattedQuickCats = dbCats.filter((cat) => cat.type === "category").map((cat) => ({ id: cat._id, name: cat.name, image: getQuickCategoryImage(cat) }));
-        setQuickCategories(formattedQuickCats);
-        newDataCache.quickCategories = formattedQuickCats;
-      }
+      // 1. Categories (Fastest, unblocks header)
+      customerApi.getCategories().then(catRes => {
+        if (seq !== fetchDataSeqRef.current) return;
+        if (catRes?.data?.success) {
+          const dbCats = catRes.data.results || catRes.data.result || [];
+          const catMap = {};
+          const subMap = {};
+          dbCats.forEach((c) => {
+            if (c.type === "category") catMap[c._id] = c;
+            else if (c.type === "subcategory") subMap[c._id] = c;
+          });
+          setCategoryMap(catMap);
+          setSubcategoryMap(subMap);
+          newDataCache.categoryMap = catMap;
+          newDataCache.subcategoryMap = subMap;
 
-      if (prodRes.data.success) {
-        const rawResult = prodRes.data.result;
-        const dbProds = Array.isArray(prodRes.data.results) ? prodRes.data.results : (Array.isArray(rawResult?.items) ? rawResult.items : (Array.isArray(rawResult) ? rawResult : []));
-        const formattedProds = dbProds.map((p) => ({
-          ...p, id: p._id, image: p.mainImage || p.image || "https://images.unsplash.com/photo-1550989460-0adf9ea622e2",
-          price: Number(p.salePrice || 0) > 0 ? Number(p.salePrice) : Number(p.price || 0),
-          originalPrice: Number(p.originalPrice || p.mrp || p.price || p.salePrice || 0),
-          weight: p.weight || "1 unit", deliveryTime: "8-15 mins"
-        }));
-        setProducts(formattedProds);
-        newDataCache.products = formattedProds;
-      }
+          const formattedHeaders = dbCats.filter((cat) => cat.type === "header").map((cat) => {
+            const catName = cat.name;
+            const meta = CATEGORY_METADATA[catName] || CATEGORY_METADATA[catName.charAt(0).toUpperCase() + catName.slice(1).toLowerCase()] || CATEGORY_METADATA[catName.toUpperCase()] || {
+              icon: Sparkles, theme: DEFAULT_CATEGORY_THEME, banner: { title: catName.toUpperCase(), subtitle: "TOP PICKS", floatingElements: "sparkles" }
+            };
+            const IconComp = (cat.iconId && ICON_COMPONENTS[cat.iconId]) || meta.icon || Sparkles;
+            return { ...cat, id: cat._id, iconId: cat.iconId, icon: IconComp, theme: meta.theme, headerColor: cat.headerColor || null, banner: { ...meta.banner, textColor: "text-white" } };
+          });
 
-      if (expRes?.data?.success) {
-        const raw = expRes.data.result || expRes.data.results || expRes.data;
-        const sections = Array.isArray(raw) ? raw : [];
-        setExperienceSections(sections);
-        newDataCache.experienceSections = sections;
-      }
+          const allHeaderFromAdmin = formattedHeaders.find(h => (h.slug?.toLowerCase() === "all") || (h.name?.toLowerCase() === "all"));
+          const mergedAllCategory = allHeaderFromAdmin ? { ...ALL_CATEGORY, headerColor: allHeaderFromAdmin.headerColor || ALL_CATEGORY.headerColor, icon: allHeaderFromAdmin.icon || ALL_CATEGORY.icon } : ALL_CATEGORY;
+          const headersWithoutAll = formattedHeaders.filter(h => !((h.slug?.toLowerCase() === "all") || (h.name?.toLowerCase() === "all")));
+          
+          const finalCategories = [mergedAllCategory, ...headersWithoutAll];
+          setCategories(finalCategories);
+          newDataCache.categories = finalCategories;
 
-      const sectionsList = sectionsRes?.data?.results || sectionsRes?.data?.result || sectionsRes?.data;
-      const offerSecs = Array.isArray(sectionsList) ? sectionsList : [];
-      setOfferSections(offerSecs);
-      newDataCache.offerSections = offerSecs;
+          let initialActive = mergedAllCategory;
+          const storedHeaderReturn = window.sessionStorage.getItem(QUICK_HEADER_RETURN_STORAGE_KEY);
+          const storedExpReturn = window.sessionStorage.getItem("experienceReturn");
+          const restoreId = (storedHeaderReturn && JSON.parse(storedHeaderReturn)?.headerId) || (storedExpReturn && JSON.parse(storedExpReturn)?.headerId);
+          if (restoreId) {
+              const match = finalCategories.find(h => h._id === restoreId || h.id === restoreId);
+              if (match) initialActive = match;
+          }
+          setActiveCategory(initialActive);
+          newDataCache.activeCategory = initialActive;
 
-      if (heroRes?.data?.success) {
-        const payload = heroRes.data.result || heroRes.data.results || heroRes.data;
-        const config = payload && (payload.banners?.items?.length > 0 || payload.categoryIds?.length > 0)
-          ? { banners: payload.banners || { items: [] }, categoryIds: payload.categoryIds || [] }
-          : { banners: { items: [] }, categoryIds: [] };
-        setHeroConfig(config);
-        newDataCache.heroConfig = config;
-      }
+          const formattedQuickCats = dbCats.filter((cat) => cat.type === "category").map((cat) => ({ id: cat._id, name: cat.name, image: getQuickCategoryImage(cat) }));
+          setQuickCategories(formattedQuickCats);
+          newDataCache.quickCategories = formattedQuickCats;
+        }
+        setIsBootstrapped(true); // Unblock the UI skeleton!
+      }).catch(console.error).finally(checkDone);
 
-      globalQuickHomeCache.data = newDataCache;
-      globalQuickHomeCache.lastFetched = Date.now();
-      setIsBootstrapped(true);
+      // 2. Products (Usually slowest)
+      const fetchProducts = hasValidLocation ? customerApi.getProducts(productParams) : Promise.resolve({ data: { success: true, result: { items: [] } } });
+      fetchProducts.then(prodRes => {
+        if (seq !== fetchDataSeqRef.current) return;
+        if (prodRes?.data?.success) {
+          const rawResult = prodRes.data.result;
+          const dbProds = Array.isArray(prodRes.data.results) ? prodRes.data.results : (Array.isArray(rawResult?.items) ? rawResult.items : (Array.isArray(rawResult) ? rawResult : []));
+          const formattedProds = dbProds.map((p) => ({
+            ...p, id: p._id, image: p.mainImage || p.image || "https://images.unsplash.com/photo-1550989460-0adf9ea622e2",
+            price: Number(p.salePrice || 0) > 0 ? Number(p.salePrice) : Number(p.price || 0),
+            originalPrice: Number(p.originalPrice || p.mrp || p.price || p.salePrice || 0),
+            weight: p.weight || "1 unit", deliveryTime: "8-15 mins"
+          }));
+          setProducts(formattedProds);
+          newDataCache.products = formattedProds;
+        }
+      }).catch(console.error).finally(checkDone);
+
+      // 3. Experience Sections
+      customerApi.getExperienceSections({ pageType: "home" }).then(expRes => {
+        if (seq !== fetchDataSeqRef.current) return;
+        if (expRes?.data?.success) {
+          const raw = expRes.data.result || expRes.data.results || expRes.data;
+          const sections = Array.isArray(raw) ? raw : [];
+          setExperienceSections(sections);
+          newDataCache.experienceSections = sections;
+        }
+      }).catch(console.error).finally(checkDone);
+
+      // 4. Offer Sections
+      const fetchOffers = hasValidLocation ? customerApi.getOfferSections({ lat: currentLocation.latitude, lng: currentLocation.longitude }) : Promise.resolve({ data: { results: [] } });
+      fetchOffers.then(sectionsRes => {
+        if (seq !== fetchDataSeqRef.current) return;
+        const sectionsList = sectionsRes?.data?.results || sectionsRes?.data?.result || sectionsRes?.data;
+        const offerSecs = Array.isArray(sectionsList) ? sectionsList : [];
+        setOfferSections(offerSecs);
+        newDataCache.offerSections = offerSecs;
+      }).catch(console.error).finally(checkDone);
+
+      // 5. Hero Config
+      customerApi.getHeroConfig({ pageType: "home" }).then(heroRes => {
+        if (seq !== fetchDataSeqRef.current) return;
+        if (heroRes?.data?.success) {
+          const payload = heroRes.data.result || heroRes.data.results || heroRes.data;
+          const config = payload && (payload.banners?.items?.length > 0 || payload.categoryIds?.length > 0)
+            ? { banners: payload.banners || { items: [] }, categoryIds: payload.categoryIds || [] }
+            : { banners: { items: [] }, categoryIds: [] };
+          setHeroConfig(config);
+          newDataCache.heroConfig = config;
+        }
+      }).catch(console.error).finally(checkDone);
+
     } catch (error) {
       console.error("Error fetching quick home data:", error);
-    } finally {
-      if (seq === fetchDataSeqRef.current) setIsLoading(false);
+      setIsLoading(false);
     }
   }, [currentLocation, getQuickCategoryImage]);
 

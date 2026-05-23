@@ -66,6 +66,18 @@ export default function BakeryList() {
           []
         if (cancelled) return
 
+        // Helper to calculate distance
+        const calculateDistance = (lat1, lon1, lat2, lon2) => {
+          if (!lat1 || !lon1 || !lat2 || !lon2) return null;
+          const R = 6371;
+          const dLat = (lat2 - lat1) * Math.PI / 180;
+          const dLon = (lon2 - lon1) * Math.PI / 180;
+          const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                    Math.sin(dLon/2) * Math.sin(dLon/2);
+          return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        }
+
         const transformed = list.map((bakery) => {
           const slug =
             bakery?.slug ||
@@ -76,14 +88,23 @@ export default function BakeryList() {
           const cuisine = Array.isArray(bakery?.cuisines) && bakery.cuisines.length > 0
             ? bakery.cuisines[0]
             : "Bakery & Desserts"
+            
+          let finalDistance = bakery?.distance;
+          if (!finalDistance && userLocation?.latitude && userLocation?.longitude && bakery?.location?.coordinates) {
+            // MongoDB coordinates are [longitude, latitude]
+            const [bakeryLng, bakeryLat] = bakery.location.coordinates;
+            finalDistance = calculateDistance(userLocation.latitude, userLocation.longitude, bakeryLat, bakeryLng);
+          }
+          const distanceStr = finalDistance ? (typeof finalDistance === 'number' ? `${finalDistance.toFixed(1)} km` : finalDistance) : "N/A";
+
           return {
             id: bakery?._id || bakery?.restaurantId || slug,
             slug,
             name: bakery?.name || "Unknown Bakery",
             cuisine,
-            rating: Number(bakery?.rating || 0) || 4.5,
-            deliveryTime: bakery?.estimatedDeliveryTime || (bakery?.estimatedDeliveryTimeMinutes ? `${bakery.estimatedDeliveryTimeMinutes} mins` : "30-40 mins"),
-            distance: bakery?.distance ? (typeof bakery.distance === 'number' ? `${bakery.distance.toFixed(1)} km` : bakery.distance) : "1.5 km",
+            rating: Number(bakery?.rating || 0),
+            deliveryTime: bakery?.estimatedDeliveryTime || (bakery?.estimatedDeliveryTimeMinutes ? `${bakery.estimatedDeliveryTimeMinutes} mins` : `30-40 mins`),
+            distance: distanceStr,
             priceRange: bakery?.priceRange || "$$",
             image: pickRestaurantImage(bakery),
           }
@@ -158,59 +179,56 @@ export default function BakeryList() {
               return (
                 <ScrollReveal key={bakery.id} delay={index * 0.05}>
                   <Link to={`/user/restaurants/${bakery.slug}`} className="h-full flex">
-                    <Card className="overflow-hidden cursor-pointer border border-gray-200 dark:border-gray-800 group bg-white dark:bg-[#1a1a1a] hover:shadow-lg dark:hover:shadow-xl dark:hover:shadow-gray-900/50 pb-1 sm:pb-2 lg:pb-3 flex flex-col h-full w-full transition-all duration-300">
-                      <div className="flex flex-row min-h-[120px] sm:min-h-[140px] md:min-h-[160px] lg:min-h-[180px] flex-1">
-                        <CardContent className="flex-1 flex flex-col justify-between p-3 sm:p-4 md:p-5 lg:p-6 min-w-0 overflow-hidden">
-                          <div className="flex-1 flex flex-col justify-between gap-2">
+                    <Card className="overflow-hidden cursor-pointer border border-rose-100 dark:border-rose-900/30 group bg-rose-50/40 hover:bg-rose-50/70 dark:bg-[#1c191a] hover:shadow-md dark:hover:shadow-lg dark:hover:shadow-rose-900/20 flex flex-col h-[180px] sm:h-[200px] w-full transition-all duration-300">
+                      <div className="flex flex-row h-full w-full">
+                        <CardContent className="flex-1 flex flex-col justify-between py-3 px-3 sm:py-4 sm:px-4 min-w-0 overflow-hidden">
+                          <div className="flex-1 flex flex-col justify-between">
                             <div className="flex-shrink-0">
-                              <div className="flex items-start justify-between gap-2 mb-2">
+                              <div className="flex items-start justify-between gap-2 mb-1">
                                 <div className="flex-1 min-w-0 pr-2">
-                                  <CardTitle className="text-base sm:text-lg md:text-xl mb-1 line-clamp-2 text-gray-900 dark:text-white">
+                                  <CardTitle className="text-lg sm:text-xl font-bold mb-0.5 line-clamp-1 text-gray-900 dark:text-rose-50">
                                     {bakery.name}
                                   </CardTitle>
-                                  <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 font-medium mb-2 line-clamp-1">
+                                  <p className="text-sm sm:text-base text-gray-700 dark:text-gray-400 font-medium mb-1.5 line-clamp-1">
                                     {bakery.cuisine}
                                   </p>
                                   <div className="flex items-center gap-2 flex-wrap">
-                                    <div className="flex items-center gap-1 bg-yellow-50 dark:bg-yellow-900/30 px-1.5 py-0.5 rounded-full">
-                                      <Star className="h-3 w-3 sm:h-3.5 sm:w-3.5 fill-yellow-400 text-yellow-400" />
-                                      <span className="font-bold text-xs sm:text-sm text-yellow-700 dark:text-yellow-400">{bakery.rating.toFixed(1)}</span>
+                                    <div className="flex items-center gap-1 bg-yellow-100 dark:bg-yellow-900/40 px-1.5 py-0.5 rounded-md shadow-sm">
+                                      <Star className="h-3.5 w-3.5 fill-yellow-500 text-yellow-500" />
+                                      <span className="font-bold text-sm text-yellow-800 dark:text-yellow-300">{bakery.rating.toFixed(1)}</span>
                                     </div>
                                   </div>
                                 </div>
                                 <Button
                                   variant="ghost"
                                   size="icon"
-                                  className={`h-7 w-7 sm:h-8 sm:w-8 rounded-full flex-shrink-0 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors ${favorite ? "text-red-500 dark:text-red-400" : "text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400"}`}
+                                  className={`h-8 w-8 rounded-full flex-shrink-0 bg-white/50 dark:bg-black/20 hover:bg-white dark:hover:bg-gray-800 transition-colors ${favorite ? "text-red-500 dark:text-red-400" : "text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400"}`}
                                   onClick={handleToggleFavorite}
                                 >
-                                  <Heart className={`h-4 w-4 sm:h-5 sm:w-5 ${favorite ? "fill-red-500 dark:fill-red-400" : ""}`} />
+                                  <Heart className={`h-5 w-5 ${favorite ? "fill-red-500 dark:fill-red-400" : ""}`} />
                                 </Button>
                               </div>
                             </div>
-                            <div className="flex items-center justify-between gap-2 mt-auto pt-2 border-t border-gray-200 dark:border-gray-800 flex-shrink-0">
-                              <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-600 dark:text-gray-400 flex-wrap">
+                            <div className="flex items-center justify-between gap-2 mt-auto pt-2 border-t border-rose-200/50 dark:border-rose-900/30 flex-shrink-0">
+                              <div className="flex items-center gap-3 text-sm font-semibold text-gray-700 dark:text-gray-300 flex-wrap">
                                 <div className="flex items-center gap-1">
-                                  <Clock className="h-3 w-3 sm:h-3.5 sm:w-3.5 flex-shrink-0" />
-                                  <span className="font-medium whitespace-nowrap">{bakery.deliveryTime}</span>
+                                  <Clock className="h-4 w-4 flex-shrink-0 text-rose-500" />
+                                  <span className="whitespace-nowrap">{bakery.deliveryTime}</span>
                                 </div>
                                 <div className="flex items-center gap-1">
-                                  <MapPin className="h-3 w-3 sm:h-3.5 sm:w-3.5 flex-shrink-0" />
-                                  <span className="font-medium whitespace-nowrap">{bakery.distance}</span>
+                                  <MapPin className="h-4 w-4 flex-shrink-0 text-rose-500" />
+                                  <span className="whitespace-nowrap">{bakery.distance}</span>
                                 </div>
                               </div>
-                              <Button className="bg-pink-600 hover:bg-pink-700 text-white text-xs sm:text-sm h-7 sm:h-8 px-3 sm:px-4 flex-shrink-0 transition-colors rounded-full">
-                                Visit Bakery
-                              </Button>
                             </div>
                           </div>
                         </CardContent>
 
-                        <div className="w-36 sm:w-44 md:w-56 lg:w-64 xl:w-72 flex-shrink-0 relative overflow-hidden group/image">
+                        <div className="w-[180px] sm:w-[200px] flex-shrink-0 relative overflow-hidden group/image">
                           <img
                             src={bakery.image || "https://via.placeholder.com/400x300?text=Bakery"}
                             alt={bakery.name}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover group-hover/image:scale-105 transition-transform duration-500"
                           />
                           <div className="absolute inset-0 bg-gradient-to-l from-black/20 dark:from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>

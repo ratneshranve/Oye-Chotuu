@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Link, useLocation as useRouterLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -127,19 +127,12 @@ export default function Profile() {
   };
 
   // Settings states
-  const [appearance, setAppearance] = useState(() => theme || localStorage.getItem("appTheme") || "light");
-
-  useEffect(() => {
-    const normalizedTheme = theme === "dark" ? "dark" : "light";
-    setAppearance(normalizedTheme);
-  }, [theme]);
-
-  useEffect(() => {
-    const normalizedAppearance = appearance === "dark" ? "dark" : "light";
-    setTheme(normalizedAppearance);
-    localStorage.setItem("appTheme", normalizedAppearance);
-    window.dispatchEvent(new CustomEvent("app-theme-changed", { detail: { theme: normalizedAppearance } }));
-  }, [appearance, setTheme]);
+  const handleThemeChange = (newTheme) => {
+    const normalizedTheme = newTheme === "dark" ? "dark" : "light";
+    setTheme(normalizedTheme);
+    localStorage.setItem("appTheme", normalizedTheme);
+    window.dispatchEvent(new CustomEvent("app-theme-changed", { detail: { theme: normalizedTheme } }));
+  };
 
   // Get first letter of name for avatar
   const avatarInitial =
@@ -157,7 +150,7 @@ export default function Profile() {
     : userProfile?.phone || "Not available";
 
   // Calculate profile completion percentage
-  const calculateProfileCompletion = () => {
+  const calculateProfileCompletion = React.useCallback(() => {
     if (!userProfile) return 0;
 
     // Helper function to check if date field is filled (handles Date objects, date strings, ISO strings)
@@ -243,35 +236,10 @@ export default function Profile() {
       (completedRequiredFields / totalRequiredFields) * 100,
     );
 
-    // Always log for debugging (remove in production if needed)
-    debugLog("?? Profile completion check:", {
-      requiredFields,
-      completedRequiredFields,
-      totalRequiredFields,
-      percentage,
-      fieldStatus: {
-        name: hasName ? "?" : "?",
-        contact: hasContact ? "?" : "?",
-        profileImage: hasImage ? "?" : "?",
-        dateOfBirth: hasDateOfBirth ? "?" : "?",
-        gender: hasGender ? "?" : "?",
-      },
-      rawData: {
-        name: userProfile.name || "missing",
-        phone: userProfile.phone || "missing",
-        email: userProfile.email || "missing",
-        profileImage: userProfile.profileImage ? "exists" : "missing",
-        dateOfBirth: userProfile.dateOfBirth
-          ? String(userProfile.dateOfBirth)
-          : "missing",
-        gender: userProfile.gender || "missing",
-      },
-    });
-
     return percentage;
-  };
+  }, [userProfile, hasValidEmail]);
 
-  const profileCompletion = calculateProfileCompletion();
+  const profileCompletion = React.useMemo(() => calculateProfileCompletion(), [calculateProfileCompletion]);
   const isComplete = profileCompletion === 100;
   useEffect(() => {
     let mounted = true;
@@ -776,7 +744,7 @@ export default function Profile() {
                     className="text-base font-medium text-gray-900 dark:text-white capitalize"
                     whileHover={{ scale: 1.1 }}
                     transition={{ duration: 0.2 }}>
-                    {appearance}
+                    {theme}
                   </motion.span>
                   <motion.div
                     whileHover={{ x: 4 }}
@@ -1221,19 +1189,19 @@ export default function Profile() {
           <div className="space-y-2 px-5 pb-5">
             <button
               onClick={() => {
-                setAppearance("light");
+                handleThemeChange("light");
                 setAppearanceOpen(false);
               }}
-              className={`w-full p-3 rounded-xl border-2 transition-all flex items-center gap-3 ${appearance === "light"
-                  ? "border-blue-600 bg-blue-50 dark:border-blue-500 dark:bg-blue-900/20"
-                  : "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600"
+              className={`w-full p-3 rounded-xl border-2 transition-all flex items-center gap-3 ${theme === "light"
+                  ? "border-[#cc2532] bg-[#cc2532]/5"
+                  : "border-slate-200 hover:border-slate-300"
                 }`}>
               <div
-                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${appearance === "light"
-                    ? "border-blue-600 bg-blue-600 dark:border-blue-500 dark:bg-blue-500"
-                    : "border-gray-300 dark:border-gray-600"
+                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${theme === "light"
+                    ? "border-[#cc2532]"
+                    : "border-slate-300"
                   }`}>
-                {appearance === "light" && (
+                {theme === "light" && (
                   <Check className="h-3 w-3 text-white" />
                 )}
               </div>
@@ -1249,19 +1217,19 @@ export default function Profile() {
             </button>
             <button
               onClick={() => {
-                setAppearance("dark");
+                handleThemeChange("dark");
                 setAppearanceOpen(false);
               }}
-              className={`w-full p-3 rounded-xl border-2 transition-all flex items-center gap-3 ${appearance === "dark"
-                  ? "border-blue-600 dark:border-blue-500 bg-blue-50 dark:bg-blue-900/20"
-                  : "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600"
+              className={`w-full p-3 rounded-xl border-2 transition-all flex items-center gap-3 ${theme === "dark"
+                  ? "border-[#cc2532] bg-[#cc2532]/5"
+                  : "border-slate-700 hover:border-slate-600"
                 }`}>
               <div
-                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${appearance === "dark"
-                    ? "border-blue-600 bg-blue-600 dark:border-blue-500 dark:bg-blue-500"
-                    : "border-gray-300 dark:border-gray-600"
+                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${theme === "dark"
+                    ? "border-[#cc2532]"
+                    : "border-slate-600"
                   }`}>
-                {appearance === "dark" && (
+                {theme === "dark" && (
                   <Check className="h-3 w-3 text-white" />
                 )}
               </div>

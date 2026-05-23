@@ -472,9 +472,6 @@ const MainLocationHeader = ({
           isProductDetailOpen && "hidden md:block",
         )}>
         <motion.div
-          initial={{ y: -50, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
           style={{
             paddingTop: headerTopPadding,
             paddingBottom: headerBottomPadding,

@@ -64,10 +64,10 @@ export const upsertLegalPage = async (key, payload, updatedBy, role = 'user') =>
                 key: k,
                 role: r,
                 legal: { title, content },
-                about: undefined,
                 updatedBy: updatedBy || null,
                 updatedByRole: 'ADMIN'
-            }
+            },
+            $unset: { about: 1 }
         },
         { upsert: true, new: true }
     ).lean();
@@ -99,10 +99,10 @@ export const upsertAboutPage = async (payload, updatedBy) => {
                 key: 'about',
                 role: 'all',
                 about: { appName, version, description, logo, features: normalizedFeatures, stats },
-                legal: undefined,
                 updatedBy: updatedBy || null,
                 updatedByRole: 'ADMIN'
-            }
+            },
+            $unset: { legal: 1 }
         },
         { upsert: true, new: true }
     ).lean();

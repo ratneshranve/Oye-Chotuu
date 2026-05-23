@@ -14,50 +14,59 @@ import { adminAPI } from "@/services/api";
 import { setCachedSettings, getCachedSettings } from "@/modules/common/utils/businessSettings";
 import { cn } from "@/lib/utils";
 
-const ModuleCard = ({ title, description, icon: Icon, enabled, onToggle, color }) => (
-  <div className={cn(
-    "relative group p-6 rounded-2xl border-2 transition-all duration-300 overflow-hidden",
-    enabled 
-      ? `border-${color}-100 bg-${color}-50/30` 
-      : "border-gray-100 bg-white"
-  )}>
-    <div className="flex items-start justify-between relative z-10">
-      <div className="flex gap-4">
-        <div className={cn(
-          "w-12 h-12 rounded-xl flex items-center justify-center transition-colors",
-          enabled ? `bg-${color}-500 text-white` : "bg-gray-100 text-gray-400"
-        )}>
-          <Icon size={24} />
+const ModuleCard = ({ title, description, icon: Icon, enabled, onToggle, color }) => {
+  const colorMap = {
+    orange: { border: 'border-orange-100', bgLight: 'bg-orange-50/30', bgMain: 'bg-orange-500' },
+    green: { border: 'border-green-100', bgLight: 'bg-green-50/30', bgMain: 'bg-green-500' },
+    pink: { border: 'border-pink-100', bgLight: 'bg-pink-50/30', bgMain: 'bg-pink-500' }
+  };
+  const theme = colorMap[color] || colorMap.orange;
+
+  return (
+    <div className={cn(
+      "relative group p-6 rounded-2xl border-2 transition-all duration-300 overflow-hidden",
+      enabled 
+        ? `${theme.border} ${theme.bgLight}` 
+        : "border-gray-100 bg-white"
+    )}>
+      <div className="flex items-start justify-between relative z-10">
+        <div className="flex gap-4">
+          <div className={cn(
+            "w-12 h-12 rounded-xl flex items-center justify-center transition-colors",
+            enabled ? `${theme.bgMain} text-white` : "bg-gray-100 text-gray-400"
+          )}>
+            <Icon size={24} />
+          </div>
+          <div>
+            <h3 className="font-bold text-gray-900">{title}</h3>
+            <p className="text-sm text-gray-500 mt-1 leading-relaxed max-w-[200px]">
+              {description}
+            </p>
+          </div>
         </div>
-        <div>
-          <h3 className="font-bold text-gray-900">{title}</h3>
-          <p className="text-sm text-gray-500 mt-1 leading-relaxed max-w-[200px]">
-            {description}
-          </p>
-        </div>
+        
+        <button
+          onClick={onToggle}
+          className={cn(
+            "w-12 h-6 rounded-full relative transition-colors duration-200 outline-none",
+            enabled ? theme.bgMain : "bg-gray-200"
+          )}
+        >
+          <div className={cn(
+            "absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform duration-200 shadow-sm",
+            enabled ? "translate-x-6" : "translate-x-0"
+          )} />
+        </button>
       </div>
       
-      <button
-        onClick={onToggle}
-        className={cn(
-          "w-12 h-6 rounded-full relative transition-colors duration-200 outline-none",
-          enabled ? `bg-${color}-500` : "bg-gray-200"
-        )}
-      >
-        <div className={cn(
-          "absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform duration-200 shadow-sm",
-          enabled ? "translate-x-6" : "translate-x-0"
-        )} />
-      </button>
+      {/* Decorative background shape */}
+      <div className={cn(
+        "absolute -right-6 -bottom-6 w-24 h-24 rounded-full blur-3xl opacity-10 transition-colors",
+        enabled ? theme.bgMain : "bg-transparent"
+      )} />
     </div>
-    
-    {/* Decorative background shape */}
-    <div className={cn(
-      "absolute -right-6 -bottom-6 w-24 h-24 rounded-full blur-3xl opacity-10 transition-colors",
-      enabled ? `bg-${color}-500` : "bg-transparent"
-    )} />
-  </div>
-);
+  );
+};
 
 const ModuleManagement = () => {
   const [loading, setLoading] = useState(true);

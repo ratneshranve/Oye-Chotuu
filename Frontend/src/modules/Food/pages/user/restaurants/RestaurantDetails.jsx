@@ -495,7 +495,7 @@ function RestaurantDetailsContent() {
               "Unknown Restaurant",
             cuisine: resolvedTopCategory,
             topCategory: resolvedTopCategory,
-            rating: actualRestaurant?.rating || apiRestaurant?.rating || actualRestaurant?.averageRating || apiRestaurant?.averageRating || 4.5,
+            rating: actualRestaurant?.rating || apiRestaurant?.rating || actualRestaurant?.averageRating || apiRestaurant?.averageRating || 0,
             reviews: actualRestaurant?.totalRatings || apiRestaurant?.totalRatings || actualRestaurant?.reviewCount || apiRestaurant?.reviewCount || actualRestaurant?.reviews?.length || apiRestaurant?.reviews?.length || 0,
             deliveryTime: actualRestaurant?.estimatedDeliveryTime || apiRestaurant?.estimatedDeliveryTime || actualRestaurant?.deliveryTime || apiRestaurant?.deliveryTime || actualRestaurant?.avgDeliveryTime || apiRestaurant?.avgDeliveryTime || "25-30 mins",
             distance: calculatedDistance || actualRestaurant?.distance || apiRestaurant?.distance || actualRestaurant?.distanceFromUser || apiRestaurant?.distanceFromUser || "1.2 km",
@@ -2073,7 +2073,7 @@ function RestaurantDetailsContent() {
             <div className="flex flex-col items-end gap-1">
               <div className="bg-[#008d48] text-white px-2 py-1 rounded-lg flex items-center gap-1 font-bold text-sm shadow-sm">
                 <Star className="h-3.5 w-3.5 fill-white" />
-                <span>{restaurant?.rating || 4.5}</span>
+                <span>{restaurant?.rating || 0}</span>
               </div>
               <span className="text-[11px] font-medium text-gray-400">
                 {(restaurant.reviews || 0).toLocaleString()}+ ratings
@@ -2160,7 +2160,7 @@ function RestaurantDetailsContent() {
              <div className="flex flex-col items-end gap-1 opacity-60 scale-90 origin-right">
                 <div className="bg-[#008d48] text-white px-2 py-0.5 rounded-lg flex items-center gap-1 font-bold text-xs">
                   <Star className="h-3 w-3 fill-white" />
-                  <span>{restaurant?.rating || 4.5}</span>
+                  <span>{restaurant?.rating || 0}</span>
                 </div>
                 <span className="text-[10px] font-medium text-gray-400 whitespace-nowrap">
                   {(restaurant.reviews || 0).toLocaleString()}+ ratings
@@ -3196,7 +3196,7 @@ function RestaurantDetailsContent() {
                                 <div className="flex items-center gap-1">
                                   <Star className="h-3.5 w-3.5 text-green-600 dark:text-green-500 fill-green-600 dark:fill-green-500" />
                                   <span className="text-xs font-medium text-gray-900 dark:text-white">
-                                    {outlet?.rating || 4.5}
+                                    {outlet?.rating || 0}
                                   </span>
                                 </div>
                                 <span className="text-xs text-gray-500 dark:text-gray-400">

@@ -62,8 +62,6 @@ export default function CustomCakeRequests() {
       }
 
       // 2. Prepare the custom cake cart item
-      // We need it to be normalized by CartContext. Since it's a custom cake,
-      // we pass the necessary custom properties: isCustomCake: true, customCakeRequestId
       const cartItem = {
         id: `${request.restaurantId?._id || request.restaurantId}-custom-cake`,
         itemId: `${request.restaurantId?._id || request.restaurantId}-custom-cake`,
@@ -120,42 +118,42 @@ export default function CustomCakeRequests() {
     switch (status) {
       case "pending":
         return (
-          <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">
+          <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-600 border border-amber-200">
             <Loader2 className="h-3 w-3 animate-spin" />
             Pending Quote
           </span>
         )
       case "quoted":
         return (
-          <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-pink-500/10 text-pink-400 border border-pink-500/20 animate-pulse">
+          <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-pink-50 text-pink-600 border border-pink-200 animate-pulse">
             <Sparkles className="h-3 w-3" />
             Quote Received
           </span>
         )
       case "confirmed":
         return (
-          <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-600 border border-emerald-200">
             <CheckCircle className="h-3 w-3" />
             Confirmed
           </span>
         )
       case "rejected":
         return (
-          <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-red-500/10 text-red-400 border border-red-500/20">
+          <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-red-50 text-red-600 border border-red-200">
             <XCircle className="h-3 w-3" />
             Rejected
           </span>
         )
       case "ordered":
         return (
-          <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
+          <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-600 border border-blue-200">
             <ShoppingBag className="h-3 w-3" />
             Ordered
           </span>
         )
       default:
         return (
-          <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-gray-500/10 text-gray-400 border border-gray-500/20">
+          <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-gray-50 text-gray-600 border border-gray-200">
             {status}
           </span>
         )
@@ -178,7 +176,7 @@ export default function CustomCakeRequests() {
     return (
       <div className="flex flex-col items-center justify-center py-20">
         <Loader2 className="h-10 w-10 text-pink-500 animate-spin mb-3" />
-        <p className="text-gray-400 text-sm">Fetching your custom requests...</p>
+        <p className="text-gray-500 text-sm">Fetching your custom requests...</p>
       </div>
     )
   }
@@ -187,12 +185,12 @@ export default function CustomCakeRequests() {
 
   if (requestsList.length === 0) {
     return (
-      <div className="bg-[#111111] rounded-2xl border border-gray-800 p-10 text-center max-w-lg mx-auto mt-6">
-        <div className="h-16 w-16 bg-pink-500/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-pink-500/20">
+      <div className="bg-white rounded-2xl border border-gray-200 p-10 text-center max-w-lg mx-auto mt-6">
+        <div className="h-16 w-16 bg-pink-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-pink-100">
           <Sparkles className="h-8 w-8 text-pink-500" />
         </div>
-        <h3 className="text-lg font-bold text-white mb-2">No Custom Requests Yet</h3>
-        <p className="text-gray-400 text-sm mb-6 leading-relaxed">
+        <h3 className="text-lg font-bold text-gray-900 mb-2">No Custom Requests Yet</h3>
+        <p className="text-gray-500 text-sm mb-6 leading-relaxed">
           Order unique custom-designed cakes from our Home Bakeries! Send specifications, choose flavours, shapes, and upload reference designs.
         </p>
       </div>
@@ -210,15 +208,15 @@ export default function CustomCakeRequests() {
         return (
           <div
             key={request._id}
-            className="bg-[#111111] border border-gray-800 hover:border-gray-700 rounded-2xl p-5 transition-all shadow-lg"
+            className="bg-white border border-gray-200 hover:border-gray-300 rounded-2xl p-5 transition-all shadow-sm"
           >
             {/* Header info */}
-            <div className="flex items-start justify-between gap-4 border-b border-gray-800/80 pb-4 mb-4">
+            <div className="flex items-start justify-between gap-4 border-b border-gray-100 pb-4 mb-4">
               <div>
                 <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">
                   Request ID: {request.requestId || request._id?.slice(-8)}
                 </span>
-                <h3 className="text-lg font-bold text-white mt-0.5">{restaurantName}</h3>
+                <h3 className="text-lg font-bold text-gray-900 mt-0.5">{restaurantName}</h3>
                 <div className="flex items-center gap-2 mt-2">
                   {getStatusBadge(request.status)}
                 </div>
@@ -226,11 +224,11 @@ export default function CustomCakeRequests() {
 
               {/* Specs Badge summary */}
               <div className="text-right">
-                <span className="inline-block px-3 py-1 bg-gray-800/60 text-gray-300 rounded-lg text-xs font-bold">
+                <span className="inline-block px-3 py-1 bg-gray-100 text-gray-700 rounded-lg text-xs font-bold">
                   {request.weight} kg • {request.shape}
                 </span>
                 {request.eggless && (
-                  <span className="block mt-1 text-[10px] text-emerald-400 font-bold uppercase tracking-wider">
+                  <span className="block mt-1 text-[10px] text-emerald-600 font-bold uppercase tracking-wider">
                     🍀 Eggless
                   </span>
                 )}
@@ -242,16 +240,16 @@ export default function CustomCakeRequests() {
               <div className="space-y-2">
                 <div>
                   <span className="text-xs text-gray-500 block">Occasion / Cake Type</span>
-                  <span className="text-white font-medium">{request.cakeType}</span>
+                  <span className="text-gray-900 font-medium">{request.cakeType}</span>
                 </div>
                 <div>
                   <span className="text-xs text-gray-500 block">Flavour</span>
-                  <span className="text-white font-medium">{request.flavour}</span>
+                  <span className="text-gray-900 font-medium">{request.flavour}</span>
                 </div>
                 {request.cakeMessage && (
                   <div>
                     <span className="text-xs text-gray-500 block">Message on Cake</span>
-                    <span className="text-pink-400 italic font-medium">"{request.cakeMessage}"</span>
+                    <span className="text-pink-600 italic font-medium">"{request.cakeMessage}"</span>
                   </div>
                 )}
               </div>
@@ -261,13 +259,13 @@ export default function CustomCakeRequests() {
                   <Calendar className="h-4 w-4 text-pink-500" />
                   <div>
                     <span className="text-xs text-gray-500 block">Delivery Requested</span>
-                    <span className="text-white font-medium">{formatDate(request.deliveryDate)}</span>
+                    <span className="text-gray-900 font-medium">{formatDate(request.deliveryDate)}</span>
                   </div>
                 </div>
                 {request.notes && (
                   <div>
                     <span className="text-xs text-gray-500 block">Instructions / Notes</span>
-                    <p className="text-gray-300 text-xs mt-0.5 leading-relaxed">{request.notes}</p>
+                    <p className="text-gray-600 text-xs mt-0.5 leading-relaxed">{request.notes}</p>
                   </div>
                 )}
               </div>
@@ -275,14 +273,14 @@ export default function CustomCakeRequests() {
 
             {/* Reference Images if any */}
             {request.images && request.images.length > 0 && (
-              <div className="mt-4 pt-3 border-t border-gray-800/40">
+              <div className="mt-4 pt-3 border-t border-gray-100">
                 <span className="text-xs text-gray-500 block mb-2">Reference Designs</span>
                 <div className="flex flex-wrap gap-2">
                   {request.images.map((img, idx) => (
                     <div
                       key={idx}
                       onClick={() => setSelectedImage(img)}
-                      className="h-14 w-14 rounded-lg overflow-hidden border border-gray-800 hover:border-pink-500 transition-all cursor-pointer relative group bg-gray-900"
+                      className="h-14 w-14 rounded-lg overflow-hidden border border-gray-200 hover:border-pink-400 transition-all cursor-pointer relative group bg-gray-50"
                     >
                       <img src={img} alt="reference" className="h-full w-full object-cover" />
                       <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
@@ -296,15 +294,15 @@ export default function CustomCakeRequests() {
 
             {/* Quotation pricing section */}
             {(request.quotePrice > 0 || isQuoted || isOrdered) && (
-              <div className="mt-4 p-3 bg-pink-500/5 rounded-xl border border-pink-500/10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="mt-4 p-3 bg-pink-50 rounded-xl border border-pink-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                  <span className="text-xs text-pink-400 font-bold block uppercase tracking-wider">
+                  <span className="text-xs text-pink-600 font-bold block uppercase tracking-wider">
                     Bakery Quote
                   </span>
                   <div className="flex items-baseline gap-2 mt-1">
-                    <span className="text-2xl font-black text-white">₹{request.quotePrice}</span>
+                    <span className="text-2xl font-black text-gray-900">₹{request.quotePrice}</span>
                     {request.preparationTimeMinutes > 0 && (
-                      <span className="text-xs text-gray-400">
+                      <span className="text-xs text-gray-500">
                         • {request.preparationTimeMinutes} mins prep time
                       </span>
                     )}
@@ -316,7 +314,7 @@ export default function CustomCakeRequests() {
                     <button
                       onClick={() => handleRejectQuotation(request)}
                       disabled={actionLoading !== null}
-                      className="w-full sm:w-auto px-5 py-2.5 bg-gray-900/80 hover:bg-red-950/40 text-gray-400 hover:text-red-400 font-semibold rounded-xl border border-gray-800 hover:border-red-900/50 transition-all text-sm flex items-center justify-center gap-2"
+                      className="w-full sm:w-auto px-5 py-2.5 bg-white hover:bg-red-50 text-gray-600 hover:text-red-600 font-semibold rounded-xl border border-gray-300 hover:border-red-300 transition-all text-sm flex items-center justify-center gap-2"
                     >
                       {actionLoading === request._id ? (
                         <Loader2 className="h-4 w-4 animate-spin" />
@@ -328,7 +326,7 @@ export default function CustomCakeRequests() {
                     <button
                       onClick={() => handleConfirmAndCheckout(request)}
                       disabled={actionLoading !== null}
-                      className="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 text-white font-bold rounded-xl shadow-lg shadow-pink-900/20 hover:shadow-pink-900/40 hover:-translate-y-0.5 transition-all text-sm flex items-center justify-center gap-2"
+                      className="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 text-white font-bold rounded-xl shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all text-sm flex items-center justify-center gap-2"
                     >
                       {actionLoading === request._id ? (
                         <>
@@ -348,7 +346,7 @@ export default function CustomCakeRequests() {
                 {isOrdered && request.orderId && (
                   <button
                     onClick={() => navigate(`/food/user/orders/${request.orderId}`)}
-                    className="w-full md:w-auto px-5 py-2 bg-gray-800 hover:bg-gray-700 text-white font-bold rounded-xl text-sm flex items-center justify-center gap-2 transition-all"
+                    className="w-full md:w-auto px-5 py-2 bg-gray-900 hover:bg-gray-800 text-white font-bold rounded-xl text-sm flex items-center justify-center gap-2 transition-all"
                   >
                     Track Order
                     <ArrowRight className="h-4 w-4" />
@@ -359,13 +357,13 @@ export default function CustomCakeRequests() {
 
             {/* Rejection notice */}
             {isRejected && request.rejectionReason && (
-              <div className="mt-4 p-3 bg-red-500/5 rounded-xl border border-red-500/10 flex items-start gap-2">
+              <div className="mt-4 p-3 bg-red-50 rounded-xl border border-red-100 flex items-start gap-2">
                 <AlertTriangle className="h-4 w-4 text-red-500 shrink-0 mt-0.5" />
                 <div>
-                  <span className="text-xs text-red-400 font-bold block uppercase tracking-wider">
+                  <span className="text-xs text-red-600 font-bold block uppercase tracking-wider">
                     Rejection Reason
                   </span>
-                  <p className="text-gray-300 text-xs mt-1 leading-relaxed">{request.rejectionReason}</p>
+                  <p className="text-gray-700 text-xs mt-1 leading-relaxed">{request.rejectionReason}</p>
                 </div>
               </div>
             )}
@@ -378,11 +376,11 @@ export default function CustomCakeRequests() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4">
           <button
             onClick={() => setSelectedImage(null)}
-            className="absolute top-4 right-4 p-2 rounded-full bg-gray-900 text-white hover:bg-gray-800 transition-colors"
+            className="absolute top-4 right-4 p-2 rounded-full bg-white text-gray-900 hover:bg-gray-100 transition-colors"
           >
             <Clock className="h-6 w-6 rotate-45" /> {/* Use custom rotation or simple X */}
           </button>
-          <div className="max-w-3xl max-h-[85vh] overflow-hidden rounded-xl border border-gray-800 bg-[#0a0a0a]">
+          <div className="max-w-3xl max-h-[85vh] overflow-hidden rounded-xl border border-gray-200 bg-white">
             <img src={selectedImage} alt="Zoomed view" className="max-w-full max-h-[80vh] object-contain" />
           </div>
         </div>

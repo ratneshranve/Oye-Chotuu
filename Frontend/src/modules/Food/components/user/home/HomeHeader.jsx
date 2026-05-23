@@ -294,26 +294,24 @@ export default function HomeHeader({
       style={{ background: theme.topBg, color: theme.text }}
     >
       {headerVideoUrl && (
-        <div className="absolute inset-0 z-0 flex justify-center overflow-hidden">
-          {/* Video temporarily removed to improve loading time
-            <video
-              ref={videoRef}
-              src={headerVideoUrl}
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="metadata"
-              aria-hidden="true"
-              className={`h-full w-full object-cover object-center transition-opacity duration-200 ${
-                isFood ? "opacity-100" : "opacity-0"
-              }`}
-            />
-            */}
+        <div className="absolute inset-x-0 bottom-0 z-0 flex justify-center overflow-hidden" style={{ top: '130px' }}>
+          <video
+            ref={videoRef}
+            src={headerVideoUrl}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+            aria-hidden="true"
+            className={`h-full w-full object-cover object-center transition-opacity duration-200 ${
+              isFood ? "opacity-100" : "opacity-0"
+            }`}
+          />
           <div
             className="absolute inset-0 transition-colors duration-700"
             style={{
-              background: `linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 100%), ${theme.accent}`
+              background: `linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.0) 100%)`
             }}
           />
           <div
@@ -325,25 +323,7 @@ export default function HomeHeader({
         </div>
       )}
 
-      <div
-        className="absolute inset-0 z-[1] opacity-[0.25] pointer-events-none"
-        style={{
-          backgroundImage: `url(${foodPattern})`,
-          backgroundSize: "200px",
-          backgroundRepeat: "repeat",
-          mixBlendMode: "overlay",
-        }}
-      />
 
-      {isFood && (
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <Pizza className="absolute top-10 right-[15%] opacity-[0.10]" style={{ color: theme.accent }} size={64} />
-          <Beef className="absolute top-40 left-[10%] opacity-[0.08]" style={{ color: theme.accent }} size={80} />
-          <ChefHat className="absolute bottom-[20%] right-[20%] opacity-[0.08]" style={{ color: theme.accent }} size={56} />
-          <Coffee className="absolute top-20 left-[30%] opacity-[0.08]" style={{ color: theme.accent }} size={48} />
-          <Soup className="absolute bottom-[40%] left-[5%] opacity-[0.05]" style={{ color: theme.accent }} size={72} />
-        </div>
-      )}
 
       <div className="flex items-center justify-between px-5 pt-4 mb-2 relative z-10">
         <button

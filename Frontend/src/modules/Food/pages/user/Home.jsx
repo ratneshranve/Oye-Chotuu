@@ -139,17 +139,9 @@ const getStoredDeliveryAddressMode = () => {
   return window.localStorage.getItem("deliveryAddressMode") || "saved";
 };
 
-const defaultBannersImages = [
-  bannerEatingBoy,
-  bannerEatingFood,
-  bannerEatingBoy
-];
+const defaultBannersImages = [];
 
-const defaultBannersData = [
-  { isFallback: true, title: "A SIX IS HIT! 🏏", subtitle: "66% OFF FOR 10 MIN!", action: "Order Now" },
-  { isFallback: true, title: "MATCH DAY SPECIAL", subtitle: "Free Delivery on Pizza", action: "Explore" },
-  { isFallback: true, title: "CRAVINGS SATISFIED", subtitle: "Flat ₹150 Off", action: "Claim Offer" }
-];
+const defaultBannersData = [];
 
 export default function Home() {
   const HERO_BANNER_AUTO_SLIDE_MS = 3500;
@@ -251,15 +243,9 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [activeTab]);
 
-  const activeBannerImages = useMemo(() => {
-    // Override API images with the custom transparent PNGs requested by the user
-    if (banners?.data?.length > 0) {
-      return banners.data.map((_, i) => defaultBannersImages[i % defaultBannersImages.length]);
-    }
-    return defaultBannersImages;
-  }, [banners?.data]);
+  const activeBannerImages = useMemo(() => banners?.images || [], [banners?.images]);
 
-  const activeBannerData = useMemo(() => banners?.data?.length > 0 ? banners.data : defaultBannersData, [banners?.data]);
+  const activeBannerData = useMemo(() => banners?.data || [], [banners?.data]);
 
   // Auto-slide banners
   useEffect(() => {
@@ -346,19 +332,7 @@ export default function Home() {
             headerVideoUrl={landing.videoUrl}
             quickThemeColor={quickThemeColor}
             bannerComponent={
-              <Suspense fallback={<HeroBannerSkeleton className="h-[130px] w-full" />}>
-                <div className="h-[130px] sm:h-36 md:h-44 mt-3 relative z-10 w-full">
-                  <BannerSection
-                    showBannerSkeleton={banners.loading}
-                    heroBannerImages={activeBannerImages}
-                    heroBannersData={activeBannerData}
-                    currentBannerIndex={currentBannerIndex}
-                    setCurrentBannerIndex={setCurrentBannerIndex}
-                    heroShellRef={heroShellRef}
-                    navigate={navigate}
-                  />
-                </div>
-              </Suspense>
+              <div className="h-[130px] sm:h-36 md:h-44 mt-3 relative z-10 w-full bg-transparent" />
             }
           />
         )}
@@ -389,22 +363,24 @@ export default function Home() {
             </Suspense>
 
 
-            <Suspense fallback={<HeroBannerSkeleton className="h-full w-full px-4 mt-3" />}>
-              <section className="content-auto px-4 pt-3 sm:pt-4 lg:pt-5">
-                <div className="overflow-hidden rounded-[22px] border border-slate-100 bg-white shadow-[0_18px_40px_-24px_rgba(15,23,42,0.3)] h-48 sm:h-56 md:h-64 lg:h-72">
-                  <BannerSection
-                    showBannerSkeleton={banners.loading}
-                    heroBannerImages={banners.images}
-                    heroBannersData={banners.data}
-                    currentBannerIndex={currentBannerIndex}
-                    setCurrentBannerIndex={setCurrentBannerIndex}
-                    heroShellRef={heroShellRef}
-                    navigate={navigate}
-                    backendOrigin={BACKEND_ORIGIN}
-                  />
-                </div>
-              </section>
-            </Suspense>
+            {(banners.loading || (banners?.images?.length > 0)) && (
+              <Suspense fallback={<HeroBannerSkeleton className="h-full w-full px-4 mt-3" />}>
+                <section className="content-auto px-4 pt-3 sm:pt-4 lg:pt-5">
+                  <div className="overflow-hidden rounded-[22px] border border-slate-100 bg-white shadow-[0_18px_40px_-24px_rgba(15,23,42,0.3)] h-48 sm:h-56 md:h-64 lg:h-72">
+                    <BannerSection
+                      showBannerSkeleton={banners.loading}
+                      heroBannerImages={banners.images}
+                      heroBannersData={banners.data}
+                      currentBannerIndex={currentBannerIndex}
+                      setCurrentBannerIndex={setCurrentBannerIndex}
+                      heroShellRef={heroShellRef}
+                      navigate={navigate}
+                      backendOrigin={BACKEND_ORIGIN}
+                    />
+                  </div>
+                </section>
+              </Suspense>
+            )}
 
             <Suspense fallback={null}>
               <SortFilterSection

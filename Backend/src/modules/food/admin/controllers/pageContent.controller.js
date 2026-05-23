@@ -53,6 +53,7 @@ export const upsertAdminPageController = async (req, res, next) => {
         }
         throw new ValidationError('Invalid page key');
     } catch (error) {
+        import('fs').then(fs => fs.writeFileSync('last_error.log', String(error.stack || error)));
         next(error);
     }
 };
