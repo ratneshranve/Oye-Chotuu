@@ -18,6 +18,8 @@ const FoodApp = lazy(() => import('../modules/Food/routes'))
 const AuthApp = lazy(() => import('../modules/auth/routes'))
 const QuickCommerceApp = lazy(() => import('../modules/quickCommerce/routes'))
 const SellerApp = lazy(() => import('../modules/seller/routes'))
+const SellerTermsPage = lazy(() => import('../modules/seller/pages/Terms'))
+const SellerPrivacyPage = lazy(() => import('../modules/seller/pages/Privacy'))
 
 
 const FoodUserLayout = lazy(() => import('../modules/Food/components/user/UserLayout'))
@@ -263,6 +265,16 @@ const AppRoutes = () => {
         {/* Seller Module */}
         <Route path="/seller" element={<SellerAppWrapper />} />
         <Route path="/seller/auth" element={<SellerAuthEntry />} />
+        <Route path="/seller/terms" element={
+          <Suspense fallback={<PageLoader />}>
+            <SellerTermsPage />
+          </Suspense>
+        } />
+        <Route path="/seller/privacy" element={
+          <Suspense fallback={<PageLoader />}>
+            <SellerPrivacyPage />
+          </Suspense>
+        } />
         <Route path="/seller/*" element={<SellerAppWrapper />} />
 
         {/* Global Admin Portal - wrap lazy router in Suspense to avoid blank/crash on direct admin URLs */}

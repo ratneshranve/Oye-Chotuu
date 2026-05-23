@@ -237,6 +237,10 @@ export default function DeliverySignIn() {
             By continuing, you agree to our{" "}
             <Link to="/food/delivery/terms" className="text-blue-600 hover:underline">
               Terms and Conditions
+            </Link>{" "}
+            and{" "}
+            <Link to="/food/delivery/privacy" className="text-blue-600 hover:underline">
+              Privacy Policy
             </Link>
           </p>
         </div>

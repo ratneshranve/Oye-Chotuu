@@ -22,6 +22,7 @@ export default function SellerAuth() {
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
   const [otpPhone, setOtpPhone] = useState("");
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const nextSellerPath =
     typeof location.state?.from === "string" &&
     location.state.from.startsWith("/seller")
@@ -41,6 +42,11 @@ export default function SellerAuth() {
   };
 
   const handleSendOtp = async () => {
+    if (!termsAccepted) {
+      toast.error("Please agree to the Terms and Conditions");
+      return;
+    }
+
     const validation = validatePhone(phone);
     if (validation) {
       toast.error(validation);
@@ -192,6 +198,26 @@ export default function SellerAuth() {
                         className="flex-1 bg-transparent text-base font-bold text-slate-900 outline-none placeholder:text-slate-300"
                       />
                     </div>
+                  </div>
+
+                  <div className="flex items-start gap-3 pt-2">
+                    <input
+                      type="checkbox"
+                      id="terms"
+                      checked={termsAccepted}
+                      onChange={(e) => setTermsAccepted(e.target.checked)}
+                      className="mt-0.5 h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900 cursor-pointer"
+                    />
+                    <label htmlFor="terms" className="text-xs sm:text-sm font-medium leading-tight text-slate-600 cursor-pointer">
+                      I agree to the{" "}
+                      <a href="/seller/terms" className="text-[#16a34a] underline font-bold hover:text-[#15803d]">
+                        Terms and Conditions
+                      </a>{" "}
+                      and{" "}
+                      <a href="/seller/privacy" className="text-[#16a34a] underline font-bold hover:text-[#15803d]">
+                        Privacy Policy
+                      </a>
+                    </label>
                   </div>
 
                   <Button

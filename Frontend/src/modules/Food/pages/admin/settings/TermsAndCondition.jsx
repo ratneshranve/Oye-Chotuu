@@ -92,7 +92,7 @@ export default function TermsAndCondition() {
           </div>
           
           {/* Role Selector */}
-          <div className="flex p-1 bg-slate-200 rounded-xl">
+          <div className="flex flex-wrap w-full md:w-auto p-1 bg-slate-200 rounded-xl gap-1">
             {[
               { id: "user", label: "Customer" },
               { id: "restaurant", label: "Restaurant" },
@@ -102,7 +102,7 @@ export default function TermsAndCondition() {
               <button
                 key={r.id}
                 onClick={() => setRole(r.id)}
-                className={`px-4 py-2 text-sm font-bold rounded-lg transition-all ${
+                className={`flex-1 sm:flex-none whitespace-nowrap px-3 sm:px-4 py-2 text-xs sm:text-sm font-bold rounded-lg transition-all ${
                   role === r.id 
                     ? "bg-white text-blue-600 shadow-sm" 
                     : "text-slate-600 hover:text-slate-900"
