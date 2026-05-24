@@ -1,6 +1,11 @@
 import { GlobalSettings } from '../models/settings.model.js';
 import { sendResponse } from '../../../utils/response.js';
 import { uploadImageBufferDetailed } from '../../../services/cloudinary.service.js';
+import { FoodUser } from '../../../core/users/user.model.js';
+import { FoodRestaurant } from '../../food/restaurant/models/restaurant.model.js';
+import { FoodDeliveryPartner } from '../../food/delivery/models/deliveryPartner.model.js';
+import { Seller } from '../../quick-commerce/seller/models/seller.model.js';
+import { FoodRefreshToken } from '../../../core/refreshTokens/refreshToken.model.js';
 
 export async function getGlobalSettings(req, res, next) {
     try {
@@ -32,7 +37,7 @@ export async function updateGlobalSettings(req, res, next) {
             data = req.body;
         }
         
-        const { companyName, email, phoneCountryCode, phoneNumber, address, state, pincode, region, logoUrl, faviconUrl, themeColor, modules, codEnabled } = data;
+        const { companyName, email, phoneCountryCode, phoneNumber, address, state, pincode, region, logoUrl, faviconUrl, themeColor, modules, codEnabled, bannedNumbers } = data;
         
         console.log("Updating global settings with data:", data);
 
@@ -91,6 +96,9 @@ export async function updateGlobalSettings(req, res, next) {
         if (codEnabled !== undefined) {
             settings.codEnabled = codEnabled;
         }
+        if (bannedNumbers !== undefined && Array.isArray(bannedNumbers)) {
+            settings.bannedNumbers = bannedNumbers;
+        }
 
         // Handle file uploads
         if (req.files) {
@@ -109,8 +117,46 @@ export async function updateGlobalSettings(req, res, next) {
                 };
             }
         }
-
+        settings.updatedBy = req.user ? req.user.userId : null;
         await settings.save();
+
+        // Auto-logout for newly banned numbers
+        if (bannedNumbers && Array.isArray(bannedNumbers) && bannedNumbers.length > 0) {
+
+            try {
+                const users = await FoodUser.find({ phone: { $in: bannedNumbers } }).select('_id');
+                const restaurants = await FoodRestaurant.find({ ownerPhone: { $in: bannedNumbers } }).select('_id');
+                const dps = await FoodDeliveryPartner.find({ phone: { $in: bannedNumbers } }).select('_id');
+                const sellers = await Seller.find({ phone: { $in: bannedNumbers } }).select('_id');
+
+                const idsToLogout = [
+                    ...users.map(u => u._id),
+                    ...restaurants.map(r => r._id),
+                    ...dps.map(d => d._id),
+                    ...sellers.map(s => s._id)
+                ];
+
+                if (idsToLogout.length > 0) {
+                    await FoodRefreshToken.deleteMany({ userId: { $in: idsToLogout } });
+                    // Deactivate them so auth middleware catches it
+                    if (users.length > 0) {
+                        await FoodUser.updateMany({ _id: { $in: users.map(u => u._id) } }, { isActive: false });
+                    }
+                    if (restaurants.length > 0) {
+                        await FoodRestaurant.updateMany({ _id: { $in: restaurants.map(r => r._id) } }, { status: 'rejected' });
+                    }
+                    if (dps.length > 0) {
+                        await FoodDeliveryPartner.updateMany({ _id: { $in: dps.map(d => d._id) } }, { status: 'rejected' });
+                    }
+                    if (sellers.length > 0) {
+                        await Seller.updateMany({ _id: { $in: sellers.map(s => s._id) } }, { isActive: false });
+                    }
+                }
+            } catch (err) {
+                console.error("Error auto-logging out banned numbers:", err);
+            }
+        }
+
         return sendResponse(res, 200, 'Global settings updated successfully', settings);
     } catch (error) {
         next(error);

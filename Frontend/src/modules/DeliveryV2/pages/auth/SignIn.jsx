@@ -10,6 +10,7 @@ import {
 import { deliveryAPI } from "@food/api"
 import { clearModuleAuth } from "@food/utils/auth"
 import { useCompanyName } from "@food/hooks/useCompanyName"
+import { toast } from "sonner"
 const debugLog = (...args) => {}
 const debugWarn = (...args) => {}
 const debugError = (...args) => {}
@@ -124,6 +125,7 @@ export default function DeliverySignIn() {
         err?.response?.data?.error ||
         err?.message ||
         "Failed to send OTP. Please try again."
+      toast.error(message)
       setError(message)
     } finally {
       setIsSending(false)

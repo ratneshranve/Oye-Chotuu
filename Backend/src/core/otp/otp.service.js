@@ -4,6 +4,7 @@ import { FoodOtp } from './otp.model.js';
 import { config } from '../../config/env.js';
 import { logger } from '../../utils/logger.js';
 import { ValidationError } from '../auth/errors.js';
+import { GlobalSettings } from '../../modules/common/models/settings.model.js';
 
 const generateOtpCode = () => {
     const code = crypto.randomInt(1000, 9999);
@@ -91,6 +92,19 @@ export const createOrUpdateOtp = async (phone, options = {}) => {
     const forceRandom = options?.forceRandom === true;
     const phoneCandidates = getPhoneCandidates(phone);
     const normalizedPhone = normalizePhoneForOtp(phone) || String(phone || '').trim();
+
+    // Check if number is banned
+    const settings = await GlobalSettings.findOne().lean();
+    const isBanned = settings?.bannedNumbers?.some(banned => {
+        const bannedLast10 = String(banned).replace(/\D/g, '').slice(-10);
+        return phoneCandidates.includes(banned) || (bannedLast10 && phoneCandidates.includes(bannedLast10));
+    });
+
+    if (isBanned) {
+        logger.warn(`OTP request blocked for banned phone number: ${phone}`);
+        throw new ValidationError('This phone number is banned. Please contact support.');
+    }
+
     const existing = await FoodOtp.findOne({ phone: { $in: phoneCandidates } });
     const now = new Date();
 

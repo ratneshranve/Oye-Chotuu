@@ -4,6 +4,7 @@ import { ShieldCheck } from "lucide-react"
 import { Button } from "@food/components/ui/button"
 import { restaurantAPI } from "@food/api"
 import { useCompanyName } from "@food/hooks/useCompanyName"
+import { toast } from "sonner"
 
 const DEFAULT_COUNTRY_CODE = "+91"
 const countryCodes = [
@@ -114,6 +115,7 @@ export default function RestaurantLogin() {
         apiErr?.response?.data?.message ||
         apiErr?.response?.data?.error ||
         "Failed to send OTP. Please try again."
+      toast.error(message)
       setError(message)
     } finally {
       setIsSending(false)

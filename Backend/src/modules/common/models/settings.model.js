@@ -27,7 +27,8 @@ const globalSettingsSchema = new mongoose.Schema(
 
             quickCommerce: { type: Boolean, default: true },
         },
-        codEnabled: { type: Boolean, default: true }
+        codEnabled: { type: Boolean, default: true },
+        bannedNumbers: { type: [String], default: [] }
     },
     { timestamps: true }
 );

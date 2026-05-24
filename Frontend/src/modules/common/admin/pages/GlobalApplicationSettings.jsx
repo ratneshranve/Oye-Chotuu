@@ -107,7 +107,9 @@ const GlobalApplicationSettings = () => {
     email: "",
     phoneNumber: "",
     address: "",
+    bannedNumbers: [],
   });
+  const [newBannedNumber, setNewBannedNumber] = useState("");
 
   const fetchSettings = async () => {
     try {
@@ -122,6 +124,7 @@ const GlobalApplicationSettings = () => {
           email: settings.email || "",
           phoneNumber: settings.phone?.number || "",
           address: settings.address || "",
+          bannedNumbers: settings.bannedNumbers || [],
         });
 
         if (settings.logo?.url) setLogoPreview(settings.logo.url);
@@ -146,6 +149,27 @@ const GlobalApplicationSettings = () => {
     }));
   };
 
+  const handleAddBannedNumber = () => {
+    const trimmed = newBannedNumber.trim();
+    if (!trimmed) return;
+    if (formData.bannedNumbers.includes(trimmed)) {
+      toast.error("Number is already banned");
+      return;
+    }
+    setFormData(prev => ({
+      ...prev,
+      bannedNumbers: [...prev.bannedNumbers, trimmed]
+    }));
+    setNewBannedNumber("");
+  };
+
+  const handleRemoveBannedNumber = (numberToRemove) => {
+    setFormData(prev => ({
+      ...prev,
+      bannedNumbers: prev.bannedNumbers.filter(n => n !== numberToRemove)
+    }));
+  };
+
   const handleUpdate = async () => {
     try {
       if (!formData.companyName.trim()) {
@@ -159,6 +183,7 @@ const GlobalApplicationSettings = () => {
         email: formData.email,
         phoneNumber: formData.phoneNumber,
         address: formData.address,
+        bannedNumbers: formData.bannedNumbers,
       };
 
       const files = {};
@@ -234,6 +259,49 @@ const GlobalApplicationSettings = () => {
               <ImageUploadBox title="Brand Logo" size="750px x 100px" preview={logoPreview} onUpload={handleLogoUpload} onClear={() => { setLogoPreview(null); setLogoFile(null); }} />
               <ImageUploadBox title="Favicon" size="80px x 80px" preview={faviconPreview} onUpload={handleFaviconUpload} onClear={() => { setFaviconPreview(null); setFaviconFile(null); }} />
            </div>
+        </SectionCard>
+
+        {/* Banned Numbers */}
+        <SectionCard title="Banned Numbers">
+          <div className="space-y-6">
+            <div className="flex items-end gap-4 max-w-md">
+              <div className="flex-1 space-y-1">
+                <label className="block text-xs font-semibold text-gray-500 mb-1.5">Phone Number to Ban</label>
+                <input
+                  type="text"
+                  value={newBannedNumber}
+                  onChange={(e) => setNewBannedNumber(e.target.value)}
+                  placeholder="e.g. 9876543210"
+                  className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm text-gray-800 bg-white focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition-colors shadow-sm"
+                  onKeyDown={(e) => e.key === 'Enter' && handleAddBannedNumber()}
+                />
+              </div>
+              <button 
+                onClick={handleAddBannedNumber}
+                className="bg-red-50 text-red-600 hover:bg-red-100 px-6 py-2.5 rounded-lg text-sm font-bold tracking-wide transition-colors border border-red-200"
+              >
+                Ban
+              </button>
+            </div>
+            
+            {formData.bannedNumbers.length > 0 ? (
+              <div className="flex flex-wrap gap-3">
+                {formData.bannedNumbers.map(number => (
+                  <div key={number} className="flex items-center gap-2 bg-red-50 border border-red-100 pl-3 pr-2 py-1.5 rounded-lg">
+                    <span className="text-sm font-semibold text-red-700">{number}</span>
+                    <button 
+                      onClick={() => handleRemoveBannedNumber(number)}
+                      className="p-1 hover:bg-red-200 rounded text-red-500 hover:text-red-700 transition-colors"
+                    >
+                      <X size={14} strokeWidth={3} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-gray-500 italic">No numbers are currently banned.</p>
+            )}
+          </div>
         </SectionCard>
 
       </div>
