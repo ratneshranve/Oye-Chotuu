@@ -32,7 +32,7 @@ export async function updateGlobalSettings(req, res, next) {
             data = req.body;
         }
         
-        const { companyName, email, phoneCountryCode, phoneNumber, address, state, pincode, region, logoUrl, faviconUrl, themeColor, modules } = data;
+        const { companyName, email, phoneCountryCode, phoneNumber, address, state, pincode, region, logoUrl, faviconUrl, themeColor, modules, codEnabled } = data;
         
         console.log("Updating global settings with data:", data);
 
@@ -87,6 +87,9 @@ export async function updateGlobalSettings(req, res, next) {
                 homeBakery: modules.homeBakery !== undefined ? modules.homeBakery : settings.modules?.homeBakery,
                 quickCommerce: modules.quickCommerce !== undefined ? modules.quickCommerce : settings.modules?.quickCommerce,
             };
+        }
+        if (codEnabled !== undefined) {
+            settings.codEnabled = codEnabled;
         }
 
         // Handle file uploads

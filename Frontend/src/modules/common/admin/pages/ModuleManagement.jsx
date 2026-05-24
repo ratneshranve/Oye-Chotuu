@@ -7,7 +7,8 @@ import {
   LayoutGrid,
   Zap,
   Check,
-  AlertCircle
+  AlertCircle,
+  Banknote
 } from 'lucide-react';
 import { toast } from "sonner";
 import { adminAPI } from "@/services/api";
@@ -76,6 +77,7 @@ const ModuleManagement = () => {
     homeBakery: false,
     quickCommerce: true,
   });
+  const [codEnabled, setCodEnabled] = useState(true);
 
   const fetchSettings = async () => {
     try {
@@ -83,12 +85,15 @@ const ModuleManagement = () => {
       const response = await adminAPI.getBusinessSettings();
       const settings = response?.data?.data || response?.data;
 
-      if (settings?.modules) {
-        setModules({
-          food: settings.modules.food ?? true,
-          homeBakery: settings.modules.homeBakery ?? false,
-          quickCommerce: settings.modules.quickCommerce ?? true,
-        });
+      if (settings) {
+        if (settings.modules) {
+          setModules({
+            food: settings.modules.food ?? true,
+            homeBakery: settings.modules.homeBakery ?? false,
+            quickCommerce: settings.modules.quickCommerce ?? true,
+          });
+        }
+        setCodEnabled(settings.codEnabled ?? true);
       }
     } catch (err) {
       console.error('Fetch error:', err);
@@ -112,7 +117,7 @@ const ModuleManagement = () => {
   const handleSave = async () => {
     try {
       setSaving(true);
-      const response = await adminAPI.updateBusinessSettings({ modules });
+      const response = await adminAPI.updateBusinessSettings({ modules, codEnabled });
       const updatedSettings = response?.data?.data || response?.data;
 
       if (updatedSettings) {
@@ -184,6 +189,15 @@ const ModuleManagement = () => {
                 enabled={modules.homeBakery} 
                 onToggle={() => handleToggle('homeBakery')}
                 color="pink"
+              />
+
+              <ModuleCard 
+                title="Cash on Delivery (COD)" 
+                description="Allow customers to pay with cash upon receiving their order." 
+                icon={Banknote} 
+                enabled={codEnabled} 
+                onToggle={() => setCodEnabled(prev => !prev)}
+                color="green"
               />
 
             </div>

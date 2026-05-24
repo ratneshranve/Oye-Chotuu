@@ -11,6 +11,7 @@ import { useCart } from "@food/context/CartContext"
 import { useProfile } from "@food/context/ProfileContext"
 import { useOrders } from "@food/context/OrdersContext"
 import QuickSharedCart from "@food/pages/user/cart/QuickSharedCart"
+import { useSettings } from "@core/context/SettingsContext";
 
 
 import { useLocation as useUserLocation } from "@food/hooks/useLocation"
@@ -140,6 +141,7 @@ const normalizeOrderAddress = (address, { recipientName = "", recipientPhone = "
 }
 
 export default function Cart() {
+  const { settings } = useSettings()
   const companyName = useCompanyName()
   const navigate = useNavigate()
   const goBack = useAppBackNavigation()
@@ -233,12 +235,18 @@ export default function Cart() {
     name: "",
     phone: "",
   })
-
   const [sendCutlery, setSendCutlery] = useState(true)
   const [isPlacingOrder, setIsPlacingOrder] = useState(false)
   const [showBillDetails, setShowBillDetails] = useState(true)
   const [showPlacingOrder, setShowPlacingOrder] = useState(false)
+  const [isRefreshing, setIsRefreshing] = useState(false)
   const [isScheduled, setIsScheduled] = useState(false)
+  
+  useEffect(() => {
+    if (settings?.codEnabled === false && selectedPaymentMethod === "cash") {
+      setSelectedPaymentMethod("razorpay")
+    }
+  }, [settings?.codEnabled, selectedPaymentMethod])
   const [scheduledDate, setScheduledDate] = useState("")
   const [scheduledTime, setScheduledTime] = useState("")
   const [orderProgress, setOrderProgress] = useState(0)
@@ -3048,14 +3056,14 @@ export default function Cart() {
                           disabled: walletBalance < total,
                           disabledText: 'Low Balance'
                         },
-                        {
+                        ...(settings?.codEnabled !== false ? [{
                           id: 'cash',
                           name: 'Cash on Delivery',
                           description: 'Pay when order arrives',
                           icon: <Banknote className="w-5 h-5" />,
                           color: 'bg-orange-50 text-orange-600 dark:bg-orange-900/40 dark:text-orange-400',
                           selectedColor: 'bg-orange-500 text-white'
-                        }
+                        }] : [])
                       ].map((option) => (
                         <button
                           key={option.id}

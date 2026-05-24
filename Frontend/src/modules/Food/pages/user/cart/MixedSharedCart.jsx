@@ -10,6 +10,7 @@ import { orderAPI } from "@food/api";
 import { initRazorpayPayment } from "@food/utils/razorpay";
 import { useCompanyName } from "@food/hooks/useCompanyName";
 import { sanitizeOrderImage, sanitizeOrderNotes } from "@food/utils/orderPayload";
+import { useSettings } from "@core/context/SettingsContext";
 
 const RUPEE_SYMBOL = "\u20B9";
 
@@ -132,6 +133,13 @@ export default function MixedSharedCart({ initialAddress = null, addressMode = "
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("cash");
   const [selectedDeliveryMode, setSelectedDeliveryMode] = useState("normal");
   const [selectedAddressId, setSelectedAddressId] = useState(null);
+  const { settings } = useSettings();
+
+  useEffect(() => {
+    if (settings?.codEnabled === false && selectedPaymentMethod === "cash") {
+      setSelectedPaymentMethod("razorpay");
+    }
+  }, [settings?.codEnabled, selectedPaymentMethod]);
 
   const foodItems = cart.filter((item) => getOrderType(item) === "food");
   const quickItems = cart.filter((item) => getOrderType(item) === "quick");
@@ -487,7 +495,7 @@ export default function MixedSharedCart({ initialAddress = null, addressMode = "
                 <p className="text-xs font-black uppercase tracking-[0.2em] text-slate-500">Payment</p>
                 <div className="grid gap-2">
                   {[
-                    { id: "cash", label: "Cash on delivery", icon: Truck },
+                    ...(settings?.codEnabled !== false ? [{ id: "cash", label: "Cash on delivery", icon: Truck }] : []),
                     { id: "razorpay", label: "Online payment", icon: CreditCard },
                   ].map((method) => (
                     <button
