@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
+import { useAuth } from "@core/context/AuthContext";
 import {
   User,
   Mail,
@@ -13,6 +14,7 @@ import {
   Globe,
   MapPin,
   CheckCircle,
+  LogOut,
 } from "lucide-react";
 import { sellerApi } from "../services/sellerApi";
 import { toast } from "sonner";
@@ -21,7 +23,9 @@ import Button from "@shared/components/ui/Button";
 import MapPicker from "../../../shared/components/MapPicker";
 
 const SellerProfile = () => {
+  const { logout } = useAuth();
   const [profile, setProfile] = useState(null);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -510,6 +514,49 @@ const SellerProfile = () => {
           </Card>
         </div>
       </div>
+
+      <div className="mt-8 flex justify-center">
+        <Button
+          type="button"
+          onClick={() => setShowLogoutConfirm(true)}
+          className="bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 rounded-lg px-8 py-3 text-sm font-bold flex items-center gap-2 shadow-sm transition-all"
+        >
+          <LogOut size={18} />
+          LOG OUT
+        </Button>
+      </div>
+
+      {showLogoutConfirm && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl p-6 md:p-8 max-w-sm w-full shadow-2xl">
+            <div className="w-12 h-12 rounded-full bg-rose-100 flex items-center justify-center mb-4 mx-auto">
+              <LogOut size={24} className="text-rose-600" />
+            </div>
+            <h3 className="text-xl font-black text-slate-900 text-center mb-2">Sign Out</h3>
+            <p className="text-sm text-slate-500 text-center mb-6">Are you sure you want to sign out of your seller account?</p>
+            <div className="flex gap-3">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setShowLogoutConfirm(false)}
+                className="flex-1 rounded-xl text-slate-700 hover:bg-slate-100"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                onClick={() => {
+                  setShowLogoutConfirm(false);
+                  logout();
+                }}
+                className="flex-1 bg-rose-600 hover:bg-rose-700 text-white rounded-xl"
+              >
+                Sign Out
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {isMapOpen && (
         <MapPicker
