@@ -944,6 +944,57 @@ export const resetAdminPasswordWithOtp = async (email, otp, newPassword) => {
   return { success: true, message: "Password reset successfully." };
 };
 
+export const deleteAccount = async (userId, role) => {
+  if (!userId || !role) {
+    throw new AuthError("Invalid token payload");
+  }
+
+  const id = userId;
+
+  switch (role) {
+    case ROLES.USER: {
+      const userProfile = await FoodUser.findById(id);
+      if (!userProfile) throw new AuthError("User not found");
+      userProfile.isActive = false;
+      await userProfile.save();
+      break;
+    }
+    case ROLES.SELLER: {
+      const seller = await Seller.findById(id);
+      if (!seller) throw new AuthError("Seller not found");
+      seller.isActive = false;
+      seller.approved = false;
+      seller.approvalStatus = "rejected";
+      seller.approvalNotes = "Account deleted by owner";
+      await seller.save();
+      break;
+    }
+    case ROLES.RESTAURANT: {
+      const restaurant = await FoodRestaurant.findById(id);
+      if (!restaurant) throw new AuthError("Restaurant not found");
+      restaurant.status = "rejected";
+      restaurant.rejectionReason = "Account deleted by owner";
+      await restaurant.save();
+      break;
+    }
+    case ROLES.DELIVERY_PARTNER: {
+      const deliveryPartner = await FoodDeliveryPartner.findById(id);
+      if (!deliveryPartner) throw new AuthError("Delivery Partner not found");
+      deliveryPartner.status = "rejected";
+      deliveryPartner.rejectionReason = "Account deleted by owner";
+      await deliveryPartner.save();
+      break;
+    }
+    default:
+      throw new AuthError("Unknown role or unsupported for deletion");
+  }
+
+  // Force logout globally by deleting all refresh tokens
+  await FoodRefreshToken.deleteMany({ userId: id });
+
+  return { success: true, message: "Account successfully deactivated" };
+};
+
 export const refreshAccessToken = async (token) => {
   if (!token) {
     throw new ValidationError("Refresh token is required");

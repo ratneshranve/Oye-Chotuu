@@ -15,7 +15,9 @@ import {
   MapPin,
   CheckCircle,
   LogOut,
+  Trash2,
 } from "lucide-react";
+import { authAPI } from "../../../services/api";
 import { sellerApi } from "../services/sellerApi";
 import { toast } from "sonner";
 import Card from "@shared/components/ui/Card";
@@ -31,6 +33,9 @@ const SellerProfile = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [isLocationSaving, setIsLocationSaving] = useState(false);
   const [isMapOpen, setIsMapOpen] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteInput, setDeleteInput] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     shopName: "",
@@ -187,6 +192,22 @@ const SellerProfile = () => {
       toast.error(error.response?.data?.message || "Failed to update profile");
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    if (deleteInput !== "DELETE" || isDeleting) return;
+    try {
+      setIsDeleting(true);
+      await authAPI.deleteAccount("seller");
+      setShowDeleteConfirm(false);
+      logout();
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message || "Failed to delete account"
+      );
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -515,7 +536,7 @@ const SellerProfile = () => {
         </div>
       </div>
 
-      <div className="mt-8 flex justify-center">
+      <div className="mt-8 flex justify-center gap-4">
         <Button
           type="button"
           onClick={() => setShowLogoutConfirm(true)}
@@ -523,6 +544,17 @@ const SellerProfile = () => {
         >
           <LogOut size={18} />
           LOG OUT
+        </Button>
+        <Button
+          type="button"
+          onClick={() => {
+            setDeleteInput("");
+            setShowDeleteConfirm(true);
+          }}
+          className="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 rounded-lg px-8 py-3 text-sm font-bold flex items-center gap-2 shadow-sm transition-all"
+        >
+          <Trash2 size={18} />
+          DELETE ACCOUNT
         </Button>
       </div>
 
@@ -552,6 +584,48 @@ const SellerProfile = () => {
                 className="flex-1 bg-rose-600 hover:bg-rose-700 text-white rounded-xl"
               >
                 Sign Out
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl p-6 md:p-8 max-w-sm w-full shadow-2xl">
+            <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mb-4 mx-auto">
+              <Trash2 size={24} className="text-red-600" />
+            </div>
+            <h3 className="text-xl font-black text-slate-900 text-center mb-2">Delete Account?</h3>
+            <p className="text-sm text-slate-500 text-center mb-4">
+              This action cannot be undone. To confirm, type <strong>DELETE</strong> below.
+            </p>
+            <div className="mb-6">
+              <input 
+                type="text" 
+                value={deleteInput} 
+                onChange={(e) => setDeleteInput(e.target.value)} 
+                className="w-full p-2 border border-slate-300 rounded-lg bg-slate-50 text-slate-900 text-center uppercase font-bold"
+                placeholder="DELETE"
+              />
+            </div>
+            <div className="flex gap-3">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setShowDeleteConfirm(false)}
+                disabled={isDeleting}
+                className="flex-1 rounded-xl text-slate-700 hover:bg-slate-100"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                onClick={handleDeleteAccount}
+                disabled={isDeleting || deleteInput !== "DELETE"}
+                className="flex-1 bg-red-600 hover:bg-red-700 text-white rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isDeleting ? "Deleting..." : "Delete"}
               </Button>
             </div>
           </div>

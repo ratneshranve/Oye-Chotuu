@@ -17,6 +17,7 @@ const AUTH = {
   LOGOUT: "/food/auth/logout",
   LOGOUT_ALL: "/food/auth/logout-all",
   ME: "/food/auth/me",
+  DELETE_ACCOUNT: "/food/auth/delete-account",
 };
 
 /**
@@ -311,4 +312,13 @@ export function verifyDeliveryOtp(phone, otp, fcmToken = null, platform = "web")
     otp: otpStr,
     ...(fcmToken ? { fcmToken, platform } : {}),
   });
+}
+
+/**
+ * Delete account (soft delete).
+ * Requires Bearer token.
+ * @param {string} module - "user" | "seller" | "restaurant" | "delivery"
+ */
+export function deleteAccount(module = "user") {
+  return apiClient.post(AUTH.DELETE_ACCOUNT, {}, { contextModule: module });
 }

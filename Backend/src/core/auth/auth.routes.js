@@ -15,7 +15,8 @@ import {
     updateAdminProfileController,
     changeAdminPasswordController,
     requestAdminForgotPasswordOtpController,
-    resetAdminPasswordWithOtpController
+    resetAdminPasswordWithOtpController,
+    deleteAccountController
 } from './auth.controller.js';
 import { authMiddleware, requireAdmin } from './auth.middleware.js';
 import { authRateLimiter } from '../../middleware/rateLimit.js';
@@ -56,6 +57,9 @@ router.post('/logout-all', logoutAllController);
 
 // Authenticated user profile (requires Bearer token)
 router.get('/me', authMiddleware, getMeController);
+
+// Delete account (requires Bearer token)
+router.post('/delete-account', authMiddleware, deleteAccountController);
 
 // Admin-only: profile update & change password (Bearer + ADMIN role)
 router.patch('/admin/profile', authMiddleware, requireAdmin, updateAdminProfileController);

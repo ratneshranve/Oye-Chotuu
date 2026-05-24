@@ -15,6 +15,7 @@ import {
   changeAdminPassword,
   requestAdminForgotPasswordOtp,
   resetAdminPasswordWithOtp,
+  deleteAccount,
 } from "./auth.service.js";
 import { validateUserOtpRequestDto } from "../../dtos/auth/userOtpRequest.dto.js";
 import { validateUserOtpVerifyDto } from "../../dtos/auth/userOtpVerify.dto.js";
@@ -227,6 +228,15 @@ export const resetAdminPasswordWithOtpController = async (req, res, next) => {
     return sendResponse(res, 200, "Password reset successfully", {
       success: true,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteAccountController = async (req, res, next) => {
+  try {
+    const result = await deleteAccount(req.user.userId, req.user.role);
+    return sendResponse(res, 200, result.message, result);
   } catch (error) {
     next(error);
   }

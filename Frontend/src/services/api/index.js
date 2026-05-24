@@ -128,6 +128,7 @@ export const authAPI = {
         : null);
     return authService.logoutAll(token, fcmToken, platform);
   },
+  deleteAccount: (module) => authService.deleteAccount(module),
 };
 
 export const supportAPI = {
