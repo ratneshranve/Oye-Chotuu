@@ -35,7 +35,11 @@ const getProfileEndpoint = (role) => {
 export const AuthProvider = ({ children }) => {
     // Current role based on URL
     const getCurrentRoleFromUrl = () => {
-        const path = window.location.pathname;
+        const pathname = window.location.pathname || '';
+        const hash = (window.location.hash || '').replace(/^#\/?/, '/');
+        // If hash contains a real path, prioritize it over pathname since we use HashRouter in APK
+        const path = hash !== '/' && hash ? hash : pathname;
+
         if (path.startsWith('/seller')) return 'seller';
         if (path.startsWith('/admin')) return 'admin';
         if (path.startsWith('/delivery')) return 'delivery';

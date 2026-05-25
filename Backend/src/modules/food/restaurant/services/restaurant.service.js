@@ -202,6 +202,7 @@ const toRestaurantProfile = (doc) => {
         updatedAt: doc.updatedAt,
         rating: normalizeRatingValue(doc.rating),
         totalRatings: normalizeTotalRatingsValue(doc.totalRatings),
+        businessType: doc.businessType || 'restaurant',
         customOrdersEnabled: Boolean(doc.customOrdersEnabled),
         customOrdersRequestStatus: doc.customOrdersRequestStatus || 'none'
     };
