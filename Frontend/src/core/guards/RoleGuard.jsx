@@ -1,16 +1,17 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@core/context/AuthContext';
 
 const RoleGuard = ({ children, allowedRoles }) => {
     const { role, isAuthenticated, isLoading } = useAuth();
+    const location = useLocation();
 
     if (isLoading) {
         return null; // Let ProtectedRoute handle the loading spinner
     }
 
     if (!isAuthenticated || !role || !allowedRoles.includes(role)) {
-        const path = window.location.hash ? window.location.hash.replace('#', '') : window.location.pathname;
+        const path = location.pathname;
         
         if (path.startsWith('/seller') && !allowedRoles.includes(role)) {
              return <Navigate to="/seller/auth" replace />;

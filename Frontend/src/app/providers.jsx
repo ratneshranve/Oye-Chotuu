@@ -27,12 +27,14 @@ export function AppProviders({ children }) {
   const isHashRouter = shouldUseHashRouter()
   
   if (isHashRouter && typeof window !== 'undefined') {
-    // If the app is opened with a pathname like /seller in a webview,
-    // HashRouter will ignore the pathname and look at the empty hash,
-    // defaulting to "/" (which redirects to /food/user).
-    // This script converts the pathname to a hash before the router initializes.
-    if (window.location.pathname !== '/' && !window.location.hash) {
-      window.history.replaceState(null, '', `/#${window.location.pathname}${window.location.search}`);
+    const path = window.location.pathname;
+    if (path !== '/' && !path.includes('index.html')) {
+      // Combine path and any existing hash to ensure we don't lose the intended route
+      const existingHash = window.location.hash.replace(/^#\/?/, '/');
+      const targetRoute = existingHash !== '/' && existingHash ? existingHash : path;
+      
+      // Force the base to be root and the route to be in the hash
+      window.history.replaceState(null, '', `/#${targetRoute}${window.location.search}`);
     }
   }
 
