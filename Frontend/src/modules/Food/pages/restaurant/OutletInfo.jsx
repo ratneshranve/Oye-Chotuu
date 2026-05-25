@@ -26,6 +26,7 @@ import {
 } from "@food/components/ui/dialog"
 import { Button } from "@food/components/ui/button"
 import { Input } from "@food/components/ui/input"
+import { Switch } from "@food/components/ui/switch"
 import { restaurantAPI } from "@food/api"
 import { toast } from "sonner"
 import { ImageSourcePicker } from "@food/components/ImageSourcePicker"
@@ -424,6 +425,36 @@ export default function OutletInfo() {
     }
   }
 
+  const handleCustomOrderToggle = async (checked) => {
+    try {
+      let payload = {}
+      let successMsg = ""
+      
+      if (restaurantData?.customOrdersRequestStatus === 'approved') {
+         payload = { customOrdersEnabled: checked }
+         successMsg = checked ? "Custom Orders Enabled" : "Custom Orders Disabled"
+      } else {
+         const newStatus = checked ? "pending" : "none"
+         payload = { customOrdersRequestStatus: newStatus }
+         if (newStatus === "none") {
+             payload.customOrdersEnabled = false
+         }
+         successMsg = checked ? "Request for Custom Orders sent to Admin" : "Custom Orders request cancelled"
+      }
+
+      await restaurantAPI.updateProfile(payload)
+      
+      setRestaurantData(prev => ({
+        ...prev,
+        ...payload
+      }))
+      
+      toast.success(successMsg)
+    } catch (error) {
+      toast.error("Failed to update Custom Orders status")
+    }
+  }
+
   return (
     <>
       <div className="min-h-screen bg-white overflow-x-hidden">
@@ -687,6 +718,40 @@ export default function OutletInfo() {
                 <p className="text-xs text-gray-400 font-medium mb-1">Service Zone</p>
                 <p className="text-sm font-semibold text-gray-800">{restaurantData?.zoneName || "Not assigned"}</p>
               </div>
+
+              {restaurantData?.businessType === "home_bakery" && (
+                <div className="p-4 border-t border-gray-100 flex justify-between items-center bg-orange-50/30">
+                  <div className="flex-1 min-w-0 pr-4">
+                    <p className="text-sm font-bold text-gray-800 mb-1">Custom Orders</p>
+                    <p className="text-xs text-gray-500">
+                      {restaurantData?.customOrdersRequestStatus === 'pending' 
+                        ? 'Your request is pending admin approval.'
+                        : restaurantData?.customOrdersRequestStatus === 'approved'
+                        ? 'You can now accept custom orders.'
+                        : restaurantData?.customOrdersRequestStatus === 'rejected'
+                        ? 'Your request was rejected. You can apply again.'
+                        : 'Enable to request admin approval for custom orders.'}
+                    </p>
+                  </div>
+                  <div className="flex flex-col items-end">
+                    <Switch 
+                      checked={
+                        restaurantData?.customOrdersRequestStatus === 'approved' 
+                          ? restaurantData?.customOrdersEnabled 
+                          : restaurantData?.customOrdersRequestStatus === 'pending'
+                      }
+                      onCheckedChange={handleCustomOrderToggle}
+                      className="data-[state=checked]:bg-[#ff8100]"
+                    />
+                    {restaurantData?.customOrdersRequestStatus === 'pending' && (
+                       <span className="text-[10px] font-medium text-orange-600 mt-1 uppercase">Pending</span>
+                    )}
+                    {restaurantData?.customOrdersRequestStatus === 'approved' && (
+                       <span className="text-[10px] font-medium text-green-600 mt-1 uppercase">Approved</span>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </section>
 

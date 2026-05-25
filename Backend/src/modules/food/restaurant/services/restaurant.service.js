@@ -201,7 +201,9 @@ const toRestaurantProfile = (doc) => {
         createdAt: doc.createdAt,
         updatedAt: doc.updatedAt,
         rating: normalizeRatingValue(doc.rating),
-        totalRatings: normalizeTotalRatingsValue(doc.totalRatings)
+        totalRatings: normalizeTotalRatingsValue(doc.totalRatings),
+        customOrdersEnabled: Boolean(doc.customOrdersEnabled),
+        customOrdersRequestStatus: doc.customOrdersRequestStatus || 'none'
     };
 };
 
@@ -520,6 +522,8 @@ export const getCurrentRestaurantProfile = async (restaurantId) => {
                 'diningSettings',
                 'isAcceptingOrders',
                 'status',
+                'customOrdersEnabled',
+                'customOrdersRequestStatus',
                 'fssaiNumber',
                 'fssaiExpiry',
                 'gstNumber',
@@ -627,6 +631,19 @@ export const updateRestaurantProfile = async (restaurantId, body = {}) => {
             update.businessType = businessType;
         } else if (businessType) {
             throw new ValidationError('Invalid business type');
+        }
+    }
+
+    if (body.customOrdersEnabled !== undefined) {
+        update.customOrdersEnabled = Boolean(body.customOrdersEnabled);
+    }
+    
+    if (body.customOrdersRequestStatus !== undefined) {
+        const allowedStatuses = ['none', 'pending', 'approved', 'rejected'];
+        if (allowedStatuses.includes(body.customOrdersRequestStatus)) {
+            update.customOrdersRequestStatus = body.customOrdersRequestStatus;
+        } else {
+            throw new ValidationError('Invalid custom orders request status');
         }
     }
 

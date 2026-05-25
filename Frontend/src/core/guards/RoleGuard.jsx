@@ -10,6 +10,12 @@ const RoleGuard = ({ children, allowedRoles }) => {
     }
 
     if (!isAuthenticated || !role || !allowedRoles.includes(role)) {
+        const path = window.location.hash ? window.location.hash.replace('#', '') : window.location.pathname;
+        
+        if (path.startsWith('/seller') && !allowedRoles.includes(role)) {
+             return <Navigate to="/seller/auth" replace />;
+        }
+
         // Redirect to their respective dashboard if they are logged in but trying to access the wrong area
         if (isAuthenticated && role) {
             return <Navigate to={`/${role}`} replace />;
