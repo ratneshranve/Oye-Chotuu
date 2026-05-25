@@ -24,7 +24,19 @@ function shouldUseHashRouter() {
 }
 
 export function AppProviders({ children }) {
-  const Router = shouldUseHashRouter() ? HashRouter : BrowserRouter
+  const isHashRouter = shouldUseHashRouter()
+  
+  if (isHashRouter && typeof window !== 'undefined') {
+    // If the app is opened with a pathname like /seller in a webview,
+    // HashRouter will ignore the pathname and look at the empty hash,
+    // defaulting to "/" (which redirects to /food/user).
+    // This script converts the pathname to a hash before the router initializes.
+    if (window.location.pathname !== '/' && !window.location.hash) {
+      window.history.replaceState(null, '', `/#${window.location.pathname}${window.location.search}`);
+    }
+  }
+
+  const Router = isHashRouter ? HashRouter : BrowserRouter
 
   return (
     <StrictMode>
