@@ -666,9 +666,9 @@ const MainLocationHeader = ({
                     type="text"
                     placeholder={searchPlaceholder || "Search Products..."}
                     readOnly
-                    className="flex-1 bg-transparent border-none outline-none pl-3 text-slate-800 font-bold placeholder:text-slate-300 text-[15px] cursor-pointer"
+                    className="flex-1 min-w-0 truncate bg-transparent border-none outline-none pl-3 text-slate-800 font-bold placeholder:text-slate-300 text-[15px] cursor-pointer"
                   />
-                  <div className="flex items-center gap-2 border-l border-red-100 pl-3">
+                  <div className="shrink-0 flex items-center gap-2 border-l border-red-100 pl-3">
                     <MicIcon sx={{ color: "#cc2532", fontSize: 20 }} />
                   </div>
                 </motion.div>

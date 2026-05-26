@@ -314,10 +314,10 @@ export default function QuickHeader({ showSearch = true, activeCategory = null, 
               style={{ backgroundColor: searchBarBg }}
               className="rounded-full px-4 h-11 shadow-md flex items-center border border-white/50 transition-all duration-200 focus-within:ring-2 focus-within:ring-white/60 cursor-pointer backdrop-blur-md">
               <SearchIcon sx={{ color: "#ffffff", fontSize: 20 }} />
-              <div className="flex-1 pl-2 text-white font-semibold flex items-center">
-                   <span className="opacity-60 text-[15px]">{searchPlaceholder}</span>
+              <div className="flex-1 min-w-0 pl-2 text-white font-semibold flex items-center">
+                   <span className="block truncate opacity-60 text-[15px]">{searchPlaceholder}</span>
               </div>
-              <div className="flex items-center gap-2 border-l border-white/10 pl-3">
+              <div className="shrink-0 flex items-center gap-2 border-l border-white/10 pl-3">
                 <button
                   type="button"
                   onClick={handleVoiceSearch}
@@ -427,10 +427,10 @@ export default function QuickHeader({ showSearch = true, activeCategory = null, 
             style={{ backgroundColor: searchBarBg }}
             className="flex-1 rounded-[10px] px-3 h-10 shadow-md flex items-center border border-white/50 transition-all duration-200 focus-within:ring-2 focus-within:ring-white/60 cursor-pointer backdrop-blur-md">
             <SearchIcon sx={{ color: "#ffffff", fontSize: 18 }} />
-            <div className="flex-1 pl-2 text-white font-semibold">
-                <span className="opacity-60 text-[14px]">{searchPlaceholder}</span>
+            <div className="flex-1 min-w-0 pl-2 text-white font-semibold">
+                <span className="block truncate opacity-60 text-[14px]">{searchPlaceholder}</span>
             </div>
-            <div className="flex items-center gap-2 border-l border-white/10 pl-2.5">
+            <div className="shrink-0 flex items-center gap-2 border-l border-white/10 pl-2.5">
               <button
                 type="button"
                 onClick={handleVoiceSearch}
