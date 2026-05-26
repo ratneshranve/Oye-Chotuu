@@ -39,7 +39,7 @@ import {
   Check,
   Share2,
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll } from "framer-motion";
 import {
   CategoryChipRowSkeleton,
   ExploreGridSkeleton,

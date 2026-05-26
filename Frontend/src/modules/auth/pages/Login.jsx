@@ -61,8 +61,8 @@ export default function UnifiedOTPFastLogin() {
   const handleSendOTP = async (e) => {
     e.preventDefault()
     const phone = normalizedPhone()
-    if (phone.length < 8) {
-      toast.error("Please enter a valid phone number (at least 8 digits)")
+    if (phoneNumber.length !== 10) {
+      toast.error("Please enter a valid 10-digit phone number")
       return
     }
     if (submitting.current) return
@@ -87,8 +87,8 @@ export default function UnifiedOTPFastLogin() {
 
   const handleResendOTP = async () => {
     const phone = normalizedPhone()
-    if (phone.length < 8) {
-      toast.error("Please enter a valid phone number (at least 8 digits)")
+    if (phoneNumber.length !== 10) {
+      toast.error("Please enter a valid 10-digit phone number")
       return
     }
     if (resendTimer > 0 || submitting.current) return
@@ -484,9 +484,9 @@ export default function UnifiedOTPFastLogin() {
 
             <button
               type="submit"
-              disabled={loading}
-              className={`w-full py-4 rounded-2xl font-black text-lg transition-all relative overflow-hidden shadow-xl ${loading
-                ? "bg-gray-100 dark:bg-gray-800 cursor-not-allowed opacity-50"
+              disabled={loading || (step === 1 && phoneNumber.length !== 10)}
+              className={`w-full py-4 rounded-2xl font-black text-lg transition-all relative overflow-hidden shadow-xl ${loading || (step === 1 && phoneNumber.length !== 10)
+                ? "bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed"
                 : "bg-[#CB202D] hover:bg-[#b01c27] text-white hover:shadow-2xl hover:shadow-[#CB202D]/30 active:scale-[0.98] hover:-translate-y-0.5"
                 }`}
             >

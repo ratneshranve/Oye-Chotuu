@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation as useRouterLocation, useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll } from "framer-motion";
 import {
   Navigation,
   ChevronDown,
@@ -168,6 +168,16 @@ export default function HomeHeader({
   const [isListening, setIsListening] = useState(false);
   const routerLocation = useRouterLocation();
   const videoRef = useRef(null);
+  const { scrollY } = useScroll();
+  const [isSticky, setIsSticky] = useState(false);
+
+  useEffect(() => {
+    return scrollY.on("change", (latest) => {
+      if (latest > 120 && !isSticky) setIsSticky(true);
+      else if (latest <= 120 && isSticky) setIsSticky(false);
+    });
+  }, [scrollY, isSticky]);
+
   const [notifications, setNotifications] = useState(() => {
     if (typeof window === "undefined") return [];
     const saved = localStorage.getItem("food_user_notifications");
@@ -525,8 +535,14 @@ export default function HomeHeader({
       </div>
 
       <div className={cn("relative z-10 pb-0 px-3 overflow-visible", isFood ? "pt-3" : "pt-0")}>
+        {isFood && isSticky && <div className="h-[46px] mb-2" />}
         {isFood && (
-          <div className="flex items-center gap-2 mb-2">
+          <div 
+            className={cn("flex items-center gap-2 mb-2", 
+              isSticky ? "fixed top-0 left-0 right-0 z-[100] px-4 py-2 pb-3 shadow-md backdrop-blur-xl border-b border-black/5 dark:border-white/5" : "relative w-full px-0"
+            )}
+            style={{ backgroundColor: isSticky ? withAlpha(theme.accent, 0.85) : "transparent" }}
+          >
             <div
               className="flex-1 rounded-[12px] h-[46px] flex items-center px-3 cursor-pointer relative overflow-hidden bg-white shadow-[0_6px_18px_rgba(15,23,42,0.10)] border-0 text-left"
               onClick={handleSearchFocus}
