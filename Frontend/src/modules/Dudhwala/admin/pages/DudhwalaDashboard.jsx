@@ -201,11 +201,9 @@ const DudhwalaDashboard = () => {
 };
 
 function MetricCard({ title, value, helper, icon, accent, path }) {
-    const navigate = useNavigate();
     return (
         <Card 
-            className="group relative overflow-hidden border-neutral-200 bg-white p-0 cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-1 active:scale-[0.98] rounded-2xl"
-            onClick={() => path && navigate(path)}
+            className="group relative overflow-hidden border-neutral-200 bg-white p-0 transition-all duration-300 rounded-2xl"
         >
             <CardContent className="relative flex flex-col gap-2 px-4 pb-4 pt-4 h-full">
                 <div className={`absolute inset-0 opacity-20 transition-opacity duration-300 group-hover:opacity-40 ${accent}`} />
@@ -218,9 +216,6 @@ function MetricCard({ title, value, helper, icon, accent, path }) {
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/90 ring-1 ring-neutral-200 shadow-sm transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 group-hover:shadow-md">
                         {icon}
                     </div>
-                </div>
-                <div className="absolute bottom-2 right-2 opacity-0 transform translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
-                    <ArrowUpRight className="h-3 w-3 text-neutral-400" />
                 </div>
             </CardContent>
         </Card>

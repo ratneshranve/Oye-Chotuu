@@ -548,6 +548,7 @@ function RestaurantDetailsContent() {
             coverImages: normalizedCoverImages,
             menuImages: normalizedMenuImages,
             businessType: actualRestaurant?.businessType || apiRestaurant?.businessType || "restaurant",
+            customOrdersEnabled: Boolean(actualRestaurant?.customOrdersEnabled || apiRestaurant?.customOrdersEnabled),
             // Menu sections for display (will be populated from menu API)
             menuSections: [],
             // Onboarding data including FSSAI license
@@ -2111,7 +2112,7 @@ function RestaurantDetailsContent() {
         </div>
 
         {/* Custom Cake Quote Request for Home Bakeries */}
-        {restaurant?.businessType === 'home_bakery' && (
+        {restaurant?.businessType === 'home_bakery' && restaurant?.customOrdersEnabled && (
           <div className="max-w-7xl mx-auto mt-4 bg-gradient-to-r from-pink-500/10 to-amber-500/10 dark:from-pink-950/30 dark:to-amber-950/20 rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-pink-200/50 dark:border-pink-800/30 p-5 relative overflow-hidden">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-center gap-4">

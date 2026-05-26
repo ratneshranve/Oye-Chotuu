@@ -427,20 +427,15 @@ export default function OutletInfo() {
 
   const handleCustomOrderToggle = async (checked) => {
     try {
-      let payload = {}
-      let successMsg = ""
-      
-      if (restaurantData?.customOrdersRequestStatus === 'approved') {
-         payload = { customOrdersEnabled: checked }
-         successMsg = checked ? "Custom Orders Enabled" : "Custom Orders Disabled"
-      } else {
-         const newStatus = checked ? "pending" : "none"
-         payload = { customOrdersRequestStatus: newStatus }
-         if (newStatus === "none") {
-             payload.customOrdersEnabled = false
-         }
-         successMsg = checked ? "Request for Custom Orders sent to Admin" : "Custom Orders request cancelled"
+      // We always send a request to the admin, whether turning it ON or OFF.
+      const payload = { 
+          customOrdersRequestStatus: 'pending',
+          customOrdersRequestedState: checked
       }
+      
+      const successMsg = checked 
+          ? "Request to enable Custom Orders sent to Admin" 
+          : "Request to disable Custom Orders sent to Admin"
 
       await restaurantAPI.updateProfile(payload)
       
@@ -725,20 +720,20 @@ export default function OutletInfo() {
                     <p className="text-sm font-bold text-gray-800 mb-1">Custom Orders</p>
                     <p className="text-xs text-gray-500">
                       {restaurantData?.customOrdersRequestStatus === 'pending' 
-                        ? 'Your request is pending admin approval.'
+                        ? (restaurantData?.customOrdersRequestedState ? 'Request to enable pending admin approval.' : 'Request to disable pending admin approval.')
                         : restaurantData?.customOrdersRequestStatus === 'approved'
-                        ? 'You can now accept custom orders.'
+                        ? (restaurantData?.customOrdersEnabled ? 'Custom orders are enabled.' : 'Custom orders are disabled.')
                         : restaurantData?.customOrdersRequestStatus === 'rejected'
-                        ? 'Your request was rejected. You can apply again.'
-                        : 'Enable to request admin approval for custom orders.'}
+                        ? 'Your last request was rejected.'
+                        : 'Enable to request admin approval.'}
                     </p>
                   </div>
                   <div className="flex flex-col items-end">
                     <Switch 
                       checked={
-                        restaurantData?.customOrdersRequestStatus === 'approved' 
-                          ? restaurantData?.customOrdersEnabled 
-                          : restaurantData?.customOrdersRequestStatus === 'pending'
+                        restaurantData?.customOrdersRequestStatus === 'pending' 
+                          ? restaurantData?.customOrdersRequestedState 
+                          : restaurantData?.customOrdersEnabled
                       }
                       onCheckedChange={handleCustomOrderToggle}
                       className="data-[state=checked]:bg-[#ff8100]"
@@ -748,6 +743,9 @@ export default function OutletInfo() {
                     )}
                     {restaurantData?.customOrdersRequestStatus === 'approved' && (
                        <span className="text-[10px] font-medium text-green-600 mt-1 uppercase">Approved</span>
+                    )}
+                    {restaurantData?.customOrdersRequestStatus === 'rejected' && (
+                       <span className="text-[10px] font-medium text-red-600 mt-1 uppercase">Rejected</span>
                     )}
                   </div>
                 </div>

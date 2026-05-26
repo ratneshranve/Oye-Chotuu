@@ -111,6 +111,9 @@ function clearModuleAuth(module) {
       localStorage.removeItem("auth_customer");
       localStorage.removeItem("accessToken");
       localStorage.removeItem("token");
+    } else if (module === "restaurant") {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("token");
     }
   } catch (_) {}
 }

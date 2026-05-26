@@ -274,6 +274,22 @@ export const adminAPI = {
     apiClient.get("/food/admin/restaurants/pending", {
       contextModule: "admin",
     }),
+  getPendingCustomOrderRequests: () =>
+    apiClient.get("/food/admin/restaurants/custom-orders/pending", {
+      contextModule: "admin",
+    }),
+  approveCustomOrderRequest: (id) =>
+    apiClient.patch(
+      `/food/admin/restaurants/${id}/custom-orders/approve`,
+      {},
+      { contextModule: "admin" }
+    ),
+  rejectCustomOrderRequest: (id) =>
+    apiClient.patch(
+      `/food/admin/restaurants/${id}/custom-orders/reject`,
+      {},
+      { contextModule: "admin" }
+    ),
   /** List restaurant complaints (admin). */
   getRestaurantComplaints: (params = {}) =>
     apiClient.get("/food/admin/restaurants/complaints", {

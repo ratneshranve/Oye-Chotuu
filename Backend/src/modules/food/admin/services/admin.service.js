@@ -2348,6 +2348,67 @@ export async function getPendingRestaurants() {
     }));
 }
 
+export async function getPendingCustomOrderRequests() {
+    const restaurants = await FoodRestaurant.find({ customOrdersRequestStatus: 'pending' })
+        .populate('zoneId', 'name zoneName serviceLocation')
+        .sort({ updatedAt: -1 })
+        .lean();
+    return restaurants.map((r, i) => ({
+        ...r,
+        sl: i + 1,
+        zone: r.zoneId?.serviceLocation || r.zoneId?.zoneName || r.zoneId?.name || null,
+    }));
+}
+
+export async function approveCustomOrderRequest(id) {
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) return null;
+    const doc = await FoodRestaurant.findById(id);
+    if (!doc) return null;
+    
+    doc.customOrdersRequestStatus = 'approved';
+    doc.customOrdersEnabled = doc.customOrdersRequestedState;
+    await doc.save();
+
+    if (doc) {
+        try {
+            const { notifyUsersSafely } = await import('../../../../core/notifications/firebase.service.js');
+            void notifyUsersSafely({
+                title: doc.customOrdersEnabled ? 'Custom Orders Approved! 🎉' : 'Custom Orders Disabled',
+                body: doc.customOrdersEnabled ? 'You can now accept custom cake requests.' : 'Custom orders have been disabled for your bakery.',
+                data: { type: 'custom_orders_approved', restaurantId: String(doc._id) }
+            }, doc.fcmTokens || []);
+        } catch (e) {
+            console.error('Failed to send notification for custom orders approval', e);
+        }
+    }
+    return doc;
+}
+
+export async function rejectCustomOrderRequest(id) {
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) return null;
+    const doc = await FoodRestaurant.findById(id);
+    if (!doc) return null;
+    
+    doc.customOrdersRequestStatus = 'rejected';
+    // We do NOT change customOrdersEnabled on rejection, we leave it as whatever it currently is.
+    await doc.save();
+
+    if (doc) {
+        try {
+            const { notifyUsersSafely } = await import('../../../../core/notifications/firebase.service.js');
+            void notifyUsersSafely({
+                title: 'Custom Orders Request Rejected',
+                body: 'Your recent request for custom orders was declined.',
+                data: { type: 'custom_orders_rejected', restaurantId: String(doc._id) }
+            }, doc.fcmTokens || []);
+        } catch (e) {
+            console.error('Failed to send notification for custom orders rejection', e);
+        }
+    }
+    return doc;
+}
+
+
 export async function updateRestaurantById(id, body = {}) {
     if (!id || !mongoose.Types.ObjectId.isValid(id)) return null;
     const doc = await FoodRestaurant.findById(id);

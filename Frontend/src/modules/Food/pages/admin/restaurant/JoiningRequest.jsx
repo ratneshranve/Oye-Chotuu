@@ -125,17 +125,7 @@ export default function JoiningRequest() {
 
   // Fetch restaurant join requests
   useEffect(() => {
-    // On first render, fetch once for initial tab (usually "pending")
-    if (!hasFetchedOnceRef.current) {
-      hasFetchedOnceRef.current = true
-      fetchRequests()
-      return
-    }
-
-    // On subsequent tab changes, refetch only when switching away from "pending"
-    if (activeTab !== "pending") {
-      fetchRequests()
-    }
+    fetchRequests()
   }, [activeTab])
 
   const fetchRequests = async () => {
@@ -143,29 +133,34 @@ export default function JoiningRequest() {
       setLoading(true)
       setError(null)
 
-      const response = await adminAPI.getPendingRestaurants()
-      const list = (response?.data?.data || []).map((request) =>
-        normalizeRequestRecord(request),
-      )
-      if (activeTab === "pending") {
-        setPendingRequests(list.filter((r) => r.status === "pending"))
+      if (activeTab === "custom-orders") {
+        const response = await adminAPI.getPendingCustomOrderRequests()
+        const list = (response?.data?.data || []).map((request) =>
+          normalizeRequestRecord(request),
+        )
+        setPendingRequests(list) // Using pendingRequests to store the list
       } else {
-        setRejectedRequests(list.filter((r) => r.status === "rejected"))
+        const response = await adminAPI.getPendingRestaurants()
+        const list = (response?.data?.data || []).map((request) =>
+          normalizeRequestRecord(request),
+        )
+        if (activeTab === "pending") {
+          setPendingRequests(list.filter((r) => r.status === "pending"))
+        } else {
+          setRejectedRequests(list.filter((r) => r.status === "rejected"))
+        }
       }
     } catch (err) {
       debugError("Error fetching restaurant requests:", err)
       setError(err.message || "Failed to fetch restaurant requests")
-      if (activeTab === "pending") {
-        setPendingRequests([])
-      } else {
-        setRejectedRequests([])
-      }
+      setPendingRequests([])
+      setRejectedRequests([])
     } finally {
       setLoading(false)
     }
   }
 
-  const currentRequests = activeTab === "pending" ? pendingRequests : rejectedRequests
+  const currentRequests = activeTab === "rejected" ? rejectedRequests : pendingRequests
 
   // Get unique zones (from DB) for filter options
   const filterOptions = useMemo(() => {
@@ -265,12 +260,16 @@ export default function JoiningRequest() {
   const handleApprove = async (request) => {
     try {
       setProcessing(true)
-      await adminAPI.approveRestaurant(request._id)
+      if (activeTab === "custom-orders") {
+         await adminAPI.approveCustomOrderRequest(request._id)
+      } else {
+         await adminAPI.approveRestaurant(request._id)
+      }
       
       // Refresh the list
       await fetchRequests()
       
-      toast.success(`Successfully approved ${request.restaurantName}'s join request!`)
+      toast.success(`Successfully approved ${request.restaurantName}'s request!`)
     } catch (err) {
       debugError("Error approving request:", err)
       toast.error(err.response?.data?.message || "Failed to approve request. Please try again.")
@@ -293,7 +292,11 @@ export default function JoiningRequest() {
 
     try {
       setProcessing(true)
-      await adminAPI.rejectRestaurant(selectedRequest._id, rejectionReason)
+      if (activeTab === "custom-orders") {
+         await adminAPI.rejectCustomOrderRequest(selectedRequest._id)
+      } else {
+         await adminAPI.rejectRestaurant(selectedRequest._id, rejectionReason)
+      }
       
       // Refresh the list
       await fetchRequests()
@@ -302,7 +305,7 @@ export default function JoiningRequest() {
       setSelectedRequest(null)
       setRejectionReason("")
       
-      alert(`Successfully rejected ${selectedRequest.restaurantName}'s join request!`)
+      alert(`Successfully rejected ${selectedRequest.restaurantName}'s request!`)
     } catch (err) {
       debugError("Error rejecting request:", err)
       alert(err.response?.data?.message || "Failed to reject request. Please try again.")
@@ -423,6 +426,16 @@ export default function JoiningRequest() {
               }`}
             >
               Rejected Request
+            </button>
+            <button
+              onClick={() => setActiveTab("custom-orders")}
+              className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+                activeTab === "custom-orders"
+                  ? "border-blue-600 text-blue-600"
+                  : "border-transparent text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              Custom Orders
             </button>
           </div>
 
@@ -595,7 +608,7 @@ export default function JoiningRequest() {
                           >
                             <Eye className="w-4 h-4" />
                           </button>
-                          {activeTab === "pending" && (
+                          {(activeTab === "pending" || activeTab === "custom-orders") && (
                             <>
                               <button
                                 onClick={() => handleApprove(request)}
@@ -926,6 +939,35 @@ export default function JoiningRequest() {
                               <p className="text-xs text-purple-800">{r.reVerification.reVerificationReason}</p>
                             </div>
                           )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Custom Orders Settings Request (if applicable) */}
+                    {activeTab === "custom-orders" && (
+                      <div className="md:col-span-2">
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-2">
+                          <h4 className="text-sm font-bold text-blue-900 mb-1 flex items-center gap-2">
+                            <FileText className="w-4 h-4" />
+                            Custom Orders Settings Request
+                          </h4>
+                          <p className="text-xs text-blue-800 mb-2">
+                            The restaurant has requested to change their Custom Orders settings.
+                          </p>
+                          <div className="grid grid-cols-2 gap-4 pt-2 border-t border-blue-200">
+                            <div>
+                              <p className="text-xs text-blue-600 font-bold uppercase tracking-wider mb-1">Requested State</p>
+                              <p className="text-sm font-medium text-slate-900 bg-white px-2 py-1 rounded inline-block border border-blue-100">
+                                {r.customOrdersRequestedState ? "Turn ON (Enable)" : "Turn OFF (Disable)"}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-xs text-slate-500 font-medium uppercase tracking-wider mb-1">Current State</p>
+                              <p className="text-sm text-slate-600 px-2 py-1">
+                                {r.customOrdersEnabled ? "ON (Enabled)" : "OFF (Disabled)"}
+                              </p>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     )}

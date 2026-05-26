@@ -55,6 +55,7 @@ router.get('/reports/transactions', adminController.getTransactionReport);
 router.get('/reports/tax', adminController.getTaxReport);
 router.get('/reports/tax/:id', adminController.getTaxReportDetail);
 router.get('/restaurants/pending', adminController.getPendingRestaurants);
+router.get('/restaurants/custom-orders/pending', adminController.getPendingCustomOrderRequests);
 router.get('/restaurants/reviews', adminController.getRestaurantReviews);
 router.get('/restaurants/:id', adminController.getRestaurantById);
 router.get('/restaurants/:id/analytics', adminController.getRestaurantAnalytics);
@@ -66,6 +67,8 @@ router.patch('/restaurants/:id/location', adminController.updateRestaurantLocati
 router.patch('/restaurants/:id/menu', adminController.updateRestaurantMenuById);
 router.patch('/restaurants/:id/approve', adminController.approveRestaurant);
 router.patch('/restaurants/:id/reject', adminController.rejectRestaurant);
+router.patch('/restaurants/:id/custom-orders/approve', adminController.approveCustomOrderRequest);
+router.patch('/restaurants/:id/custom-orders/reject', adminController.rejectCustomOrderRequest);
 
 // ----- Restaurant Commission -----
 router.get('/restaurant-commissions/bootstrap', adminController.getRestaurantCommissionBootstrap);

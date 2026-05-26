@@ -597,6 +597,51 @@ export async function getPendingRestaurants(req, res, next) {
     }
 }
 
+export async function getPendingCustomOrderRequests(req, res, next) {
+    try {
+        const pending = await adminService.getPendingCustomOrderRequests();
+        res.status(200).json({
+            success: true,
+            message: 'Pending custom order requests fetched successfully',
+            data: pending
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+export async function approveCustomOrderRequest(req, res, next) {
+    try {
+        const { id } = req.params;
+        if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ success: false, message: 'Invalid restaurant id' });
+        }
+        const updated = await adminService.approveCustomOrderRequest(id);
+        if (!updated) {
+            return res.status(404).json({ success: false, message: 'Restaurant not found' });
+        }
+        res.status(200).json({ success: true, message: 'Custom order request approved', data: { restaurant: updated } });
+    } catch (error) {
+        next(error);
+    }
+}
+
+export async function rejectCustomOrderRequest(req, res, next) {
+    try {
+        const { id } = req.params;
+        if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ success: false, message: 'Invalid restaurant id' });
+        }
+        const updated = await adminService.rejectCustomOrderRequest(id);
+        if (!updated) {
+            return res.status(404).json({ success: false, message: 'Restaurant not found' });
+        }
+        res.status(200).json({ success: true, message: 'Custom order request rejected', data: { restaurant: updated } });
+    } catch (error) {
+        next(error);
+    }
+}
+
 // ----- Delivery partner bonus (admin) -----
 export async function getDeliveryPartnerBonusTransactions(req, res, next) {
     try {

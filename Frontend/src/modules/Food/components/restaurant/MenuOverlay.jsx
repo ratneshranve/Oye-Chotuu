@@ -19,6 +19,8 @@ import {
   LogOut,
   LogIn,
 } from "lucide-react"
+import { restaurantAPI } from "@food/api"
+import { clearModuleAuth } from "@food/utils/auth"
 
 export default function MenuOverlay({ showMenu, setShowMenu }) {
   const navigate = useNavigate()
@@ -150,14 +152,14 @@ export default function MenuOverlay({ showMenu, setShowMenu }) {
                         if (option.isLogout) {
                           // Handle logout
                           if (window.confirm("Are you sure you want to logout?")) {
-                            // Clear authentication state
-                            localStorage.removeItem("restaurant_authenticated")
-                            localStorage.removeItem("restaurant_user")
-                            setIsAuthenticated(false)
-                            // Dispatch custom event for same-tab updates
-                            window.dispatchEvent(new Event('restaurantAuthChanged'))
-                            // Redirect to login
-                            navigate("/restaurant/login")
+                            const doLogout = async () => {
+                              try { await restaurantAPI.logout() } catch (e) {}
+                              clearModuleAuth("restaurant")
+                              setIsAuthenticated(false)
+                              window.dispatchEvent(new Event('restaurantAuthChanged'))
+                              navigate("/food/restaurant/login")
+                            }
+                            doLogout()
                           }
                         } else {
                           navigate(option.route)

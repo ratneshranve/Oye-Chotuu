@@ -24,6 +24,8 @@ import {
 import { Card, CardContent } from "@food/components/ui/card"
 import BottomNavbar from "@food/components/restaurant/BottomNavbar"
 import MenuOverlay from "@food/components/restaurant/MenuOverlay"
+import { restaurantAPI } from "@food/api"
+import { clearModuleAuth } from "@food/utils/auth"
 const debugLog = (...args) => {}
 const debugWarn = (...args) => {}
 const debugError = (...args) => {}
@@ -88,9 +90,13 @@ export default function SettingsPage() {
       id: "actions",
       title: "Actions",
       items: [
-        { id: "logout", label: "Logout", icon: LogOut, isDestructive: true, action: () => {
-          debugLog("Logout clicked")
-          // Add logout logic here
+        { id: "logout", label: "Logout", icon: LogOut, isDestructive: true, action: async () => {
+          if (window.confirm("Are you sure you want to logout?")) {
+            try { await restaurantAPI.logout() } catch (e) {}
+            clearModuleAuth("restaurant")
+            window.dispatchEvent(new Event('restaurantAuthChanged'))
+            navigate("/food/restaurant/login")
+          }
         } },
       ]
     }

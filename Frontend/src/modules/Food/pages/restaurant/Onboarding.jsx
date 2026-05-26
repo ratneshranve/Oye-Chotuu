@@ -661,10 +661,19 @@ export default function RestaurantOnboarding() {
         })
       }
       if (localData.step2) {
+        const cachedMenuImages = [...(onboardingFileCache.step2.menuImages || [])]
         const restoredMenuImages = (localData.step2.menuImages || [])
-          .map((img, index) => restoreDraftImage(img, `menu-image-${index + 1}`))
+          .map((img, index) => {
+            if (img?.kind === "draft-file" && cachedMenuImages.length > 0) {
+              return cachedMenuImages.shift()
+            }
+            return restoreDraftImage(img, `menu-image-${index + 1}`)
+          })
           .filter(Boolean)
-        const cachedMenuImages = onboardingFileCache.step2.menuImages || []
+        
+        // Add any remaining cached images that weren't in localData
+        const finalMenuImages = [...restoredMenuImages, ...cachedMenuImages]
+
         const restoredProfileImage = restoreDraftImage(
           localData.step2.profileImage,
           "restaurant-profile",
@@ -672,7 +681,7 @@ export default function RestaurantOnboarding() {
         const cachedProfileImage = onboardingFileCache.step2.profileImage || null
 
         setStep2({
-          menuImages: [...restoredMenuImages, ...cachedMenuImages],
+          menuImages: finalMenuImages,
           profileImage: cachedProfileImage || restoredProfileImage,
           cuisines: localData.step2.cuisines || [],
           openingTime: normalizeTimeValue(localData.step2.openingTime),
@@ -722,6 +731,9 @@ export default function RestaurantOnboarding() {
         hasRestoredDraftStepRef.current = true
         goToStep(localData.currentStep, { replace: true })
       }
+    } else {
+      // Clear file cache if no local data exists (e.g. after a fresh login)
+      clearOnboardingFileCache()
     }
   }, [searchParams])
 

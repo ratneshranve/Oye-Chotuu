@@ -647,6 +647,10 @@ export const updateRestaurantProfile = async (restaurantId, body = {}) => {
             throw new ValidationError('Invalid custom orders request status');
         }
     }
+    
+    if (body.customOrdersRequestedState !== undefined) {
+        update.customOrdersRequestedState = Boolean(body.customOrdersRequestedState);
+    }
 
     // Owner/contact fields (used by restaurant Contact Details screens)
     if (body.ownerName !== undefined) {
