@@ -450,6 +450,145 @@ export default function RestaurantOnboarding() {
   const [isFssaiCalendarOpen, setIsFssaiCalendarOpen] = useState(false)
   const [zones, setZones] = useState([])
   const [zonesLoading, setZonesLoading] = useState(false)
+  const [fetchingCurrentLocation, setFetchingCurrentLocation] = useState(false)
+
+  const findMatchingZone = (lat, lng, zonesList) => {
+    if (!lat || !lng || !Array.isArray(zonesList)) return null
+    return zonesList.find((z) => {
+      return (
+        Array.isArray(z.coordinates) &&
+        z.coordinates.length >= 3 &&
+        isPointInPolygon(Number(lat), Number(lng), z.coordinates)
+      )
+    })
+  }
+
+  const ensureGoogleMapsLoaded = async () => {
+    if (mapsScriptLoadedRef.current && window.google?.maps?.places?.Autocomplete) return true
+    if (window.google?.maps?.places?.Autocomplete) {
+      mapsScriptLoadedRef.current = true
+      return true
+    }
+    const apiKey = await getGoogleMapsApiKey()
+    if (!apiKey) return false
+
+    const existing = document.getElementById("restaurant-onboarding-maps-script")
+    if (existing) {
+      for (let i = 0; i < 30; i += 1) {
+        if (window.google?.maps?.places?.Autocomplete) {
+          mapsScriptLoadedRef.current = true
+          return true
+        }
+        await new Promise((r) => setTimeout(r, 100))
+      }
+      return false
+    }
+
+    await new Promise((resolve, reject) => {
+      const script = document.createElement("script")
+      script.id = "restaurant-onboarding-maps-script"
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&v=weekly`
+      script.async = true
+      script.defer = true
+      script.onload = resolve
+      script.onerror = reject
+      document.head.appendChild(script)
+    })
+
+    // Double check that autocomplete has loaded
+    for (let i = 0; i < 30; i += 1) {
+      if (window.google?.maps?.places?.Autocomplete) {
+        mapsScriptLoadedRef.current = true
+        return true
+      }
+      await new Promise((r) => setTimeout(r, 100))
+    }
+
+    return false
+  }
+
+  const handleUseCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      toast.error("Geolocation is not supported by your browser.")
+      return
+    }
+
+    setFetchingCurrentLocation(true)
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords
+        try {
+          const loaded = await ensureGoogleMapsLoaded()
+          if (!loaded || !window.google?.maps) {
+            throw new Error("Google Maps API failed to load")
+          }
+
+          const geocoder = new window.google.maps.Geocoder()
+          geocoder.geocode(
+            { location: { lat: latitude, lng: longitude } },
+            (results, status) => {
+              if (status === "OK" && results[0]) {
+                const place = results[0]
+                const formattedAddress = place.formatted_address || ""
+                const comps = Array.isArray(place.address_components) ? place.address_components : []
+                const get = (types) => comps.find((c) => types.some((t) => c.types?.includes(t)))?.long_name || ""
+
+                const area = get(["sublocality_level_1", "sublocality", "neighborhood"]) || get(["locality"])
+                const city = get(["locality"]) || get(["administrative_area_level_2"])
+                const state = get(["administrative_area_level_1"])
+                const pincode = get(["postal_code"])
+
+                const matchedZone = findMatchingZone(latitude, longitude, zones)
+                const matchedZoneId = matchedZone ? String(matchedZone._id || matchedZone.id) : ""
+
+                if (locationSearchInputRef.current) {
+                  locationSearchInputRef.current.value = formattedAddress
+                }
+
+                setStep1((prev) => ({
+                  ...prev,
+                  zoneId: matchedZoneId,
+                  location: {
+                    ...prev.location,
+                    formattedAddress,
+                    addressLine1: formattedAddress,
+                    area,
+                    city,
+                    state,
+                    pincode,
+                    latitude: Number(latitude.toFixed(6)),
+                    longitude: Number(longitude.toFixed(6)),
+                  },
+                }))
+
+                if (!matchedZoneId) {
+                  toast.warning("Your current location is outside OyeChotuu service zones.")
+                } else {
+                  toast.success("Location updated successfully!")
+                }
+              } else {
+                toast.error("Failed to determine address for this location.")
+              }
+              setFetchingCurrentLocation(false)
+            }
+          )
+        } catch (err) {
+          debugError("Error geocoding location:", err)
+          toast.error("Error fetching location details.")
+          setFetchingCurrentLocation(false)
+        }
+      },
+      (error) => {
+        let msg = "Failed to get current location."
+        if (error.code === error.PERMISSION_DENIED) {
+          msg = "Permission denied. Please enable location services in your browser settings."
+        }
+        toast.error(msg)
+        setFetchingCurrentLocation(false)
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    )
+  }
 
   const [step1, setStep1] = useState({
     restaurantName: "",
@@ -511,6 +650,11 @@ export default function RestaurantOnboarding() {
   const previewUrlCacheRef = useRef(new Map())
   const locationSearchInputRef = useRef(null)
   const placesAutocompleteRef = useRef(null)
+  const zonesRef = useRef([])
+
+  useEffect(() => {
+    zonesRef.current = zones
+  }, [zones])
   const mapsScriptLoadedRef = useRef(false)
   const hasRestoredDraftStepRef = useRef(false)
   const menuImagesInputRef = useRef(null)
@@ -1514,16 +1658,48 @@ export default function RestaurantOnboarding() {
             </p>
           </div>
           <div>
-            <Label className="text-xs text-gray-700">Search location</Label>
+            <div className="flex justify-between items-center mb-1">
+              <Label className="text-xs text-gray-700">Search location</Label>
+              <button
+                type="button"
+                onClick={handleUseCurrentLocation}
+                disabled={fetchingCurrentLocation || !isEditing}
+                className="text-xs font-semibold text-blue-600 hover:text-blue-800 flex items-center gap-1 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {fetchingCurrentLocation ? (
+                  <>
+                    <svg className="animate-spin h-3.5 w-3.5 text-blue-600" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    <span>Fetching location...</span>
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <span>Use current location</span>
+                  </>
+                )}
+              </button>
+            </div>
             <Input
               ref={locationSearchInputRef}
               className="mt-1 bg-white text-sm text-black! dark:text-white! placeholder:text-gray-500 dark:placeholder:text-gray-400 caret-black dark:caret-white"
               style={{ color: "#000", WebkitTextFillColor: "#000" }}
               placeholder="Start typing your restaurant address..."
+              disabled={!isEditing || fetchingCurrentLocation}
             />
             <p className="text-[11px] text-gray-500 mt-1">
               Select a suggestion to auto-fill area/city/state/pincode and coordinates.
             </p>
+            {step1.location?.latitude && step1.location?.longitude && !step1.zoneId && (
+              <p className="text-[11px] text-red-600 font-medium mt-1 flex items-center gap-1">
+                <span>⚠️ Selected location is outside our service zones.</span>
+              </p>
+            )}
           </div>
           <Input
             value={step1.location?.addressLine1 || ""}
@@ -1604,6 +1780,16 @@ export default function RestaurantOnboarding() {
               placeholder="Pincode"
             />
           </div>
+          {step1.location?.latitude && step1.location?.longitude && !step1.zoneId && (
+            <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-md text-xs text-red-700 flex items-start gap-2">
+              <svg className="w-4 h-4 text-red-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <div>
+                <span className="font-semibold">Outside service area:</span> We don't serve in this location yet. Please select another address or coordinates within our service zones.
+              </div>
+            </div>
+          )}
           <p className="text-[11px] text-gray-500 mt-1">
             Please ensure that this address is the same as mentioned on your FSSAI license.
           </p>
@@ -1625,41 +1811,6 @@ export default function RestaurantOnboarding() {
         await new Promise((r) => setTimeout(r, 50))
       }
       if (!locationSearchInputRef.current || cancelled) return
-
-      const loadMaps = async () => {
-        if (mapsScriptLoadedRef.current && window.google?.maps?.places?.Autocomplete) return true
-        if (window.google?.maps?.places?.Autocomplete) {
-          mapsScriptLoadedRef.current = true
-          return true
-        }
-        const apiKey = await getGoogleMapsApiKey()
-        if (!apiKey) return false
-
-        const existing = document.getElementById("restaurant-onboarding-maps-script")
-        if (existing) {
-          for (let i = 0; i < 30; i += 1) {
-            if (window.google?.maps?.places?.Autocomplete) {
-              mapsScriptLoadedRef.current = true
-              return true
-            }
-            await new Promise((r) => setTimeout(r, 100))
-          }
-          return false
-        }
-
-        await new Promise((resolve, reject) => {
-          const script = document.createElement("script")
-          script.id = "restaurant-onboarding-maps-script"
-          script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&v=weekly`
-          script.async = true
-          script.defer = true
-          script.onload = resolve
-          script.onerror = reject
-          document.head.appendChild(script)
-        })
-        mapsScriptLoadedRef.current = true
-        return !!window.google?.maps?.places?.Autocomplete
-      }
 
       const parsePlace = (place) => {
         const formattedAddress = place?.formatted_address || ""
@@ -1686,7 +1837,7 @@ export default function RestaurantOnboarding() {
         }
       }
 
-      const ok = await loadMaps()
+      const ok = await ensureGoogleMapsLoaded()
       if (!ok || cancelled || !locationSearchInputRef.current) return
       if (placesAutocompleteRef.current) return
 
@@ -1702,38 +1853,17 @@ export default function RestaurantOnboarding() {
         const place = placesAutocompleteRef.current.getPlace()
         const parsed = parsePlace(place)
 
-        // Immediate Geofencing Check
-        setStep1((prev) => {
-          if (prev.zoneId && parsed.latitude && parsed.longitude) {
-            // Access latest zones from state
-            const selectedZone = zones.find((z) => String(z._id || z.id) === prev.zoneId)
-            if (
-              selectedZone &&
-              Array.isArray(selectedZone.coordinates) &&
-              selectedZone.coordinates.length >= 3
-            ) {
-              const isInside = isPointInPolygon(
-                Number(parsed.latitude),
-                Number(parsed.longitude),
-                selectedZone.coordinates,
-              )
-              if (!isInside) {
-                toast.error("Selected address is outside the selected zone")
-                // Clear search input if outside
-                if (locationSearchInputRef.current) {
-                  locationSearchInputRef.current.value = ""
-                }
-                return prev
-              }
-            }
-          }
+        if (parsed.latitude && parsed.longitude) {
+          const matchedZone = findMatchingZone(parsed.latitude, parsed.longitude, zonesRef.current)
+          const matchedZoneId = matchedZone ? String(matchedZone._id || matchedZone.id) : ""
 
-          return {
+          setStep1((prev) => ({
             ...prev,
+            zoneId: matchedZoneId,
             location: {
               ...prev.location,
               formattedAddress: parsed.formattedAddress || prev.location.formattedAddress,
-              addressLine1: prev.location.addressLine1 || parsed.formattedAddress || "",
+              addressLine1: parsed.formattedAddress || prev.location.addressLine1 || "",
               area: parsed.area || prev.location.area,
               city: parsed.city || prev.location.city,
               state: parsed.state || prev.location.state,
@@ -1741,8 +1871,27 @@ export default function RestaurantOnboarding() {
               latitude: parsed.latitude !== "" ? parsed.latitude : prev.location.latitude,
               longitude: parsed.longitude !== "" ? parsed.longitude : prev.location.longitude,
             },
+          }))
+
+          if (!matchedZoneId) {
+            toast.warning("Selected address is outside OyeChotuu service zones.")
+          } else {
+            toast.success("Zone auto-selected based on address!")
           }
-        })
+        } else {
+          setStep1((prev) => ({
+            ...prev,
+            location: {
+              ...prev.location,
+              formattedAddress: parsed.formattedAddress || prev.location.formattedAddress,
+              addressLine1: parsed.formattedAddress || prev.location.addressLine1 || "",
+              area: parsed.area || prev.location.area,
+              city: parsed.city || prev.location.city,
+              state: parsed.state || prev.location.state,
+              pincode: parsed.pincode || prev.location.pincode,
+            },
+          }))
+        }
       })
     }
 
@@ -2587,15 +2736,7 @@ export default function RestaurantOnboarding() {
         )}
 
         <footer className={`px-4 sm:px-6 py-3 bg-white ${keyboardInset ? "hidden" : ""}`}>
-          <div className="flex justify-between items-center">
-            <Button
-              variant="ghost"
-              disabled={step === 1 || saving}
-              onClick={() => { goToStep(step - 1); window.scrollTo({ top: 0, behavior: "instant" }) }}
-              className="text-sm text-gray-700 bg-transparent"
-            >
-              Back
-            </Button>
+          <div className="flex justify-end items-center">
             <Button
               onClick={handleNext}
               disabled={saving || (step === 4 && !isEditing)}
