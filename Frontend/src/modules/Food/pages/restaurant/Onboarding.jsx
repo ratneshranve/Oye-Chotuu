@@ -1690,7 +1690,7 @@ export default function RestaurantOnboarding() {
               className="mt-1 bg-white text-sm text-black! dark:text-white! placeholder:text-gray-500 dark:placeholder:text-gray-400 caret-black dark:caret-white"
               style={{ color: "#000", WebkitTextFillColor: "#000" }}
               placeholder="Start typing your restaurant address..."
-              disabled={!isEditing || fetchingCurrentLocation}
+              disabled={fetchingCurrentLocation}
             />
             <p className="text-[11px] text-gray-500 mt-1">
               Select a suggestion to auto-fill area/city/state/pincode and coordinates.
@@ -1742,8 +1742,9 @@ export default function RestaurantOnboarding() {
                 location: { ...step1.location, area: e.target.value },
               })
             }
-            className="bg-white text-sm"
+            className="bg-gray-100 text-sm cursor-not-allowed"
             placeholder="Area / Sector / Locality*"
+            readOnly
           />
           <Input
             value={step1.location?.city || ""}
@@ -1753,8 +1754,9 @@ export default function RestaurantOnboarding() {
                 location: { ...step1.location, city: e.target.value.replace(/[^A-Za-z ]/g, "") },
               })
             }
-            className="bg-white text-sm"
+            className="bg-gray-100 text-sm cursor-not-allowed"
             placeholder="City"
+            readOnly
           />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Input
@@ -1765,8 +1767,9 @@ export default function RestaurantOnboarding() {
                   location: { ...step1.location, state: e.target.value.replace(/[^A-Za-z ]/g, "") },
                 })
               }
-              className="bg-white text-sm"
+              className="bg-gray-100 text-sm cursor-not-allowed"
               placeholder="State"
+              readOnly
             />
             <Input
               value={step1.location?.pincode || ""}
@@ -1776,8 +1779,9 @@ export default function RestaurantOnboarding() {
                   location: { ...step1.location, pincode: e.target.value.replace(/\D/g, "").slice(0, 6) },
                 })
               }
-              className="bg-white text-sm"
+              className="bg-gray-100 text-sm cursor-not-allowed"
               placeholder="Pincode"
+              readOnly
             />
           </div>
           {step1.location?.latitude && step1.location?.longitude && !step1.zoneId && (
