@@ -14,7 +14,7 @@ import Button from "./ui/Button";
 const libraries = ["places"];
 const mapContainerStyle = {
   width: "100%",
-  height: "400px",
+  height: "100%",
 };
 
 const defaultCenter = {
@@ -224,19 +224,19 @@ const MapPicker = ({
       title="Select Shop Location"
       size="lg"
       footer={
-        <div className="flex justify-between w-full items-center">
-          <div className="text-sm text-gray-500">
+        <div className="flex flex-col sm:flex-row gap-3 w-full justify-between items-stretch sm:items-center">
+          <div className="text-sm text-gray-500 text-center sm:text-left">
             {marker
               ? address
-                ? <span className="font-medium text-slate-700 truncate max-w-xs block">{address}</span>
+                ? <span className="font-medium text-slate-700 block truncate max-w-full sm:max-w-xs">{address}</span>
                 : `${marker.lat.toFixed(4)}, ${marker.lng.toFixed(4)}`
               : "No location selected"}
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={onClose}>
+          <div className="flex gap-2 justify-end">
+            <Button variant="outline" onClick={onClose} className="flex-1 sm:flex-initial">
               Cancel
             </Button>
-            <Button onClick={handleConfirm} disabled={!marker || isGeocoding}>
+            <Button onClick={handleConfirm} disabled={!marker || isGeocoding} className="flex-1 sm:flex-initial">
               {isGeocoding ? (
                 <Loader2 className="w-4 h-4 animate-spin mr-2" />
               ) : null}
@@ -283,9 +283,9 @@ const MapPicker = ({
           </Button>
         </div>
 
-        <div className="rounded-xl overflow-hidden border border-gray-200 shadow-inner relative">
+        <div className="h-[250px] sm:h-[400px] rounded-xl overflow-hidden border border-gray-200 shadow-inner relative">
           {!isLoaded ? (
-            <div className="h-[400px] flex items-center justify-center bg-gray-50">
+            <div className="h-full flex items-center justify-center bg-gray-50">
               <Loader2 className="w-8 h-8 animate-spin text-primary" />
             </div>
           ) : (

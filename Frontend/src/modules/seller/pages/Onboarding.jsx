@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import {
   ArrowRight,
   Building2,
+  Calendar,
   Check,
   CreditCard,
   FileBadge2,
@@ -13,6 +14,7 @@ import {
   ShieldCheck,
   Store,
   Upload,
+  X,
 } from "lucide-react";
 import { toast } from "sonner";
 import { sellerApi } from "../services/sellerApi";
@@ -94,10 +96,76 @@ const normalizeTimeValue = (value) => {
 
 const getSellerPhone = (seller = {}) => seller.phone || "";
 
+const isPointInPolygon = (lat, lng, polygon) => {
+  if (!Array.isArray(polygon) || polygon.length < 3) return false;
+  let inside = false;
+  for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+    const xi = Number(polygon[i].longitude || polygon[i].lng);
+    const yi = Number(polygon[i].latitude || polygon[i].lat);
+    const xj = Number(polygon[j].longitude || polygon[j].lng);
+    const yj = Number(polygon[j].latitude || polygon[j].lat);
+    const intersect =
+      yi > lat !== yj > lat &&
+      lng < ((xj - xi) * (lat - yi)) / (yj - yi + 0.0) + xi;
+    if (intersect) inside = !inside;
+  }
+  return inside;
+};
+
+const findMatchingZone = (lat, lng, zonesList) => {
+  if (!lat || !lng || !Array.isArray(zonesList)) return null;
+  const numLat = Number(lat);
+  const numLng = Number(lng);
+  for (const zone of zonesList) {
+    if (Array.isArray(zone.coordinates) && zone.coordinates.length >= 3) {
+      if (isPointInPolygon(numLat, numLng, zone.coordinates)) {
+        return zone;
+      }
+    }
+  }
+  return null;
+};
+
+const formatToDDMMYY = (value) => {
+  const clean = value.replace(/\D/g, "");
+  if (clean.length <= 2) return clean;
+  if (clean.length <= 4) return `${clean.slice(0, 2)}/${clean.slice(2)}`;
+  return `${clean.slice(0, 2)}/${clean.slice(2, 4)}/${clean.slice(4, 8)}`;
+};
+
+const convertDDMMYYToYYYYMMDD = (dateStr) => {
+  if (!dateStr) return "";
+  const parts = dateStr.split("/");
+  if (parts.length !== 3) return "";
+  const day = parts[0].padStart(2, "0");
+  const month = parts[1].padStart(2, "0");
+  let year = parts[2];
+  if (year.length === 2) {
+    year = "20" + year;
+  }
+  return `${year}-${month}-${day}`;
+};
+
+const convertYYYYMMDDToDDMMYY = (ymd) => {
+  if (!ymd) return "";
+  const datePart = ymd.split("T")[0];
+  const parts = datePart.split("-");
+  if (parts.length !== 3) return ymd;
+  const year = parts[0];
+  const month = parts[1];
+  const day = parts[2];
+  return `${day}/${month}/${year.slice(-2)}`;
+};
+
+const isPastDate = (dateStr) => {
+  const ymd = convertDDMMYYToYYYYMMDD(dateStr);
+  if (!ymd || ymd.length !== 10) return false;
+  return ymd < new Date().toISOString().split("T")[0];
+};
 
 export default function SellerOnboarding() {
   const navigate = useNavigate();
-  const { user, refreshUser } = useAuth();
+  const { user, refreshUser, logout } = useAuth();
   const [form, setForm] = useState(initialState);
   const [qrFile, setQrFile] = useState(null);
   const [licenseFile, setLicenseFile] = useState(null);
@@ -111,7 +179,21 @@ export default function SellerOnboarding() {
 
   useEffect(() => {
     if (user) {
-      setForm((prev) => ({ ...initialState, phone: getSellerPhone(user) || prev.phone }));
+      const fssaiExpiryVal = user.fssaiExpiry || user.documents?.fssaiExpiry || user.shopInfo?.fssaiExpiry || "";
+      const shopLicenseExpiryVal = user.shopLicenseExpiry || user.documents?.shopLicenseExpiry || user.shopInfo?.shopLicenseExpiry || "";
+      const displayName = user.name && /^Seller \d+$/i.test(user.name) ? "" : (user.name || "");
+      const displayShopName = user.shopName && /^Store \d+$/i.test(user.shopName) ? "" : (user.shopName || "");
+      const displayEmail = user.email && /@seller\.local$/i.test(user.email) ? "" : (user.email || "");
+      setForm((prev) => ({
+        ...initialState,
+        ...user,
+        name: displayName,
+        shopName: displayShopName,
+        email: displayEmail,
+        phone: getSellerPhone(user) || prev.phone,
+        fssaiExpiry: fssaiExpiryVal ? convertYYYYMMDDToDDMMYY(fssaiExpiryVal) : "",
+        shopLicenseExpiry: shopLicenseExpiryVal ? convertYYYYMMDDToDDMMYY(shopLicenseExpiryVal) : "",
+      }));
       setHoursDraft({ openingTime: "", closingTime: "" });
     }
   }, [user]);
@@ -128,7 +210,21 @@ export default function SellerOnboarding() {
       try {
         const response = await sellerApi.getProfile();
         const data = response?.data?.result || {};
-        setForm((prev) => ({ ...initialState, phone: getSellerPhone(data) || prev.phone }));
+        const fssaiExpiryVal = data.fssaiExpiry || data.documents?.fssaiExpiry || data.shopInfo?.fssaiExpiry || "";
+        const shopLicenseExpiryVal = data.shopLicenseExpiry || data.documents?.shopLicenseExpiry || data.shopInfo?.shopLicenseExpiry || "";
+        const displayName = data.name && /^Seller \d+$/i.test(data.name) ? "" : (data.name || "");
+        const displayShopName = data.shopName && /^Store \d+$/i.test(data.shopName) ? "" : (data.shopName || "");
+        const displayEmail = data.email && /@seller\.local$/i.test(data.email) ? "" : (data.email || "");
+        setForm((prev) => ({
+          ...initialState,
+          ...data,
+          name: displayName,
+          shopName: displayShopName,
+          email: displayEmail,
+          phone: getSellerPhone(data) || prev.phone,
+          fssaiExpiry: fssaiExpiryVal ? convertYYYYMMDDToDDMMYY(fssaiExpiryVal) : "",
+          shopLicenseExpiry: shopLicenseExpiryVal ? convertYYYYMMDDToDDMMYY(shopLicenseExpiryVal) : "",
+        }));
         setHoursDraft(parseOpeningHours(data?.shopInfo?.openingHours || data?.openingHours || ""));
       } catch (error) {
         if (error?.response?.status !== 401) {
@@ -170,6 +266,37 @@ export default function SellerOnboarding() {
 
     loadZones();
   }, []);
+
+  useEffect(() => {
+    if (!form.lat || !form.lng || zonesLoading || zones.length === 0) return;
+    const matching = findMatchingZone(form.lat, form.lng, zones);
+    if (matching) {
+      const matchId = String(matching._id || matching.id || "");
+      const matchSource = String(matching.source || "");
+      if (form.zoneId !== matchId || form.zoneSource !== matchSource) {
+        setForm((prev) => ({
+          ...prev,
+          zoneId: matchId,
+          zoneSource: matchSource,
+        }));
+      }
+    } else {
+      if (form.zoneId || form.zoneSource) {
+        setForm((prev) => ({
+          ...prev,
+          zoneId: "",
+          zoneSource: "",
+        }));
+      }
+    }
+  }, [form.lat, form.lng, zones, zonesLoading]);
+
+
+  const isLocationOutsideZones = useMemo(() => {
+    if (!form.lat || !form.lng || zonesLoading || zones.length === 0) return false;
+    const matching = findMatchingZone(form.lat, form.lng, zones);
+    return !matching;
+  }, [form.lat, form.lng, zones, zonesLoading]);
 
   const completionText = useMemo(() => {
     const fields = [
@@ -285,14 +412,28 @@ export default function SellerOnboarding() {
       return;
     }
 
-    if (form.gstNumber && !/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(form.gstNumber)) {
-      toast.error("Invalid GST format. Must be 15 characters (e.g. 22ABCDE1234F1Z5)");
-      return;
+    if (form.gstRegistered) {
+      if (!form.gstNumber || !form.gstLegalName) {
+        toast.error("GST number and GST legal name are required when GST registered is checked");
+        return;
+      }
+      if (!/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(form.gstNumber)) {
+        toast.error("Invalid GST format. Must be 15 characters (e.g. 22ABCDE1234F1Z5)");
+        return;
+      }
     }
 
-    if (form.fssaiExpiry && form.fssaiExpiry < new Date().toISOString().split("T")[0]) {
-      toast.error("FSSAI expiry date cannot be a past date");
-      return;
+    if (form.fssaiExpiry) {
+      const fssaiExpiryYMD = convertDDMMYYToYYYYMMDD(form.fssaiExpiry);
+      const today = new Date().toISOString().split("T")[0];
+      if (!fssaiExpiryYMD || fssaiExpiryYMD.length !== 10) {
+        toast.error("FSSAI expiry date must be in DD/MM/YY or DD/MM/YYYY format");
+        return;
+      }
+      if (fssaiExpiryYMD < today) {
+        toast.error("FSSAI expiry date cannot be a past date");
+        return;
+      }
     }
 
     if (form.shopLicenseNumber && !/^[A-Za-z0-9\/\-]{5,20}$/.test(form.shopLicenseNumber)) {
@@ -300,9 +441,17 @@ export default function SellerOnboarding() {
       return;
     }
 
-    if (form.shopLicenseExpiry && form.shopLicenseExpiry < new Date().toISOString().split("T")[0]) {
-      toast.error("Shop license expiry date cannot be a past date");
-      return;
+    if (form.shopLicenseExpiry) {
+      const shopLicenseExpiryYMD = convertDDMMYYToYYYYMMDD(form.shopLicenseExpiry);
+      const today = new Date().toISOString().split("T")[0];
+      if (!shopLicenseExpiryYMD || shopLicenseExpiryYMD.length !== 10) {
+        toast.error("Shop license expiry date must be in DD/MM/YY or DD/MM/YYYY format");
+        return;
+      }
+      if (shopLicenseExpiryYMD < today) {
+        toast.error("Shop license expiry date cannot be a past date");
+        return;
+      }
     }
 
     if (form.accountNumber && !/^\d{6,20}$/.test(form.accountNumber)) {
@@ -331,6 +480,8 @@ export default function SellerOnboarding() {
       const nextForm = {
         ...form,
         zoneName: selectedZone?.label || "",
+        fssaiExpiry: convertDDMMYYToYYYYMMDD(form.fssaiExpiry),
+        shopLicenseExpiry: convertDDMMYYToYYYYMMDD(form.shopLicenseExpiry),
       };
       Object.entries(nextForm).forEach(([key, value]) => {
         payload.append(
@@ -364,19 +515,25 @@ export default function SellerOnboarding() {
   }
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(251,191,36,0.18),_transparent_28%),linear-gradient(180deg,#f8fafc_0%,#fffaf2_100%)] px-4 py-8 font-['Outfit'] md:px-8">
+    <div className="relative min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(251,191,36,0.18),_transparent_28%),linear-gradient(180deg,#f8fafc_0%,#fffaf2_100%)] px-4 py-6 font-['Outfit'] sm:py-8 md:px-8">
+      <button
+        type="button"
+        onClick={logout}
+        className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:bg-slate-50 hover:text-slate-800 md:right-8 md:top-8"
+        title="Exit and logout"
+      >
+        <X className="h-5 w-5" />
+      </button>
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-8 lg:grid-cols-[1.05fr_1.4fr]">
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="rounded-[34px] bg-[linear-gradient(160deg,#0f172a_0%,#0f766e_55%,#f59e0b_130%)] p-8 text-white shadow-[0_35px_90px_rgba(15,23,42,0.22)]"
+          <div
+            className="rounded-[28px] sm:rounded-[34px] bg-[linear-gradient(160deg,#0f172a_0%,#0f766e_55%,#f59e0b_130%)] p-6 sm:p-8 text-white shadow-[0_35px_90px_rgba(15,23,42,0.22)] animate-in fade-in slide-in-from-bottom-4 duration-500"
           >
             <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[11px] font-black uppercase tracking-[0.3em]">
               <ShieldCheck className="h-4 w-4" />
               Seller Onboarding
             </div>
-            <h1 className="mt-8 text-4xl font-black leading-tight">
+            <h1 className="mt-8 text-3xl sm:text-4xl font-black leading-tight">
               Set up your store once and send it straight for approval.
             </h1>
             <p className="mt-4 max-w-lg text-sm font-medium leading-7 text-white/78">
@@ -404,7 +561,7 @@ export default function SellerOnboarding() {
               ].map((item) => (
                 <div
                   key={item.title}
-                  className="rounded-3xl border border-white/12 bg-white/10 p-5 backdrop-blur-sm"
+                  className="rounded-3xl border border-white/12 bg-white/10 p-4 sm:p-5 backdrop-blur-sm"
                 >
                   <div className="flex items-start gap-4">
                     <div className="rounded-2xl bg-white/12 p-3">
@@ -421,7 +578,7 @@ export default function SellerOnboarding() {
               ))}
             </div>
 
-            <div className="mt-8 rounded-3xl border border-white/12 bg-white/10 p-5">
+            <div className="mt-8 rounded-3xl border border-white/12 bg-white/10 p-4 sm:p-5">
               <p className="text-[11px] font-black uppercase tracking-[0.28em] text-white/60">
                 Progress Signal
               </p>
@@ -431,13 +588,11 @@ export default function SellerOnboarding() {
                 request inside quick-commerce.
               </p>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.form
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
+          <form
             onSubmit={handleSubmit}
-            className="space-y-6 rounded-[34px] border border-white/70 bg-white/90 p-6 shadow-[0_35px_90px_rgba(15,23,42,0.08)] backdrop-blur xl:p-8"
+            className="space-y-6 rounded-[28px] sm:rounded-[34px] border border-white/70 bg-white/90 p-4 sm:p-6 shadow-[0_35px_90px_rgba(15,23,42,0.08)] backdrop-blur xl:p-8 animate-in fade-in slide-in-from-bottom-4 duration-500"
           >
             <section className="space-y-5">
               <div className="flex items-center gap-3">
@@ -504,36 +659,7 @@ export default function SellerOnboarding() {
                     <p className="text-xs font-semibold text-red-500 px-1">Alternate number cannot be same as primary number</p>
                   )}
                 </div>
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs font-bold text-slate-500">Service zone <span className="text-red-500">*</span></label>
-                <select
-                  required
-                  className="rounded-2xl border border-slate-200 px-4 py-3 font-semibold outline-none focus:border-slate-900"
-                  value={`${form.zoneSource}:${form.zoneId}`}
-                  onChange={(e) => {
-                    const [zoneSource, zoneId] = e.target.value.split(":");
-                    setForm((prev) => ({
-                      ...prev,
-                      zoneSource: zoneSource || "",
-                      zoneId: zoneId || "",
-                    }));
-                  }}
-                  disabled={zonesLoading}
-                >
-                  <option value=":">
-                    {zonesLoading ? "Loading zones..." : "Select a service zone"}
-                  </option>
-                  {zones.map((zone) => {
-                    const zoneId = String(zone?._id || zone?.id || "");
-                    const zoneSource = String(zone?.source || "");
-                    return (
-                      <option key={`${zoneSource}-${zoneId}`} value={`${zoneSource}:${zoneId}`}>
-                        {zone.label}
-                      </option>
-                    );
-                  })}
-                </select>
-                </div>
+
                 <div className="flex flex-col gap-1 md:col-span-2">
                   <label className="text-xs font-bold text-slate-500">Support email <span className="text-red-500">*</span></label>
                   <input
@@ -548,21 +674,14 @@ export default function SellerOnboarding() {
                     <p className="text-xs font-semibold text-red-500 px-1">Enter a valid email address (e.g. support@example.com)</p>
                   )}
                 </div>
-                {selectedZone ? (
-                  <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 md:col-span-2">
-                    <p className="text-[11px] font-black uppercase tracking-[0.18em] text-emerald-600">Selected zone</p>
-                    <p className="mt-1 text-sm font-semibold text-emerald-900">
-                      {selectedZone.label}
-                    </p>
-                  </div>
-                ) : null}
+
                 <div className="rounded-[24px] border border-slate-200 bg-slate-50/70 p-4 md:col-span-2">
-                  <div className="mb-3 flex items-center justify-between gap-3">
+                  <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                       <p className="text-sm font-black text-slate-900">Opening hours</p>
                       <p className="text-xs font-medium text-slate-500">Select your daily opening and closing time.</p>
                     </div>
-                    <span className="rounded-full bg-white px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                    <span className="self-start sm:self-auto rounded-full bg-white px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
                       {openingHoursPreview}
                     </span>
                   </div>
@@ -648,11 +767,58 @@ export default function SellerOnboarding() {
                       <p className="mt-1 font-semibold text-slate-700">{(form.lng !== null && form.lng !== "") ? form.lng : "Not selected"}</p>
                     </div>
                   </div>
+                  {isLocationOutsideZones && (
+                    <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 p-4">
+                      <p className="text-[11px] font-black uppercase tracking-[0.18em] text-red-600">Location Warning</p>
+                      <p className="mt-1 text-xs font-semibold text-red-700">
+                        Selected storefront location does not lie inside any active service zones. Please pick a location inside your desired service zone.
+                      </p>
+                    </div>
+                  )}
                 </div>
+
+                <div className="flex flex-col gap-1 md:col-span-2">
+                  <label className="text-xs font-bold text-slate-500">Service zone <span className="text-red-500">*</span></label>
+                  <select
+                    required
+                    className="rounded-2xl border border-slate-200 px-4 py-3 font-semibold outline-none focus:border-slate-900"
+                    value={`${form.zoneSource}:${form.zoneId}`}
+                    onChange={(e) => {
+                      const [zoneSource, zoneId] = e.target.value.split(":");
+                      setForm((prev) => ({
+                        ...prev,
+                        zoneSource: zoneSource || "",
+                        zoneId: zoneId || "",
+                      }));
+                    }}
+                    disabled={zonesLoading}
+                  >
+                    <option value=":">
+                      {zonesLoading ? "Loading zones..." : "Select a service zone"}
+                    </option>
+                    {zones.map((zone) => {
+                      const zoneId = String(zone?._id || zone?.id || "");
+                      const zoneSource = String(zone?.source || "");
+                      return (
+                        <option key={`${zoneSource}-${zoneId}`} value={`${zoneSource}:${zoneId}`}>
+                          {zone.label}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+                {selectedZone && (
+                  <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 md:col-span-2 animate-in fade-in duration-300">
+                    <p className="text-[11px] font-black uppercase tracking-[0.18em] text-emerald-600">Selected zone</p>
+                    <p className="mt-1 text-sm font-semibold text-emerald-900">
+                      {selectedZone.label}
+                    </p>
+                  </div>
+                )}
               </div>
             </section>
 
-            <section className="space-y-5 rounded-[28px] bg-slate-50/80 p-5">
+            <section className="space-y-5 rounded-[28px] bg-slate-50/80 p-4 sm:p-5">
               <h2 className="text-lg font-black text-slate-900">
                 Banking and UPI
               </h2>
@@ -728,8 +894,10 @@ export default function SellerOnboarding() {
                 <div className="flex flex-col gap-1 md:col-span-2">
                   <label className="text-xs font-bold text-slate-500">UPI QR image <span className="text-red-500">*</span></label>
                   <label className="flex cursor-pointer items-center justify-between rounded-2xl border border-dashed border-slate-300 bg-white px-4 py-3 text-sm font-bold text-slate-700">
-                    <span>{qrFile?.name || "Upload UPI QR image"}</span>
-                    <span className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] text-white">
+                    <span className="truncate max-w-[150px] sm:max-w-xs" title={qrFile?.name || "Upload UPI QR image"}>
+                      {qrFile?.name || "Upload UPI QR image"}
+                    </span>
+                    <span className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] text-white shrink-0">
                       <Upload className="h-3.5 w-3.5" />
                       Choose
                     </span>
@@ -759,26 +927,37 @@ export default function SellerOnboarding() {
                   )}
                 </div>
                 <label className="flex items-center gap-3 rounded-2xl border border-slate-200 px-4 py-3 font-semibold text-slate-700">
-                  <input type="checkbox" checked={form.gstRegistered} onChange={(e) => updateField("gstRegistered", e.target.checked)} />
+                  <input
+                    type="checkbox"
+                    checked={form.gstRegistered}
+                    onChange={(e) => {
+                      const checked = e.target.checked;
+                      setForm((prev) => ({
+                        ...prev,
+                        gstRegistered: checked,
+                        ...(!checked ? { gstNumber: "", gstLegalName: "" } : {}),
+                      }));
+                    }}
+                  />
                   GST registered
                 </label>
                 <div className="flex flex-col gap-1">
-                  <label className="text-xs font-bold text-slate-500">GST number <span className="text-red-500">*</span></label>
+                  <label className="text-xs font-bold text-slate-500">GST number {form.gstRegistered && <span className="text-red-500">*</span>}</label>
                   <input
-                    required
-                    className={`rounded-2xl border px-4 py-3 font-semibold uppercase outline-none focus:border-slate-900 ${form.gstNumber && !/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(form.gstNumber) ? "border-red-400 bg-red-50" : "border-slate-200"}`}
+                    required={form.gstRegistered}
+                    className={`rounded-2xl border px-4 py-3 font-semibold uppercase outline-none focus:border-slate-900 ${form.gstRegistered && form.gstNumber && !/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(form.gstNumber) ? "border-red-400 bg-red-50" : "border-slate-200"}`}
                     placeholder="GST number (e.g. 22ABCDE1234F1Z5)"
                     value={form.gstNumber}
                     maxLength={15}
                     onChange={(e) => updateField("gstNumber", e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 15))}
                   />
-                  {form.gstNumber && !/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(form.gstNumber) && (
+                  {form.gstRegistered && form.gstNumber && !/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(form.gstNumber) && (
                     <p className="text-xs font-semibold text-red-500 px-1">Invalid GST format. Must be 15 chars: 2 digits + PAN (10) + entity + Z + check (e.g. 22ABCDE1234F1Z5)</p>
                   )}
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label className="text-xs font-bold text-slate-500">GST legal name <span className="text-red-500">*</span></label>
-                  <input required className="rounded-2xl border border-slate-200 px-4 py-3 font-semibold outline-none focus:border-slate-900" placeholder="GST legal name" value={form.gstLegalName} onChange={(e) => updateField("gstLegalName", e.target.value.replace(/[^a-zA-Z\s]/g, ""))} />
+                  <label className="text-xs font-bold text-slate-500">GST legal name {form.gstRegistered && <span className="text-red-500">*</span>}</label>
+                  <input required={form.gstRegistered} className="rounded-2xl border border-slate-200 px-4 py-3 font-semibold outline-none focus:border-slate-900" placeholder="GST legal name" value={form.gstLegalName} onChange={(e) => updateField("gstLegalName", e.target.value.replace(/[^a-zA-Z\s]/g, ""))} />
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-bold text-slate-500">FSSAI number <span className="text-red-500">*</span></label>
@@ -796,15 +975,31 @@ export default function SellerOnboarding() {
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-bold text-slate-500">FSSAI expiry date <span className="text-red-500">*</span></label>
-                  <input
-                    required
-                    className={`rounded-2xl border px-4 py-3 font-semibold outline-none focus:border-slate-900 ${form.fssaiExpiry && form.fssaiExpiry < new Date().toISOString().split("T")[0] ? "border-red-400 bg-red-50" : "border-slate-200"}`}
-                    type="date"
-                    value={form.fssaiExpiry}
-                    min={new Date().toISOString().split("T")[0]}
-                    onChange={(e) => updateField("fssaiExpiry", e.target.value)}
-                  />
-                  {form.fssaiExpiry && form.fssaiExpiry < new Date().toISOString().split("T")[0] && (
+                  <div className="relative">
+                    <input
+                      required
+                      className={`w-full rounded-2xl border pl-4 pr-11 py-3 font-semibold outline-none focus:border-slate-900 ${form.fssaiExpiry && isPastDate(form.fssaiExpiry) ? "border-red-400 bg-red-50" : "border-slate-200"}`}
+                      type="text"
+                      placeholder="DD/MM/YY"
+                      value={form.fssaiExpiry}
+                      maxLength={10}
+                      onChange={(e) => updateField("fssaiExpiry", formatToDDMMYY(e.target.value))}
+                    />
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-6 h-6">
+                      <Calendar className="w-5 h-5 text-slate-400 pointer-events-none" />
+                      <input
+                        type="date"
+                        min={new Date().toISOString().split("T")[0]}
+                        className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                        onChange={(e) => {
+                          if (e.target.value) {
+                            updateField("fssaiExpiry", convertYYYYMMDDToDDMMYY(e.target.value));
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                  {form.fssaiExpiry && isPastDate(form.fssaiExpiry) && (
                     <p className="text-xs font-semibold text-red-500 px-1">FSSAI expiry date cannot be a past date</p>
                   )}
                 </div>
@@ -824,23 +1019,41 @@ export default function SellerOnboarding() {
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-bold text-slate-500">Shop license expiry date <span className="text-red-500">*</span></label>
-                  <input
-                    required
-                    className={`rounded-2xl border px-4 py-3 font-semibold outline-none focus:border-slate-900 ${form.shopLicenseExpiry && form.shopLicenseExpiry < new Date().toISOString().split("T")[0] ? "border-red-400 bg-red-50" : "border-slate-200"}`}
-                    type="date"
-                    value={form.shopLicenseExpiry}
-                    min={new Date().toISOString().split("T")[0]}
-                    onChange={(e) => updateField("shopLicenseExpiry", e.target.value)}
-                  />
-                  {form.shopLicenseExpiry && form.shopLicenseExpiry < new Date().toISOString().split("T")[0] && (
+                  <div className="relative">
+                    <input
+                      required
+                      className={`w-full rounded-2xl border pl-4 pr-11 py-3 font-semibold outline-none focus:border-slate-900 ${form.shopLicenseExpiry && isPastDate(form.shopLicenseExpiry) ? "border-red-400 bg-red-50" : "border-slate-200"}`}
+                      type="text"
+                      placeholder="DD/MM/YY"
+                      value={form.shopLicenseExpiry}
+                      maxLength={10}
+                      onChange={(e) => updateField("shopLicenseExpiry", formatToDDMMYY(e.target.value))}
+                    />
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-6 h-6">
+                      <Calendar className="w-5 h-5 text-slate-400 pointer-events-none" />
+                      <input
+                        type="date"
+                        min={new Date().toISOString().split("T")[0]}
+                        className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                        onChange={(e) => {
+                          if (e.target.value) {
+                            updateField("shopLicenseExpiry", convertYYYYMMDDToDDMMYY(e.target.value));
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                  {form.shopLicenseExpiry && isPastDate(form.shopLicenseExpiry) && (
                     <p className="text-xs font-semibold text-red-500 px-1">Shop license expiry date cannot be a past date</p>
                   )}
                 </div>
                 <div className="flex flex-col gap-1 md:col-span-2">
                   <label className="text-xs font-bold text-slate-500">Shop license image <span className="text-red-500">*</span></label>
                   <label className="flex cursor-pointer items-center justify-between rounded-2xl border border-dashed border-slate-300 bg-white px-4 py-3 text-sm font-bold text-slate-700">
-                    <span>{licenseFile?.name || "Upload shop license image"}</span>
-                    <span className="inline-flex items-center gap-2 rounded-full bg-amber-500 px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] text-white">
+                    <span className="truncate max-w-[150px] sm:max-w-xs" title={licenseFile?.name || "Upload shop license image"}>
+                      {licenseFile?.name || "Upload shop license image"}
+                    </span>
+                    <span className="inline-flex items-center gap-2 rounded-full bg-amber-500 px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] text-white shrink-0">
                       <Upload className="h-3.5 w-3.5" />
                       Choose
                     </span>
@@ -864,7 +1077,7 @@ export default function SellerOnboarding() {
                 {!isSubmitting && <ArrowRight className="h-4 w-4" />}
               </button>
             </div>
-          </motion.form>
+          </form>
         </div>
       </div>
 
