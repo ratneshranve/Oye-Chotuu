@@ -141,7 +141,7 @@ export default function RestaurantLogin() {
 
   return (
     <div
-      className="h-[100dvh] bg-[#fafafa] flex flex-col relative overflow-hidden font-sans"
+      className={`h-[100dvh] bg-[#fafafa] flex flex-col relative font-sans ${keyboardInset > 0 ? "overflow-y-auto overflow-x-hidden" : "overflow-hidden"}`}
       style={{ paddingBottom: keyboardInset ? `${keyboardInset + 24}px` : undefined }}
     >
       {/* Top Green Section */}

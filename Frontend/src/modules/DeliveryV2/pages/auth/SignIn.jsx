@@ -83,6 +83,17 @@ export default function DeliverySignIn() {
     }
   }, [])
 
+  useEffect(() => {
+    if (keyboardInset > 0) {
+      const activeElement = document.activeElement;
+      if (activeElement && (activeElement.tagName === "INPUT" || activeElement.tagName === "TEXTAREA")) {
+        setTimeout(() => {
+          activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 150);
+      }
+    }
+  }, [keyboardInset]);
+
   // Get selected country details dynamically
   const selectedCountry = countryCodes.find(c => c.code === formData.countryCode) || countryCodes[2] // Default to India (+91)
 
@@ -182,7 +193,7 @@ export default function DeliverySignIn() {
 
   return (
     <div
-      className="h-[100dvh] bg-[#fafafa] flex flex-col relative overflow-hidden font-sans"
+      className={`h-[100dvh] bg-[#fafafa] flex flex-col relative font-sans ${keyboardInset > 0 ? "overflow-y-auto overflow-x-hidden" : "overflow-hidden"}`}
       style={{ paddingBottom: keyboardInset ? `${keyboardInset + 24}px` : undefined }}
     >
       {/* Top Blue Section */}

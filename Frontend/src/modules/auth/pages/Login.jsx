@@ -27,6 +27,37 @@ export default function UnifiedOTPFastLogin() {
   const searchParams = new URLSearchParams(location.search)
   const referralCode = searchParams.get("ref") || ""
   const [logoUrl, setLogoUrl] = useState(() => getCachedSettings()?.logo?.url || null)
+  const [keyboardInset, setKeyboardInset] = useState(0)
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.visualViewport) return undefined
+
+    const updateKeyboardInset = () => {
+      const viewport = window.visualViewport
+      const inset = Math.max(0, window.innerHeight - viewport.height - viewport.offsetTop)
+      setKeyboardInset(inset > 0 ? inset : 0)
+    }
+
+    updateKeyboardInset()
+    window.visualViewport.addEventListener("resize", updateKeyboardInset)
+    window.visualViewport.addEventListener("scroll", updateKeyboardInset)
+
+    return () => {
+      window.visualViewport.removeEventListener("resize", updateKeyboardInset)
+      window.visualViewport.removeEventListener("scroll", updateKeyboardInset)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (keyboardInset > 0) {
+      const activeElement = document.activeElement
+      if (activeElement && (activeElement.tagName === "INPUT" || activeElement.tagName === "TEXTAREA")) {
+        setTimeout(() => {
+          activeElement.scrollIntoView({ behavior: "smooth", block: "center" })
+        }, 150)
+      }
+    }
+  }, [keyboardInset])
 
   const fromPath = location.state?.from?.pathname || location.state?.from || "/portal"
   const fromSearch = location.state?.from?.search || ""
@@ -285,7 +316,10 @@ export default function UnifiedOTPFastLogin() {
     (step === 2 && !showNameInput && otp.length !== 4)
 
   return (
-    <div className="h-[100dvh] bg-[#fafafa] flex flex-col relative overflow-hidden font-sans">
+    <div
+      className={`h-[100dvh] bg-[#fafafa] flex flex-col relative font-sans ${keyboardInset > 0 ? "overflow-y-auto overflow-x-hidden" : "overflow-hidden"}`}
+      style={{ paddingBottom: keyboardInset ? `${keyboardInset + 24}px` : undefined }}
+    >
       {/* Top Red Section */}
       <div className="w-full flex flex-col shrink-0 z-10 drop-shadow-md">
         <div className="w-full relative overflow-hidden bg-[#b81724] pb-4">

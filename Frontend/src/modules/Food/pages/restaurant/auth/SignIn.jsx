@@ -19,6 +19,37 @@ export default function RestaurantSignIn() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
   const companyName = useCompanyName()
+  const [keyboardInset, setKeyboardInset] = useState(0)
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.visualViewport) return undefined
+
+    const updateKeyboardInset = () => {
+      const viewport = window.visualViewport
+      const inset = Math.max(0, window.innerHeight - viewport.height - viewport.offsetTop)
+      setKeyboardInset(inset > 0 ? inset : 0)
+    }
+
+    updateKeyboardInset()
+    window.visualViewport.addEventListener("resize", updateKeyboardInset)
+    window.visualViewport.addEventListener("scroll", updateKeyboardInset)
+
+    return () => {
+      window.visualViewport.removeEventListener("resize", updateKeyboardInset)
+      window.visualViewport.removeEventListener("scroll", updateKeyboardInset)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (keyboardInset > 0) {
+      const activeElement = document.activeElement
+      if (activeElement && (activeElement.tagName === "INPUT" || activeElement.tagName === "TEXTAREA")) {
+        setTimeout(() => {
+          activeElement.scrollIntoView({ behavior: "smooth", block: "center" })
+        }, 150)
+      }
+    }
+  }, [keyboardInset])
 
   // Redirect to restaurant home if already authenticated
   useEffect(() => {
@@ -62,7 +93,10 @@ export default function RestaurantSignIn() {
   }
 
   return (
-    <div className="h-screen w-full flex bg-white overflow-hidden">
+    <div
+      className={`h-screen w-full flex bg-white ${keyboardInset > 0 ? "overflow-y-auto overflow-x-hidden" : "overflow-hidden"}`}
+      style={{ paddingBottom: keyboardInset ? `${keyboardInset}px` : undefined }}
+    >
       {/* Left image section */}
       <div className="hidden lg:flex lg:w-1/2 relative">
         <img

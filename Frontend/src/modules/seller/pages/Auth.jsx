@@ -55,6 +55,18 @@ export default function SellerAuth() {
       window.visualViewport.removeEventListener("scroll", updateKeyboardInset)
     }
   }, [])
+
+  useEffect(() => {
+    if (keyboardInset > 0) {
+      const activeElement = document.activeElement;
+      if (activeElement && (activeElement.tagName === "INPUT" || activeElement.tagName === "TEXTAREA")) {
+        setTimeout(() => {
+          activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 150);
+      }
+    }
+  }, [keyboardInset]);
+
   const nextSellerPath =
     typeof location.state?.from === "string" &&
     location.state.from.startsWith("/seller")
@@ -164,7 +176,7 @@ export default function SellerAuth() {
 
   return (
     <div
-      className="h-[100dvh] bg-[#fafafa] flex flex-col relative overflow-hidden font-sans"
+      className={`h-[100dvh] bg-[#fafafa] flex flex-col relative font-sans ${keyboardInset > 0 ? "overflow-y-auto overflow-x-hidden" : "overflow-hidden"}`}
       style={{ paddingBottom: keyboardInset ? `${keyboardInset + 24}px` : undefined }}
     >
       {/* Top Green Section */}
