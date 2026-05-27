@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
-import { ArrowLeft, ShieldCheck, Timer, RefreshCw } from "lucide-react"
+import { ArrowLeft, ShieldCheck, Timer, RefreshCw, Phone, ArrowRight, Loader2, ConciergeBell, Soup, Utensils, Home } from "lucide-react"
 import { Button } from "@food/components/ui/button"
 import { restaurantAPI } from "@food/api"
 import {
@@ -9,6 +9,9 @@ import {
 } from "@food/utils/auth"
 import { checkOnboardingStatus, isRestaurantOnboardingComplete } from "@food/utils/onboardingUtils"
 import { useCompanyName } from "@food/hooks/useCompanyName"
+import { motion } from "framer-motion"
+import zozomenLogo from "@/assets/zozomenLogo.png"
+import { loadBusinessSettings, getCachedSettings } from "@common/utils/businessSettings"
 
 const debugLog = (...args) => {}
 const debugWarn = (...args) => {}
@@ -28,6 +31,17 @@ export default function RestaurantOTP() {
   const inputRefs = useRef([])
   const hasSubmittedRef = useRef(false)
   const otpSectionRef = useRef(null)
+  const [logoUrl, setLogoUrl] = useState(() => getCachedSettings()?.logo?.url || null)
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const settings = await loadBusinessSettings()
+        if (settings?.logo?.url) setLogoUrl(settings.logo.url)
+      } catch (e) {}
+    }
+    fetchSettings()
+  }, [])
 
   useEffect(() => {
     const stored = sessionStorage.getItem("restaurantAuthData")
@@ -339,50 +353,123 @@ export default function RestaurantOTP() {
 
   return (
     <div
-      className={`h-[100dvh] bg-white flex flex-col font-sans ${keyboardOffset > 0 ? "overflow-y-auto overflow-x-hidden" : "overflow-hidden"}`}
+      className={`h-[100dvh] bg-[#fafafa] flex flex-col relative font-sans ${keyboardOffset > 0 ? "overflow-y-auto overflow-x-hidden" : "overflow-hidden"}`}
       style={keyboardOffset > 0 ? { paddingBottom: `${Math.min(keyboardOffset, 360)}px` } : undefined}
     >
-      {/* Curved Header Background */}
-      <div className="relative h-[240px] sm:h-[300px] w-full bg-[#49AB14] overflow-hidden">
-        {/* Abstract Circles like in the image */}
-        <div className="absolute -top-10 -left-10 w-48 h-48 rounded-full bg-white/10" />
-        <div className="absolute top-20 -right-10 w-64 h-64 rounded-full bg-white/10" />
-        <div className="absolute -bottom-20 left-1/2 -translate-x-1/2 w-80 h-80 rounded-full bg-white/5" />
-        
-        {/* The dominant curve */}
-        <div className="absolute bottom-0 w-full h-[100px] bg-white rounded-t-[100px] shadow-[0_-20px_40px_rgba(0,0,0,0.05)]" />
-        
-        {/* Back Button */}
-        <button
-          onClick={() => navigate("/food/restaurant/login")}
-          className="absolute top-10 sm:top-12 left-6 sm:left-8 p-2.5 sm:p-3 bg-white shadow-xl rounded-full text-[#49AB14] hover:scale-110 active:scale-95 transition-all"
-        >
-          <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
-        </button>
-      </div>
+      {/* Top Green Section */}
+      <div className="w-full flex flex-col shrink-0 z-10 drop-shadow-md">
+        <div className="w-full relative overflow-hidden bg-[#49AB14] pb-4">
+          {/* Back Button */}
+          <button
+            onClick={() => navigate("/food/restaurant/login")}
+            className="absolute top-6 left-6 p-2 bg-white/20 hover:bg-white/30 text-white rounded-full transition-all duration-200 z-20 backdrop-blur-md"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </button>
 
-      <div className="flex-1 flex flex-col items-center px-4 sm:px-8 -mt-12 sm:-mt-16 z-10 overflow-hidden">
-        {/* Central Logo / Branding */}
-        <div className="w-28 h-28 sm:w-32 sm:h-32 bg-white rounded-full shadow-xl flex items-center justify-center border-4 border-slate-50 mb-4 sm:mb-6 overflow-hidden">
-          <div className="text-center">
-             <div className="w-16 h-16 bg-[#49AB14] rounded-2xl mx-auto flex items-center justify-center transform rotate-12 shadow-lg mb-1">
-                <ShieldCheck className="w-8 h-8 text-white -rotate-12" />
-             </div>
+          {/* Abstract wavy background layers */}
+          <div className="absolute inset-0 z-0">
+             {/* Darker green gradient in the corners */}
+             <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-[#347d0d] via-transparent to-transparent opacity-80" />
+             <div className="absolute bottom-0 left-0 w-full h-full bg-gradient-to-tr from-[#347d0d] via-transparent to-transparent opacity-80" />
+             
+             {/* Dotted pattern top left */}
+             <div className="absolute -top-10 -left-10 w-40 h-40 opacity-10" style={{ backgroundImage: 'radial-gradient(circle, white 2px, transparent 2px)', backgroundSize: '12px 12px' }} />
+
+             {/* Curved shape top right */}
+             <div className="absolute -top-20 -right-10 w-64 h-64 bg-[#5ec427] rounded-full blur-2xl opacity-40" />
+             {/* Curved shape bottom left */}
+             <div className="absolute -bottom-10 -left-20 w-80 h-80 bg-[#5ec427] rounded-full blur-3xl opacity-40" />
+          </div>
+
+          {/* Background Icons */}
+          <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-20">
+            <motion.div
+              animate={{ y: [0, -10, 0], rotate: [-12, -8, -12] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute top-6 left-8"
+            >
+              <ConciergeBell className="w-16 h-16" strokeWidth={1} />
+            </motion.div>
+            <motion.div
+              animate={{ y: [0, 8, 0], rotate: [12, 16, 12] }}
+              transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+              className="absolute top-6 right-8"
+            >
+              <Soup className="w-12 h-12" strokeWidth={1} />
+            </motion.div>
+            <motion.div
+              animate={{ y: [0, -8, 0], rotate: [-12, -16, -12] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+              className="absolute bottom-10 left-8"
+            >
+              <Utensils className="w-12 h-12" strokeWidth={1} />
+            </motion.div>
+            <motion.div
+              animate={{ y: [0, 6, 0], rotate: [0, 4, 0] }}
+              transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+              className="absolute bottom-10 right-8"
+            >
+              <Home className="w-12 h-12" strokeWidth={1} />
+            </motion.div>
+          </div>
+
+          <div className="relative z-10 flex flex-col items-center pt-8 pb-10 px-6 text-center text-white">
+            <motion.div
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              className="w-24 h-24 md:w-28 md:h-28 bg-white rounded-full flex items-center justify-center mb-3 shadow-2xl overflow-hidden border-[2px] border-[#49AB14] ring-[4px] ring-white"
+            >
+              <img src={logoUrl || zozomenLogo} alt="Logo" className="w-full h-full object-cover rounded-full" />
+            </motion.div>
+            
+            <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-2 uppercase">
+              {companyName}
+            </h1>
+            <div className="flex items-center gap-2 justify-center">
+               <div className="h-[1px] w-6 md:w-8 bg-white/70" />
+               <p className="text-[12px] md:text-[14px] font-bold tracking-[0.1em] uppercase whitespace-nowrap">
+                 Restaurant Partner Portal
+               </p>
+               <div className="h-[1px] w-6 md:w-8 bg-white/70" />
+            </div>
+            <div className="h-1 w-8 bg-white rounded-full mt-2" />
           </div>
         </div>
 
-        <div className="text-center space-y-1.5 sm:space-y-2 mb-6 sm:mb-10">
-          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight lowercase">
-            verify otp
-          </h2>
-          <p className="text-slate-400 text-xs font-bold uppercase tracking-widest leading-relaxed">
-            Sent to <span className="text-[#49AB14] font-black">{contactInfo}</span>
-          </p>
+        {/* Wave SVG directly below the green section */}
+        <div className="w-full overflow-hidden leading-[0] -mt-0.5">
+          <svg viewBox="0 0 1440 100" preserveAspectRatio="none" className="w-full h-[40px] md:h-[60px] block">
+            <path d="M0,0 L1440,0 L1440,40 C1200,10 960,10 720,40 C480,80 240,80 0,40 Z" fill="#49AB14" />
+          </svg>
         </div>
+      </div>
 
-        <div className="w-full max-w-[400px] flex-1 flex flex-col justify-between animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="flex-1 max-w-[420px] mx-auto w-full px-4 flex flex-col mt-16 md:mt-20 relative z-20 pb-4 h-full">
+        {/* Main Card */}
+        <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-gray-100 shrink-0 mb-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="text-center mb-5">
+            <div className="flex items-center justify-center gap-3 mb-1.5">
+               <div className="relative w-5 h-5">
+                 <div className="absolute top-1 right-0 w-2.5 h-0.5 bg-[#49AB14] transform rotate-45" />
+                 <div className="absolute top-2.5 right-0 w-3 h-0.5 bg-[#49AB14]" />
+                 <div className="absolute top-4 right-0 w-2.5 h-0.5 bg-[#49AB14] transform -rotate-45" />
+               </div>
+               <h2 className="text-2xl font-black text-[#1c1c1c]">Verify OTP</h2>
+               <div className="relative w-5 h-5">
+                 <div className="absolute top-1 left-0 w-2.5 h-0.5 bg-[#49AB14] transform -rotate-45" />
+                 <div className="absolute top-2.5 left-0 w-3 h-0.5 bg-[#49AB14]" />
+                 <div className="absolute top-4 left-0 w-2.5 h-0.5 bg-[#49AB14] transform rotate-45" />
+               </div>
+            </div>
+            <p className="text-sm text-gray-500 font-medium">
+              Sent to <span className="text-[#49AB14] font-bold">{contactInfo}</span>
+            </p>
+            <div className="h-1 w-8 bg-[#49AB14] mx-auto mt-2 rounded-full" />
+          </div>
+
           <div className="space-y-6">
-            <div ref={otpSectionRef} className="flex justify-center gap-4">
+            <div ref={otpSectionRef} className="flex justify-center gap-3">
               {otp.map((digit, index) => (
                 <input
                   key={index}
@@ -397,50 +484,57 @@ export default function RestaurantOTP() {
                   onFocus={() => setFocusedIndex(index)}
                   onBlur={() => setFocusedIndex(null)}
                   disabled={isLoading}
-                  className={`w-12 h-14 sm:w-14 sm:h-16 bg-slate-50 border-2 rounded-2xl text-center text-2xl font-black text-slate-900 focus:outline-none transition-all duration-300 ${
+                  className={`w-12 h-14 sm:w-14 sm:h-16 bg-slate-50 border-2 rounded-2xl text-center text-2xl font-bold text-slate-900 focus:outline-none transition-all duration-300 ${
                     error 
                       ? "border-red-500 bg-red-50" 
                       : focusedIndex === index 
-                        ? "border-[#49AB14] ring-4 ring-[#49AB14]/10 shadow-lg bg-white" 
-                        : "border-slate-100"
+                        ? "border-[#49AB14] ring-1 ring-[#49AB14] shadow-md bg-white" 
+                        : "border-gray-200"
                   }`}
                 />
               ))}
             </div>
 
             {error && (
-              <p className="text-[#49AB14] text-xs font-bold text-center italic animate-pulse">
+              <p className="text-[10px] font-semibold text-red-500 text-center px-1 animate-pulse">
                 {error}
               </p>
             )}
 
-            <div className="space-y-3">
+            <div className="space-y-4">
               <Button
                 onClick={() => handleVerify()}
                 disabled={isLoading || !isOtpComplete}
-                className={`w-full h-14 sm:h-16 rounded-[32px] font-black text-base sm:text-lg tracking-widest uppercase shadow-lg transition-all duration-300 ${
+                className={`w-full py-3 rounded-xl font-bold text-base transition-all flex items-center justify-center gap-2 ${
                   isOtpComplete && !isLoading
-                    ? "bg-[#49AB14] hover:bg-[#3d8f11] text-white shadow-[#49AB14]/20 transform active:scale-[0.98]"
-                    : "bg-slate-100 text-slate-300 cursor-not-allowed"
+                    ? "bg-[#49AB14] hover:bg-[#3d8f11] text-white shadow-lg shadow-[#49AB14]/30 active:scale-[0.98]"
+                    : "bg-gray-100 cursor-not-allowed opacity-50 text-gray-400 shadow-none"
                 }`}
               >
-                {isLoading ? "Verifying..." : "Verify Code"}
+                {isLoading ? (
+                  <Loader2 className="w-5 h-5 animate-spin mx-auto text-gray-400" />
+                ) : (
+                  <>
+                    Verify & Continue
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
               </Button>
 
-              <div className="flex flex-col items-center gap-4">
+              <div className="flex flex-col items-center gap-4 pt-1">
                 {resendTimer > 0 ? (
-                  <div className="flex items-center gap-2 text-slate-400 text-xs font-black tracking-widest uppercase">
+                  <div className="flex items-center gap-2 text-slate-400 text-xs font-semibold tracking-wider uppercase">
                     <Timer className="w-4 h-4 text-[#49AB14]" />
-                    RESEND IN <span className="text-[#49AB14]">{resendTimer}S</span>
+                    Resend in <span className="font-bold text-gray-900">{resendTimer}s</span>
                   </div>
                 ) : (
                   <button
                     onClick={handleResend}
                     disabled={isLoading}
-                    className="flex items-center gap-2 text-[#49AB14] font-black text-xs tracking-widest uppercase hover:underline"
+                    className="flex items-center gap-2 text-[#49AB14] font-bold text-xs tracking-wider uppercase hover:underline"
                   >
                     <RefreshCw className="w-4 h-4" />
-                    RESEND CODE
+                    Resend Code
                   </button>
                 )}
               </div>
@@ -449,7 +543,7 @@ export default function RestaurantOTP() {
         </div>
       </div>
 
-      <div className="py-3 text-center">
+      <div className="pb-8 text-center mt-auto">
           <p className="text-[10px] font-black text-slate-300 tracking-[0.2em] uppercase">
             SECURE VERIFICATION SYSTEM &bull; {companyName.toUpperCase()}
           </p>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react"
 import { motion } from "framer-motion"
 import { Routes, Route, Navigate, Link, useLocation, useNavigate } from "react-router-dom"
-import { Phone, Lock, ArrowRight, ShieldCheck, Loader2, UserRound } from "lucide-react"
+import { Phone, Lock, ArrowRight, ShieldCheck, Loader2, UserRound, ChevronDown, Zap, HeadphonesIcon, Utensils, Home, Coffee, ConciergeBell, Soup } from "lucide-react"
 import { toast } from "sonner"
 import { authAPI, userAPI } from "@food/api"
 import { isModuleAuthenticated, setAuthData } from "@food/utils/auth"
@@ -54,14 +54,14 @@ export default function UnifiedOTPFastLogin() {
   }, [])
 
   const normalizedPhone = () => {
-    const digits = String(phoneNumber).replace(/\D/g, "").slice(-15)
-    return digits.length >= 8 ? digits : ""
+    const digits = String(phoneNumber).replace(/\D/g, "").slice(-10)
+    return digits.length === 10 ? digits : ""
   }
 
   const handleSendOTP = async (e) => {
     e.preventDefault()
     const phone = normalizedPhone()
-    if (phoneNumber.length !== 10) {
+    if (phone.length !== 10) {
       toast.error("Please enter a valid 10-digit phone number")
       return
     }
@@ -87,7 +87,7 @@ export default function UnifiedOTPFastLogin() {
 
   const handleResendOTP = async () => {
     const phone = normalizedPhone()
-    if (phoneNumber.length !== 10) {
+    if (phone.length !== 10) {
       toast.error("Please enter a valid 10-digit phone number")
       return
     }
@@ -278,232 +278,303 @@ export default function UnifiedOTPFastLogin() {
     return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`
   }
 
-  // Service images (served from public folder)
-  const foodIcon = "/super-app/food.png"
-
-  const groceryIcon = "/super-app/grocery.png"
-
-
-  const services = [
-    { id: 'food', name: 'Food Delivery', icon: foodIcon, label: 'Zomato', color: 'bg-red-500', shadow: 'shadow-red-200' },
-
-    { id: 'grocery', name: 'Quick Commerce', icon: groceryIcon, label: 'Blinkit', color: 'bg-green-500', shadow: 'shadow-green-200' },
-
-  ]
+  const isSubmitDisabled =
+    loading ||
+    (step === 1 && !showNameInput && phoneNumber.length !== 10) ||
+    (showNameInput && name.trim().length === 0) ||
+    (step === 2 && !showNameInput && otp.length !== 4)
 
   return (
-    <div className="min-h-screen bg-white dark:bg-[#0a0a0a] flex flex-col pt-0 sm:pt-0">
-      {/* Top Banner section - Zomato Red */}
-      <div className="w-full bg-[#CB202D] dark:bg-[#b01c27] rounded-b-[2.5rem] p-6 text-center text-white relative overflow-hidden shadow-2xl">
-        <div className="absolute inset-0 bg-white/5 opacity-50 blur-3xl rounded-full -top-1/2 -left-1/4 animate-pulse" />
-        <div className="absolute right-0 bottom-0 w-32 h-32 md:w-48 md:h-48 opacity-10 pointer-events-none">
-          <svg viewBox="0 0 200 200" fill="currentColor">
-            <path d="M100 0C44.8 0 0 44.8 0 100s44.8 100 100 100 100-44.8 100-100S155.2 0 100 0zm0 180c-44.1 0-80-35.9-80-80s35.9-80 80-80 80 35.9 80 80-35.9 80-80 80z" />
-          </svg>
+    <div className="h-[100dvh] bg-[#fafafa] flex flex-col relative overflow-hidden font-sans">
+      {/* Top Red Section */}
+      <div className="w-full flex flex-col shrink-0 z-10 drop-shadow-md">
+        <div className="w-full relative overflow-hidden bg-[#b81724] pb-4">
+          {/* Abstract wavy background layers to match the image */}
+          <div className="absolute inset-0 z-0">
+             {/* Darker red gradient in the corners */}
+             <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-[#99111c] via-transparent to-transparent opacity-80" />
+             <div className="absolute bottom-0 left-0 w-full h-full bg-gradient-to-tr from-[#99111c] via-transparent to-transparent opacity-80" />
+             
+             {/* Dotted pattern top left */}
+             <div className="absolute -top-10 -left-10 w-40 h-40 opacity-10" style={{ backgroundImage: 'radial-gradient(circle, white 2px, transparent 2px)', backgroundSize: '12px 12px' }} />
+
+             {/* Curved shape top right */}
+             <div className="absolute -top-20 -right-10 w-64 h-64 bg-[#d41c2c] rounded-full blur-2xl opacity-40" />
+             {/* Curved shape bottom left */}
+             <div className="absolute -bottom-10 -left-20 w-80 h-80 bg-[#d41c2c] rounded-full blur-3xl opacity-40" />
+          </div>
+
+          {/* Background Icons */}
+          <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-20">
+            <motion.div
+              animate={{ y: [0, -10, 0], rotate: [-12, -8, -12] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute top-6 left-8"
+            >
+              <ConciergeBell className="w-16 h-16" strokeWidth={1} />
+            </motion.div>
+            <motion.div
+              animate={{ y: [0, 8, 0], rotate: [12, 16, 12] }}
+              transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+              className="absolute top-6 right-8"
+            >
+              <Soup className="w-12 h-12" strokeWidth={1} />
+            </motion.div>
+            <motion.div
+              animate={{ y: [0, -8, 0], rotate: [-12, -16, -12] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+              className="absolute bottom-10 left-8"
+            >
+              <Utensils className="w-12 h-12" strokeWidth={1} />
+            </motion.div>
+            <motion.div
+              animate={{ y: [0, 6, 0], rotate: [0, 4, 0] }}
+              transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+              className="absolute bottom-10 right-8"
+            >
+              <Home className="w-12 h-12" strokeWidth={1} />
+            </motion.div>
+          </div>
+
+          <div className="relative z-10 flex flex-col items-center pt-8 pb-10 px-6 text-center text-white">
+            {/* Logo */}
+            <motion.div
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              className="w-24 h-24 md:w-28 md:h-28 bg-white rounded-full flex items-center justify-center mb-3 shadow-2xl overflow-hidden border-[2px] border-[#CB202D] ring-[4px] ring-white"
+            >
+              <img src={logoUrl || zozomenLogo} alt="Logo" className="w-full h-full object-cover rounded-full" />
+            </motion.div>
+            
+            <motion.h1
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-2xl md:text-3xl font-bold tracking-tight mb-2"
+            >
+              OyeChotuu
+            </motion.h1>
+            <div className="flex items-center gap-2 justify-center">
+               <div className="h-[1px] w-6 md:w-8 bg-white/70" />
+               <p className="text-[14px] sm:text-[16px] md:text-[18px] font-bold tracking-[0.1em] uppercase whitespace-nowrap">
+                 Har Ghar Ka Chota Saathi
+               </p>
+               <div className="h-[1px] w-6 md:w-8 bg-white/70" />
+            </div>
+            <div className="h-1 w-8 bg-white rounded-full mt-2" />
+          </div>
         </div>
 
-        <div className="relative z-10 flex flex-col items-center">
-          <motion.div
-            initial={{ scale: 0.8 }}
-            animate={{ scale: 1 }}
-            className="w-12 h-12 bg-white rounded-full flex items-center justify-center mb-3 shadow-xl overflow-hidden"
-          >
-            <img src={logoUrl || zozomenLogo} alt="Logo" className="w-full h-full object-cover" />
-          </motion.div>
-          <motion.h1
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-2xl md:text-5xl font-black tracking-tight mb-1"
-          >
-            OyeChotuu
-          </motion.h1>
-          <p className="text-xs md:text-base font-bold text-white/90 tracking-[0.2em] uppercase">
-            Har Ghar Ka Chota Saathi
-          </p>
+        {/* Wave SVG directly below the red section */}
+        <div className="w-full overflow-hidden leading-[0] -mt-0.5">
+          <svg viewBox="0 0 1440 100" preserveAspectRatio="none" className="w-full h-[40px] md:h-[60px] block">
+            <path d="M0,0 L1440,0 L1440,40 C1200,10 960,10 720,40 C480,80 240,80 0,40 Z" fill="#b81724" />
+          </svg>
         </div>
       </div>
 
-      <div className="flex-1 max-w-[480px] mx-auto w-full px-6 py-4 flex flex-col justify-center -mt-8 relative z-20">
+
+      <div className="flex-1 max-w-[420px] mx-auto w-full px-4 flex flex-col mt-16 md:mt-20 relative z-20 pb-4 h-full">
         {/* Main Card */}
-        <div className="bg-white dark:bg-[#1a1a1a] rounded-[2rem] p-6 sm:p-8 md:p-12 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.15)] dark:shadow-none border border-gray-50 dark:border-gray-800">
-          <div className="text-center mb-6 space-y-2">
-            <h2 className="text-2xl font-black text-gray-900 dark:text-white">Login or Signup</h2>
-            <div className="h-1 w-12 bg-[#CB202D] mx-auto rounded-full" />
+        <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-gray-100 shrink-0 mb-4">
+          <div className="text-center mb-5">
+            <div className="flex items-center justify-center gap-3 mb-1.5">
+               <div className="relative w-5 h-5">
+                 <div className="absolute top-1 right-0 w-2.5 h-0.5 bg-[#CB202D] transform rotate-45" />
+                 <div className="absolute top-2.5 right-0 w-3 h-0.5 bg-[#CB202D]" />
+                 <div className="absolute top-4 right-0 w-2.5 h-0.5 bg-[#CB202D] transform -rotate-45" />
+               </div>
+               <h2 className="text-2xl font-black text-[#1c1c1c]">Welcome!</h2>
+               <div className="relative w-5 h-5">
+                 <div className="absolute top-1 left-0 w-2.5 h-0.5 bg-[#CB202D] transform -rotate-45" />
+                 <div className="absolute top-2.5 left-0 w-3 h-0.5 bg-[#CB202D]" />
+                 <div className="absolute top-4 left-0 w-2.5 h-0.5 bg-[#CB202D] transform rotate-45" />
+               </div>
+            </div>
+            <p className="text-sm text-gray-500 font-medium">Login or Signup to continue</p>
+            <div className="h-1 w-8 bg-[#CB202D] mx-auto mt-2 rounded-full" />
           </div>
 
           <form onSubmit={showNameInput ? handleSubmitName : step === 1 ? handleSendOTP : handleVerifyOTP} className="space-y-5">
             {step === 1 ? (
-              <div className="space-y-6">
-                <div className="space-y-4">
-                  <div className="relative group">
-                    <div className="absolute inset-y-0 left-0 pl-1 flex items-center pointer-events-none">
-                      <Phone className="w-5 h-5 text-gray-400 group-focus-within:text-[#CB202D] transition-colors" />
-                    </div>
-                    <div className="absolute left-8 inset-y-0 flex items-center pointer-events-none">
-                      <span className="text-sm font-bold text-gray-900 dark:text-white border-r border-gray-200 dark:border-gray-800 pr-3">+91</span>
-                    </div>
-                    <input
-                      type="tel"
-                      required
-                      autoFocus
-                      value={phoneNumber}
-                      onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, "").slice(0, 10))}
-                      maxLength={10}
-                      className="block w-full pl-20 pr-4 py-3 bg-transparent text-gray-900 dark:text-white border-b-2 border-gray-100 dark:border-gray-800 focus:border-[#CB202D] outline-none transition-all placeholder:text-gray-300 font-bold text-lg"
-                      placeholder="Phone number"
-                    />
+              <div className="space-y-4">
+                <div className="flex items-center border border-gray-200 rounded-xl p-1.5 bg-white focus-within:border-[#CB202D] focus-within:ring-1 focus-within:ring-[#CB202D] transition-all">
+                  <div className="bg-[#FFF0F0] p-2 rounded-lg flex items-center justify-center shrink-0">
+                    <Phone className="w-4 h-4 text-[#CB202D]" />
                   </div>
+                  <div className="flex items-center pl-2 pr-3 border-r border-gray-200">
+                    <span className="text-sm text-gray-700 font-semibold">+91</span>
+                  </div>
+                  <input
+                    type="tel"
+                    required
+                    autoFocus
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, "").slice(0, 10))}
+                    maxLength={10}
+                    className="w-full bg-transparent pl-2 pr-2 py-1.5 text-sm text-gray-900 font-semibold outline-none placeholder:text-gray-400 placeholder:font-normal"
+                    placeholder="Enter phone number"
+                  />
                 </div>
-                <p className="text-[11px] text-gray-400 text-center leading-relaxed">
-                  We will send success notifications and order updates via SMS
-                </p>
+                
+                <div className="flex items-start gap-2 pt-1">
+                  <div className="shrink-0 mt-0.5">
+                    <ShieldCheck className="w-4 h-4 text-[#CB202D]" />
+                  </div>
+                  <p className="text-xs text-gray-500 leading-tight font-medium">
+                    We will send success notifications and order updates via SMS
+                  </p>
+                </div>
               </div>
             ) : showNameInput ? (
-              <div className="space-y-6">
-                <div className="flex items-center gap-3 bg-gray-50 dark:bg-gray-900 p-4 rounded-2xl border border-dashed border-gray-200 dark:border-gray-800">
-                  <div className="w-10 h-10 bg-[#CB202D]/10 rounded-full flex items-center justify-center">
-                    <ShieldCheck className="w-5 h-5 text-[#CB202D]" />
+              <div className="space-y-4">
+                <div className="flex items-center border border-gray-200 rounded-xl p-1.5 bg-white focus-within:border-[#CB202D] focus-within:ring-1 focus-within:ring-[#CB202D] transition-all">
+                  <div className="bg-[#FFF0F0] p-2 rounded-lg flex items-center justify-center shrink-0">
+                    <UserRound className="w-4 h-4 text-[#CB202D]" />
                   </div>
-                  <div className="flex-1">
-                    <p className="text-[10px] uppercase font-black text-gray-400 tracking-widest leading-none mb-1">Verified Number</p>
-                    <p className="text-sm font-black text-gray-900 dark:text-white">+91 {phoneNumber}</p>
-                  </div>
-                  <button type="button" onClick={handleEditNumber} className="text-xs text-[#CB202D] font-black underline cursor-pointer">
-                    Change
-                  </button>
+                  <input
+                    type="text"
+                    required
+                    autoFocus
+                    value={name}
+                    onChange={(e) => {
+                      setName(e.target.value)
+                      if (nameError) setNameError("")
+                    }}
+                    className="w-full bg-transparent pl-2 pr-2 py-1.5 text-sm text-gray-900 font-semibold outline-none placeholder:text-gray-400 placeholder:font-normal"
+                    placeholder="Enter your full name"
+                  />
                 </div>
-
-                <div className="space-y-4">
-                  <div className="relative group">
-                    <div className="absolute inset-y-0 left-0 pl-1 flex items-center pointer-events-none">
-                      <UserRound className="w-5 h-5 text-gray-400 group-focus-within:text-[#CB202D] transition-colors" />
-                    </div>
-                    <input
-                      type="text"
-                      required
-                      autoFocus
-                      value={name}
-                      onChange={(e) => {
-                        setName(e.target.value)
-                        if (nameError) setNameError("")
-                      }}
-                      className={`block w-full pl-10 pr-4 py-3 bg-transparent text-gray-900 dark:text-white border-b-2 border-gray-100 dark:border-gray-800 focus:border-[#CB202D] outline-none transition-all placeholder:text-gray-300 font-bold text-lg ${nameError ? "border-red-500" : ""}`}
-                      placeholder="Your full name"
-                    />
-                  </div>
-
-                  {nameError ? (
-                    <p className="text-xs font-semibold text-red-500 text-center">{nameError}</p>
-                  ) : (
-                    <p className="text-[11px] text-gray-400 text-center leading-relaxed">
-                      Please enter your name so we can save it to your profile.
-                    </p>
-                  )}
-                </div>
+                {nameError && (
+                  <p className="text-[10px] font-semibold text-red-500 px-1">{nameError}</p>
+                )}
               </div>
             ) : (
-              <div className="space-y-6">
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3 bg-gray-50 dark:bg-gray-900 p-4 rounded-2xl border border-dashed border-gray-200 dark:border-gray-800">
-                    <div className="w-10 h-10 bg-[#CB202D]/10 rounded-full flex items-center justify-center">
-                      <ShieldCheck className="w-5 h-5 text-[#CB202D]" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-[10px] uppercase font-black text-gray-400 tracking-widest leading-none mb-1">Sent to</p>
-                      <p className="text-sm font-black text-gray-900 dark:text-white">+91 {phoneNumber}</p>
-                    </div>
-                    <button type="button" onClick={handleEditNumber} className="text-xs text-[#CB202D] font-black underline cursor-pointer">Edit</button>
-                  </div>
+              <div className="space-y-4">
+                <div className="text-center">
+                  <p className="text-xs text-gray-500 font-medium">Enter the 4-digit code sent to</p>
+                  <p className="text-sm text-gray-900 font-bold mt-1">+91 {phoneNumber} <button type="button" onClick={handleEditNumber} className="text-[#CB202D] text-xs ml-1 hover:underline">Edit</button></p>
+                </div>
+                <div className="flex justify-center gap-2">
+                  {[0, 1, 2, 3].map((index) => (
+                    <input
+                      key={index}
+                      id={`otp-${index}`}
+                      type="tel"
+                      inputMode="numeric"
+                      required
+                      autoFocus={index === 0}
+                      value={otp[index] || ""}
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/\D/g, "").slice(-1);
+                        if (!val) return;
+                        const newOtp = otp.split("");
+                        newOtp[index] = val;
+                        const combined = newOtp.join("").slice(0, 4);
+                        setOtp(combined);
 
-                  <div className="flex justify-center gap-3 mt-4">
-                    {[0, 1, 2, 3].map((index) => (
-                      <input
-                        key={index}
-                        id={`otp-${index}`}
-                        type="tel"
-                        inputMode="numeric"
-                        required
-                        autoFocus={index === 0}
-                        value={otp[index] || ""}
-                        onChange={(e) => {
-                          const val = e.target.value.replace(/\D/g, "").slice(-1);
-                          if (!val) return;
-                          const newOtp = otp.split("");
-                          newOtp[index] = val;
-                          const combined = newOtp.join("").slice(0, 4);
-                          setOtp(combined);
-
-                          // Focus next
-                          if (index < 3 && val) {
-                            document.getElementById(`otp-${index + 1}`)?.focus();
+                        if (index < 3 && val) {
+                          document.getElementById(`otp-${index + 1}`)?.focus();
+                        }
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Backspace") {
+                          if (!otp[index] && index > 0) {
+                            document.getElementById(`otp-${index - 1}`)?.focus();
+                          } else {
+                            const newOtp = otp.split("");
+                            newOtp[index] = "";
+                            setOtp(newOtp.join(""));
                           }
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === "Backspace") {
-                            if (!otp[index] && index > 0) {
-                              document.getElementById(`otp-${index - 1}`)?.focus();
-                            } else {
-                              const newOtp = otp.split("");
-                              newOtp[index] = "";
-                              setOtp(newOtp.join(""));
-                            }
-                          }
-                        }}
-                        onPaste={(e) => {
-                          e.preventDefault();
-                          const pasteData = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 4);
-                          if (pasteData) {
-                            setOtp(pasteData);
-                            document.getElementById(`otp-${Math.min(pasteData.length, 3)}`)?.focus();
-                          }
-                        }}
-                        className="w-14 h-14 sm:w-16 sm:h-16 text-center text-xl sm:text-3xl font-black bg-gray-50 dark:bg-gray-900 border-2 border-gray-100 dark:border-gray-800 focus:border-[#CB202D] rounded-xl sm:rounded-2xl outline-none transition-all text-gray-900 dark:text-white"
-                        placeholder="-"
-                      />
-                    ))}
-                  </div>
-                  <div className="text-center mt-4">
-                    {resendTimer > 0 ? (
-                      <p className="text-xs font-semibold text-gray-500 dark:text-gray-400">
-                        Resend OTP in {formatResendTimer(resendTimer)}
-                      </p>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={handleResendOTP}
-                        disabled={loading}
-                        className="text-xs font-black text-[#CB202D] underline disabled:opacity-60 disabled:cursor-not-allowed"
-                      >
-                        Resend OTP
-                      </button>
-                    )}
-                  </div>
+                        }
+                      }}
+                      onPaste={(e) => {
+                        e.preventDefault();
+                        const pasteData = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 4);
+                        if (pasteData) {
+                          setOtp(pasteData);
+                          document.getElementById(`otp-${Math.min(pasteData.length, 3)}`)?.focus();
+                        }
+                      }}
+                      className="w-12 h-12 text-center text-xl font-bold bg-white border border-gray-200 focus:border-[#CB202D] focus:ring-1 focus:ring-[#CB202D] rounded-xl outline-none transition-all text-gray-900"
+                    />
+                  ))}
+                </div>
+                <div className="text-center mt-3">
+                  {resendTimer > 0 ? (
+                    <p className="text-xs text-gray-500 font-medium">
+                      Resend code in <span className="font-bold text-gray-900">{formatResendTimer(resendTimer)}</span>
+                    </p>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={handleResendOTP}
+                      disabled={loading}
+                      className="text-xs font-bold text-[#CB202D] hover:underline disabled:opacity-60 disabled:cursor-not-allowed"
+                    >
+                      Resend Code
+                    </button>
+                  )}
                 </div>
               </div>
             )}
 
             <button
               type="submit"
-              disabled={loading || (step === 1 && phoneNumber.length !== 10)}
-              className={`w-full py-4 rounded-2xl font-black text-lg transition-all relative overflow-hidden shadow-xl ${loading || (step === 1 && phoneNumber.length !== 10)
-                ? "bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed"
-                : "bg-[#CB202D] hover:bg-[#b01c27] text-white hover:shadow-2xl hover:shadow-[#CB202D]/30 active:scale-[0.98] hover:-translate-y-0.5"
-                }`}
+              disabled={isSubmitDisabled}
+              className={`w-full py-3 rounded-xl font-bold text-base transition-all flex items-center justify-center gap-2 ${
+                isSubmitDisabled
+                ? "bg-gray-100 cursor-not-allowed opacity-50 text-gray-400 shadow-none"
+                : "bg-[#CB202D] hover:bg-[#b01c27] text-white shadow-lg shadow-[#CB202D]/30 active:scale-[0.98]"
+              }`}
             >
               {loading ? (
-                <Loader2 className="w-7 h-7 animate-spin mx-auto text-white" />
+                <Loader2 className="w-5 h-5 animate-spin mx-auto text-white" />
               ) : (
-                step === 1 ? "Get Verification Code" : showNameInput ? "Save Name & Continue" : "Continue"
+                <>
+                  {step === 1 ? "Get Verification Code" : showNameInput ? "Save Name & Continue" : "Verify & Continue"}
+                  <ArrowRight className="w-4 h-4" />
+                </>
               )}
             </button>
           </form>
         </div>
 
-        <div className="mt-6 text-center space-y-2">
-          <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] leading-relaxed">
-            By continuing, you agree to our <br />
-            <Link to="/food/user/profile/terms" className="text-gray-900 dark:text-white underline cursor-pointer hover:text-[#CB202D] transition-colors">Terms of Service</Link>, <Link to="/food/user/profile/privacy" className="text-gray-900 dark:text-white underline cursor-pointer hover:text-[#CB202D] transition-colors">Privacy Policy</Link> & <Link to="/food/user/profile/support" className="text-gray-900 dark:text-white underline cursor-pointer hover:text-[#CB202D] transition-colors">Support</Link>
-          </p>
+        {/* Features Row */}
+        {step === 1 && (
+        <div className="grid grid-cols-3 gap-1 shrink-0 mt-2">
+          <div className="flex flex-col items-center text-center">
+            <div className="w-10 h-10 bg-[#FFF0F0] rounded-full flex items-center justify-center mb-1">
+               <ShieldCheck className="w-5 h-5 text-[#CB202D]" />
+            </div>
+            <h4 className="text-[10px] font-bold text-gray-900 mb-0.5">Safe & Secure</h4>
+            <p className="text-[8px] text-gray-500 leading-tight">Your data is protected</p>
+          </div>
+          <div className="flex flex-col items-center text-center border-l border-r border-gray-200">
+            <div className="w-10 h-10 bg-[#FFF0F0] rounded-full flex items-center justify-center mb-1">
+               <Zap className="w-5 h-5 text-[#CB202D]" />
+            </div>
+            <h4 className="text-[10px] font-bold text-gray-900 mb-0.5">Fast & Easy</h4>
+            <p className="text-[8px] text-gray-500 leading-tight">Quick login in seconds</p>
+          </div>
+          <div className="flex flex-col items-center text-center">
+            <div className="w-10 h-10 bg-[#FFF0F0] rounded-full flex items-center justify-center mb-1">
+               <HeadphonesIcon className="w-5 h-5 text-[#CB202D]" />
+            </div>
+            <h4 className="text-[10px] font-bold text-gray-900 mb-0.5">24/7 Support</h4>
+            <p className="text-[8px] text-gray-500 leading-tight">We're here to help</p>
+          </div>
+        </div>
+        )}
+
+        <div className="text-center space-y-1 shrink-0 mt-auto pt-4 mb-2">
+          <p className="text-[10px] text-gray-500 font-medium">By continuing, you agree to our</p>
+          <div className="flex items-center justify-center gap-1.5 text-[10px] font-semibold">
+            <Link to="/food/user/profile/terms" className="text-[#CB202D] hover:underline">Terms of Service</Link>
+            <span className="text-gray-400">•</span>
+            <Link to="/food/user/profile/privacy" className="text-[#CB202D] hover:underline">Privacy Policy</Link>
+            <span className="text-gray-400">•</span>
+            <Link to="/food/user/profile/support" className="text-[#CB202D] hover:underline">Support</Link>
+          </div>
         </div>
       </div>
     </div>

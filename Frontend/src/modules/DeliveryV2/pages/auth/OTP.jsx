@@ -1,17 +1,21 @@
 import { useState, useEffect, useRef } from "react"
-import { useNavigate } from "react-router-dom"
-import { ArrowLeft, Loader2 } from "lucide-react"
-import AnimatedPage from "@food/components/user/AnimatedPage"
+import { useNavigate, Link } from "react-router-dom"
+import { ArrowLeft, ShieldCheck, Timer, RefreshCw, Phone, ArrowRight, Loader2, ConciergeBell, Soup, Utensils, Home } from "lucide-react"
 import { Input } from "@food/components/ui/input"
 import { Button } from "@food/components/ui/button"
 import { deliveryAPI } from "@food/api"
 import { setAuthData as storeAuthData } from "@food/utils/auth"
+import { motion } from "framer-motion"
+import zozomenLogo from "@/assets/zozomenLogo.png"
+import { loadBusinessSettings, getCachedSettings } from "@common/utils/businessSettings"
+import { useCompanyName } from "@food/hooks/useCompanyName"
 const debugLog = (...args) => {}
 const debugWarn = (...args) => {}
 const debugError = (...args) => {}
 
 
 export default function DeliveryOTP() {
+  const companyName = useCompanyName()
   const navigate = useNavigate()
   const [otp, setOtp] = useState(["", "", "", ""])
   const [isLoading, setIsLoading] = useState(false)
@@ -29,6 +33,37 @@ export default function DeliveryOTP() {
   const [deviceToken, setDeviceToken] = useState(null)
   const [activePlatform, setActivePlatform] = useState("web")
   const inputRefs = useRef([])
+  const [logoUrl, setLogoUrl] = useState(() => getCachedSettings()?.logo?.url || null)
+  const [keyboardInset, setKeyboardInset] = useState(0)
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const settings = await loadBusinessSettings()
+        if (settings?.logo?.url) setLogoUrl(settings.logo.url)
+      } catch (e) {}
+    }
+    fetchSettings()
+  }, [])
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.visualViewport) return undefined
+
+    const updateKeyboardInset = () => {
+      const viewport = window.visualViewport
+      const inset = Math.max(0, window.innerHeight - viewport.height - viewport.offsetTop)
+      setKeyboardInset(inset > 0 ? inset : 0)
+    }
+
+    updateKeyboardInset()
+    window.visualViewport.addEventListener("resize", updateKeyboardInset)
+    window.visualViewport.addEventListener("scroll", updateKeyboardInset)
+
+    return () => {
+      window.visualViewport.removeEventListener("resize", updateKeyboardInset)
+      window.visualViewport.removeEventListener("scroll", updateKeyboardInset)
+    }
+  }, [])
 
   useEffect(() => {
     // Get auth data from sessionStorage (delivery module key)
@@ -488,38 +523,105 @@ export default function DeliveryOTP() {
   }
 
   return (
-    <AnimatedPage className="min-h-screen bg-white flex flex-col">
-      {/* Header */}
-      <div className="relative flex items-center justify-center py-4 px-4 border-b border-gray-200">
-        <button
-          onClick={() => navigate("/food/delivery/login")}
-          className="absolute left-4 top-1/2 -translate-y-1/2"
-          aria-label="Go back"
-        >
-          <ArrowLeft className="h-5 w-5 text-black" />
-        </button>
-        <h1 className="text-lg font-bold text-black">OTP Verification</h1>
-      </div>
+    <div
+      className={`h-[100dvh] bg-[#fafafa] flex flex-col relative font-sans ${keyboardInset > 0 ? "overflow-y-auto overflow-x-hidden" : "overflow-hidden"}`}
+      style={{ paddingBottom: keyboardInset ? `${keyboardInset + 24}px` : undefined }}
+    >
+      {/* Top Blue Section */}
+      <div className="w-full flex flex-col shrink-0 z-10 drop-shadow-md">
+        <div className="w-full relative overflow-hidden bg-[#005b96] pb-4">
+          {/* Back Button */}
+          <button
+            onClick={() => navigate("/food/delivery/login")}
+            className="absolute top-6 left-6 p-2 bg-white/20 hover:bg-white/30 text-white rounded-full transition-all duration-200 z-20 backdrop-blur-md"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </button>
 
-      {/* Main Content */}
-      <div className="flex flex-col justify-center px-6 pt-8 pb-12">
-        <div className="max-w-md mx-auto w-full space-y-8">
-          {/* Message */}
-          <div className="text-center space-y-2">
-            <p className="text-base text-black">
-              {showNameInput
-                ? "You're almost done! Please tell us your name to complete registration."
-                : "We have sent a verification code to"}
-            </p>
-            {!showNameInput && (
-              <p className="text-base text-black font-medium">
-                {getPhoneNumber()}
-              </p>
-            )}
+          {/* Abstract wavy background layers */}
+          <div className="absolute inset-0 z-0">
+             {/* Darker blue gradient in the corners */}
+             <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-[#004b7c] via-transparent to-transparent opacity-80" />
+             <div className="absolute bottom-0 left-0 w-full h-full bg-gradient-to-tr from-[#004b7c] via-transparent to-transparent opacity-80" />
+             
+             {/* Dotted pattern top left */}
+             <div className="absolute -top-10 -left-10 w-40 h-40 opacity-10" style={{ backgroundImage: 'radial-gradient(circle, white 2px, transparent 2px)', backgroundSize: '12px 12px' }} />
+
+             {/* Curved shape top right */}
+             <div className="absolute -top-20 -right-10 w-64 h-64 bg-[#0074bf] rounded-full blur-2xl opacity-40" />
+             {/* Curved shape bottom left */}
+             <div className="absolute -bottom-10 -left-20 w-80 h-80 bg-[#0074bf] rounded-full blur-3xl opacity-40" />
           </div>
 
-          {/* Pending approval message – already registered, waiting for admin */}
-          {pendingMessage && (
+          {/* Background Icons */}
+          <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-20">
+            <motion.div
+              animate={{ y: [0, -10, 0], rotate: [-12, -8, -12] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute top-6 left-8"
+            >
+              <ConciergeBell className="w-16 h-16" strokeWidth={1} />
+            </motion.div>
+            <motion.div
+              animate={{ y: [0, 8, 0], rotate: [12, 16, 12] }}
+              transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+              className="absolute top-6 right-8"
+            >
+              <Soup className="w-12 h-12" strokeWidth={1} />
+            </motion.div>
+            <motion.div
+              animate={{ y: [0, -8, 0], rotate: [-12, -16, -12] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+              className="absolute bottom-10 left-8"
+            >
+              <Utensils className="w-12 h-12" strokeWidth={1} />
+            </motion.div>
+            <motion.div
+              animate={{ y: [0, 6, 0], rotate: [0, 4, 0] }}
+              transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+              className="absolute bottom-10 right-8"
+            >
+              <Home className="w-12 h-12" strokeWidth={1} />
+            </motion.div>
+          </div>
+
+          <div className="relative z-10 flex flex-col items-center pt-8 pb-10 px-6 text-center text-white">
+            <motion.div
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              className="w-24 h-24 md:w-28 md:h-28 bg-white rounded-full flex items-center justify-center mb-3 shadow-2xl overflow-hidden border-[2px] border-[#005b96] ring-[4px] ring-white"
+            >
+              <img src={logoUrl || zozomenLogo} alt="Logo" className="w-full h-full object-cover rounded-full" />
+            </motion.div>
+            
+            <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-2 uppercase">
+              {companyName}
+            </h1>
+            <div className="flex items-center gap-2 justify-center">
+               <div className="h-[1px] w-6 md:w-8 bg-white/70" />
+               <p className="text-[12px] md:text-[14px] font-bold tracking-[0.1em] uppercase whitespace-nowrap">
+                 Delivery Partner Portal
+               </p>
+               <div className="h-[1px] w-6 md:w-8 bg-white/70" />
+            </div>
+            <div className="h-1 w-8 bg-white rounded-full mt-2" />
+          </div>
+        </div>
+
+        {/* Wave SVG directly below the blue section */}
+        <div className="w-full overflow-hidden leading-[0] -mt-0.5">
+          <svg viewBox="0 0 1440 100" preserveAspectRatio="none" className="w-full h-[40px] md:h-[60px] block">
+            <path d="M0,0 L1440,0 L1440,40 C1200,10 960,10 720,40 C480,80 240,80 0,40 Z" fill="#005b96" />
+          </svg>
+        </div>
+      </div>
+
+      <div className="flex-1 max-w-[420px] mx-auto w-full px-4 flex flex-col mt-16 md:mt-20 relative z-20 pb-4 h-full">
+        {/* Main Card */}
+        <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-gray-100 shrink-0 mb-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          
+          {/* Pending approval message */}
+          {pendingMessage ? (
             <div className={`rounded-xl border p-5 text-center space-y-4 shadow-sm ${isRejected ? "bg-red-50 border-red-100" : "bg-amber-50 border-amber-100"}`}>
               <div className="space-y-2">
                 <p className={`text-sm font-semibold ${isRejected ? "text-red-800" : "text-amber-800"}`}>
@@ -537,7 +639,7 @@ export default function DeliveryOTP() {
               </div>
 
               <div className="flex flex-col gap-2 pt-2">
-                {isRejected ? (
+                {isRejected && (
                   <button
                     type="button"
                     onClick={() => {
@@ -556,118 +658,177 @@ export default function DeliveryOTP() {
                   >
                     Re-apply Now
                   </button>
-                ) : null}
+                )}
                 
                 <button
                   type="button"
                   onClick={() => navigate("/food/delivery/login", { replace: true })}
                   className={`text-sm font-medium underline transition-colors ${isRejected ? "text-red-600 hover:text-red-800" : "text-amber-700 hover:text-amber-900"}`}
                 >
-                  Back to login
+                  Back to Login
                 </button>
               </div>
             </div>
-          )}
-
-          {/* Error message */}
-          {error && (
-            <p className="text-sm text-red-500 text-center">
-              {error}
-            </p>
-          )}
-
-          {/* OTP Input Fields */}
-          {!showNameInput && !pendingMessage && (
+          ) : showNameInput ? (
+            /* Name Input Step */
             <>
-              <div className="flex justify-center gap-2">
-                {otp.map((digit, index) => (
-                  <Input
-                    key={index}
-                    ref={(el) => (inputRefs.current[index] = el)}
-                    type="text"
-                    inputMode="numeric"
-                    maxLength={1}
-                    value={digit}
-                    onChange={(e) => handleChange(index, e.target.value)}
-                    onKeyDown={(e) => handleKeyDown(index, e)}
-                    onPaste={index === 0 ? handlePaste : undefined}
-                    disabled={isLoading}
-                    autoComplete="off"
-                    autoFocus={false}
-                    className="w-12 h-12 text-center text-lg font-semibold p-0 border border-black rounded-md focus-visible:ring-0 focus-visible:border-black bg-white"
-                  />
-                ))}
+              <div className="text-center mb-5">
+                <div className="flex items-center justify-center gap-3 mb-1.5">
+                   <div className="relative w-5 h-5">
+                     <div className="absolute top-1 right-0 w-2.5 h-0.5 bg-[#005b96] transform rotate-45" />
+                     <div className="absolute top-2.5 right-0 w-3 h-0.5 bg-[#005b96]" />
+                     <div className="absolute top-4 right-0 w-2.5 h-0.5 bg-[#005b96] transform -rotate-45" />
+                   </div>
+                   <h2 className="text-2xl font-black text-[#1c1c1c]">Full Name</h2>
+                   <div className="relative w-5 h-5">
+                     <div className="absolute top-1 left-0 w-2.5 h-0.5 bg-[#005b96] transform -rotate-45" />
+                     <div className="absolute top-2.5 left-0 w-3 h-0.5 bg-[#005b96]" />
+                     <div className="absolute top-4 left-0 w-2.5 h-0.5 bg-[#005b96] transform rotate-45" />
+                   </div>
+                </div>
+                <p className="text-sm text-gray-500 font-medium">Please enter your name to complete registration</p>
+                <div className="h-1 w-8 bg-[#005b96] mx-auto mt-2 rounded-full" />
               </div>
 
-              {/* Resend Section */}
-              <div className="text-center space-y-1">
-                <p className="text-sm text-black">
-                  Didn't get the OTP?
-                </p>
-                {resendTimer > 0 ? (
-                  <p className="text-sm text-gray-500">
-                    Resend SMS in {resendTimer}s
-                  </p>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={handleResend}
+              <div className="space-y-4">
+                <div className="space-y-1">
+                  <Input
+                    type="text"
+                    value={name}
+                    onChange={(e) => {
+                      setName(e.target.value)
+                      if (nameError) setNameError("")
+                    }}
                     disabled={isLoading}
-                    className="text-sm text-gray-500 hover:text-gray-700 disabled:opacity-50"
-                  >
-                    Resend SMS
-                  </button>
+                    placeholder="Enter your name"
+                    className={`h-11 border ${nameError ? "border-red-500" : "border-gray-300"}`}
+                  />
+                  {nameError && (
+                    <p className="text-xs text-red-500 text-left px-1 font-semibold mt-1">
+                      {nameError}
+                    </p>
+                  )}
+                </div>
+
+                {error && (
+                  <p className="text-xs text-red-500 text-center font-semibold animate-pulse">{error}</p>
                 )}
+
+                <Button
+                  onClick={handleSubmitName}
+                  disabled={isLoading || !name.trim()}
+                  className={`w-full py-3 rounded-xl font-bold text-base transition-all flex items-center justify-center gap-2 ${
+                    !isLoading && name.trim()
+                    ? "bg-[#005b96] hover:bg-[#004b7c] text-white shadow-lg shadow-[#005b96]/30 active:scale-[0.98]"
+                    : "bg-gray-100 cursor-not-allowed opacity-50 text-gray-400 shadow-none"
+                  }`}
+                >
+                  {isLoading ? "Continuing..." : "Continue"}
+                </Button>
               </div>
             </>
-          )}
-
-          {/* Name Input (shown only after OTP verified and user is new) */}
-          {showNameInput && (
-            <div className="space-y-3">
-              <div className="space-y-1">
-                <label className="block text-sm font-medium text-black text-left">
-                  Full name
-                </label>
-                <Input
-                  type="text"
-                  value={name}
-                  onChange={(e) => {
-                    setName(e.target.value)
-                    if (nameError) setNameError("")
-                  }}
-                  disabled={isLoading}
-                  placeholder="Enter your name"
-                  className={`h-11 border ${nameError ? "border-red-500" : "border-gray-300"
-                    }`}
-                />
-                {nameError && (
-                  <p className="text-xs text-red-500 text-left">
-                    {nameError}
-                  </p>
-                )}
+          ) : (
+            /* OTP Input Step */
+            <>
+              <div className="text-center mb-5">
+                <div className="flex items-center justify-center gap-3 mb-1.5">
+                   <div className="relative w-5 h-5">
+                     <div className="absolute top-1 right-0 w-2.5 h-0.5 bg-[#005b96] transform rotate-45" />
+                     <div className="absolute top-2.5 right-0 w-3 h-0.5 bg-[#005b96]" />
+                     <div className="absolute top-4 right-0 w-2.5 h-0.5 bg-[#005b96] transform -rotate-45" />
+                   </div>
+                   <h2 className="text-2xl font-black text-[#1c1c1c]">Verify OTP</h2>
+                   <div className="relative w-5 h-5">
+                     <div className="absolute top-1 left-0 w-2.5 h-0.5 bg-[#005b96] transform -rotate-45" />
+                     <div className="absolute top-2.5 left-0 w-3 h-0.5 bg-[#005b96]" />
+                     <div className="absolute top-4 left-0 w-2.5 h-0.5 bg-[#005b96] transform rotate-45" />
+                   </div>
+                </div>
+                <p className="text-sm text-gray-500 font-medium">
+                  Sent to <span className="text-[#005b96] font-bold">{getPhoneNumber()}</span>
+                </p>
+                <div className="h-1 w-8 bg-[#005b96] mx-auto mt-2 rounded-full" />
               </div>
 
-              <Button
-                onClick={handleSubmitName}
-                disabled={isLoading}
-                className="w-full h-11 bg-[#00B761] hover:bg-[#00A055] text-white font-semibold"
-              >
-                {isLoading ? "Continuing..." : "Continue"}
-              </Button>
-            </div>
-          )}
+              <div className="space-y-6">
+                <div className="flex justify-center gap-3">
+                  {otp.map((digit, index) => (
+                    <input
+                      key={index}
+                      ref={(el) => (inputRefs.current[index] = el)}
+                      type="text"
+                      inputMode="numeric"
+                      maxLength={1}
+                      value={digit}
+                      onChange={(e) => handleChange(index, e.target.value)}
+                      onKeyDown={(e) => handleKeyDown(index, e)}
+                      onPaste={index === 0 ? handlePaste : undefined}
+                      disabled={isLoading}
+                      autoComplete="off"
+                      className={`w-12 h-14 sm:w-14 sm:h-16 bg-slate-50 border-2 rounded-2xl text-center text-2xl font-bold text-slate-900 focus:outline-none transition-all duration-300 border-gray-200`}
+                    />
+                  ))}
+                </div>
 
-          {/* Loading Spinner */}
-          {isLoading && !showNameInput && (
-            <div className="flex justify-center pt-4">
-              <Loader2 className="h-6 w-6 text-green-500 animate-spin" />
-            </div>
+                {error && (
+                  <p className="text-[10px] font-semibold text-red-500 text-center px-1 animate-pulse">
+                    {error}
+                  </p>
+                )}
+
+                <div className="space-y-4">
+                  {/* Auto-verify loader / fallback button */}
+                  <Button
+                    onClick={() => handleVerify()}
+                    disabled={isLoading || otp.some(d => !d)}
+                    className={`w-full py-3 rounded-xl font-bold text-base transition-all flex items-center justify-center gap-2 ${
+                      !isLoading && otp.every(d => d)
+                        ? "bg-[#005b96] hover:bg-[#004b7c] text-white shadow-lg shadow-[#005b96]/30 active:scale-[0.98]"
+                        : "bg-gray-100 cursor-not-allowed opacity-50 text-gray-400 shadow-none"
+                    }`}
+                  >
+                    {isLoading ? (
+                      <Loader2 className="w-5 h-5 animate-spin mx-auto text-gray-400" />
+                    ) : (
+                      <>
+                        Verify & Continue
+                        <ArrowRight className="w-4 h-4" />
+                      </>
+                    )}
+                  </Button>
+
+                  <div className="text-center space-y-1">
+                    <p className="text-xs text-slate-400 font-medium">
+                      Didn't get the OTP?
+                    </p>
+                    {resendTimer > 0 ? (
+                      <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider">
+                        Resend SMS in <span className="font-bold text-gray-900">{resendTimer}s</span>
+                      </p>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={handleResend}
+                        disabled={isLoading}
+                        className="text-xs text-[#005b96] font-bold tracking-wider uppercase hover:underline disabled:opacity-50"
+                      >
+                        Resend SMS
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </>
           )}
         </div>
       </div>
 
-    </AnimatedPage>
+      <div className="pb-8 text-center mt-auto">
+          <p className="text-[10px] font-black text-slate-300 tracking-[0.2em] uppercase">
+            &copy; {new Date().getFullYear()} {companyName.toUpperCase()} DELIVERY PARTNER
+          </p>
+      </div>
+    </div>
   )
 }
 

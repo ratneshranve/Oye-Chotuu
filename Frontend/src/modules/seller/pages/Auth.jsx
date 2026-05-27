@@ -1,7 +1,7 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowRight, ShieldCheck, Store, Phone, KeyRound } from "lucide-react";
+import { ArrowRight, ShieldCheck, Store, Phone, KeyRound, ArrowLeft, Loader2, ConciergeBell, Soup, Utensils, Home } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@food/components/ui/button";
@@ -9,6 +9,8 @@ import { useCompanyName } from "@food/hooks/useCompanyName";
 import { setAuthData } from "@food/utils/auth";
 import { useAuth } from "@core/context/AuthContext";
 import { sellerApi } from "../services/sellerApi";
+import zozomenLogo from "@/assets/zozomenLogo.png"
+import { loadBusinessSettings, getCachedSettings } from "@common/utils/businessSettings"
 
 const DEFAULT_COUNTRY_CODE = "+91";
 
@@ -22,7 +24,37 @@ export default function SellerAuth() {
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
   const [otpPhone, setOtpPhone] = useState("");
-  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [logoUrl, setLogoUrl] = useState(() => getCachedSettings()?.logo?.url || null)
+  const [keyboardInset, setKeyboardInset] = useState(0)
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const settings = await loadBusinessSettings()
+        if (settings?.logo?.url) setLogoUrl(settings.logo.url)
+      } catch (e) {}
+    }
+    fetchSettings()
+  }, [])
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.visualViewport) return undefined
+
+    const updateKeyboardInset = () => {
+      const viewport = window.visualViewport
+      const inset = Math.max(0, window.innerHeight - viewport.height - viewport.offsetTop)
+      setKeyboardInset(inset > 0 ? inset : 0)
+    }
+
+    updateKeyboardInset()
+    window.visualViewport.addEventListener("resize", updateKeyboardInset)
+    window.visualViewport.addEventListener("scroll", updateKeyboardInset)
+
+    return () => {
+      window.visualViewport.removeEventListener("resize", updateKeyboardInset)
+      window.visualViewport.removeEventListener("scroll", updateKeyboardInset)
+    }
+  }, [])
   const nextSellerPath =
     typeof location.state?.from === "string" &&
     location.state.from.startsWith("/seller")
@@ -42,10 +74,6 @@ export default function SellerAuth() {
   };
 
   const handleSendOtp = async () => {
-    if (!termsAccepted) {
-      toast.error("Please agree to the Terms and Conditions");
-      return;
-    }
 
     const validation = validatePhone(phone);
     if (validation) {
@@ -74,9 +102,9 @@ export default function SellerAuth() {
   };
 
   const handleVerifyOtp = async () => {
-    const code = String(otp || "").replace(/\D/g, "").slice(0, 6);
-    if (code.length < 4) {
-      toast.error("Enter the OTP you received");
+    const code = String(otp || "").replace(/\D/g, "").slice(0, 4);
+    if (code.length !== 4) {
+      toast.error("Enter the 4-digit OTP");
       return;
     }
 
@@ -129,161 +157,261 @@ export default function SellerAuth() {
     }
   };
 
+  const isSubmitDisabled =
+    isLoading ||
+    (step === "phone" && phone.length !== 10) ||
+    (step === "otp" && otp.length !== 4);
+
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#fcfaf6] px-6 py-10 font-['Outfit']">
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute left-[-8%] top-[-8%] h-72 w-72 rounded-full bg-[#d9f99d]/40 blur-3xl" />
-        <div className="absolute bottom-[-10%] right-[-5%] h-80 w-80 rounded-full bg-[#86efac]/30 blur-3xl" />
+    <div
+      className="h-[100dvh] bg-[#fafafa] flex flex-col relative overflow-hidden font-sans"
+      style={{ paddingBottom: keyboardInset ? `${keyboardInset + 24}px` : undefined }}
+    >
+      {/* Top Green Section */}
+      <div className="w-full flex flex-col shrink-0 z-10 drop-shadow-md">
+        <div className="w-full relative overflow-hidden bg-[#16a34a] pb-4">
+          {/* Back Button */}
+          {step === "otp" && (
+            <button
+              onClick={() => {
+                setStep("phone");
+                setOtp("");
+                setOtpPhone("");
+              }}
+              className="absolute top-6 left-6 p-2 bg-white/20 hover:bg-white/30 text-white rounded-full transition-all duration-200 z-20 backdrop-blur-md"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+          )}
+
+          {/* Abstract wavy background layers */}
+          <div className="absolute inset-0 z-0">
+             {/* Darker green gradient in the corners */}
+             <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-[#14532d] via-transparent to-transparent opacity-80" />
+             <div className="absolute bottom-0 left-0 w-full h-full bg-gradient-to-tr from-[#14532d] via-transparent to-transparent opacity-80" />
+             
+             {/* Dotted pattern top left */}
+             <div className="absolute -top-10 -left-10 w-40 h-40 opacity-10" style={{ backgroundImage: 'radial-gradient(circle, white 2px, transparent 2px)', backgroundSize: '12px 12px' }} />
+
+             {/* Curved shape top right */}
+             <div className="absolute -top-20 -right-10 w-64 h-64 bg-[#22c55e] rounded-full blur-2xl opacity-40" />
+             {/* Curved shape bottom left */}
+             <div className="absolute -bottom-10 -left-20 w-80 h-80 bg-[#22c55e] rounded-full blur-3xl opacity-40" />
+          </div>
+
+          {/* Background Icons */}
+          <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-20">
+            <motion.div
+              animate={{ y: [0, -10, 0], rotate: [-12, -8, -12] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute top-6 left-8"
+            >
+              <ConciergeBell className="w-16 h-16" strokeWidth={1} />
+            </motion.div>
+            <motion.div
+              animate={{ y: [0, 8, 0], rotate: [12, 16, 12] }}
+              transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+              className="absolute top-6 right-8"
+            >
+              <Soup className="w-12 h-12" strokeWidth={1} />
+            </motion.div>
+            <motion.div
+              animate={{ y: [0, -8, 0], rotate: [-12, -16, -12] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+              className="absolute bottom-10 left-8"
+            >
+              <Utensils className="w-12 h-12" strokeWidth={1} />
+            </motion.div>
+            <motion.div
+              animate={{ y: [0, 6, 0], rotate: [0, 4, 0] }}
+              transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+              className="absolute bottom-10 right-8"
+            >
+              <Home className="w-12 h-12" strokeWidth={1} />
+            </motion.div>
+          </div>
+
+          <div className="relative z-10 flex flex-col items-center pt-8 pb-10 px-6 text-center text-white">
+            <motion.div
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              className="w-24 h-24 md:w-28 md:h-28 bg-white rounded-full flex items-center justify-center mb-3 shadow-2xl overflow-hidden border-[2px] border-[#16a34a] ring-[4px] ring-white"
+            >
+              <img src={logoUrl || zozomenLogo} alt="Logo" className="w-full h-full object-cover rounded-full" />
+            </motion.div>
+            
+            <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-2 uppercase">
+              {companyName}
+            </h1>
+            <div className="flex items-center gap-2 justify-center">
+               <div className="h-[1px] w-6 md:w-8 bg-white/70" />
+               <p className="text-[12px] md:text-[14px] font-bold tracking-[0.1em] uppercase whitespace-nowrap">
+                 Seller Partner Portal
+               </p>
+               <div className="h-[1px] w-6 md:w-8 bg-white/70" />
+            </div>
+            <div className="h-1 w-8 bg-white rounded-full mt-2" />
+          </div>
+        </div>
+
+        {/* Wave SVG directly below the green section */}
+        <div className="w-full overflow-hidden leading-[0] -mt-0.5">
+          <svg viewBox="0 0 1440 100" preserveAspectRatio="none" className="w-full h-[40px] md:h-[60px] block">
+            <path d="M0,0 L1440,0 L1440,40 C1200,10 960,10 720,40 C480,80 240,80 0,40 Z" fill="#16a34a" />
+          </svg>
+        </div>
       </div>
 
-      <div className="relative mx-auto flex min-h-[calc(100vh-5rem)] w-full max-w-6xl overflow-hidden rounded-[36px] border border-white/70 bg-white shadow-[0_40px_120px_rgba(15,23,42,0.08)]">
-        <div className="hidden w-[42%] flex-col justify-between bg-[linear-gradient(160deg,#0f172a_0%,#14532d_60%,#22c55e_100%)] p-10 text-white md:flex">
-          <div>
-            <div className="inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[11px] font-black uppercase tracking-[0.28em]">
-              <Store className="h-4 w-4" />
-              Seller Console
-            </div>
-            <h1 className="mt-8 text-4xl font-black leading-tight">
-              Grow your store with a seller-first login flow.
-            </h1>
-            <p className="mt-4 max-w-md text-sm font-medium text-white/80">
-              Based on your Blinkit reference, adapted to this project&apos;s live OTP backend so partners can actually sign in.
-            </p>
-          </div>
-
-          <div className="space-y-3 text-sm font-semibold text-white/85">
-            <div className="rounded-2xl bg-white/10 px-4 py-3">Fast OTP login for store owners</div>
-          </div>
-        </div>
-
-        <div className="flex w-full items-center justify-center px-6 py-10 md:w-[58%] md:px-12">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="w-full max-w-xl"
-          >
-            <div className="mb-8 flex items-center justify-between">
-              <div>
-                <p className="text-[11px] font-black uppercase tracking-[0.3em] text-[#16a34a]">Partner Access</p>
-                <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-900">
-                  {companyName} seller login
-                </h2>
-                <p className="mt-2 text-sm font-medium text-slate-500">
-                  Use your registered store phone number to receive a one-time code.
-                </p>
+      <div className="flex-1 max-w-[420px] mx-auto w-full px-4 flex flex-col mt-16 md:mt-20 relative z-20 pb-4 h-full">
+        {/* Main Card */}
+        <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-gray-100 shrink-0 mb-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          {step === "phone" ? (
+            <>
+              <div className="text-center mb-5">
+                <div className="flex items-center justify-center gap-3 mb-1.5">
+                   <div className="relative w-5 h-5">
+                     <div className="absolute top-1 right-0 w-2.5 h-0.5 bg-[#16a34a] transform rotate-45" />
+                     <div className="absolute top-2.5 right-0 w-3 h-0.5 bg-[#16a34a]" />
+                     <div className="absolute top-4 right-0 w-2.5 h-0.5 bg-[#16a34a] transform -rotate-45" />
+                   </div>
+                   <h2 className="text-2xl font-black text-[#1c1c1c]">Welcome Back!</h2>
+                   <div className="relative w-5 h-5">
+                     <div className="absolute top-1 left-0 w-2.5 h-0.5 bg-[#16a34a] transform -rotate-45" />
+                     <div className="absolute top-2.5 left-0 w-3 h-0.5 bg-[#16a34a]" />
+                     <div className="absolute top-4 left-0 w-2.5 h-0.5 bg-[#16a34a] transform rotate-45" />
+                   </div>
+                </div>
+                <p className="text-sm text-gray-500 font-medium">Login to your seller partner account</p>
+                <div className="h-1 w-8 bg-[#16a34a] mx-auto mt-2 rounded-full" />
               </div>
-              <div className="hidden h-16 w-16 items-center justify-center rounded-2xl bg-slate-100 md:flex">
-                <ShieldCheck className="h-8 w-8 text-[#16a34a]" />
-              </div>
-            </div>
 
-            <div className="space-y-5 rounded-[32px] border border-slate-200 bg-slate-50/70 p-6">
-              {step === "phone" ? (
-                <>
-                  <div className="space-y-2">
-                    <label className="text-[11px] font-black uppercase tracking-[0.24em] text-slate-400">
-                      Registered Mobile Number
-                    </label>
-                    <div className="flex items-center gap-3 rounded-[24px] border border-slate-200 bg-white px-4 py-4">
-                      <Phone className="h-5 w-5 text-slate-400" />
-                      <span className="font-bold text-slate-900">{DEFAULT_COUNTRY_CODE}</span>
-                      <div className="h-5 w-px bg-slate-200" />
-                      <input
-                        type="tel"
-                        inputMode="numeric"
-                        maxLength={10}
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
-                        placeholder="10-digit mobile number"
-                        className="flex-1 bg-transparent text-base font-bold text-slate-900 outline-none placeholder:text-slate-300"
-                      />
+              <div className="space-y-5">
+                <div className="space-y-4">
+                  <div className="flex items-center border border-gray-200 rounded-xl p-1.5 bg-white focus-within:border-[#16a34a] focus-within:ring-1 focus-within:ring-[#16a34a] transition-all">
+                    <div className="bg-[#EAFaf1] p-2 rounded-lg flex items-center justify-center shrink-0">
+                      <Phone className="w-4 h-4 text-[#16a34a]" />
                     </div>
-                  </div>
-
-                  <div className="flex items-start gap-3 pt-2">
+                    <div className="flex items-center pl-2 pr-3 border-r border-gray-200">
+                      <span className="text-sm text-gray-700 font-semibold">+91</span>
+                    </div>
                     <input
-                      type="checkbox"
-                      id="terms"
-                      checked={termsAccepted}
-                      onChange={(e) => setTermsAccepted(e.target.checked)}
-                      className="mt-0.5 h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900 cursor-pointer"
+                      type="tel"
+                      maxLength={10}
+                      inputMode="numeric"
+                      placeholder="Enter phone number"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
+                      className="w-full bg-transparent pl-2 pr-2 py-1.5 text-sm text-gray-900 font-semibold outline-none placeholder:text-gray-400 placeholder:font-normal"
                     />
-                    <label htmlFor="terms" className="text-xs sm:text-sm font-medium leading-tight text-slate-600 cursor-pointer">
-                      I agree to the{" "}
-                      <a href="/seller/terms" className="text-[#16a34a] underline font-bold hover:text-[#15803d]">
-                        Terms and Conditions
-                      </a>
-                      ,{" "}
-                      <a href="/seller/privacy" className="text-[#16a34a] underline font-bold hover:text-[#15803d]">
-                        Privacy Policy
-                      </a>
-                      {" "}and{" "}
-                      <a href="/seller/support" className="text-[#16a34a] underline font-bold hover:text-[#15803d]">
-                        Support
-                      </a>
-                    </label>
                   </div>
+                </div>
 
-                  <Button
-                    type="button"
-                    onClick={handleSendOtp}
-                    disabled={isLoading}
-                    className="h-14 w-full rounded-[24px] bg-slate-900 text-sm font-black uppercase tracking-[0.22em] text-white hover:bg-black"
-                  >
-                    {isLoading ? "Sending OTP..." : "Send OTP"}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <div className="space-y-2">
-                    <label className="text-[11px] font-black uppercase tracking-[0.24em] text-slate-400">
-                      Verify OTP
-                    </label>
-                    <div className="rounded-[24px] border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700">
-                      Code sent to {maskedPhone}
-                    </div>
-                    <div className="flex items-center gap-3 rounded-[24px] border border-slate-200 bg-white px-4 py-4">
-                      <KeyRound className="h-5 w-5 text-slate-400" />
-                      <input
-                        type="tel"
-                        inputMode="numeric"
-                        maxLength={6}
-                        value={otp}
-                        onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
-                        placeholder="Enter OTP"
-                        className="flex-1 bg-transparent text-base font-bold tracking-[0.45em] text-slate-900 outline-none placeholder:tracking-normal placeholder:text-slate-300"
-                      />
-                    </div>
-                  </div>
 
-                  <div className="flex gap-3">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => {
-                        setStep("phone");
-                        setOtp("");
-                        setOtpPhone("");
-                      }}
-                      className="h-14 flex-1 rounded-[24px] border-slate-300 bg-white font-black uppercase tracking-[0.18em] text-slate-700"
-                    >
-                      Back
-                    </Button>
-                    <Button
-                      type="button"
-                      onClick={handleVerifyOtp}
-                      disabled={isLoading}
-                      className="h-14 flex-[1.4] rounded-[24px] bg-[#16a34a] text-sm font-black uppercase tracking-[0.18em] text-white hover:bg-[#15803d]"
-                    >
-                      {isLoading ? "Verifying..." : "Continue"}
-                    </Button>
+                <Button
+                  onClick={handleSendOtp}
+                  disabled={isSubmitDisabled}
+                  className={`w-full py-3 rounded-xl font-bold text-base transition-all flex items-center justify-center gap-2 ${
+                    !isSubmitDisabled
+                    ? "bg-[#16a34a] hover:bg-[#128a3e] text-white shadow-lg shadow-[#16a34a]/30 active:scale-[0.98]"
+                    : "bg-gray-100 cursor-not-allowed opacity-50 text-gray-400 shadow-none"
+                  }`}
+                >
+                  {isLoading ? (
+                    <Loader2 className="w-5 h-5 animate-spin mx-auto text-gray-400" />
+                  ) : (
+                    <>
+                      Get Verification Code
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </Button>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="text-center mb-5">
+                <div className="flex items-center justify-center gap-3 mb-1.5">
+                   <div className="relative w-5 h-5">
+                     <div className="absolute top-1 right-0 w-2.5 h-0.5 bg-[#16a34a] transform rotate-45" />
+                     <div className="absolute top-2.5 right-0 w-3 h-0.5 bg-[#16a34a]" />
+                     <div className="absolute top-4 right-0 w-2.5 h-0.5 bg-[#16a34a] transform -rotate-45" />
+                   </div>
+                   <h2 className="text-2xl font-black text-[#1c1c1c]">Verify OTP</h2>
+                   <div className="relative w-5 h-5">
+                     <div className="absolute top-1 left-0 w-2.5 h-0.5 bg-[#16a34a] transform -rotate-45" />
+                     <div className="absolute top-2.5 left-0 w-3 h-0.5 bg-[#16a34a]" />
+                     <div className="absolute top-4 left-0 w-2.5 h-0.5 bg-[#16a34a] transform rotate-45" />
+                   </div>
+                </div>
+                <p className="text-sm text-gray-500 font-medium">
+                  Sent to <span className="text-[#16a34a] font-bold">{maskedPhone}</span>
+                </p>
+                <div className="h-1 w-8 bg-[#16a34a] mx-auto mt-2 rounded-full" />
+              </div>
+
+              <div className="space-y-5">
+                <div className="space-y-4">
+                  <div className="flex items-center border border-gray-200 rounded-xl p-1.5 bg-white focus-within:border-[#16a34a] focus-within:ring-1 focus-within:ring-[#16a34a] transition-all">
+                    <div className="bg-[#EAFaf1] p-2 rounded-lg flex items-center justify-center shrink-0">
+                      <KeyRound className="w-4 h-4 text-[#16a34a]" />
+                    </div>
+                    <input
+                      type="tel"
+                      inputMode="numeric"
+                      maxLength={4}
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 4))}
+                      placeholder="Enter 4-digit OTP"
+                      className="w-full bg-transparent pl-3 pr-2 py-1.5 text-sm text-gray-900 font-semibold outline-none placeholder:text-gray-400 placeholder:font-normal tracking-[0.25em] focus:tracking-[0.4em] transition-all"
+                    />
                   </div>
-                </>
-              )}
-            </div>
-          </motion.div>
+                </div>
+
+                <Button
+                  onClick={handleVerifyOtp}
+                  disabled={isSubmitDisabled}
+                  className={`w-full py-3 rounded-xl font-bold text-base transition-all flex items-center justify-center gap-2 ${
+                    !isSubmitDisabled
+                    ? "bg-[#16a34a] hover:bg-[#128a3e] text-white shadow-lg shadow-[#16a34a]/30 active:scale-[0.98]"
+                    : "bg-gray-100 cursor-not-allowed opacity-50 text-gray-400 shadow-none"
+                  }`}
+                >
+                  {isLoading ? (
+                    <Loader2 className="w-5 h-5 animate-spin mx-auto text-gray-400" />
+                  ) : (
+                    <>
+                      Verify & Continue
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </Button>
+              </div>
+            </>
+          )}
         </div>
+      </div>
+
+      <div className="text-center pt-4 pb-2">
+        <p className="text-slate-400 text-xs font-medium">
+          By continuing, you agree to our <br />
+          <a href="/seller/terms" className="text-[#16a34a] font-bold hover:underline">
+            Terms & Conditions
+          </a>
+          ,{" "}
+          <a href="/seller/privacy" className="text-[#16a34a] font-bold hover:underline">
+            Privacy Policy
+          </a>
+          {" "}and{" "}
+          <a href="/seller/support" className="text-[#16a34a] font-bold hover:underline">
+            Support
+          </a>
+        </p>
+      </div>
+
+      <div className="pb-8 text-center mt-auto">
+          <p className="text-[10px] font-black text-slate-300 tracking-[0.2em] uppercase">
+            &copy; {new Date().getFullYear()} {companyName.toUpperCase()} SELLER PORTAL
+          </p>
       </div>
     </div>
   );
