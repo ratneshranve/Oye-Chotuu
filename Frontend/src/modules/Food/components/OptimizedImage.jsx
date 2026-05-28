@@ -65,12 +65,12 @@ const OptimizedImage = React.memo(({
   // Generate responsive srcset
   const srcSet = useMemo(() => {
     if (!supportsOptimization(resolvedSrc)) return undefined
-    const sizesArr = [400, 600, 800, 1200, 1600]
+    const sizesArr = [300, 600, 900, 1200]
     
     // Check if it's Cloudinary
     if (/res\.cloudinary\.com/i.test(resolvedSrc)) {
       return sizesArr
-        .map(size => `${optimizeCloudinaryUrl(resolvedSrc, { width: size, quality: 80, format: 'auto' })} ${size}w`)
+        .map(size => `${optimizeCloudinaryUrl(resolvedSrc, { width: size, quality: 'auto:good', format: 'auto' })} ${size}w`)
         .join(', ')
     }
 
@@ -82,12 +82,12 @@ const OptimizedImage = React.memo(({
   // Generate WebP srcset
   const webPSrcSet = useMemo(() => {
     if (!supportsOptimization(resolvedSrc)) return undefined
-    const sizesArr = [400, 600, 800, 1200, 1600]
+    const sizesArr = [300, 600, 900, 1200]
 
     // Check if it's Cloudinary
     if (/res\.cloudinary\.com/i.test(resolvedSrc)) {
       return sizesArr
-        .map(size => `${optimizeCloudinaryUrl(resolvedSrc, { width: size, quality: 80, format: 'webp' })} ${size}w`)
+        .map(size => `${optimizeCloudinaryUrl(resolvedSrc, { width: size, quality: 'auto:good', format: 'webp' })} ${size}w`)
         .join(', ')
     }
 

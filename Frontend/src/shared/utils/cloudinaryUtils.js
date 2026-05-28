@@ -23,11 +23,11 @@ export const optimizeCloudinaryUrl = (url, options = {}) => {
   }
 
   const {
-    format = "webp",
-    quality = "auto",
+    format = "auto",
+    quality = "auto:good",
     width,
     height,
-    crop = width || height ? "fill" : null,
+    crop = width || height ? "limit" : null,
     dpr = "auto",
   } = options;
 
@@ -46,8 +46,9 @@ export const optimizeCloudinaryUrl = (url, options = {}) => {
       const transforms = firstSegment
         .split(",")
         .filter(Boolean)
-        .filter((part) => !part.startsWith("f_") && !part.startsWith("q_"));
+        .filter((part) => !part.startsWith("f_") && !part.startsWith("q_") && !part.startsWith("c_"));
 
+      if (crop) transforms.unshift(`c_${crop}`);
       transforms.unshift(`q_${quality}`);
       transforms.unshift(`f_${format}`);
 
@@ -68,9 +69,9 @@ export const optimizeCloudinaryUrl = (url, options = {}) => {
 };
 
 /**
- * Specifically ensures webp format for a Cloudinary URL.
+ * Specifically ensures auto format (WebP/AVIF) for a Cloudinary URL.
  */
-export const ensureWebp = (url) => optimizeCloudinaryUrl(url, { format: "webp" });
+export const ensureWebp = (url) => optimizeCloudinaryUrl(url, { format: "auto" });
 
 /**
  * Generates a srcSet for Cloudinary images.
@@ -78,12 +79,12 @@ export const ensureWebp = (url) => optimizeCloudinaryUrl(url, { format: "webp" }
  * @param {number[]} widths - Array of widths.
  * @returns {string} - srcSet string.
  */
-export const getCloudinarySrcSet = (url, widths = [200, 400, 600, 800, 1000]) => {
+export const getCloudinarySrcSet = (url, widths = [300, 600, 900, 1200]) => {
   if (!url || !/res\.cloudinary\.com/i.test(url)) return null;
 
   return widths
     .map((w) => {
-      const optimized = optimizeCloudinaryUrl(url, { width: w, crop: "scale", format: "webp", quality: "auto" });
+      const optimized = optimizeCloudinaryUrl(url, { width: w, crop: "limit", format: "auto", quality: "auto:good" });
       return `${optimized} ${w}w`;
     })
     .join(", ");
