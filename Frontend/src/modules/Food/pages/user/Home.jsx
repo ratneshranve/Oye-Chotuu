@@ -282,9 +282,9 @@ export default function Home() {
   // --- Handlers ---
   const handleTabChange = (tab) => {
     startTransition(() => setActiveTab(tab));
-    if (tab === "quick") navigate("/quick");
-    else if (tab === "milk") navigate("/dudhwala");
-    else navigate("/food/user");
+    if (tab === "quick") navigate("/quick", { replace: true });
+    else if (tab === "milk") navigate("/dudhwala", { replace: true });
+    else navigate("/food/user", { replace: true });
   };
 
   const handleVegModeChange = (newValue) => {

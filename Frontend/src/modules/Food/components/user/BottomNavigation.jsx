@@ -45,6 +45,7 @@ export default function BottomNavigation() {
         {/* Delivery Tab */}
         <Link
           to="/food/user"
+          replace
           className={`flex flex-1 flex-col items-center gap-1.5 px-2 sm:px-3 py-2 transition-all duration-200 relative ${isDelivery
               ? "text-red-600 dark:text-red-500"
               : "text-gray-600 dark:text-gray-400"

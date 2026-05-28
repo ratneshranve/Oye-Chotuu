@@ -43,7 +43,7 @@ const DraggableModuleSwitcher = () => {
             style={{ bottom: '100px', left: '16px' }} 
         >
             <div 
-                onClick={() => navigate(targetPath)}
+                onClick={() => navigate(targetPath, { replace: true })}
                 className="flex items-center gap-2 rounded-t-[16px] rounded-b-[8px] border border-gray-200 bg-white px-3 pb-2 pt-1.5 shadow-lg active:scale-95 transition-transform"
             >
                 <div className="text-left leading-none">
