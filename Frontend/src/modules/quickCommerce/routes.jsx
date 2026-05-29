@@ -28,6 +28,7 @@ import { LocationProvider } from "./user/context/LocationContext"
 import { ProductDetailProvider } from "./user/context/ProductDetailContext"
 import { WishlistProvider } from "./user/context/WishlistContext"
 import { CartAnimationProvider } from "./user/context/CartAnimationContext"
+import { ProfileProvider } from "@food/context/ProfileContext"
 
 // Inner routes component — kept separate so Suspense doesn't remount providers
 function QuickCommerceInnerRoutes() {
@@ -69,16 +70,18 @@ function QuickCommerceInnerRoutes() {
 
 export default function QuickCommerceRoutes() {
   return (
-    <CartProvider>
-      <LocationProvider>
-        <WishlistProvider>
-          <CartAnimationProvider>
-            <ProductDetailProvider>
-              <QuickCommerceInnerRoutes />
-            </ProductDetailProvider>
-          </CartAnimationProvider>
-        </WishlistProvider>
-      </LocationProvider>
-    </CartProvider>
+    <ProfileProvider>
+      <CartProvider>
+        <LocationProvider>
+          <WishlistProvider>
+            <CartAnimationProvider>
+              <ProductDetailProvider>
+                <QuickCommerceInnerRoutes />
+              </ProductDetailProvider>
+            </CartAnimationProvider>
+          </WishlistProvider>
+        </LocationProvider>
+      </CartProvider>
+    </ProfileProvider>
   );
 }

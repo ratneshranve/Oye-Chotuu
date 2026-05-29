@@ -125,7 +125,7 @@ const LocationDrawer = ({ isOpen, onClose }) => {
       name: address.address,
       time: "12-15 mins",
       ...(address.location ? { latitude: address.location.lat, longitude: address.location.lng } : {}),
-    }, { persist: true });
+    }, { persist: true, mode: "saved" });
     onClose();
   };
 

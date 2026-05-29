@@ -177,7 +177,23 @@ export function buildDeliverySocketPayload(orderDoc, restaurantDoc = null) {
   const restaurant = restaurantDoc || order?.restaurantId || null;
   const restaurantLocation = restaurant?.location || {};
   const deliveryAddress = order?.deliveryAddress || {};
-  const pickupPoints = Array.isArray(order?.pickupPoints) ? order.pickupPoints : [];
+
+  let pickupPoints = Array.isArray(order?.pickupPoints) ? order.pickupPoints : [];
+  if (pickupPoints.length === 0 && (order.orderType === "quick" || order.orderType === "mixed") && restaurant) {
+    pickupPoints = [{
+      pickupType: "quick",
+      sourceId: restaurant._id?.toString() || "",
+      sourceName: restaurant.shopName || restaurant.name || "Seller Store",
+      address: restaurantLocation?.address || restaurantLocation?.formattedAddress || restaurant?.address || "",
+      location: restaurantLocation?.coordinates?.length === 2
+        ? { type: "Point", coordinates: restaurantLocation.coordinates }
+        : (Number.isFinite(restaurantLocation?.latitude) && Number.isFinite(restaurantLocation?.longitude)
+            ? { type: "Point", coordinates: [restaurantLocation.longitude, restaurantLocation.latitude] }
+            : undefined),
+      phone: restaurant.phone || "",
+    }];
+  }
+
   const customerAddressParts = [
     deliveryAddress.street,
     deliveryAddress.additionalDetails,

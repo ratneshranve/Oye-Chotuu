@@ -659,6 +659,105 @@ function reorderPickupPointsForLeg(order, legId) {
   return [selectedPoint, ...pickupPoints];
 }
 
+export async function populateQuickOrderSellers(orders) {
+  const isArray = Array.isArray(orders);
+  const list = isArray ? orders : [orders];
+
+  const quickOrders = list.filter(o => o && (o.orderType === 'quick' || o.orderType === 'mixed'));
+  if (quickOrders.length === 0) return orders;
+
+  const sellerIds = new Set();
+  for (const o of quickOrders) {
+    if (o.pickupPoints && o.pickupPoints.length > 0) {
+      continue;
+    }
+    if (o.items) {
+      for (const item of o.items) {
+        if (item.type === 'quick' && item.sourceId) {
+          sellerIds.add(item.sourceId.toString());
+        }
+      }
+    }
+    if (o.dispatchPlan?.legs) {
+      for (const leg of o.dispatchPlan.legs) {
+        if (leg.pickupType === 'quick' && leg.sourceId) {
+          sellerIds.add(leg.sourceId.toString());
+        }
+      }
+    }
+  }
+
+  if (sellerIds.size > 0) {
+    const sellers = await Seller.find({ _id: { $in: Array.from(sellerIds) } }).lean();
+    const sellerMap = new Map(sellers.map(s => [s._id.toString(), s]));
+
+    for (const o of quickOrders) {
+      if (!o.pickupPoints || o.pickupPoints.length === 0) {
+        const points = [];
+        if (o.items) {
+          const grouped = new Map();
+          for (const item of o.items) {
+            if (item.type === 'quick' && item.sourceId) {
+              const sId = item.sourceId.toString();
+              if (!grouped.has(sId)) {
+                const s = sellerMap.get(sId);
+                if (s) {
+                  grouped.set(sId, {
+                    pickupType: 'quick',
+                    sourceId: sId,
+                    sourceName: s.shopName || s.name || 'Seller Store',
+                    address: s.location?.address || s.location?.formattedAddress || '',
+                    location: s.location?.coordinates
+                      ? { type: 'Point', coordinates: s.location.coordinates }
+                      : (Number.isFinite(s.location?.latitude) && Number.isFinite(s.location?.longitude)
+                          ? { type: 'Point', coordinates: [s.location.longitude, s.location.latitude] }
+                          : undefined),
+                    phone: s.phone || '',
+                    itemIds: [],
+                  });
+                }
+              }
+              if (grouped.has(sId)) {
+                grouped.get(sId).itemIds.push(item.itemId || item.id || item.name);
+              }
+            }
+          }
+          points.push(...grouped.values());
+        }
+        o.pickupPoints = points;
+      }
+    }
+  }
+
+  for (const o of list) {
+    if (o && (o.orderType === 'quick' || o.orderType === 'mixed')) {
+      if (o.pickupPoints && o.pickupPoints.length > 0) {
+        const primary = o.pickupPoints[0];
+        if (!o.restaurantLocation) {
+          o.restaurantLocation = primary.location;
+        }
+        if (!o.restaurantName) {
+          o.restaurantName = primary.sourceName;
+        }
+        if (!o.restaurantAddress) {
+          o.restaurantAddress = primary.address;
+        }
+        if (!o.restaurantPhone) {
+          o.restaurantPhone = primary.phone || '';
+        }
+        if (primary.location?.coordinates?.length === 2) {
+          o.restaurantLat = primary.location.coordinates[1];
+          o.restaurantLng = primary.location.coordinates[0];
+          o.latitude = primary.location.coordinates[1];
+          o.longitude = primary.location.coordinates[0];
+        }
+      }
+    }
+  }
+
+  return orders;
+}
+
 function buildDeliveryOrderView(orderDoc, deliveryPartnerId, options = {}) {
   const order = normalizeOrderForClient(orderDoc);
   const assignedLeg =
@@ -2526,6 +2625,7 @@ export async function getOrderById(
     .select("+deliveryOtp")
     .lean();
   if (!order) throw new NotFoundError("Order not found");
+  await populateQuickOrderSellers(order);
 
   if (admin) return normalizeOrderForClient(order);
 
@@ -3240,6 +3340,7 @@ export async function getCurrentTripDelivery(deliveryPartnerId) {
     .lean();
 
   if (!order) return null;
+  await populateQuickOrderSellers(order);
   return buildDeliveryOrderView(order, deliveryPartnerId, {
     assignedDispatchLeg: getAssignedDispatchLeg(order, deliveryPartnerId),
   });
@@ -3309,6 +3410,8 @@ export async function listOrdersAvailableDelivery(deliveryPartnerId, query) {
     .populate("userId", "name phone email")
     .populate("restaurantId", "restaurantName name address phone ownerPhone location profileImage")
     .lean();
+
+  await populateQuickOrderSellers(orders);
 
   const docs = [];
   for (const order of orders) {

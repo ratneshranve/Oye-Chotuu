@@ -388,6 +388,7 @@ const CheckoutPage = () => {
       return "saved";
     }
   });
+  const [selectedAddressId, setSelectedAddressId] = useState(null);
 
   // Sync delivery mode from overlay/localStorage changes.
   useEffect(() => {
@@ -548,6 +549,13 @@ const CheckoutPage = () => {
       const addr = resolveUniversalAddress();
       if (addr) {
         setCurrentAddress(addr);
+        if (localStorage.getItem("deliveryAddressMode") === "saved") {
+          if (addr.id) {
+            setSelectedAddressId(addr.id);
+          }
+        } else {
+          setSelectedAddressId(null);
+        }
       }
     };
 
@@ -558,7 +566,7 @@ const CheckoutPage = () => {
     return () => {
       window.removeEventListener("userLocationUpdated", handleLocationUpdate);
     };
-  }, [resolveUniversalAddress, profileAddresses, deliveryAddressMode]);
+  }, [resolveUniversalAddress, profileAddresses, deliveryAddressMode, selectedAddressId]);
 
   // Mock data for recommendations
   const recommendedProducts = [
@@ -998,6 +1006,11 @@ const CheckoutPage = () => {
   }, [normalizeAddressLabel]);
 
   const handleSelectSavedAddress = async (addr) => {
+    if (addr?.id) {
+      setSelectedAddressId(addr.id);
+    }
+    setDeliveryAddressMode("saved");
+
     const rawText = addr?.address || "";
     const addrLoc = addr?.location;
     const hasLoc = isValidLatLng(addrLoc);
@@ -1050,6 +1063,7 @@ const CheckoutPage = () => {
 
       // 2. Persist the selection to localStorage
       localStorage.setItem("deliveryAddressMode", "saved");
+      setDeliveryAddressMode("saved");
 
       // 3. Dispatch the userLocationUpdated event to alert other pages (like Food Cart)
       const coordinates = [resolvedLoc.lng, resolvedLoc.lat];
@@ -1086,7 +1100,7 @@ const CheckoutPage = () => {
           latitude: resolvedLoc.lat,
           longitude: resolvedLoc.lng,
         },
-        { persist: true, updateSavedHome: false },
+        { persist: true, updateSavedHome: false, mode: "saved" },
       );
 
       setIsAddressModalOpen(false);
@@ -1106,6 +1120,11 @@ const CheckoutPage = () => {
       }
 
       const getAddressIdLocal = (a) => a?.id || a?._id || "";
+      const addressId = getAddressIdLocal(address);
+      if (addressId) {
+        setSelectedAddressId(addressId);
+      }
+      setDeliveryAddressMode("saved");
       const coordinates = address.location?.coordinates || [];
       const lat = typeof address.location?.lat === "number" ? address.location.lat : coordinates[1];
       const lng = typeof address.location?.lng === "number" ? address.location.lng : coordinates[0];
@@ -1193,6 +1212,7 @@ const CheckoutPage = () => {
 
         // Set deliveryAddressMode to saved
         localStorage.setItem("deliveryAddressMode", "saved");
+        setDeliveryAddressMode("saved");
 
         // Sync local storage and dispatch event
         const userLocPayload = {
@@ -1225,7 +1245,7 @@ const CheckoutPage = () => {
               latitude: resolvedLoc.lat,
               longitude: resolvedLoc.lng,
             },
-            { persist: true, updateSavedHome: false },
+            { persist: true, updateSavedHome: false, mode: "saved" },
           );
         }
       }
@@ -1290,7 +1310,7 @@ const CheckoutPage = () => {
             latitude: loc.lat,
             longitude: loc.lng,
           },
-          { persist: true, updateSavedHome: false },
+          { persist: true, updateSavedHome: false, mode: currentAddress.id ? "saved" : "current" },
         );
       }
     } catch (e) {
@@ -1319,8 +1339,10 @@ const CheckoutPage = () => {
         };
         await updateAddress(currentAddress.id, payload);
         localStorage.setItem("deliveryAddressMode", "saved");
+        setDeliveryAddressMode("saved");
       } else {
         localStorage.setItem("deliveryAddressMode", "current");
+        setDeliveryAddressMode("current");
       }
 
       // Sync local storage and dispatch event
@@ -1358,6 +1380,8 @@ const CheckoutPage = () => {
   };
 
   const handleUseCurrentLiveLocation = async () => {
+    setSelectedAddressId(null);
+    setDeliveryAddressMode("current");
     const result = await refreshLocation();
 
     if (result?.ok && result.location) {
@@ -1365,6 +1389,7 @@ const CheckoutPage = () => {
 
       // Update deliveryAddressMode to current
       localStorage.setItem("deliveryAddressMode", "current");
+      setDeliveryAddressMode("current");
 
       const userLocPayload = {
         latitude: liveLocation.latitude,
@@ -1407,6 +1432,7 @@ const CheckoutPage = () => {
     if (currentLocation?.name) {
       // Update deliveryAddressMode to current
       localStorage.setItem("deliveryAddressMode", "current");
+      setDeliveryAddressMode("current");
 
       const userLocPayload = {
         latitude: currentLocation.latitude,
@@ -1976,11 +2002,11 @@ const CheckoutPage = () => {
                           <div className="mt-4 space-y-3">
                             {mappedAddresses.map((address) => {
                               const addressId = address.id;
-                              const isSelected = addressId && addressId === currentAddress?.id && deliveryAddressMode === "saved";
+                              const isSelected = addressId && addressId === selectedAddressId && deliveryAddressMode === "saved";
                               return (
                                 <button
                                   key={addressId || `${address.label}-${address.address}`}
-                                  type="button; e.preventDefault(); e.stopPropagation();"
+                                  type="button"
                                   onClick={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
@@ -2000,22 +2026,9 @@ const CheckoutPage = () => {
                                         </p>
                                         <div className="flex items-center gap-2">
                                           {isSelected && (
-                                            <>
-                                              <button
-                                                type="button"
-                                                onClick={(e) => {
-                                                  e.preventDefault();
-                                                  e.stopPropagation();
-                                                  handleOpenEditAddress();
-                                                }}
-                                                className="text-slate-500 text-xs font-bold hover:underline"
-                                              >
-                                                Edit
-                                              </button>
                                               <span className="text-[10px] bg-[#0c831f] text-white px-2 py-0.5 rounded uppercase font-bold tracking-wider whitespace-nowrap">
                                                 Selected
                                               </span>
-                                            </>
                                           )}
                                         </div>
                                       </div>

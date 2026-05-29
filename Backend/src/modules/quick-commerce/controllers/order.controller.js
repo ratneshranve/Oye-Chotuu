@@ -1,3 +1,4 @@
+
 import mongoose from 'mongoose';
 import { getIO, rooms } from '../../../config/socket.js';
 import { logger } from '../../../utils/logger.js';
@@ -6,6 +7,8 @@ import { QuickCart } from '../models/cart.model.js';
 import { QuickProduct } from '../models/product.model.js';
 import { Seller } from '../seller/models/seller.model.js';
 import { SellerOrder } from '../seller/models/sellerOrder.model.js';
+import { QuickZone } from '../models/quick_zone.model.js';
+import { FoodZone } from '../../food/admin/models/zone.model.js';
 import { getSellerCommissionSnapshot } from '../admin/services/commission.service.js';
 import {
   calculateQuickPricing,
@@ -162,6 +165,22 @@ const emitQuickSellerOrders = (sellerOrders) => {
   }
 };
 
+const isPointInPolygon = (lat, lng, polygon) => {
+  if (!Array.isArray(polygon) || polygon.length < 3) return false;
+  let inside = false;
+  for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+    const xi = polygon[i].longitude;
+    const yi = polygon[i].latitude;
+    const xj = polygon[j].longitude;
+    const yj = polygon[j].latitude;
+    const intersect =
+      yi > lat !== yj > lat &&
+      lng < ((xj - xi) * (lat - yi)) / (yj - yi + 0.0) + xi;
+    if (intersect) inside = !inside;
+  }
+  return inside;
+};
+
 export const placeOrder = async (req, res) => {
   try {
     const idQuery = resolveId(req);
@@ -259,6 +278,54 @@ export const placeOrder = async (req, res) => {
     const shouldFanOutSellerOrders = true;
     const deliveryAddress = normalizeDeliveryAddress(req.body?.address);
 
+    const sellerIds = [...new Set(products.map((p) => String(p.sellerId)).filter(Boolean))];
+    const sellers = await Seller.find({ _id: { $in: sellerIds } }).lean();
+
+    // Validate zone constraint
+    const customerCoords = deliveryAddress?.location?.coordinates;
+    if (customerCoords && customerCoords.length === 2) {
+      const custLng = customerCoords[0];
+      const custLat = customerCoords[1];
+
+      for (const product of products) {
+        const seller = sellers.find((s) => String(s._id) === String(product.sellerId));
+        if (seller && seller.shopInfo?.zoneId) {
+          let zone = null;
+          if (seller.shopInfo.zoneSource === 'food') {
+            zone = await FoodZone.findById(seller.shopInfo.zoneId).lean();
+          } else {
+            zone = await QuickZone.findById(seller.shopInfo.zoneId).lean();
+          }
+
+          if (zone && zone.coordinates && zone.coordinates.length >= 3) {
+            const isInside = isPointInPolygon(custLat, custLng, zone.coordinates);
+            if (!isInside) {
+              return res.status(400).json({
+                success: false,
+                message: `Delivery address is outside of ${seller.shopName || 'seller'}'s service zone. Please choose a different address.`,
+              });
+            }
+          }
+        }
+      }
+    }
+
+    const pickupPoints = sellers.map((seller) => {
+      const sellerItems = items.filter((item) => String(item.sellerId) === String(seller._id));
+      return {
+        pickupType: 'quick',
+        sourceId: String(seller._id),
+        sourceName: seller.shopName || seller.name || 'Seller Store',
+        address: seller.location?.address || seller.location?.formattedAddress || '',
+        location: seller.location?.coordinates
+          ? { type: 'Point', coordinates: seller.location.coordinates }
+          : (Number.isFinite(seller.location?.latitude) && Number.isFinite(seller.location?.longitude)
+              ? { type: 'Point', coordinates: [seller.location.longitude, seller.location.latitude] }
+              : undefined),
+        itemIds: sellerItems.map((item) => String(item.productId)),
+      };
+    });
+
     // Calculate rider earning (using base payout if distance is unknown/short)
     const riderEarning = await getQuickRiderEarning(0.1);
 
@@ -277,6 +344,7 @@ export const placeOrder = async (req, res) => {
         sourceId: String(item.sellerId || item.productId),
         sourceName: '',
       })),
+      pickupPoints,
       pricing: {
         ...pricing,
         subtotal,

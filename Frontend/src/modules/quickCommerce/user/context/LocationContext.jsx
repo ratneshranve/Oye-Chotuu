@@ -178,7 +178,7 @@ export const LocationProvider = ({ children }) => {
   // address actions should touch the saved list.
   const updateLocation = (
     newLoc,
-    { persist = true, updateSavedHome = false } = {},
+    { persist = true, updateSavedHome = false, mode } = {},
   ) => {
     setCurrentLocation(newLoc);
 
@@ -221,7 +221,9 @@ export const LocationProvider = ({ children }) => {
           }
         };
         window.localStorage.setItem("userLocation", JSON.stringify(userLocPayload));
-        window.localStorage.setItem("deliveryAddressMode", "current");
+        
+        const addressMode = mode || "current";
+        window.localStorage.setItem("deliveryAddressMode", addressMode);
 
         // Dispatch the custom event to sync Food module immediately
         window.dispatchEvent(
