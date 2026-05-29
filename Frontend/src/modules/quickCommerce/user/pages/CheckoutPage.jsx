@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { Link, useLocation as useRouterLocation, useNavigate } from "react-router-dom";
 import Lottie from "lottie-react";
 import { useCart } from "../context/CartContext";
@@ -249,6 +249,39 @@ const buildNormalizedQuickOrderAddress = ({
   };
 };
 
+const formatFullAddress = (address) => {
+  if (!address) return "";
+
+  const looksLikeLatLng = (s) => {
+    if (!s) return false;
+    const v = String(s).trim();
+    return /^-?\d+(\.\d+)?\s*,\s*-?\d+(\.\d+)?$/.test(v);
+  };
+
+  if (address.formattedAddress && address.formattedAddress !== "Select location") {
+    if (!looksLikeLatLng(address.formattedAddress)) {
+      return address.formattedAddress;
+    }
+  }
+
+  const addressParts = [];
+  if (address.street) addressParts.push(address.street);
+  if (address.additionalDetails) addressParts.push(address.additionalDetails);
+  if (address.city) addressParts.push(address.city);
+  if (address.state) addressParts.push(address.state);
+  if (address.zipCode) addressParts.push(address.zipCode);
+
+  if (addressParts.length > 0) {
+    return addressParts.join(', ');
+  }
+
+  if (address.address && address.address !== "Select location") {
+    return address.address;
+  }
+
+  return "";
+};
+
 const readStoredCheckoutState = () => {
   try {
     if (typeof window === "undefined") return {};
@@ -281,7 +314,14 @@ const CheckoutPage = () => {
     useWishlist();
   const { showToast } = useToast();
   const { user, isAuthenticated } = useAuth();
-  const { userProfile } = useProfile();
+  const {
+    userProfile,
+    getDefaultAddress,
+    setDefaultAddress,
+    addresses: profileAddresses,
+    addAddress,
+    updateAddress,
+  } = useProfile();
   const { settings } = useSettings();
   const routerLocation = useRouterLocation();
 
@@ -294,7 +334,6 @@ const CheckoutPage = () => {
 
   const appName = settings?.appName || "App";
   const {
-    savedAddresses: locationSavedAddresses,
     currentLocation,
     refreshLocation,
     isFetchingLocation,
@@ -341,6 +380,25 @@ const CheckoutPage = () => {
   const [currentAddress, setCurrentAddress] = useState(
     storedCheckoutState.currentAddress || DEFAULT_CURRENT_ADDRESS,
   );
+  const [deliveryAddressMode, setDeliveryAddressMode] = useState(() => {
+    try {
+      if (typeof window === "undefined") return "saved";
+      return localStorage.getItem("deliveryAddressMode") || "saved";
+    } catch {
+      return "saved";
+    }
+  });
+
+  // Sync delivery mode from overlay/localStorage changes.
+  useEffect(() => {
+    try {
+      const mode = localStorage.getItem("deliveryAddressMode") || "saved";
+      setDeliveryAddressMode((prev) => (prev === mode ? prev : mode));
+    } catch {
+      // ignore
+    }
+  });
+
   const [isEditAddressOpen, setIsEditAddressOpen] = useState(false);
   const [editAddressForm, setEditAddressForm] = useState({
     ...(storedCheckoutState.currentAddress || DEFAULT_CURRENT_ADDRESS),
@@ -351,12 +409,156 @@ const CheckoutPage = () => {
   const [recipientData, setRecipientData] = useState(DEFAULT_RECIPIENT_DATA);
   const [savedRecipient, setSavedRecipient] = useState(null);
   const [recipientErrors, setRecipientErrors] = useState({});
+
   const sharedProfileName = String(
     userProfile?.name || user?.name || "",
   ).trim();
   const sharedProfilePhone = String(
     userProfile?.phone || user?.phone || "",
   ).trim();
+
+  const resolveUniversalAddress = useCallback(() => {
+    const mode = localStorage.getItem("deliveryAddressMode") || "saved";
+
+    // 1. Current location address from storage
+    let currentLocFromStorage = null;
+    try {
+      const raw = localStorage.getItem("userLocation");
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && (parsed.latitude || parsed.lat) && (parsed.longitude || parsed.lng)) {
+          const lat = parsed.latitude || parsed.lat;
+          const lng = parsed.longitude || parsed.lng;
+          currentLocFromStorage = {
+            type: "Home",
+            name: sharedProfileName || "",
+            address: parsed.formattedAddress || parsed.address || "",
+            landmark: parsed.area || "",
+            city: parsed.city || "",
+            state: parsed.state || "",
+            zipCode: parsed.postalCode || parsed.zipCode || "",
+            phone: sharedProfilePhone || "",
+            location: { lat, lng },
+            placeId: parsed.placeId || null,
+          };
+        }
+      }
+    } catch (e) {
+      console.error("Error parsing userLocation", e);
+    }
+
+    // 2. Current location address from context
+    let currentLocFromContext = null;
+    if (currentLocation && currentLocation.latitude && currentLocation.longitude) {
+      currentLocFromContext = {
+        type: "Home",
+        name: sharedProfileName || "",
+        address: currentLocation.name || "",
+        landmark: "",
+        city: [currentLocation.city, currentLocation.state, currentLocation.pincode]
+          .filter(Boolean)
+          .join(", "),
+        state: currentLocation.state || "",
+        zipCode: currentLocation.pincode || "",
+        phone: sharedProfilePhone || "",
+        location: { lat: currentLocation.latitude, lng: currentLocation.longitude },
+        placeId: null,
+      };
+    }
+
+    // 3. Saved default address from profile
+    let savedDefaultAddr = null;
+    const defaultAddr = getDefaultAddress();
+    if (defaultAddr) {
+      const getAddressId = (a) => a?.id || a?._id || "";
+      const coordinates = defaultAddr.location?.coordinates || [];
+      const lat = typeof defaultAddr.location?.lat === "number" ? defaultAddr.location.lat : coordinates[1];
+      const lng = typeof defaultAddr.location?.lng === "number" ? defaultAddr.location.lng : coordinates[0];
+
+      const street = defaultAddr.street || "";
+      const additionalDetails = defaultAddr.additionalDetails || "";
+      const addressString = [
+        street,
+        additionalDetails,
+        [defaultAddr.city, defaultAddr.state].filter(Boolean).join(", "),
+        defaultAddr.zipCode || defaultAddr.postalCode || "",
+      ]
+        .filter(Boolean)
+        .join(", ");
+
+      savedDefaultAddr = {
+        id: getAddressId(defaultAddr),
+        type: defaultAddr.label || "Home",
+        name: defaultAddr.name || sharedProfileName || "",
+        address: addressString || defaultAddr.formattedAddress || defaultAddr.address || "",
+        landmark: defaultAddr.additionalDetails || defaultAddr.landmark || "",
+        city: defaultAddr.city || "",
+        state: defaultAddr.state || "",
+        zipCode: defaultAddr.zipCode || defaultAddr.postalCode || "",
+        phone: defaultAddr.phone || sharedProfilePhone || "",
+        location: (lat && lng) ? { lat, lng } : undefined,
+        placeId: defaultAddr.placeId || null,
+      };
+    }
+
+    // 4. First saved address from profile
+    let firstSavedAddr = null;
+    if (profileAddresses && profileAddresses.length > 0) {
+      const first = profileAddresses[0];
+      const getAddressId = (a) => a?.id || a?._id || "";
+      const coordinates = first.location?.coordinates || [];
+      const lat = typeof first.location?.lat === "number" ? first.location.lat : coordinates[1];
+      const lng = typeof first.location?.lng === "number" ? first.location.lng : coordinates[0];
+
+      const street = first.street || "";
+      const additionalDetails = first.additionalDetails || "";
+      const addressString = [
+        street,
+        additionalDetails,
+        [first.city, first.state].filter(Boolean).join(", "),
+        first.zipCode || first.postalCode || "",
+      ]
+        .filter(Boolean)
+        .join(", ");
+
+      firstSavedAddr = {
+        id: getAddressId(first),
+        type: first.label || "Home",
+        name: first.name || sharedProfileName || "",
+        address: addressString || first.formattedAddress || first.address || "",
+        landmark: first.additionalDetails || first.landmark || "",
+        city: first.city || "",
+        state: first.state || "",
+        zipCode: first.zipCode || first.postalCode || "",
+        phone: first.phone || sharedProfilePhone || "",
+        location: (lat && lng) ? { lat, lng } : undefined,
+        placeId: first.placeId || null,
+      };
+    }
+
+    if (mode === "current") {
+      return currentLocFromStorage || currentLocFromContext || savedDefaultAddr || firstSavedAddr || null;
+    } else {
+      return savedDefaultAddr || firstSavedAddr || currentLocFromStorage || currentLocFromContext || null;
+    }
+  }, [getDefaultAddress, profileAddresses, currentLocation, sharedProfileName, sharedProfilePhone]);
+
+  useEffect(() => {
+    const handleLocationUpdate = () => {
+      const addr = resolveUniversalAddress();
+      if (addr) {
+        setCurrentAddress(addr);
+      }
+    };
+
+    window.addEventListener("userLocationUpdated", handleLocationUpdate);
+    // Also run on mount or when dependencies change
+    handleLocationUpdate();
+
+    return () => {
+      window.removeEventListener("userLocationUpdated", handleLocationUpdate);
+    };
+  }, [resolveUniversalAddress, profileAddresses, deliveryAddressMode]);
 
   // Mock data for recommendations
   const recommendedProducts = [
@@ -582,65 +784,44 @@ const CheckoutPage = () => {
     // the receiver is a different person, so the user must enter their details manually.
   }, [sharedProfileName, sharedProfilePhone]);
 
-  useEffect(() => {
-    const hasUsableAddress = [currentAddress.address, currentAddress.city, currentAddress.landmark]
-      .some((value) => String(value || "").trim());
+  const mappedAddresses = useMemo(() => {
+    const getAddressId = (addr) => addr?.id || addr?._id || "";
+    return profileAddresses.map((addr) => {
+      const id = getAddressId(addr);
+      const street = addr.street || "";
+      const additionalDetails = addr.additionalDetails || "";
+      const addressString = [
+        street,
+        additionalDetails,
+        [addr.city, addr.state].filter(Boolean).join(", "),
+        addr.zipCode || addr.postalCode || "",
+      ]
+        .filter(Boolean)
+        .join(", ");
 
-    if (hasUsableAddress || !locationSavedAddresses.length) {
-      return;
-    }
+      const coordinates = addr.location?.coordinates || [];
+      const lat = typeof addr.location?.lat === "number" ? addr.location.lat : coordinates[1];
+      const lng = typeof addr.location?.lng === "number" ? addr.location.lng : coordinates[0];
 
-    const primaryAddress =
-      locationSavedAddresses.find((addr) => addr?.isDefault || addr?.isCurrent) ||
-      locationSavedAddresses[0];
-    if (!primaryAddress?.address) {
-      return;
-    }
+      return {
+        id,
+        label: addr.label || "Home",
+        name: addr.name || sharedProfileName || "",
+        address: addressString || addr.formattedAddress || addr.address || "",
+        city: addr.city || "",
+        state: addr.state || "",
+        zipCode: addr.zipCode || addr.postalCode || "",
+        phone: addr.phone || sharedProfilePhone || "",
+        location: (lat && lng) ? { lat, lng } : undefined,
+        placeId: addr.placeId || null,
+        isDefault: addr.isDefault || false,
+      };
+    });
+  }, [profileAddresses, sharedProfileName, sharedProfilePhone]);
 
-    setCurrentAddress((prev) => ({
-      ...prev,
-      type: primaryAddress.label || prev.type || "Home",
-      name: primaryAddress.name || sharedProfileName || "",
-      address: primaryAddress.address || "",
-      city: primaryAddress.city || "",
-      phone: primaryAddress.phone || sharedProfilePhone || "",
-      landmark: "",
-      ...(primaryAddress.placeId ? { placeId: primaryAddress.placeId } : {}),
-      ...(primaryAddress.location ? { location: primaryAddress.location } : {}),
-      ...(primaryAddress.id ? { id: primaryAddress.id } : {}),
-    }));
-  }, [
-    currentAddress.address,
-    currentAddress.city,
-    currentAddress.landmark,
-    locationSavedAddresses,
-    sharedProfileName,
-    sharedProfilePhone,
-  ]);
+  // Legacy address synchronization effect removed to prevent conflict with resolveUniversalAddress
 
   const buildAddressForOrder = () => {
-    if (savedRecipient) {
-      const recipientAddressParts = parseAddressLineParts(
-        savedRecipient.completeAddress,
-      );
-      return buildNormalizedQuickOrderAddress({
-        label: "Other",
-        name: savedRecipient.name,
-        phone: savedRecipient.phone,
-        street: recipientAddressParts[0] || savedRecipient.completeAddress,
-        additionalDetails:
-          savedRecipient.landmark || recipientAddressParts.slice(1, -1).join(", "),
-        city: currentAddress.city || recipientAddressParts.at(-1) || "NA",
-        state: currentAddress.state || currentLocation?.state || "NA",
-        zipCode: savedRecipient.pincode || currentAddress.pincode || "",
-        completeAddress: savedRecipient.completeAddress,
-        location:
-          currentLocation?.latitude && currentLocation?.longitude
-            ? { lat: currentLocation.latitude, lng: currentLocation.longitude }
-            : undefined,
-      });
-    }
-
     const addrLoc = currentAddress?.location;
     const hasAddrLoc =
       addrLoc &&
@@ -799,6 +980,23 @@ const CheckoutPage = () => {
     return null;
   };
 
+  const normalizeAddressLabel = useCallback((label) => {
+    if (!label) return "";
+    const value = String(label).trim().toLowerCase();
+    if (value === "work" || value === "office") return "office";
+    if (value === "home") return "home";
+    if (value === "other") return "other";
+    return value;
+  }, []);
+
+  const getDisplayAddressLabel = useCallback((label) => {
+    const normalized = normalizeAddressLabel(label);
+    if (normalized === "office") return "Work";
+    if (normalized === "home") return "Home";
+    if (normalized === "other") return "Other";
+    return label || "Saved address";
+  }, [normalizeAddressLabel]);
+
   const handleSelectSavedAddress = async (addr) => {
     const rawText = addr?.address || "";
     const addrLoc = addr?.location;
@@ -845,38 +1043,101 @@ const CheckoutPage = () => {
         return;
       }
 
-      setCurrentAddress({
-        id: addr.id,
-        type: addr.label,
-        name: addr.name || user?.name || "",
-        address: rawText,
-        city: addr.city || "",
-        phone: addr.phone || currentAddress.phone,
-        landmark: "", // already baked into addr.address if present
-        ...(pid ? { placeId: pid } : {}),
-        ...(resolvedLoc ? { location: resolvedLoc } : {}),
-      });
-
-      if (resolvedLoc) {
-        updateLocation(
-          {
-            name: rawText,
-            time: currentLocation?.time || "12-15 mins",
-            city: currentLocation?.city,
-            state: currentLocation?.state,
-            pincode: currentLocation?.pincode,
-            latitude: resolvedLoc.lat,
-            longitude: resolvedLoc.lng,
-          },
-          { persist: true, updateSavedHome: false },
-        );
+      // 1. Set the default address in profile context reactively!
+      if (addr.id) {
+        await setDefaultAddress(addr.id);
       }
+
+      // 2. Persist the selection to localStorage
+      localStorage.setItem("deliveryAddressMode", "saved");
+
+      // 3. Dispatch the userLocationUpdated event to alert other pages (like Food Cart)
+      const coordinates = [resolvedLoc.lng, resolvedLoc.lat];
+      const userLocPayload = {
+        latitude: resolvedLoc.lat,
+        longitude: resolvedLoc.lng,
+        address: rawText,
+        formattedAddress: rawText,
+        city: addr.city || "",
+        state: addr.state || "",
+        postalCode: addr.zipCode || "",
+        street: rawText,
+        area: "",
+        location: {
+          type: "Point",
+          coordinates,
+        }
+      };
+      localStorage.setItem("userLocation", JSON.stringify(userLocPayload));
+      window.dispatchEvent(
+        new CustomEvent("userLocationUpdated", {
+          detail: { location: userLocPayload },
+        })
+      );
+
+      // 4. Update the location context state
+      updateLocation(
+        {
+          name: rawText,
+          time: currentLocation?.time || "12-15 mins",
+          city: addr.city || currentLocation?.city,
+          state: addr.state || currentLocation?.state,
+          pincode: addr.zipCode || currentLocation?.pincode,
+          latitude: resolvedLoc.lat,
+          longitude: resolvedLoc.lng,
+        },
+        { persist: true, updateSavedHome: false },
+      );
 
       setIsAddressModalOpen(false);
     } finally {
       setIsResolvingAddressCoords(false);
     }
   };
+
+  const handleSelectAddressByLabel = useCallback(async (label) => {
+    try {
+      const targetLabel = normalizeAddressLabel(label);
+      const address = profileAddresses.find(addr => normalizeAddressLabel(addr.label || addr.type) === targetLabel);
+
+      if (!address) {
+        showToast(`No ${label} address found. Please add an address first.`, "error");
+        return;
+      }
+
+      const getAddressIdLocal = (a) => a?.id || a?._id || "";
+      const coordinates = address.location?.coordinates || [];
+      const lat = typeof address.location?.lat === "number" ? address.location.lat : coordinates[1];
+      const lng = typeof address.location?.lng === "number" ? address.location.lng : coordinates[0];
+
+      const street = address.street || "";
+      const additionalDetails = address.additionalDetails || "";
+      const addressString = [
+        street,
+        additionalDetails,
+        [address.city, address.state].filter(Boolean).join(", "),
+        address.zipCode || address.postalCode || "",
+      ]
+        .filter(Boolean)
+        .join(", ");
+
+      await handleSelectSavedAddress({
+        id: getAddressIdLocal(address),
+        label: address.label || "Home",
+        name: address.name || sharedProfileName || "",
+        address: addressString || address.formattedAddress || address.address || "",
+        city: address.city || "",
+        state: address.state || "",
+        zipCode: address.zipCode || address.postalCode || "",
+        phone: address.phone || sharedProfilePhone || "",
+        location: (lat && lng) ? { lat, lng } : undefined,
+        placeId: address.placeId || null,
+      });
+    } catch (error) {
+      console.error(`Error selecting ${label} address:`, error);
+      showToast(`Failed to select ${label} address. Please try again.`, "error");
+    }
+  }, [profileAddresses, handleSelectSavedAddress, normalizeAddressLabel, sharedProfileName, sharedProfilePhone, showToast]);
 
   const handleSaveNewAddress = async () => {
     const errors = {};
@@ -906,35 +1167,67 @@ const CheckoutPage = () => {
         }
       } catch { /* geocoding optional */ }
 
-      // Save via location context
-      const newAddr = {
-        label: newAddressForm.label,
-        name: newAddressForm.name.trim(),
-        phone: newAddressForm.phone,
-        address: newAddressForm.address.trim(),
-        landmark: newAddressForm.landmark.trim(),
+      // Save via Profile Context API (unified address backend)
+      const payload = {
+        street: newAddressForm.address.trim(),
+        additionalDetails: newAddressForm.landmark.trim(),
         city: newAddressForm.city.trim(),
-        zipCode: newAddressForm.zipCode,
-        ...(resolvedLoc ? { location: resolvedLoc } : {}),
+        state: "Madhya Pradesh", // fallback state
+        zipCode: newAddressForm.zipCode || "",
+        label: newAddressForm.label === "Work" ? "Office" : newAddressForm.label,
+        phone: newAddressForm.phone,
+        name: newAddressForm.name.trim(),
+        location: resolvedLoc ? { type: "Point", coordinates: [resolvedLoc.lng, resolvedLoc.lat] } : undefined,
+        latitude: resolvedLoc?.lat,
+        longitude: resolvedLoc?.lng,
       };
 
-      // Set as current address
-      setCurrentAddress({
-        type: newAddr.label,
-        name: newAddr.name,
-        phone: newAddr.phone,
-        address: newAddr.address,
-        landmark: newAddr.landmark,
-        city: newAddr.city,
-        zipCode: newAddr.zipCode,
-        ...(resolvedLoc ? { location: resolvedLoc } : {}),
-      });
+      const created = await addAddress(payload);
 
-      if (resolvedLoc) {
-        updateLocation(
-          { name: query, time: currentLocation?.time || "12-15 mins", latitude: resolvedLoc.lat, longitude: resolvedLoc.lng },
-          { persist: true, updateSavedHome: false },
+      if (created) {
+        const getAddressId = (a) => a?.id || a?._id || null;
+        const newId = getAddressId(created);
+        if (newId) {
+          await setDefaultAddress(newId);
+        }
+
+        // Set deliveryAddressMode to saved
+        localStorage.setItem("deliveryAddressMode", "saved");
+
+        // Sync local storage and dispatch event
+        const userLocPayload = {
+          latitude: resolvedLoc?.lat || 22.7196,
+          longitude: resolvedLoc?.lng || 75.9001,
+          address: query,
+          formattedAddress: query,
+          city: payload.city,
+          state: payload.state,
+          postalCode: payload.zipCode,
+          street: payload.street,
+          area: payload.additionalDetails,
+          location: resolvedLoc ? { type: "Point", coordinates: [resolvedLoc.lng, resolvedLoc.lat] } : undefined,
+        };
+        localStorage.setItem("userLocation", JSON.stringify(userLocPayload));
+        window.dispatchEvent(
+          new CustomEvent("userLocationUpdated", {
+            detail: { location: userLocPayload },
+          })
         );
+
+        if (resolvedLoc) {
+          updateLocation(
+            {
+              name: query,
+              time: currentLocation?.time || "12-15 mins",
+              city: payload.city,
+              state: payload.state,
+              pincode: payload.zipCode,
+              latitude: resolvedLoc.lat,
+              longitude: resolvedLoc.lng,
+            },
+            { persist: true, updateSavedHome: false },
+          );
+        }
       }
 
       showToast("Address saved!", "success");
@@ -966,14 +1259,15 @@ const CheckoutPage = () => {
     let location = null;
     let placeId = null;
     let formattedAddress = null;
+    const query = [
+      editAddressForm.address,
+      editAddressForm.landmark,
+      editAddressForm.city,
+    ]
+      .filter(Boolean)
+      .join(", ");
+
     try {
-      const query = [
-        editAddressForm.address,
-        editAddressForm.landmark,
-        editAddressForm.city,
-      ]
-        .filter(Boolean)
-        .join(", ");
       const resp = await customerApi.geocodeAddress(query);
       const loc = resp.data?.result?.location;
       if (
@@ -1008,6 +1302,50 @@ const CheckoutPage = () => {
       );
     }
 
+    try {
+      if (currentAddress.id) {
+        const payload = {
+          street: editAddressForm.address.trim(),
+          additionalDetails: editAddressForm.landmark.trim(),
+          city: editAddressForm.city.trim(),
+          state: editAddressForm.state || "Madhya Pradesh",
+          zipCode: editAddressForm.zipCode || "",
+          label: editAddressForm.type || "Home",
+          phone: editAddressForm.phone,
+          name: editAddressForm.name.trim(),
+          location: location ? { type: "Point", coordinates: [location.lng, location.lat] } : undefined,
+          latitude: location?.lat,
+          longitude: location?.lng,
+        };
+        await updateAddress(currentAddress.id, payload);
+        localStorage.setItem("deliveryAddressMode", "saved");
+      } else {
+        localStorage.setItem("deliveryAddressMode", "current");
+      }
+
+      // Sync local storage and dispatch event
+      const userLocPayload = {
+        latitude: location?.lat || currentLocation?.latitude || 22.7196,
+        longitude: location?.lng || currentLocation?.longitude || 75.9001,
+        address: formattedAddress || query,
+        formattedAddress: formattedAddress || query,
+        city: editAddressForm.city.trim(),
+        state: editAddressForm.state || "Madhya Pradesh",
+        postalCode: editAddressForm.zipCode || "",
+        street: editAddressForm.address.trim(),
+        area: editAddressForm.landmark.trim(),
+        location: location ? { type: "Point", coordinates: [location.lng, location.lat] } : undefined,
+      };
+      localStorage.setItem("userLocation", JSON.stringify(userLocPayload));
+      window.dispatchEvent(
+        new CustomEvent("userLocationUpdated", {
+          detail: { location: userLocPayload },
+        })
+      );
+    } catch (err) {
+      console.error("Error editing address", err);
+    }
+
     setCurrentAddress({
       ...editAddressForm,
       name: editAddressForm.name || currentAddress.name || user?.name || "",
@@ -1024,6 +1362,32 @@ const CheckoutPage = () => {
 
     if (result?.ok && result.location) {
       const liveLocation = result.location;
+
+      // Update deliveryAddressMode to current
+      localStorage.setItem("deliveryAddressMode", "current");
+
+      const userLocPayload = {
+        latitude: liveLocation.latitude,
+        longitude: liveLocation.longitude,
+        address: liveLocation.name,
+        formattedAddress: liveLocation.name,
+        city: liveLocation.city || "",
+        state: liveLocation.state || "",
+        postalCode: liveLocation.pincode || "",
+        street: liveLocation.name || "",
+        area: "",
+        location: {
+          type: "Point",
+          coordinates: [liveLocation.longitude, liveLocation.latitude],
+        }
+      };
+      localStorage.setItem("userLocation", JSON.stringify(userLocPayload));
+      window.dispatchEvent(
+        new CustomEvent("userLocationUpdated", {
+          detail: { location: userLocPayload },
+        })
+      );
+
       setCurrentAddress((prev) => ({
         ...prev,
         address: liveLocation.name,
@@ -1041,6 +1405,31 @@ const CheckoutPage = () => {
     }
 
     if (currentLocation?.name) {
+      // Update deliveryAddressMode to current
+      localStorage.setItem("deliveryAddressMode", "current");
+
+      const userLocPayload = {
+        latitude: currentLocation.latitude,
+        longitude: currentLocation.longitude,
+        address: currentLocation.name,
+        formattedAddress: currentLocation.name,
+        city: currentLocation.city || "",
+        state: currentLocation.state || "",
+        postalCode: currentLocation.pincode || "",
+        street: currentLocation.name || "",
+        area: "",
+        location: {
+          type: "Point",
+          coordinates: [currentLocation.longitude, currentLocation.latitude],
+        }
+      };
+      localStorage.setItem("userLocation", JSON.stringify(userLocPayload));
+      window.dispatchEvent(
+        new CustomEvent("userLocationUpdated", {
+          detail: { location: userLocPayload },
+        })
+      );
+
       setCurrentAddress((prev) => ({
         ...prev,
         address: currentLocation.name,
@@ -1510,259 +1899,157 @@ const CheckoutPage = () => {
 
             {/* Delivery Address Section - New UI */}
             <motion.div className="bg-white dark:bg-card rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-white/5 transition-colors">
-              <div className="flex justify-between items-center mb-3">
-                <span className="text-xs text-slate-500 font-medium">
-                  Ordering for someone else?
-                </span>
-                <button
-                  onClick={() => setShowRecipientForm(!showRecipientForm)}
-                  className="text-[#0c831f] text-xs font-bold hover:underline">
-                  {showRecipientForm
-                    ? "Close"
-                    : savedRecipient
-                      ? "Change details"
-                      : "Add details"}
-                </button>
-              </div>
 
-              {savedRecipient && !showRecipientForm && (
-                <div className="mb-4 p-4 bg-green-50 border border-green-100 rounded-2xl flex items-start justify-between">
-                  <div className="flex gap-3">
-                    <div className="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center text-[#0c831f] flex-shrink-0">
-                      <Contact2 size={18} />
-                    </div>
-                    <div>
-                      <p className="text-sm font-bold text-slate-800">
-                        {savedRecipient.name}
-                      </p>
-                      <p className="text-xs text-[#0c831f] font-bold mb-1">
-                        {savedRecipient.phone}
-                      </p>
-                      <p className="text-xs text-slate-500 leading-tight">
-                        {savedRecipient.completeAddress}
-                        {savedRecipient.landmark &&
-                          `, ${savedRecipient.landmark}`}
-                        {savedRecipient.pincode &&
-                          ` - ${savedRecipient.pincode}`}
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => {
-                      setSavedRecipient(null);
-                      try {
-                        if (typeof window !== "undefined") {
-                          window.localStorage.removeItem(RECIPIENT_STORAGE_KEY);
-                        }
-                      } catch {
-                        // ignore storage errors
-                      }
-                    }}
-                    className="text-red-500 text-xs font-bold hover:underline">
-                    Remove
-                  </button>
-                </div>
-              )}
-
-              <AnimatePresence>
-                {showRecipientForm && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
-                    className="overflow-hidden mb-4">
-                    <div className="bg-[#f8f9fb] dark:bg-slate-900/50 rounded-2xl p-4 border border-slate-100 dark:border-white/5 space-y-4">
-                      <div>
-                        <h4 className="text-sm font-bold text-slate-800 mb-3">
-                          Enter delivery address details
-                        </h4>
-                        <div className="space-y-3">
-                          <div>
-                            <Input
-                              placeholder="Enter complete address*"
-                              value={recipientData.completeAddress}
-                              onChange={(e) => {
-                                setRecipientData({ ...recipientData, completeAddress: e.target.value });
-                                if (recipientErrors.completeAddress) setRecipientErrors((prev) => ({ ...prev, completeAddress: "" }));
-                              }}
-                              className={`h-12 rounded-xl text-sm ${recipientErrors.completeAddress ? "border-rose-400 focus:ring-rose-400 focus:border-rose-400" : "border-slate-200 focus:ring-[#0c831f] focus:border-[#0c831f]"}`}
-                            />
-                            {recipientErrors.completeAddress && (
-                              <p className="text-xs text-rose-500 mt-1 ml-1">{recipientErrors.completeAddress}</p>
-                            )}
-                          </div>
-                          <Input
-                            placeholder="Find landmark (optional)"
-                            value={recipientData.landmark}
-                            onChange={(e) => setRecipientData({ ...recipientData, landmark: e.target.value })}
-                            className="h-12 rounded-xl border-slate-200 focus:ring-[#0c831f] focus:border-[#0c831f] text-sm"
-                          />
-                          <div>
-                            <Input
-                              placeholder="Enter pin code (optional)"
-                              value={recipientData.pincode}
-                              type="text"
-                              inputMode="numeric"
-                              maxLength={6}
-                              onChange={(e) => {
-                                const val = e.target.value.replace(/\D/g, "").slice(0, 6);
-                                setRecipientData({ ...recipientData, pincode: val });
-                                if (recipientErrors.pincode) setRecipientErrors((prev) => ({ ...prev, pincode: "" }));
-                              }}
-                              className={`h-12 rounded-xl text-sm ${recipientErrors.pincode ? "border-rose-400 focus:ring-rose-400 focus:border-rose-400" : "border-slate-200 focus:ring-[#0c831f] focus:border-[#0c831f]"}`}
-                            />
-                            {recipientErrors.pincode && (
-                              <p className="text-xs text-rose-500 mt-1 ml-1">{recipientErrors.pincode}</p>
-                            )}
-                          </div>
-                        </div>
+              {(() => {
+                const hasSavedAddress = mappedAddresses.length > 0;
+                return (
+                  <div className="flex items-start justify-between w-full text-left">
+                    <div className="flex items-start gap-4 flex-1">
+                      <div className="bg-green-50 dark:bg-green-950/20 p-2 rounded-xl mt-0.5">
+                        <MapPin className="h-5 w-5 text-[#0c831f]" />
                       </div>
-
-                      <div>
-                        <h4 className="text-sm font-bold text-slate-800 mb-1">
-                          Enter receiver details
-                        </h4>
-                        <p className="text-[10px] text-slate-400 mb-3 font-medium">
-                          We'll contact receiver to get the exact delivery
-                          address
-                        </p>
-                        <div className="space-y-3">
-                          <div>
-                            <Input
-                              placeholder="Receiver's name*"
-                              value={recipientData.name}
-                              onChange={(e) => {
-                                const val = e.target.value.replace(/[^a-zA-Z\u00C0-\u024F\s]/g, "");
-                                setRecipientData({ ...recipientData, name: val });
-                                if (recipientErrors.name) setRecipientErrors((prev) => ({ ...prev, name: "" }));
-                              }}
-                              className={`h-12 rounded-xl text-sm ${recipientErrors.name ? "border-rose-400 focus:ring-rose-400 focus:border-rose-400" : "border-slate-200 focus:ring-[#0c831f] focus:border-[#0c831f]"}`}
-                            />
-                            {recipientErrors.name && (
-                              <p className="text-xs text-rose-500 mt-1 ml-1">{recipientErrors.name}</p>
-                            )}
-                          </div>
-                          <div>
-                            <div className="relative">
-                              <Input
-                                placeholder="Receiver's phone number*"
-                                value={recipientData.phone}
-                                type="tel"
-                                inputMode="numeric"
-                                maxLength={10}
-                                onChange={(e) => {
-                                  const val = e.target.value.replace(/\D/g, "").slice(0, 10);
-                                  setRecipientData({ ...recipientData, phone: val });
-                                  if (recipientErrors.phone) setRecipientErrors((prev) => ({ ...prev, phone: "" }));
-                                }}
-                                className={`h-12 rounded-xl text-sm pr-10 ${recipientErrors.phone ? "border-rose-400 focus:ring-rose-400 focus:border-rose-400" : "border-slate-200 focus:ring-[#0c831f] focus:border-[#0c831f]"}`}
-                              />
-                              <button
-                                type="button"
-                                title="Pick from contacts"
-                                onClick={async () => {
-                                  if ("contacts" in navigator && "ContactsManager" in window) {
-                                    try {
-                                      const contacts = await navigator.contacts.select(["tel"], { multiple: false });
-                                      if (contacts?.length && contacts[0]?.tel?.length) {
-                                        const raw = contacts[0].tel[0].replace(/\D/g, "").slice(-10);
-                                        setRecipientData((prev) => ({ ...prev, phone: raw }));
-                                        if (recipientErrors.phone) setRecipientErrors((prev) => ({ ...prev, phone: "" }));
-                                      }
-                                    } catch {
-                                      // user cancelled or permission denied
-                                    }
-                                  } else {
-                                    document.querySelector("input[placeholder=\"Receiver's phone number*\"]")?.focus();
-                                  }
-                                }}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#0c831f] transition-colors cursor-pointer p-1 rounded-lg hover:bg-slate-100"
-                              >
-                                <Contact2 size={18} />
-                              </button>
+                      <div className="flex-1">
+                        <div className="flex flex-col">
+                          <p className="text-sm md:text-base text-gray-800 dark:text-gray-200">
+                            Delivery at{" "}
+                            <span className="font-semibold">
+                              {deliveryAddressMode === "current" ? "Current location" : "Location"}
+                            </span>
+                          </p>
+                          {deliveryAddressMode === "current" ? (
+                            <div className="mt-1">
+                              {isFetchingLocation || !currentAddress?.address ? (
+                                <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 animate-pulse">
+                                  Finding your current address...
+                                </p>
+                              ) : (
+                                <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 line-clamp-2">
+                                  {currentAddress.address || "Add delivery address"}
+                                </p>
+                              )}
+                              <div className="mt-1 flex items-center gap-2">
+                                <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] md:text-[11px] font-semibold bg-green-50 text-[#0c831f] dark:bg-emerald-950/10 dark:text-[#0c831f] border border-green-200">
+                                  GPS enabled
+                                </span>
+                              </div>
                             </div>
-                            {recipientErrors.phone && (
-                              <p className="text-xs text-rose-500 mt-1 ml-1">{recipientErrors.phone}</p>
-                            )}
-                          </div>
+                          ) : (
+                            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 line-clamp-2 pr-4">
+                              {currentAddress?.address || "Add delivery address"}
+                            </p>
+                          )}
                         </div>
+                        {!hasSavedAddress && (
+                          <p className="text-sm text-[#0c831f] mt-2 font-medium">
+                            Select a delivery location to continue
+                          </p>
+                        )}
+                        {/* Address Selection Buttons */}
+                        <div className="flex flex-wrap gap-2 mt-3">
+                          {["Home", "Work", "Other"].map((label) => {
+                            const normalizedLabel = normalizeAddressLabel(label);
+                            const addressExists = mappedAddresses.some(addr => normalizeAddressLabel(addr.label) === normalizedLabel);
+                            const isCurrentLabel = normalizeAddressLabel(currentAddress?.type || currentAddress?.label) === normalizedLabel && deliveryAddressMode === "saved";
+                            return (
+                              <button
+                                key={label}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  handleSelectAddressByLabel(label);
+                                }}
+                                disabled={!addressExists}
+                                className={`text-xs px-4 py-1.5 rounded-full font-semibold transition-all ${
+                                  isCurrentLabel
+                                    ? 'bg-green-100 text-[#0c831f] border border-green-200 dark:bg-emerald-950/40 dark:text-[#0c831f]'
+                                    : addressExists
+                                      ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-gray-800 dark:text-gray-300'
+                                      : 'bg-gray-50 text-gray-400 border border-gray-100 cursor-not-allowed dark:bg-gray-900'
+                                }`}
+                              >
+                                {label}
+                              </button>
+                            );
+                          })}
+                        </div>
+                        {mappedAddresses.length > 0 && (
+                          <div className="mt-4 space-y-3">
+                            {mappedAddresses.map((address) => {
+                              const addressId = address.id;
+                              const isSelected = addressId && addressId === currentAddress?.id && deliveryAddressMode === "saved";
+                              return (
+                                <button
+                                  key={addressId || `${address.label}-${address.address}`}
+                                  type="button; e.preventDefault(); e.stopPropagation();"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    handleSelectSavedAddress(address);
+                                  }}
+                                  className={`w-full text-left rounded-xl border-2 p-3 transition-colors ${
+                                    isSelected
+                                      ? "border-[#0c831f] bg-green-50/50 dark:bg-emerald-950/10"
+                                      : "border-slate-100 dark:border-gray-800 hover:border-slate-200"
+                                  }`}
+                                >
+                                  <div className="flex items-start justify-between gap-3">
+                                    <div className="min-w-0 flex-1">
+                                      <div className="flex items-center justify-between">
+                                        <p className="text-sm font-bold text-gray-900 dark:text-gray-100">
+                                          {getDisplayAddressLabel(address.label)}
+                                        </p>
+                                        <div className="flex items-center gap-2">
+                                          {isSelected && (
+                                            <>
+                                              <button
+                                                type="button"
+                                                onClick={(e) => {
+                                                  e.preventDefault();
+                                                  e.stopPropagation();
+                                                  handleOpenEditAddress();
+                                                }}
+                                                className="text-slate-500 text-xs font-bold hover:underline"
+                                              >
+                                                Edit
+                                              </button>
+                                              <span className="text-[10px] bg-[#0c831f] text-white px-2 py-0.5 rounded uppercase font-bold tracking-wider whitespace-nowrap">
+                                                Selected
+                                              </span>
+                                            </>
+                                          )}
+                                        </div>
+                                      </div>
+                                      <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 mt-1">
+                                        {address.address || "Address details"}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        )}
                       </div>
-
-                      <Button
-                        onClick={handleSaveRecipient}
-                        className="w-full h-12 bg-[#2d8618] hover:bg-[#236b11] text-white font-bold rounded-xl">
-                        Save address
-                      </Button>
                     </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-              <div className="mb-3">
-                <h3 className="font-black text-slate-800 text-base">
-                  Delivery Address
-                </h3>
-                <p className="text-xs text-slate-500">
-                  Select or edit your saved address
-                </p>
-              </div>
-
-              {/* Address Card */}
-              <div className="border rounded-xl p-3 mb-3 relative cursor-pointer transition-all border-[#0c831f] bg-green-50/50 dark:bg-emerald-950/20">
-                <div className="flex items-start gap-3">
-                  {/* Radio/Check Button */}
-                  <div className="mt-1">
-                    <div className="h-5 w-5 rounded-full bg-[#0c831f] flex items-center justify-center">
-                      <Check size={12} className="text-white stroke-[4]" />
-                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const currentPath = "/quick/checkout";
+                        navigate("/food/user/address-selector", {
+                          state: {
+                            from: currentPath,
+                            backTo: currentPath,
+                          },
+                        });
+                      }}
+                      className="p-2 text-[#0c831f] bg-green-50 rounded-full hover:bg-green-100 transition-colors dark:bg-emerald-950/20 dark:hover:bg-emerald-950/40"
+                      aria-label="Open location selector"
+                    >
+                      <ChevronRight className="h-5 w-5" />
+                    </button>
                   </div>
-
-                  <div className="flex-1">
-                    <div className="flex justify-between items-start">
-                      <h4 className="font-bold text-slate-800 text-sm">
-                        {displayName}
-                      </h4>
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleOpenEditAddress();
-                          }}
-                          className="text-slate-500 text-xs font-bold hover:underline">
-                          Edit
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setIsAddressModalOpen(true);
-                          }}
-                          className="text-[#0c831f] text-xs font-bold hover:underline">
-                          Change
-                        </button>
-                      </div>
-                    </div>
-                    {displayPhone ? (
-                      <p className="text-xs text-slate-500 font-medium mt-0.5">
-                        {displayPhone}
-                      </p>
-                    ) : null}
-                    <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                      {displayAddress}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Use current location button */}
-              <button
-                type="button"
-                onClick={handleUseCurrentLiveLocation}
-                disabled={isFetchingLocation}
-                className="mt-3 w-full py-2.5 rounded-2xl border border-dashed border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors">
-                {isFetchingLocation
-                  ? "Detecting live location..."
-                  : "Use current live location"}
-              </button>
+                );
+              })()}
               {/* Manual address info banner */}
               <motion.div className="mt-3 rounded-2xl border border-emerald-100 bg-emerald-50/70 px-4 py-3 flex items-center gap-3 shadow-sm">
                 <div className="h-8 w-8 rounded-full bg-emerald-600 flex items-center justify-center shadow-emerald-500/40 shadow-md">
@@ -2226,10 +2513,10 @@ const CheckoutPage = () => {
 
               {/* Address List */}
               <div className="overflow-y-auto flex-1 px-4 py-3 space-y-3">
-                {locationSavedAddresses.length === 0 && (
+                {mappedAddresses.length === 0 && (
                   <p className="text-center text-sm text-slate-400 py-6">No saved addresses yet.</p>
                 )}
-                {locationSavedAddresses.map((addr) => (
+                {mappedAddresses.map((addr) => (
                   <button
                     key={addr.id}
                     onClick={() => handleSelectSavedAddress(addr)}

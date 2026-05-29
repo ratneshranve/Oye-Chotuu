@@ -268,6 +268,7 @@ const MainLocationHeader = ({
   showTopContent = true,
   showSearchBar = true,
   showCategories = true,
+  showLocation = true,
 }) => {
   const { scrollY } = useScroll();
   const [isLocationOpen, setIsLocationOpen] = useState(false);
@@ -526,23 +527,25 @@ const MainLocationHeader = ({
                 </div>
 
                 {/* Location Block (Desktop inline row) */}
-                <button
-                  type="button"
-                  onClick={() => setIsLocationOpen(true)}
-                  className="flex flex-col border-l border-black/10 pl-4 lg:pl-8 h-10 justify-center border-0 bg-transparent p-0 text-left cursor-pointer group active:scale-95 transition-all"
-                >
-                  <div className="flex items-center gap-[3px]">
-                    <span className="truncate text-[15px] font-black text-slate-900 tracking-tight">
-                      {locationTitle}
+                {showLocation && (
+                  <button
+                    type="button"
+                    onClick={() => setIsLocationOpen(true)}
+                    className="flex flex-col border-l border-black/10 pl-4 lg:pl-8 h-10 justify-center border-0 bg-transparent p-0 text-left cursor-pointer group active:scale-95 transition-all"
+                  >
+                    <div className="flex items-center gap-[3px]">
+                      <span className="truncate text-[15px] font-black text-slate-900 tracking-tight">
+                        {locationTitle}
+                      </span>
+                      <ChevronDownIcon
+                        sx={{ fontSize: 14, color: "#111827", opacity: 0.7 }}
+                      />
+                    </div>
+                    <span className="max-w-[250px] lg:max-w-[320px] truncate text-[11px] font-medium text-slate-500">
+                      {locationSubtitle}
                     </span>
-                    <ChevronDownIcon
-                      sx={{ fontSize: 14, color: "#111827", opacity: 0.7 }}
-                    />
-                  </div>
-                  <span className="max-w-[250px] lg:max-w-[320px] truncate text-[11px] font-medium text-slate-500">
-                    {locationSubtitle}
-                  </span>
-                </button>
+                  </button>
+                )}
               </div>
 
               {/* Center Section: Empty (Search moved to categories) */}
@@ -603,7 +606,7 @@ const MainLocationHeader = ({
           )}
 
           {/* Collapsible Delivery Info & Location (MOBILE ONLY) */}
-          {!embedded && showTopContent && <div className="md:hidden">
+          {!embedded && showTopContent && showLocation && <div className="md:hidden">
             <motion.div
               style={{
                 height: contentHeight,

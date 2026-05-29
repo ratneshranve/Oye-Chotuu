@@ -71,7 +71,13 @@ function getAccessToken(config) {
     const moduleToken = localStorage.getItem(key);
     if (moduleToken) return moduleToken;
     
-    // 2. Fallback to generic token only for non-admin modules
+    // 2. Fallback to auth_customer for user module (Quick Commerce token compatibility)
+    if (module === "user") {
+      const customerToken = localStorage.getItem("auth_customer");
+      if (customerToken) return customerToken;
+    }
+
+    // 3. Fallback to generic token only for non-admin modules
     if (module !== "admin") {
       return localStorage.getItem("accessToken") || null;
     }

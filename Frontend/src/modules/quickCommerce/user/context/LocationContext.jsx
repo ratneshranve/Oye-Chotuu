@@ -78,14 +78,93 @@ const mapSharedAddress = (addr = {}, idx = 0, profile = {}) => {
 export const LocationProvider = ({ children }) => {
   const { user, isAuthenticated } = useAuth();
   // Default location (used until we can resolve a better one)
-  const [currentLocation, setCurrentLocation] = useState({
-    name: "214, Rajshri Palace Colony, Pipliyahana, Indore, Madhya Pradesh 452018, India",
-    time: "12-15 mins",
-    city: "Indore",
-    state: "Madhya Pradesh",
-    pincode: "452018",
-    latitude: 22.711140989838025,
-    longitude: 75.9001552518043,
+  const [currentLocation, setCurrentLocation] = useState(() => {
+    const defaultLoc = {
+      name: "214, Rajshri Palace Colony, Pipliyahana, Indore, Madhya Pradesh 452018, India",
+      time: "12-15 mins",
+      city: "Indore",
+      state: "Madhya Pradesh",
+      pincode: "452018",
+      latitude: 22.711140989838025,
+      longitude: 75.9001552518043,
+    };
+
+    if (typeof window === "undefined") return defaultLoc;
+
+    try {
+      const mode = localStorage.getItem("deliveryAddressMode") || "saved";
+      if (mode === "current") {
+        const raw = localStorage.getItem("userLocation");
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && (parsed.address || parsed.formattedAddress)) {
+            return {
+              name: parsed.formattedAddress || parsed.address,
+              time: "12-15 mins",
+              city: parsed.city || "Indore",
+              state: parsed.state || "Madhya Pradesh",
+              pincode: parsed.postalCode || parsed.zipCode || "452018",
+              latitude: parsed.latitude || defaultLoc.latitude,
+              longitude: parsed.longitude || defaultLoc.longitude,
+            };
+          }
+        }
+      } else {
+        const raw = localStorage.getItem("userAddresses");
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            const defaultAddr = parsed.find(addr => addr.isDefault) || parsed[0];
+            if (defaultAddr) {
+              const street = defaultAddr.street || "";
+              const additionalDetails = defaultAddr.additionalDetails || "";
+              const addressString = [
+                street,
+                additionalDetails,
+                [defaultAddr.city, defaultAddr.state].filter(Boolean).join(", "),
+                defaultAddr.zipCode || defaultAddr.postalCode || "",
+              ]
+                .filter(Boolean)
+                .join(", ");
+              const coordinates = defaultAddr.location?.coordinates || [];
+              const lat = typeof defaultAddr.location?.lat === "number" ? defaultAddr.location.lat : coordinates[1];
+              const lng = typeof defaultAddr.location?.lng === "number" ? defaultAddr.location.lng : coordinates[0];
+
+              return {
+                name: addressString || defaultAddr.formattedAddress || defaultAddr.address || "",
+                time: "12-15 mins",
+                city: defaultAddr.city || "Indore",
+                state: defaultAddr.state || "Madhya Pradesh",
+                pincode: defaultAddr.zipCode || defaultAddr.postalCode || "452018",
+                latitude: lat || defaultLoc.latitude,
+                longitude: lng || defaultLoc.longitude,
+              };
+            }
+          }
+        }
+      }
+
+      // Fallback to location_v2
+      const rawV2 = window.localStorage.getItem(STORAGE_KEY);
+      if (rawV2) {
+        const parsed = JSON.parse(rawV2);
+        const addressName = parsed.address || parsed.name;
+        if (parsed && addressName) {
+          return {
+            name: addressName,
+            time: parsed.time || "12-15 mins",
+            city: parsed.city,
+            state: parsed.state,
+            pincode: parsed.pincode,
+            latitude: parsed.latitude,
+            longitude: parsed.longitude,
+          };
+        }
+      }
+    } catch (e) {
+      // ignore
+    }
+    return defaultLoc;
   });
 
   // Address list for drawer UI – will be hydrated from profile API.
@@ -124,6 +203,32 @@ export const LocationProvider = ({ children }) => {
           time: newLoc.time,
         };
         window.localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+
+        // Sync with Food module userLocation and deliveryAddressMode
+        const userLocPayload = {
+          latitude: newLoc.latitude,
+          longitude: newLoc.longitude,
+          address: newLoc.name,
+          formattedAddress: newLoc.name,
+          city: newLoc.city || "",
+          state: newLoc.state || "",
+          postalCode: newLoc.pincode || "",
+          street: newLoc.name || "",
+          area: "",
+          location: {
+            type: "Point",
+            coordinates: [newLoc.longitude, newLoc.latitude],
+          }
+        };
+        window.localStorage.setItem("userLocation", JSON.stringify(userLocPayload));
+        window.localStorage.setItem("deliveryAddressMode", "current");
+
+        // Dispatch the custom event to sync Food module immediately
+        window.dispatchEvent(
+          new CustomEvent("userLocationUpdated", {
+            detail: { location: userLocPayload },
+          })
+        );
       } catch {
         // ignore storage errors
       }
@@ -382,6 +487,31 @@ export const LocationProvider = ({ children }) => {
     }
     // Live fetch happens only when user taps location pill or "Use current location"
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Listen for external location changes (e.g. from Food module)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const handleUserLocationUpdated = (event) => {
+      const loc = event.detail?.location;
+      if (loc && loc.latitude && loc.longitude) {
+        setCurrentLocation({
+          name: loc.formattedAddress || loc.address,
+          time: "12-15 mins",
+          city: loc.city || "",
+          state: loc.state || "",
+          pincode: loc.postalCode || loc.zipCode || "",
+          latitude: loc.latitude,
+          longitude: loc.longitude,
+        });
+      }
+    };
+
+    window.addEventListener("userLocationUpdated", handleUserLocationUpdated);
+    return () => {
+      window.removeEventListener("userLocationUpdated", handleUserLocationUpdated);
+    };
   }, []);
 
   return (

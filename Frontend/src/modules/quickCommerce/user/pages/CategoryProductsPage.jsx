@@ -60,53 +60,49 @@ const CategoryProductsPage = () => {
     const [categoryMap, setCategoryMap] = useState({});
     const [subcategoryMap, setSubcategoryMap] = useState({});
 
-    const fetchData = async () => {
+    const fetchData = () => {
         setIsLoading(true);
-        try {
-            const hasValidLocation =
-                Number.isFinite(currentLocation?.latitude) &&
-                Number.isFinite(currentLocation?.longitude);
+        const hasValidLocation =
+            Number.isFinite(currentLocation?.latitude) &&
+            Number.isFinite(currentLocation?.longitude);
 
-            const [prodRes, catRes, expRes, heroRes] = await Promise.all([
-                hasValidLocation
-                    ? customerApi.getProducts({
-                        categoryId: catId,
-                        lat: currentLocation.latitude,
-                        lng: currentLocation.longitude,
-                    })
-                    : Promise.resolve({ data: { success: true, result: { items: [] } } }),
-                customerApi.getCategories({ tree: true }),
-                customerApi.getExperienceSections({ pageType: 'header', headerId: catId }).catch(() => null),
-                customerApi.getHeroConfig({ pageType: 'header', headerId: catId }).catch(() => null)
-            ]);
+        if (hasValidLocation) {
+            customerApi.getProducts({
+                categoryId: catId,
+                lat: currentLocation.latitude,
+                lng: currentLocation.longitude,
+            }).then(prodRes => {
+                if (prodRes?.data?.success) {
+                    const rawResult = prodRes.data.result;
+                    const dbProds = Array.isArray(prodRes.data.results)
+                        ? prodRes.data.results
+                        : Array.isArray(rawResult?.items)
+                            ? rawResult.items
+                            : Array.isArray(rawResult)
+                                ? rawResult
+                                : [];
 
-            if (prodRes.data.success) {
-                const rawResult = prodRes.data.result;
-                const dbProds = Array.isArray(prodRes.data.results)
-                    ? prodRes.data.results
-                    : Array.isArray(rawResult?.items)
-                        ? rawResult.items
-                        : Array.isArray(rawResult)
-                            ? rawResult
-                            : [];
+                    const formattedProds = dbProds.map(p => ({
+                        ...p,
+                        id: p._id,
+                        image: p.mainImage || p.image || "https://images.unsplash.com/photo-1550989460-0adf9ea622e2",
+                        price: p.salePrice || p.price,
+                        originalPrice: p.price,
+                        weight: p.weight || "1 unit",
+                        deliveryTime: "8-15 mins"
+                    }));
+                    setProducts(Array.isArray(formattedProds) ? formattedProds : []);
+                }
+            }).catch(console.error).finally(() => setIsLoading(false));
+        } else {
+            setIsLoading(false);
+        }
 
-                const formattedProds = dbProds.map(p => ({
-                    ...p,
-                    id: p._id,
-                    image: p.mainImage || p.image || "https://images.unsplash.com/photo-1550989460-0adf9ea622e2",
-                    price: p.salePrice || p.price,
-                    originalPrice: p.price,
-                    weight: p.weight || "1 unit",
-                    deliveryTime: "8-15 mins"
-                }));
-                setProducts(Array.isArray(formattedProds) ? formattedProds : []);
-            }
-
-            if (catRes.data.success) {
+        customerApi.getCategories({ tree: true }).then(catRes => {
+            if (catRes?.data?.success) {
                 const results = catRes.data.results || catRes.data.result || [];
                 const allCats = Array.isArray(results) ? results : [];
 
-                // Build maps for SectionRenderer
                 const cMap = {};
                 const sMap = {};
                 const fullMap = {};
@@ -123,24 +119,20 @@ const CategoryProductsPage = () => {
                 setCategoryMap(cMap);
                 setSubcategoryMap(sMap);
 
-                // Find the current category in the flattened map
                 let currentCat = fullMap[catId];
-                
                 if (currentCat) {
                     setCategory(currentCat);
-                    
-                    // Populate subcategories
                     let subs = [];
                     let isDirectSub = false;
 
                     if (currentCat.children && currentCat.children.length > 0) {
-                        // It's a parent category, show its children
                         subs = currentCat.children;
                     } else if (currentCat.parentId) {
-                        // It's a subcategory, find its parent and show all siblings
                         const parent = fullMap[currentCat.parentId?._id || currentCat.parentId];
-                        if (parent && parent.children) {
-                            subs = parent.children;
+                        if (parent) {
+                            subs = parent.children && parent.children.length > 0
+                                ? parent.children
+                                : allCats.filter(cat => cat.parentId === parent._id || cat.parentId?._id === parent._id);
                         }
                         isDirectSub = true;
                     }
@@ -153,24 +145,24 @@ const CategoryProductsPage = () => {
                     
                     setSubCategories([{ id: 'all', name: 'All', icon: 'https://cdn-icons-png.flaticon.com/128/2321/2321831.png' }, ...formattedSubs]);
                     
-                    // If we arrived here directly with a subcategory ID, select it
                     if (isDirectSub && selectedSubCategory === 'all' && !location.state?.activeSubcategoryId) {
                         setSelectedSubCategory(currentCat._id);
                     }
                 }
             }
+        }).catch(console.error);
 
+        customerApi.getExperienceSections({ pageType: 'header', headerId: catId }).then(expRes => {
             if (expRes?.data?.success) {
                 setExperienceSections(expRes.data.result || expRes.data.results || []);
             }
+        }).catch(() => null);
+
+        customerApi.getHeroConfig({ pageType: 'header', headerId: catId }).then(heroRes => {
             if (heroRes?.data?.success) {
                 setHeroConfig(heroRes.data.result);
             }
-        } catch (error) {
-            console.error("Error fetching category data:", error);
-        } finally {
-            setIsLoading(false);
-        }
+        }).catch(() => null);
     };
 
     useEffect(() => {
@@ -215,7 +207,7 @@ const CategoryProductsPage = () => {
                                 Quick Category
                             </span>
                             <h1 className="text-[18px] font-bold text-white tracking-tight">
-                                {category?.name || catId}
+                                {category?.name || location.state?.categoryName || catId}
                             </h1>
                         </div>
                     </div>
@@ -268,9 +260,15 @@ const CategoryProductsPage = () => {
                         )}
 
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-2 gap-y-4 md:gap-4 lg:gap-6">
-                            {filteredProducts.map((product) => (
-                                <ProductCard key={product.id} product={product} compact={true} />
-                            ))}
+                            {isLoading ? (
+                                Array.from({ length: 12 }).map((_, i) => (
+                                    <div key={i} className="animate-pulse bg-gray-100 dark:bg-white/5 rounded-2xl aspect-[3/4] w-full border border-gray-200/50"></div>
+                                ))
+                            ) : (
+                                filteredProducts.map((product) => (
+                                    <ProductCard key={product.id} product={product} compact={true} />
+                                ))
+                            )}
                             {filteredProducts.length === 0 && !isLoading && (
                                 <div className="col-span-2 py-20 text-center">
                                     <p className="text-gray-400 font-bold italic">No products found in this category</p>

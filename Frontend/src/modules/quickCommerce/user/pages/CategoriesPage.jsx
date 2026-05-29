@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import MainLocationHeader from '../components/shared/MainLocationHeader';
 import { customerApi } from '../services/customerApi';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -9,39 +8,19 @@ const COLORS = [
     "#F2FDFD", "#FDF2FD", "#FFF8F0", "#F0FFF8"
 ];
 
-const CategoryCard = ({ category, isFlipped }) => {
+const CategoryCard = ({ category }) => {
     return (
-        <div className="relative w-full aspect-square [perspective:1000px] group">
-            <motion.div
-                initial={false}
-                animate={{ rotateY: isFlipped ? 180 : 0 }}
-                transition={{
-                    duration: 0.6,
-                    type: "spring",
-                    stiffness: 260,
-                    damping: 20
-                }}
-                className="w-full h-full relative [transform-style:preserve-3d] cursor-pointer"
-            >
-                {/* Front Side (Image) */}
-                <div className="absolute inset-0 [backface-visibility:hidden] bg-card dark:bg-background rounded-full p-1.5 shadow-[0_8px_20px_-8px_rgba(0,0,0,0.1)] border border-border flex items-center justify-center overflow-hidden transition-colors">
-                    <img
-                        src={category.image}
-                        alt={category.name}
-                        className="w-[85%] h-[85%] object-contain mix-blend-multiply dark:mix-blend-normal group-hover:scale-110 transition-transform duration-500"
-                    />
-                </div>
-
-                {/* Back Side (Name) */}
-                <div
-                    className="absolute inset-0 [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-full p-2.5 flex items-center justify-center text-center shadow-inner border border-border"
-                    style={{ backgroundColor: category.color }}
-                >
-                    <span className="text-[9px] md:text-[11px] font-black text-foreground uppercase tracking-widest leading-tight">
-                        {category.name}
-                    </span>
-                </div>
-            </motion.div>
+        <div className="flex flex-col items-center group w-full cursor-pointer h-full">
+            <div className="w-full aspect-square bg-[#F5F7FA] dark:bg-card rounded-[16px] md:rounded-[20px] shadow-sm flex items-center justify-center p-3 md:p-4 mb-2 transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-md border border-transparent dark:border-border">
+                <img
+                    src={category.image}
+                    alt={category.name}
+                    className="w-full h-full object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-300"
+                />
+            </div>
+            <span className="text-[12px] md:text-[14px] font-medium md:font-semibold text-foreground text-center leading-tight line-clamp-2 px-1 mt-1">
+                {category.name}
+            </span>
         </div>
     );
 };
@@ -121,9 +100,8 @@ const CategoriesPage = () => {
 
     return (
         <div className="min-h-screen bg-background transition-colors duration-500">
-            <MainLocationHeader showCategories={false} />
-
-            <div className="max-w-[1400px] mx-auto px-3 pt-[206px] md:pt-[240px] pb-20">
+            <div className="max-w-[1400px] mx-auto px-4 pt-6 md:pt-10 pb-20">
+                <h1 className="text-[28px] md:text-[32px] font-bold text-slate-900 dark:text-white mb-6 tracking-tight">Categories</h1>
                 <AnimatePresence mode='wait'>
                     {isLoading ? (
                         <motion.div
@@ -145,18 +123,18 @@ const CategoriesPage = () => {
                                     transition={{ delay: groupIdx * 0.1 }}
                                     className="space-y-6"
                                 >
-                                    <div className="flex items-center gap-3">
-                                        <h2 className="text-sm md:text-base font-black text-foreground tracking-wider uppercase transition-colors">
+                                    <div className="mb-2 md:mb-4 pt-2">
+                                        <h2 className="text-[22px] md:text-[24px] font-bold text-foreground capitalize transition-colors">
                                             {group.title}
                                         </h2>
-                                        <div className="h-[1px] flex-1 bg-gradient-to-r from-border dark:from-white/10 to-transparent" />
                                     </div>
 
-                                    <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-2 md:gap-3 lg:gap-4">
+                                    <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-x-3 gap-y-6 md:gap-x-4 md:gap-y-8">
                                         {group.categories.map((category) => (
                                             <Link
                                                 key={category.id}
                                                 to={`/quick/categories/${category.id}`}
+                                                state={{ categoryName: category.name }}
                                                 className="block"
                                             >
                                                 <CategoryCard

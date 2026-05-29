@@ -41,7 +41,7 @@ const DudhwalaHomeScreen = () => {
     }, []);
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-[#0a0a0a] pb-20 font-sans">
+        <div className="min-h-screen bg-slate-50 dark:bg-[#0a0a0a] pb-16 font-sans">
             {/* Hero Section / Promotion - Premium Milk Banner with Extrusion */}
             <div className="relative mb-12"> {/* Container for the whole hero + extrusion */}
                 <div className="relative overflow-visible bg-[#00AEEF] p-6 text-white shadow-sm min-h-[150px] flex items-center">
@@ -120,7 +120,7 @@ const DudhwalaHomeScreen = () => {
 
             {/* Why Chotuu Dudhwala? */}
             {whyConfigs.length > 0 && (
-                <div className="mt-6 px-4 mb-6">
+                <div className="mt-6 px-4 mb-0">
                     <div className="rounded-[28px] bg-white p-5 dark:bg-[#1a1a1a] shadow-sm border border-slate-100 dark:border-slate-800">
                         <h3 className="font-bold text-[10px] mb-4 uppercase tracking-widest text-slate-400 ml-1">Why Chotuu Dudhwala?</h3>
                         <ul className="space-y-3">
@@ -148,6 +148,13 @@ const DudhwalaHomeScreen = () => {
                     </div>
                 </div>
             )}
+
+            {/* App Watermark */}
+            <div className="flex justify-center items-center pt-4 pb-2 opacity-40">
+                <span className="text-xl font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.25em]">
+                    OyeChotuu
+                </span>
+            </div>
 
             <BottomNavigation />
         </div>
