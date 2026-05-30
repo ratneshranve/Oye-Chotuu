@@ -14,7 +14,18 @@ const STORE_NAME = "documents"
 
 const initDB = () => {
   return new Promise((resolve) => {
+    let resolved = false
+    const done = (result) => {
+      if (!resolved) {
+        resolved = true
+        resolve(result)
+      }
+    }
     try {
+      if (typeof window === "undefined" || !window.indexedDB) {
+        return done(null)
+      }
+      const timeout = setTimeout(() => done(null), 1500)
       const request = indexedDB.open(DB_NAME, 1)
       request.onupgradeneeded = (e) => {
         const db = e.target.result
@@ -22,10 +33,20 @@ const initDB = () => {
           db.createObjectStore(STORE_NAME)
         }
       }
-      request.onsuccess = (e) => resolve(e.target.result)
-      request.onerror = () => resolve(null)
+      request.onsuccess = (e) => {
+        clearTimeout(timeout)
+        done(e.target.result)
+      }
+      request.onerror = () => {
+        clearTimeout(timeout)
+        done(null)
+      }
+      request.onblocked = () => {
+        clearTimeout(timeout)
+        done(null)
+      }
     } catch (e) {
-      resolve(null)
+      done(null)
     }
   })
 }
@@ -34,14 +55,28 @@ const saveFileToDB = async (key, file) => {
   const db = await initDB()
   if (!db) return
   return new Promise((resolve) => {
+    let resolved = false
+    const done = () => {
+      if (!resolved) {
+        resolved = true
+        resolve()
+      }
+    }
     try {
+      const timeout = setTimeout(done, 1500)
       const transaction = db.transaction(STORE_NAME, "readwrite")
       const store = transaction.objectStore(STORE_NAME)
       store.put(file, key)
-      transaction.oncomplete = () => resolve()
-      transaction.onerror = () => resolve()
+      transaction.oncomplete = () => {
+        clearTimeout(timeout)
+        done()
+      }
+      transaction.onerror = () => {
+        clearTimeout(timeout)
+        done()
+      }
     } catch (e) {
-      resolve()
+      done()
     }
   })
 }
@@ -50,14 +85,28 @@ const getFileFromDB = async (key) => {
   const db = await initDB()
   if (!db) return null
   return new Promise((resolve) => {
+    let resolved = false
+    const done = (result) => {
+      if (!resolved) {
+        resolved = true
+        resolve(result)
+      }
+    }
     try {
+      const timeout = setTimeout(() => done(null), 1500)
       const transaction = db.transaction(STORE_NAME, "readonly")
       const store = transaction.objectStore(STORE_NAME)
       const request = store.get(key)
-      request.onsuccess = () => resolve(request.result)
-      request.onerror = () => resolve(null)
+      request.onsuccess = () => {
+        clearTimeout(timeout)
+        done(request.result)
+      }
+      request.onerror = () => {
+        clearTimeout(timeout)
+        done(null)
+      }
     } catch (e) {
-      resolve(null)
+      done(null)
     }
   })
 }
