@@ -166,7 +166,7 @@ const sanitizeUploadedDocs = (docs) => ({
 })
 
 const hasDocumentValue = (localFile, uploadedValue) => {
-  if (localFile instanceof File) return true
+  if (localFile instanceof File || localFile instanceof Blob) return true
   if (typeof uploadedValue === "string") return uploadedValue.trim().length > 0
   if (uploadedValue && typeof uploadedValue === "object") {
     if (typeof uploadedValue.url === "string" && uploadedValue.url.trim()) return true
@@ -282,7 +282,7 @@ export default function SignupStep2() {
   useEffect(() => {
     return () => {
       Object.values(documents).forEach((file) => {
-        if (file instanceof File) {
+        if (file instanceof File || file instanceof Blob) {
           const previewUrl = file.previewUrl || file._previewUrl
           if (previewUrl) {
             URL.revokeObjectURL(previewUrl)
@@ -298,7 +298,7 @@ export default function SignupStep2() {
     if (uploaded?.url) return uploaded.url
 
     const localFile = documents[docType]
-    if (localFile instanceof File) {
+    if (localFile instanceof File || localFile instanceof Blob) {
       if (!localFile._previewUrl) {
         localFile._previewUrl = URL.createObjectURL(localFile)
       }
@@ -411,16 +411,16 @@ export default function SignupStep2() {
     }
     if (details.panNumber) formData.append("panNumber", details.panNumber)
     if (details.aadharNumber) formData.append("aadharNumber", details.aadharNumber)
-    if (documents.profilePhoto instanceof File) {
+    if (documents.profilePhoto instanceof File || documents.profilePhoto instanceof Blob) {
       formData.append("profilePhoto", documents.profilePhoto)
     }
-    if (documents.aadharPhoto instanceof File) {
+    if (documents.aadharPhoto instanceof File || documents.aadharPhoto instanceof Blob) {
       formData.append("aadharPhoto", documents.aadharPhoto)
     }
-    if (documents.panPhoto instanceof File) {
+    if (documents.panPhoto instanceof File || documents.panPhoto instanceof Blob) {
       formData.append("panPhoto", documents.panPhoto)
     }
-    if (documents.drivingLicensePhoto instanceof File) {
+    if (documents.drivingLicensePhoto instanceof File || documents.drivingLicensePhoto instanceof Blob) {
       formData.append("drivingLicensePhoto", documents.drivingLicensePhoto)
     }
 
