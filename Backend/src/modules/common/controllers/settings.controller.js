@@ -37,7 +37,7 @@ export async function updateGlobalSettings(req, res, next) {
             data = req.body;
         }
         
-        const { companyName, email, phoneCountryCode, phoneNumber, address, state, pincode, region, logoUrl, faviconUrl, themeColor, modules, codEnabled, bannedNumbers } = data;
+        const { companyName, email, phoneCountryCode, phoneNumber, address, state, pincode, region, logoUrl, faviconUrl, themeColor, modules, codEnabled, showLocationPopup, bannedNumbers } = data;
         
         console.log("Updating global settings with data:", data);
 
@@ -95,6 +95,9 @@ export async function updateGlobalSettings(req, res, next) {
         }
         if (codEnabled !== undefined) {
             settings.codEnabled = codEnabled;
+        }
+        if (showLocationPopup !== undefined) {
+            settings.showLocationPopup = showLocationPopup;
         }
         if (bannedNumbers !== undefined && Array.isArray(bannedNumbers)) {
             settings.bannedNumbers = bannedNumbers;

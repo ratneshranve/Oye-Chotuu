@@ -3167,8 +3167,12 @@ export async function updateOrderStatusRestaurant(
             for (const p of partners) {
               const targetRoom = rooms.delivery(p.partnerId);
               console.log(
-                `[DEBUG] Emitting new_order_available to room: ${targetRoom}`,
+                `[DEBUG] Emitting new_order_available and new_order to room: ${targetRoom}`,
               );
+              io.to(targetRoom).emit("new_order", {
+                ...payload,
+                pickupDistanceKm: p.distanceKm,
+              });
               io.to(targetRoom).emit("new_order_available", {
                 ...payload,
                 pickupDistanceKm: p.distanceKm,

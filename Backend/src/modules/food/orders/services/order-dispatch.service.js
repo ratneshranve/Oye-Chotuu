@@ -278,6 +278,19 @@ export async function tryAutoAssign(orderId, options = {}) {
           });
         }
       }
+
+      try {
+        await notifyOwnersSafely(
+          eligible.map((p) => ({ ownerType: "DELIVERY_PARTNER", ownerId: p.partnerId })),
+          {
+            title: "New order assigned!",
+            body: `You have 60 seconds to accept Order #${order.order_id || order._id}.`,
+            data: { type: "new_order", orderId: order._id.toString() },
+          }
+        );
+      } catch (err) {
+        logger.warn(`Push notification failed for Phase 2: ${err.message}`);
+      }
     } else {
       // PHASE 1: Target best rider only
       const p = eligible[0];

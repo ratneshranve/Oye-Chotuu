@@ -8,7 +8,8 @@ import {
   Zap,
   Check,
   AlertCircle,
-  Banknote
+  Banknote,
+  MapPin
 } from 'lucide-react';
 import { toast } from "sonner";
 import { adminAPI } from "@/services/api";
@@ -78,6 +79,7 @@ const ModuleManagement = () => {
     quickCommerce: true,
   });
   const [codEnabled, setCodEnabled] = useState(true);
+  const [showLocationPopup, setShowLocationPopup] = useState(true);
 
   const fetchSettings = async () => {
     try {
@@ -94,6 +96,7 @@ const ModuleManagement = () => {
           });
         }
         setCodEnabled(settings.codEnabled ?? true);
+        setShowLocationPopup(settings.showLocationPopup ?? true);
       }
     } catch (err) {
       console.error('Fetch error:', err);
@@ -117,7 +120,7 @@ const ModuleManagement = () => {
   const handleSave = async () => {
     try {
       setSaving(true);
-      const response = await adminAPI.updateBusinessSettings({ modules, codEnabled });
+      const response = await adminAPI.updateBusinessSettings({ modules, codEnabled, showLocationPopup });
       const updatedSettings = response?.data?.data || response?.data;
 
       if (updatedSettings) {
@@ -198,6 +201,15 @@ const ModuleManagement = () => {
                 enabled={codEnabled} 
                 onToggle={() => setCodEnabled(prev => !prev)}
                 color="green"
+              />
+
+              <ModuleCard 
+                title="Location Services Popup" 
+                description="Prompt new users to enable their device location services." 
+                icon={MapPin} 
+                enabled={showLocationPopup} 
+                onToggle={() => setShowLocationPopup(prev => !prev)}
+                color="pink"
               />
 
             </div>

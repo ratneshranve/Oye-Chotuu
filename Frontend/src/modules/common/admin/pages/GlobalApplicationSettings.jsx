@@ -108,6 +108,7 @@ const GlobalApplicationSettings = () => {
     phoneNumber: "",
     address: "",
     bannedNumbers: [],
+    showLocationPopup: true,
   });
   const [newBannedNumber, setNewBannedNumber] = useState("");
 
@@ -125,6 +126,7 @@ const GlobalApplicationSettings = () => {
           phoneNumber: settings.phone?.number || "",
           address: settings.address || "",
           bannedNumbers: settings.bannedNumbers || [],
+          showLocationPopup: settings.showLocationPopup ?? true,
         });
 
         if (settings.logo?.url) setLogoPreview(settings.logo.url);
@@ -184,6 +186,7 @@ const GlobalApplicationSettings = () => {
         phoneNumber: formData.phoneNumber,
         address: formData.address,
         bannedNumbers: formData.bannedNumbers,
+        showLocationPopup: formData.showLocationPopup,
       };
 
       const files = {};

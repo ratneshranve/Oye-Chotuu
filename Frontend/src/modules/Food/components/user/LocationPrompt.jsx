@@ -3,9 +3,11 @@ import { MapPin, X } from "lucide-react"
 import { Card, CardHeader, CardTitle, CardContent } from "@food/components/ui/card"
 import { Button } from "@food/components/ui/button"
 import { useLocation } from "@food/hooks/useLocation"
+import { useSettings } from "@core/context/SettingsContext"
 
 export default function LocationPrompt() {
   const { location, loading, permissionGranted, requestLocation } = useLocation()
+  const { settings } = useSettings()
   const [showPrompt, setShowPrompt] = useState(false)
   const cardRef = useRef(null)
 
@@ -19,8 +21,10 @@ export default function LocationPrompt() {
     // 1. No location is stored (first time user)
     // 2. Prompt hasn't been dismissed
     // 3. Location permission was denied (we'll detect this after a delay)
+    // 4. showLocationPopup setting is true (default is true)
+    const shouldShowPopup = settings?.showLocationPopup ?? true;
     
-    if (!storedLocation && !promptDismissed) {
+    if (shouldShowPopup && !storedLocation && !promptDismissed) {
       // Wait a bit to let the hook try to get location automatically
       // If it fails, we'll show the prompt
       const timer = setTimeout(() => {
@@ -49,7 +53,7 @@ export default function LocationPrompt() {
         document.body.style.overflow = ""
       }
     }
-  }, [permissionGranted])
+  }, [permissionGranted, settings?.showLocationPopup])
 
   // Close prompt when location is successfully obtained
   useEffect(() => {
