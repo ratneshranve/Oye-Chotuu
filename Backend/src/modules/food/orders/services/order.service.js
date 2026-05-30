@@ -4066,46 +4066,48 @@ function emitOrderUpdate(order, deliveryPartnerId) {
       );
       io.to(rooms.user(order.userId)).emit("order_status_update", payload);
     }
-    let riderTitle = `Order deliverd! 🏁`;
-    let riderBody = `Order #${order.orderId} has been marked as delivered.`;
+    if (order.orderStatus === "delivered") {
+      let riderTitle = `Order deliverd! 🏁`;
+      let riderBody = `Order #${order.orderId} has been marked as delivered.`;
 
-    // Special message for COD payment collection
-    if (order.payment?.method === "cash") {
-      riderTitle = "Payment Collected! 💵";
-      riderBody = `You have collected ₹${order.pricing?.total || 0} cash for Order #${order.orderId}.`;
-    }
-
-    void notifyOwnersSafely(
-      [
-        { ownerType: "RESTAURANT", ownerId: order.restaurantId },
-        { ownerType: "USER", ownerId: order.userId },
-      ],
-      {
-        title: `Order #${order.orderId} delivered! ✅`,
-        body: `Hope you enjoyed your meal!`,
-        data: {
-          type: "order_status_update",
-          orderId: order.orderId,
-          orderMongoId: order._id?.toString?.() || "",
-          orderStatus: "delivered",
-        },
-      },
-    );
-
-    void notifyOwnerSafely(
-      { ownerType: "DELIVERY_PARTNER", ownerId: deliveryPartnerId },
-      {
-        title: riderTitle,
-        body: riderBody,
-        data: {
-          type: "order_completed",
-          orderId: order.orderId,
-          orderMongoId: order._id?.toString?.() || "",
-          paymentMethod: order.payment?.method,
-          amountCollected: String(order.pricing?.total || 0),
-        },
+      // Special message for COD payment collection
+      if (order.payment?.method === "cash") {
+        riderTitle = "Payment Collected! 💵";
+        riderBody = `You have collected ₹${order.pricing?.total || 0} cash for Order #${order.orderId}.`;
       }
-    );
+
+      void notifyOwnersSafely(
+        [
+          { ownerType: "RESTAURANT", ownerId: order.restaurantId },
+          { ownerType: "USER", ownerId: order.userId },
+        ],
+        {
+          title: `Order #${order.orderId} delivered! ✅`,
+          body: `Hope you enjoyed your meal!`,
+          data: {
+            type: "order_status_update",
+            orderId: order.orderId,
+            orderMongoId: order._id?.toString?.() || "",
+            orderStatus: "delivered",
+          },
+        },
+      );
+
+      void notifyOwnerSafely(
+        { ownerType: "DELIVERY_PARTNER", ownerId: deliveryPartnerId },
+        {
+          title: riderTitle,
+          body: riderBody,
+          data: {
+            type: "order_completed",
+            orderId: order.orderId,
+            orderMongoId: order._id?.toString?.() || "",
+            paymentMethod: order.payment?.method,
+            amountCollected: String(order.pricing?.total || 0),
+          },
+        }
+      );
+    }
   } catch (e) {
     console.error("Error emitting order update:", e);
   }
