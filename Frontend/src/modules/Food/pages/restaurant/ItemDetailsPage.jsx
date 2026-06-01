@@ -108,6 +108,7 @@ export default function ItemDetailsPage() {
   const [loadingCategories, setLoadingCategories] = useState(true)
   const [keyboardInset, setKeyboardInset] = useState(0)
   const [isPureVegRestaurant, setIsPureVegRestaurant] = useState(false)
+  const [loadingItem, setLoadingItem] = useState(false)
 
   // Restore draft if exists
   useEffect(() => {

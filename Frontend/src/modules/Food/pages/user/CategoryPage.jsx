@@ -22,6 +22,7 @@ import { useLocation } from "@food/hooks/useLocation"
 import { useZone } from "@food/hooks/useZone"
 import { useDelayedLoading } from "@food/hooks/useDelayedLoading"
 import { getMenuFromResponse } from "@food/utils/menuItems"
+import { getRestaurantAvailabilityStatus } from "@food/utils/restaurantAvailability"
 
 // Filter options
 const filterOptions = [
@@ -299,6 +300,7 @@ export default function CategoryPage() {
 
         return {
           ...(matchedRestaurant || {}),
+          isFallbackOffline: !matchedRestaurant,
           id: `${restaurantId || fallbackSlug || "restaurant"}-${String(food?.id || food?._id || index)}`,
           restaurantId: restaurantId || matchedRestaurant?.restaurantId || matchedRestaurant?.id || null,
           mongoId: matchedRestaurant?.mongoId || matchedRestaurant?.id || null,
@@ -557,6 +559,13 @@ export default function CategoryPage() {
         return 0
       })
     }
+
+    // Always push offline restaurants to the bottom
+    nextRows.sort((a, b) => {
+      if (a.isOffline && !b.isOffline) return 1;
+      if (!a.isOffline && b.isOffline) return -1;
+      return 0; // preserve previous sorting
+    });
 
     return uniqueByRestaurant(nextRows)
   }
@@ -880,6 +889,7 @@ export default function CategoryPage() {
               const restaurantName = (restaurant.restaurantName || restaurant.name || "").toLowerCase()
 
               return {
+                ...restaurant,
                 id: restaurantId,
                 name: restaurant.restaurantName || restaurant.name,
                 cuisine: cuisine,
@@ -1200,6 +1210,14 @@ export default function CategoryPage() {
       }
     }
 
+    filtered = filtered.map(r => {
+      if (r.isFallbackOffline) {
+        return { ...r, isOffline: true };
+      }
+      const availabilityStatus = getRestaurantAvailabilityStatus(r, new Date());
+      return { ...r, isOffline: !availabilityStatus.isOpen }
+    });
+
     return applyFiltersAndSorting(filtered)
   }, [selectedCategory, activeFilters, deferredSearchQuery, restaurantsData, categoryKeywords, vegMode, approvedFoodsData, sortBy])
 
@@ -1249,6 +1267,14 @@ export default function CategoryPage() {
           : fallbackDishes
       }
     }
+
+    filtered = filtered.map(r => {
+      if (r.isFallbackOffline) {
+        return { ...r, isOffline: true };
+      }
+      const availabilityStatus = getRestaurantAvailabilityStatus(r, new Date());
+      return { ...r, isOffline: !availabilityStatus.isOpen }
+    });
 
     return applyFiltersAndSorting(filtered)
   }, [selectedCategory, activeFilters, deferredSearchQuery, restaurantsData, categoryKeywords, vegMode, approvedFoodsData, sortBy])
@@ -1460,10 +1486,11 @@ export default function CategoryPage() {
                   return (
                     <Link
                       key={restaurant.id}
-                      to={`/user/restaurants/${restaurant.name.toLowerCase().replace(/\s+/g, '-')}`}
-                      className="block"
+                      to={restaurant.isOffline ? "#" : `/user/restaurants/${restaurant.name.toLowerCase().replace(/\s+/g, '-')}`}
+                      className={`block ${restaurant.isOffline ? 'cursor-default pointer-events-none' : ''}`}
+                      onClick={(e) => restaurant.isOffline && e.preventDefault()}
                     >
-                      <div className={`group ${shouldShowGrayscale ? 'grayscale opacity-75' : ''}`}>
+                      <div className={`group ${shouldShowGrayscale || restaurant.isOffline ? 'grayscale opacity-75' : ''}`}>
                         {/* Image Container */}
                         <div className="relative aspect-square rounded-xl md:rounded-2xl overflow-hidden mb-2">
                           {/* Use category dish image if available, otherwise restaurant image */}
@@ -1564,8 +1591,13 @@ export default function CategoryPage() {
                 const isFavorite = favorites.has(restaurant.id)
 
                 return (
-                  <Link key={restaurant.id} to={`/user/restaurants/${restaurantSlug}`} className="h-full flex">
-                    <Card className={`overflow-hidden cursor-pointer gap-0 border-0 dark:border-gray-800 group bg-white dark:bg-[#1a1a1a] shadow-md hover:shadow-xl transition-all duration-300 py-0 rounded-md h-full flex flex-col w-full ${shouldShowGrayscale ? 'grayscale opacity-75' : ''
+                  <Link 
+                    key={restaurant.id} 
+                    to={restaurant.isOffline ? "#" : `/user/restaurants/${restaurantSlug}`} 
+                    className={`h-full flex ${restaurant.isOffline ? 'cursor-default pointer-events-none' : ''}`}
+                    onClick={(e) => restaurant.isOffline && e.preventDefault()}
+                  >
+                    <Card className={`overflow-hidden gap-0 border-0 dark:border-gray-800 group bg-white dark:bg-[#1a1a1a] shadow-md hover:shadow-xl transition-all duration-300 py-0 rounded-md h-full flex flex-col w-full ${shouldShowGrayscale || restaurant.isOffline ? 'grayscale opacity-75 cursor-default' : 'cursor-pointer'
                       }`}>
                       {/* Image Section */}
                       <div className="relative h-44 sm:h-52 md:h-60 lg:h-64 xl:h-72 w-full overflow-hidden rounded-t-md flex-shrink-0">

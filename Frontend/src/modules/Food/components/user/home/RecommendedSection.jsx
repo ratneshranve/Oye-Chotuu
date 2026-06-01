@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Flame } from "lucide-react";
 
+import { getRestaurantAvailabilityStatus } from "@food/utils/restaurantAvailability";
+
 const RecommendedSection = memo(({ recommendedForYouRestaurants }) => {
   if (!recommendedForYouRestaurants || recommendedForYouRestaurants.length === 0) return null;
 
@@ -17,11 +19,19 @@ const RecommendedSection = memo(({ recommendedForYouRestaurants }) => {
       </h2>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 px-4">
-        {recommendedForYouRestaurants.map((restaurant, index) => {
+        {[...recommendedForYouRestaurants].sort((a, b) => {
+          const aAvail = getRestaurantAvailabilityStatus(a, new Date());
+          const bAvail = getRestaurantAvailabilityStatus(b, new Date());
+          if (!aAvail.isOpen && bAvail.isOpen) return 1;
+          if (aAvail.isOpen && !bAvail.isOpen) return -1;
+          return 0;
+        }).map((restaurant, index) => {
           const restaurantSlug =
             restaurant.slug ||
             restaurant.name.toLowerCase().replace(/\s+/g, "-");
           const isNew = !(Number(restaurant.rating) > 0);
+          const availabilityStatus = getRestaurantAvailabilityStatus(restaurant, new Date());
+          const isOffline = !availabilityStatus.isOpen;
 
           return (
             <motion.div
@@ -30,10 +40,12 @@ const RecommendedSection = memo(({ recommendedForYouRestaurants }) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.35, delay: index * 0.05 }}
+              className={isOffline ? "grayscale opacity-75" : ""}
             >
               <Link
-                to={`/user/restaurants/${restaurantSlug}`}
-                className="block rounded-2xl overflow-hidden bg-white shadow-sm border border-gray-50"
+                to={isOffline ? "#" : `/user/restaurants/${restaurantSlug}`}
+                onClick={(e) => isOffline && e.preventDefault()}
+                className={`block rounded-2xl overflow-hidden bg-white shadow-sm border border-gray-50 ${isOffline ? "cursor-default pointer-events-none" : ""}`}
               >
                 <div className="relative aspect-[4/3] bg-gray-100">
                   <img

@@ -155,7 +155,10 @@ export function useZone(location) {
         setZone(cachedZone ? JSON.parse(cachedZone) : null);
         setZoneStatus("IN_SERVICE");
       } else {
-        setZoneStatus("OUT_OF_SERVICE");
+        // If location is not available yet, we shouldn't immediately assume OUT_OF_SERVICE
+        // because it causes a 1-2 second grayscale flash while GPS is acquired.
+        // We leave it as 'loading' until detectZone explicitly fails or is called.
+        // setZoneStatus("OUT_OF_SERVICE"); 
         setZoneId(null);
         setZone(null);
       }

@@ -19,6 +19,7 @@ import { restaurantAPI, adminAPI } from "@food/api"
 import { isModuleAuthenticated } from "@food/utils/auth"
 import { flattenMenuItems, getMenuFromResponse } from "@food/utils/menuItems"
 import { calculateDistance, formatDistance } from "@food/utils/common"
+import { getRestaurantAvailabilityStatus } from "@food/utils/restaurantAvailability"
 const debugLog = (...args) => {}
 const debugWarn = (...args) => {}
 const debugError = (...args) => {}
@@ -225,6 +226,13 @@ export default function Under250() {
       // No additional sorting needed
     }
 
+    // Always push offline restaurants to the bottom
+    filtered.sort((a, b) => {
+      if (a.isOffline && !b.isOffline) return 1;
+      if (!a.isOffline && b.isOffline) return -1;
+      return 0; // preserve previous sorting
+    });
+
     return filtered
   }, [under250Restaurants, selectedSort, under30MinsFilter, activeCategory, categories])
 
@@ -403,6 +411,7 @@ export default function Under250() {
                   ? formatDistance(restaurant.distance)
                   : (restaurant?.distance || "")
 
+              const availabilityStatus = getRestaurantAvailabilityStatus(restaurant, new Date());
               return {
                 id: String(restaurantId),
                 restaurantId: String(restaurantId),
@@ -421,6 +430,7 @@ export default function Under250() {
                 distanceInKm,
                 originalIndex: index,
                 menuItems,
+                isOffline: !availabilityStatus.isOpen,
               }
             } catch {
               return null
@@ -1010,8 +1020,9 @@ export default function Under250() {
         ) : (
           sortedAndFilteredRestaurants.map((restaurant) => {
             const restaurantSlug = restaurant.slug || restaurant.name.toLowerCase().replace(/\s+/g, "-")
+            const isRestaurantOffline = restaurant.isOffline
             return (
-              <section key={restaurant.id} className="pt-4 sm:pt-6 md:pt-8 lg:pt-10">
+              <section key={restaurant.id} className={`pt-4 sm:pt-6 md:pt-8 lg:pt-10 ${isRestaurantOffline ? 'grayscale opacity-75' : ''}`}>
                 {/* Restaurant Header */}
                 <div className="flex items-start justify-between mb-3 md:mb-4 lg:mb-6">
                   <div className="flex-1">
@@ -1053,8 +1064,12 @@ export default function Under250() {
                         return (
                           <motion.div
                             key={item.id}
-                            className="flex-shrink-0 w-[200px] sm:w-[220px] md:w-full bg-white dark:bg-[#1a1a1a] rounded-lg md:rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden cursor-pointer"
-                            onClick={() => handleItemClick(item, restaurant)}
+                            className={`flex-shrink-0 w-[200px] sm:w-[220px] md:w-full bg-white dark:bg-[#1a1a1a] rounded-lg md:rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden ${shouldShowGrayscale || isRestaurantOffline ? 'cursor-default' : 'cursor-pointer'}`}
+                            onClick={() => {
+                              if (!shouldShowGrayscale && !isRestaurantOffline) {
+                                handleItemClick(item, restaurant)
+                              }
+                            }}
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, margin: "-50px" }}
@@ -1133,14 +1148,14 @@ export default function Under250() {
                                   <Button
                                     variant={"outline"}
                                     size="sm"
-                                    disabled={shouldShowGrayscale}
-                                    className={`h-7 md:h-8 lg:h-9 px-3 md:px-4 lg:px-5 text-xs md:text-sm lg:text-base ${shouldShowGrayscale
+                                    disabled={shouldShowGrayscale || isRestaurantOffline}
+                                    className={`h-7 md:h-8 lg:h-9 px-3 md:px-4 lg:px-5 text-xs md:text-sm lg:text-base ${shouldShowGrayscale || isRestaurantOffline
                                       ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 border-gray-300 dark:border-gray-700 cursor-not-allowed opacity-50'
                                       : 'bg-[#FFF5F5] text-[#cc2532] border-[#cc2532] hover:bg-[#cc2532] hover:text-white'
                                       }`}
                                     onClick={(e) => {
                                       e.stopPropagation()
-                                      if (!shouldShowGrayscale) {
+                                      if (!shouldShowGrayscale && !isRestaurantOffline) {
                                         handleItemClick(item, restaurant)
                                       }
                                     }}

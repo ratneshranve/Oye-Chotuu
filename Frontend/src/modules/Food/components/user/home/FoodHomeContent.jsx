@@ -54,7 +54,7 @@ const FoodRestaurantCard = memo(function FoodRestaurantCard({
       : fallbackSlugSource.toLowerCase().replace(/\s+/g, "-");
 
   const availability = getRestaurantAvailabilityStatus(restaurant, new Date(availabilityTick), {
-    ignoreOperationalStatus: true,
+    ignoreOperationalStatus: false,
   });
   const favorite = isFavorite(restaurantSlug);
 
@@ -310,8 +310,16 @@ function FoodHomeContent({
           </h2>
 
           <div className="grid grid-cols-2 gap-3 px-4 sm:grid-cols-3 lg:grid-cols-4">
-            {recommendedForYouRestaurants.map((restaurant, index) => {
+            {[...recommendedForYouRestaurants].sort((a, b) => {
+              const aAvail = getRestaurantAvailabilityStatus(a, new Date(availabilityTick || Date.now()));
+              const bAvail = getRestaurantAvailabilityStatus(b, new Date(availabilityTick || Date.now()));
+              if (!aAvail.isOpen && bAvail.isOpen) return 1;
+              if (aAvail.isOpen && !bAvail.isOpen) return -1;
+              return 0;
+            }).map((restaurant, index) => {
               const restaurantSlug = restaurant.slug || restaurant.name.toLowerCase().replace(/\s+/g, "-");
+              const availabilityStatus = getRestaurantAvailabilityStatus(restaurant, new Date(availabilityTick || Date.now()));
+              const isOffline = !availabilityStatus.isOpen;
               return (
                 <motion.div
                   key={`recommended-${restaurant.mongoId || restaurant.id || restaurantSlug}`}
@@ -319,10 +327,12 @@ function FoodHomeContent({
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.35, delay: index * 0.05 }}
+                  className={isOffline ? "grayscale opacity-75" : ""}
                 >
                   <Link
-                    to={`/user/restaurants/${restaurantSlug}`}
-                    className="block overflow-hidden rounded-[20px] border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-md dark:border-gray-800 dark:bg-[#1a1a1a]"
+                    to={isOffline ? "#" : `/user/restaurants/${restaurantSlug}`}
+                    onClick={(e) => isOffline && e.preventDefault()}
+                    className={`block overflow-hidden rounded-[20px] border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-md dark:border-gray-800 dark:bg-[#1a1a1a] ${isOffline ? "cursor-default pointer-events-none" : ""}`}
                   >
                     <div className="relative h-24 bg-gray-50 sm:h-28 md:h-32">
                       <img
