@@ -124,15 +124,16 @@ export const initSocket = async (server) => {
     io.on('connection', (socket) => {
         const userId = socket.user?.userId;
         const role = socket.user?.role;
+        const normalizedRole = String(role || '').trim().toUpperCase();
         logger.info(`Socket client connected: ${socket.id} (${role || 'UNKNOWN'}:${userId || '-'})`);
 
         // Auto-join role rooms (lets us emit without a custom join).
-        if (userId && role) {
-            if (role === 'ADMIN') socket.join(roomNames.admin(userId));
-            if (role === 'RESTAURANT') socket.join(roomNames.restaurant(userId));
-            if (role === 'USER') socket.join(roomNames.user(userId));
-            if (role === 'SELLER') socket.join(roomNames.seller(userId));
-            if (role === 'DELIVERY_PARTNER') {
+        if (userId && normalizedRole) {
+            if (normalizedRole === 'ADMIN') socket.join(roomNames.admin(userId));
+            if (normalizedRole === 'RESTAURANT') socket.join(roomNames.restaurant(userId));
+            if (normalizedRole === 'USER') socket.join(roomNames.user(userId));
+            if (normalizedRole === 'SELLER') socket.join(roomNames.seller(userId));
+            if (normalizedRole === 'DELIVERY_PARTNER') {
                 socket.join(roomNames.delivery(userId));
                 logDeliverySocket('Auto-joined delivery room on connect', {
                     socketId: socket.id,

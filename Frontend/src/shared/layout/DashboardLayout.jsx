@@ -106,12 +106,10 @@ const DashboardLayout = ({ children, navItems, title }) => {
                     return (o?.status || '').toLowerCase() === 'pending';
                 });
 
+                // Always process pending orders to show modal, even on initial load
+                // (This ensures that refreshing the page or loading directly to a subpage will still trigger the alert)
                 if (isFirstLoadRef.current) {
-                    const existingIds = new Set(pendingOrders.map((o) => o.orderId).filter(Boolean));
-                    shownOrderIdsRef.current = existingIds;
                     isFirstLoadRef.current = false;
-                    setShownOrderIds(existingIds);
-                    return;
                 }
 
                 const newOrder = pendingOrders.find((o) => !shownOrderIdsRef.current.has(o.orderId));

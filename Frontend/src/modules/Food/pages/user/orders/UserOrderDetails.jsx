@@ -207,9 +207,10 @@ export default function UserOrderDetails() {
     })
     : ""
 
+  const deliveryAddressObj = order.deliveryAddress || order.address || {}
   const addressText =
-    order.address?.formattedAddress ||
-    [order.address?.street, order.address?.city, order.address?.state, order.address?.zipCode]
+    deliveryAddressObj.formattedAddress ||
+    [deliveryAddressObj.street, deliveryAddressObj.additionalDetails, deliveryAddressObj.city, deliveryAddressObj.state, deliveryAddressObj.zipCode]
       .filter(Boolean)
       .join(", ")
 

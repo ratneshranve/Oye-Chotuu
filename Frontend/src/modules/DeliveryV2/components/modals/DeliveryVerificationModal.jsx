@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ShieldCheck,
-  DollarSign,
+  IndianRupee,
   CheckCircle2,
   QrCode,
   Loader2,
@@ -318,7 +318,7 @@ const PaymentModal = ({ order, otpString, onComplete, onClose }) => {
             <div className="flex items-center gap-3">
               <div
                 className={`w-12 h-12 rounded-2xl flex items-center justify-center ${isPaid ? "bg-green-100 text-green-600" : "bg-amber-100 text-amber-600"}`}>
-                <DollarSign className="w-7 h-7" />
+                <IndianRupee className="w-7 h-7" />
               </div>
               <div>
                 <h2 className="text-xl font-bold text-gray-900">
@@ -380,7 +380,7 @@ const PaymentModal = ({ order, otpString, onComplete, onClose }) => {
                       ? "bg-amber-600 text-white shadow-lg ring-2 ring-amber-300 ring-offset-2"
                       : "bg-white border-2 border-amber-200 text-amber-800"
                   }`}>
-                  <DollarSign className="w-5 h-5" />
+                  <IndianRupee className="w-5 h-5" />
                   Cash in Hand
                 </button>
               </div>
