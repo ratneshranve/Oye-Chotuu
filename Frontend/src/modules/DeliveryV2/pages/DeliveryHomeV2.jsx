@@ -580,9 +580,17 @@ export default function DeliveryHomeV2({ tab = 'feed' }) {
       }
     }, isSocketConnected ? 12000 : 5000);
 
+    const onVisibilityChange = () => {
+      if (!document.hidden) {
+        void hydrateAvailableOrder();
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibilityChange);
+
     return () => {
       cancelled = true;
       window.clearInterval(poller);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
     };
   }, [activeOrder, currentTab, isOnline, isSocketConnected, setActiveOrder]);
 

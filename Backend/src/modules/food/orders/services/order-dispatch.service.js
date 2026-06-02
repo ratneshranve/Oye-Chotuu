@@ -329,7 +329,8 @@ export async function tryAutoAssign(orderId, options = {}) {
       }
     }
 
-    const offeredToEntries = eligible.map((p) => ({
+    const offeredPartners = isPhase2 ? eligible : [eligible[0]];
+    const offeredToEntries = offeredPartners.map((p) => ({
       partnerId: p.partnerId,
       at: new Date(),
       action: "offered",

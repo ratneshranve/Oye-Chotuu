@@ -154,6 +154,12 @@ const GlobalApplicationSettings = () => {
   const handleAddBannedNumber = () => {
     const trimmed = newBannedNumber.trim();
     if (!trimmed) return;
+    
+    if (!/^\d{10}$/.test(trimmed)) {
+      toast.error("Phone number must be exactly 10 digits");
+      return;
+    }
+    
     if (formData.bannedNumbers.includes(trimmed)) {
       toast.error("Number is already banned");
       return;
@@ -273,8 +279,9 @@ const GlobalApplicationSettings = () => {
                 <input
                   type="text"
                   value={newBannedNumber}
-                  onChange={(e) => setNewBannedNumber(e.target.value)}
+                  onChange={(e) => setNewBannedNumber(e.target.value.replace(/\D/g, '').slice(0, 10))}
                   placeholder="e.g. 9876543210"
+                  maxLength={10}
                   className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm text-gray-800 bg-white focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition-colors shadow-sm"
                   onKeyDown={(e) => e.key === 'Enter' && handleAddBannedNumber()}
                 />

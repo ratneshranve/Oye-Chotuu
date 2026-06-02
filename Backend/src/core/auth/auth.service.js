@@ -489,7 +489,7 @@ export const logout = async (refreshToken, fcmToken, platform) => {
     // We try to remove the token from all 4 possible models regardless of the user ID, 
     // ensuring no stale connections are left across any role or app the user was logged into.
     const field = platform === "mobile" ? "fcmTokenMobile" : "fcmTokens";
-    const models = [FoodUser, FoodRestaurant, FoodDeliveryPartner, FoodAdmin];
+    const models = [FoodUser, FoodRestaurant, FoodDeliveryPartner, FoodAdmin, Seller];
     
     try {
       await Promise.all(
@@ -537,7 +537,7 @@ export const logoutAll = async (refreshToken, fcmToken, platform) => {
   // 2. Cleanup FCM token globally if provided
   if (fcmToken) {
     const field = platform === "mobile" ? "fcmTokenMobile" : "fcmTokens";
-    const models = [FoodUser, FoodRestaurant, FoodDeliveryPartner, FoodAdmin];
+    const models = [FoodUser, FoodRestaurant, FoodDeliveryPartner, FoodAdmin, Seller];
     try {
       await Promise.all(
         models.map((model) =>

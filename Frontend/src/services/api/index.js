@@ -1369,29 +1369,59 @@ export const restaurantAPI = {
     apiClient.delete(`/food/restaurant/addons/${String(id)}`, {
       contextModule: "restaurant",
     }),
-  logout: (refreshToken) => {
+  logout: async (refreshToken) => {
     restaurantCurrentInFlight = null;
     restaurantCurrentCached = null;
     restaurantCurrentCacheTime = 0;
-    const token =
-      refreshToken ||
-      (typeof localStorage !== "undefined"
-        ? localStorage.getItem("restaurant_refreshToken")
-        : null);
-    const fcmToken = typeof localStorage !== "undefined" ? localStorage.getItem("fcm_web_registered_token_restaurant") : null;
-    return authService.logout(token, fcmToken, "web");
+    
+    let fcmToken = null;
+    let platform = "web";
+    if (typeof window !== "undefined") {
+      try {
+        if (window.flutter_inappwebview?.callHandler) {
+          platform = "mobile";
+          for (const handler of ["getFcmToken", "getFCMToken", "getPushToken", "getFirebaseToken"]) {
+            const t = await window.flutter_inappwebview.callHandler(handler);
+            if (t && typeof t === 'string' && t.trim() !== '') { fcmToken = t.trim(); break; }
+          }
+        } else if (window.MobileApp && typeof window.MobileApp.getFcmToken === "function") {
+          platform = "mobile";
+          fcmToken = window.MobileApp.getFcmToken();
+        } else {
+          fcmToken = localStorage.getItem("fcm_web_registered_token_restaurant") || null;
+        }
+      } catch (err) { console.warn("FCM fetch error on logout", err); }
+    }
+    
+    const token = refreshToken || (typeof localStorage !== "undefined" ? localStorage.getItem("restaurant_refreshToken") : null);
+    return authService.logout(token, fcmToken, platform);
   },
-  logoutAll: (refreshToken) => {
+  logoutAll: async (refreshToken) => {
     restaurantCurrentInFlight = null;
     restaurantCurrentCached = null;
     restaurantCurrentCacheTime = 0;
-    const token =
-      refreshToken ||
-      (typeof localStorage !== "undefined"
-        ? localStorage.getItem("restaurant_refreshToken")
-        : null);
-    const fcmToken = typeof localStorage !== "undefined" ? localStorage.getItem("fcm_web_registered_token_restaurant") : null;
-    return authService.logoutAll(token, fcmToken, "web");
+    
+    let fcmToken = null;
+    let platform = "web";
+    if (typeof window !== "undefined") {
+      try {
+        if (window.flutter_inappwebview?.callHandler) {
+          platform = "mobile";
+          for (const handler of ["getFcmToken", "getFCMToken", "getPushToken", "getFirebaseToken"]) {
+            const t = await window.flutter_inappwebview.callHandler(handler);
+            if (t && typeof t === 'string' && t.trim() !== '') { fcmToken = t.trim(); break; }
+          }
+        } else if (window.MobileApp && typeof window.MobileApp.getFcmToken === "function") {
+          platform = "mobile";
+          fcmToken = window.MobileApp.getFcmToken();
+        } else {
+          fcmToken = localStorage.getItem("fcm_web_registered_token_restaurant") || null;
+        }
+      } catch (err) { console.warn("FCM fetch error on logoutAll", err); }
+    }
+    
+    const token = refreshToken || (typeof localStorage !== "undefined" ? localStorage.getItem("restaurant_refreshToken") : null);
+    return authService.logoutAll(token, fcmToken, platform);
   },
   /** Backend has no email/password login; use phone OTP only. */
   login: (_email, _password) =>
@@ -1679,19 +1709,35 @@ export const deliveryAPI = {
     apiClient.get("/food/delivery/referrals/stats", {
       contextModule: "delivery",
     }),
-  logout: (refreshToken) => {
+  logout: async (refreshToken, customFcmToken = null, customPlatform = null) => {
     deliveryMeCached = null;
     deliveryMeCacheTime = 0;
     try {
       localStorage.removeItem("app:isOnline");
     } catch (_) {}
-    const token =
-      refreshToken ||
-      (typeof localStorage !== "undefined"
-        ? localStorage.getItem("delivery_refreshToken")
-        : null);
-    const fcmToken = typeof localStorage !== "undefined" ? localStorage.getItem("fcm_web_registered_token_delivery") : null;
-    return authService.logout(token, fcmToken, "web");
+    
+    let fcmToken = customFcmToken;
+    let platform = customPlatform || "web";
+    
+    if (!fcmToken && typeof window !== "undefined") {
+      try {
+        if (window.flutter_inappwebview?.callHandler) {
+          platform = "mobile";
+          for (const handler of ["getFcmToken", "getFCMToken", "getPushToken", "getFirebaseToken"]) {
+            const t = await window.flutter_inappwebview.callHandler(handler);
+            if (t && typeof t === 'string' && t.trim() !== '') { fcmToken = t.trim(); break; }
+          }
+        } else if (window.MobileApp && typeof window.MobileApp.getFcmToken === "function") {
+          platform = "mobile";
+          fcmToken = window.MobileApp.getFcmToken();
+        } else {
+          fcmToken = localStorage.getItem("fcm_web_registered_token_delivery") || null;
+        }
+      } catch (err) { console.warn("FCM fetch error on logout", err); }
+    }
+    
+    const token = refreshToken || (typeof localStorage !== "undefined" ? localStorage.getItem("delivery_refreshToken") : null);
+    return authService.logout(token, fcmToken, platform);
   },
   /** POST /food/delivery/register - multipart FormData (new partner, no token). */
   register: (formData) => {
