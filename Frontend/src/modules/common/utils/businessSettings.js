@@ -38,14 +38,19 @@ if (cachedSettings) {
 }
 
 let inFlightSettingsPromise = null;
+let hasFetchedFromServer = false;
 
 /**
  * Load business settings from backend (public endpoint - no auth required)
  */
-export const loadBusinessSettings = async () => {
+export const loadBusinessSettings = async (force = false) => {
   try {
     const endpoint = API_ENDPOINTS.ADMIN.BUSINESS_SETTINGS_PUBLIC;
     if (!endpoint || (typeof endpoint === "string" && !endpoint.trim())) {
+      return cachedSettings;
+    }
+
+    if (!force && hasFetchedFromServer) {
       return cachedSettings;
     }
 
@@ -67,13 +72,15 @@ export const loadBusinessSettings = async () => {
         updateFavicon(settings.favicon?.url);
         updateTitle(settings.companyName);
         updateThemeColor(settings.themeColor);
-        return settings;
       }
+      // Mark as fetched even if settings are empty to prevent infinite retries
+      hasFetchedFromServer = true;
       return cachedSettings;
     })();
 
     return await inFlightSettingsPromise;
   } catch (error) {
+    hasFetchedFromServer = true; // Prevent retries on error as well
     return cachedSettings;
   } finally {
     inFlightSettingsPromise = null;

@@ -1273,6 +1273,39 @@ export const uploadRestaurantMenuImages = async (restaurantId, files = []) => {
     };
 };
 
+const toRestaurantSummary = (doc) => {
+    if (!doc) return null;
+    
+    const coverImages = Array.isArray(doc.coverImages)
+        ? doc.coverImages.map((m) => toUrl(m)).filter(Boolean).map((url) => ({ url, publicId: null }))
+        : [];
+
+    return {
+        id: doc._id,
+        _id: doc._id,
+        name: doc.restaurantName || '',
+        restaurantName: doc.restaurantName || '',
+        profileImage: doc.profileImage ? { url: doc.profileImage } : null,
+        coverImages,
+        openingTime: normalizeRestaurantTime(doc.openingTime) || null,
+        closingTime: normalizeRestaurantTime(doc.closingTime) || null,
+        openDays: Array.isArray(doc.openDays) ? doc.openDays : [],
+        estimatedDeliveryTime: doc.estimatedDeliveryTime || '',
+        featuredDish: doc.featuredDish || '',
+        featuredPrice: doc.featuredPrice ?? null,
+        offer: doc.offer || '',
+        estimatedDeliveryTimeMinutes:
+            Number.isFinite(Number(doc.estimatedDeliveryTimeMinutes))
+                ? Number(doc.estimatedDeliveryTimeMinutes)
+                : null,
+        isAcceptingOrders: doc.isAcceptingOrders !== false,
+        rating: normalizeRatingValue(doc.rating),
+        totalRatings: normalizeTotalRatingsValue(doc.totalRatings),
+        pureVegRestaurant: Boolean(doc.pureVegRestaurant),
+        slug: doc.slug || doc.restaurantNameNormalized || ''
+    };
+};
+
 export const listApprovedRestaurants = async (query = {}) => {
     const limit = Math.min(Math.max(parseInt(query.limit, 10) || 100, 1), 1000);
     const page = Math.max(parseInt(query.page, 10) || 1, 1);
@@ -1350,12 +1383,8 @@ export const listApprovedRestaurants = async (query = {}) => {
 
     const projection = {
         restaurantName: 1,
-        area: 1,
-        city: 1,
-        cuisines: 1,
         profileImage: 1,
         coverImages: 1,
-        menuImages: 1,
         estimatedDeliveryTime: 1,
         estimatedDeliveryTimeMinutes: 1,
         offer: 1,
@@ -1364,13 +1393,12 @@ export const listApprovedRestaurants = async (query = {}) => {
         rating: 1,
         totalRatings: 1,
         isAcceptingOrders: 1,
-        status: 1,
         pureVegRestaurant: 1,
-        createdAt: 1,
-        location: 1,
         openingTime: 1,
         closingTime: 1,
-        openDays: 1
+        openDays: 1,
+        slug: 1,
+        restaurantNameNormalized: 1
     };
 
     // Use $geoNear only when geo is explicitly needed (radius filter or nearest sorting).
@@ -1410,18 +1438,26 @@ export const listApprovedRestaurants = async (query = {}) => {
             sortStage
         ];
 
-        const [pageDocs, totalDocs] = await Promise.all([
+        const [docs, totalCountAggr] = await Promise.all([
             FoodRestaurant.aggregate([
                 ...basePipeline,
-                { $project: projection },
                 { $skip: skip },
-                { $limit: limit }
+                { $limit: limit },
+                { $project: { ...projection, distanceInKm: 1 } }
             ]),
-            FoodRestaurant.aggregate([...basePipeline, { $count: 'count' }])
+            FoodRestaurant.aggregate([...basePipeline, { $count: 'total' }])
         ]);
 
-        const total = totalDocs?.[0]?.count || 0;
-        return { restaurants: pageDocs, total, page, limit };
+        const total = totalCountAggr[0]?.total || 0;
+        return {
+            restaurants: docs.map(doc => {
+                const summary = toRestaurantSummary(doc);
+                if (summary && doc.distanceInKm !== undefined) {
+                    summary.distanceInKm = doc.distanceInKm;
+                }
+                return summary;
+            }), total, page, limit
+        };
     }
 
     // Non-geo path: normal query + sort.
@@ -1444,22 +1480,7 @@ export const listApprovedRestaurants = async (query = {}) => {
         FoodRestaurant.countDocuments(filter)
     ]);
 
-    const restaurants = (restaurantsRaw || []).map((r) => ({
-        ...r,
-        // Frontend user app expects `name` and often checks `profileImage.url`
-        restaurantId: r._id,
-        id: r._id,
-        name: r.restaurantName || '',
-        rating: normalizeRatingValue(r.rating),
-        totalRatings: normalizeTotalRatingsValue(r.totalRatings),
-        profileImage: r.profileImage ? { url: r.profileImage } : null,
-        coverImages: Array.isArray(r.coverImages) ? r.coverImages : [],
-        openingTime: r.openingTime || null,
-        closingTime: r.closingTime || null,
-        openDays: Array.isArray(r.openDays) ? r.openDays : [],
-        // Keep menuImages as an array for fallbacks; allow both string and {url} on client.
-        menuImages: Array.isArray(r.menuImages) ? r.menuImages : []
-    }));
+    const restaurants = (restaurantsRaw || []).map(toRestaurantSummary);
 
     return { restaurants, total, page, limit };
 };

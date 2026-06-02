@@ -88,8 +88,20 @@ export const getPublicGourmetController = async (req, res, next) => {
     }
 };
 
+let landingSettingsCache = { data: null, lastFetched: 0 };
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+export const invalidateLandingSettingsCache = () => {
+    landingSettingsCache = { data: null, lastFetched: 0 };
+};
+
 export const getPublicLandingSettingsController = async (req, res, next) => {
     try {
+        const now = Date.now();
+        if (landingSettingsCache.data && now - landingSettingsCache.lastFetched < CACHE_TTL) {
+            return sendResponse(res, 200, 'Landing settings fetched', landingSettingsCache.data);
+        }
+
         const settings = await getLandingSettings();
         const ids = settings?.recommendedRestaurantIds || [];
         let recommendedRestaurants = [];
@@ -104,6 +116,12 @@ export const getPublicLandingSettingsController = async (req, res, next) => {
             recommendedRestaurantIds: undefined,
             recommendedRestaurants
         };
+
+        landingSettingsCache = {
+            data: payload,
+            lastFetched: now
+        };
+
         return sendResponse(res, 200, 'Landing settings fetched', payload);
     } catch (error) {
         next(error);

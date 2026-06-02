@@ -102,22 +102,22 @@ function emitOrderUpdate(order, deliveryPartnerId) {
       userTitle = 'Order on the way!';
       userBody = `Partner has picked up your order #${orderId} and is heading your way.`;
       riderTitle = 'Order picked up!';
-      riderBody = `You have picked up order #${orderId}. Proceed to the customer location.`;
+      riderBody = `You have picked up the order. Proceed to the customer location.`;
     } else if (status === 'reached_drop') {
       userTitle = 'Partner nearby!';
       userBody = `Your delivery partner has reached your location for order #${orderId}.`;
       riderTitle = 'Arrived at drop!';
-      riderBody = `You have reached the customer location for order #${orderId}.`;
+      riderBody = `You have reached the customer location.`;
     } else if (status === 'delivered') {
       userTitle = `Order #${orderId} delivered!`;
       userBody = 'Hope you enjoyed your meal! Don\'t forget to rate your experience.';
       riderTitle = 'Delivery successful!';
-      riderBody = `Order #${orderId} has been successfully delivered.`;
+      riderBody = `The order has been successfully delivered.`;
 
       if (order.payment?.method === 'cash' || order.paymentMethod === 'cash') {
         riderTitle = 'Payment collected!';
         const amt = order.pricing?.total || order.amounts?.totalCustomerPaid || 0;
-        riderBody = `You have collected Rs ${amt} cash for Order #${orderId}.`;
+        riderBody = `You have collected Rs ${amt} cash for the order.`;
       }
     }
 
@@ -616,7 +616,7 @@ export async function confirmReachedPickupDelivery(orderId, deliveryPartnerId) {
           sellerOrders.map(so => ({ ownerType: 'SELLER', ownerId: so.sellerId })),
           {
             title: 'Rider arrived! 🛵',
-            body: `${partner?.name || 'The delivery partner'} has arrived to pick up Order #${order.orderId}.`,
+            body: `${partner?.name || 'The delivery partner'} has arrived to pick up the order.`,
             data: {
               type: 'rider_arrived',
               orderId: String(order.orderId),

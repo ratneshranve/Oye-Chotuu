@@ -192,13 +192,18 @@ export const useFoodHomeData = ({
 
   // --- Fetch Restaurants ---
   const fetchRestaurants = useCallback(async (filters = {}) => {
+    if (!location) return; // Wait for location to initialize to prevent premature/duplicate calls
+    
     const requestSeq = ++restaurantsRequestSeqRef.current;
     try {
       setLoadingRestaurants(true);
       const params = {};
-      if (Number.isFinite(location?.latitude) && Number.isFinite(location?.longitude)) {
-        params.lat = location.latitude;
-        params.lng = location.longitude;
+      const lat = Number(location?.latitude);
+      const lng = Number(location?.longitude);
+      
+      if (Number.isFinite(lat) && Number.isFinite(lng)) {
+        params.lat = lat;
+        params.lng = lng;
       }
       if (filters.sortBy) params.sortBy = filters.sortBy;
       if (filters.selectedCuisine) params.cuisine = filters.selectedCuisine;

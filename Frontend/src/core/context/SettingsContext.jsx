@@ -8,6 +8,8 @@ import React, {
 import axiosInstance from "@core/api/axios";
 import { getWithDedupe } from "@core/api/dedupe";
 
+import { loadBusinessSettings } from "@/modules/common/utils/businessSettings";
+
 const SettingsContext = createContext(undefined);
 
 /** Default fallbacks when settings are not yet loaded or API fails */
@@ -82,13 +84,12 @@ export const SettingsProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchSettings = useCallback(async () => {
+  const fetchSettings = useCallback(async (force = false) => {
     try {
       setLoading(true);
       setError(null);
-      // Use the Food module's public settings endpoint
-      const res = await getWithDedupe("/food/admin/business-settings/public", {}, { ttl: 60 * 1000 });
-      const data = res.data?.result || res.data?.data || res.data;
+      // Use the consolidated public settings fetcher
+      const data = await loadBusinessSettings(force);
       const merged = { ...DEFAULT_SETTINGS, ...data };
       setSettings(merged);
       applyThemeVariables(merged);

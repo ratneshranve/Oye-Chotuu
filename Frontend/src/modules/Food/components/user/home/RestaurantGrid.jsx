@@ -161,6 +161,22 @@ const RestaurantGrid = memo(({
   loadMoreRestaurants,
   restaurantLoadMoreRef
 }) => {
+  React.useEffect(() => {
+    if (!restaurantLoadMoreRef || !restaurantLoadMoreRef.current || !hasMoreRestaurants) return;
+    
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        loadMoreRestaurants();
+      }
+    }, { threshold: 0.1 });
+    
+    observer.observe(restaurantLoadMoreRef.current);
+    
+    return () => {
+      observer.disconnect();
+    };
+  }, [hasMoreRestaurants, loadMoreRestaurants, restaurantLoadMoreRef]);
+
   return (
     <section className="content-auto space-y-0 pb-8 pt-3 sm:pt-4 md:pb-10 lg:pt-6">
       <div className="mb-4 px-4">
@@ -216,10 +232,10 @@ const RestaurantGrid = memo(({
             onClick={loadMoreRestaurants}
             className="border-gray-300 text-sm font-medium hover:border-gray-400 rounded-full px-8 py-6 h-auto"
           >
-            Load more restaurants
+            Loading more restaurants...
           </Button>
         )}
-        <div ref={restaurantLoadMoreRef} className="h-1 w-full" aria-hidden="true" />
+        <div ref={restaurantLoadMoreRef} className="h-10 w-full" aria-hidden="true" />
       </div>
     </section>
   );

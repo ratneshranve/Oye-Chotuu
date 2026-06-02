@@ -681,7 +681,7 @@ export const adminAPI = {
 
   /** Public categories (user app) - zone-aware */
   getPublicCategories: (params = {}, config = {}) =>
-    apiClient.get("/food/restaurant/categories/public", {
+    publicGetOnce("/food/restaurant/categories/public", {
       params: params ?? {},
       ...config,
     }),
@@ -2142,18 +2142,26 @@ export const userAPI = {
   /** GET /food/user/addresses (Bearer USER). Deduped + short-cached. */
   getAddresses: (() => {
     let inFlight = null;
-    let cached = null;
-    let cacheTime = 0;
-    const CACHE_MS = 3000;
+    let memCache = null;
     const fn = () => {
-      const now = Date.now();
-      if (cached && now - cacheTime < CACHE_MS) return Promise.resolve(cached);
+      if (memCache) return Promise.resolve(memCache);
+      try {
+        const local = localStorage.getItem("api_addresses_cache");
+        if (local) {
+          const parsed = JSON.parse(local);
+          memCache = parsed;
+          return Promise.resolve(parsed);
+        }
+      } catch (e) {}
+
       if (!inFlight) {
         inFlight = apiClient
           .get("/food/user/addresses", { contextModule: "user" })
           .then((res) => {
-            cached = res;
-            cacheTime = Date.now();
+            memCache = res;
+            try {
+              localStorage.setItem("api_addresses_cache", JSON.stringify(res));
+            } catch (e) {}
             return res;
           })
           .finally(() => {
@@ -2164,8 +2172,8 @@ export const userAPI = {
     };
     fn.invalidateCache = () => {
       inFlight = null;
-      cached = null;
-      cacheTime = 0;
+      memCache = null;
+      try { localStorage.removeItem("api_addresses_cache"); } catch (e) {}
     };
     return fn;
   })(),

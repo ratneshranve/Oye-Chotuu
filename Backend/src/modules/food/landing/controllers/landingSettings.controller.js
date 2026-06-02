@@ -4,6 +4,7 @@ import {
     updateLandingSettings,
     uploadLandingHeaderVideo
 } from '../services/landingSettings.service.js';
+import { invalidateLandingSettingsCache } from './publicLanding.controller.js';
 import { sendResponse } from '../../../../utils/response.js';
 import { ValidationError } from '../../../../core/auth/errors.js';
 
@@ -23,6 +24,7 @@ export const updateAdminLandingSettingsController = async (req, res, next) => {
             throw new ValidationError('Invalid settings payload');
         }
         const updated = await updateLandingSettings(payload);
+        invalidateLandingSettingsCache();
         return sendResponse(res, 200, 'Landing settings updated successfully', { settings: updated });
     } catch (error) {
         next(error);
@@ -32,6 +34,7 @@ export const updateAdminLandingSettingsController = async (req, res, next) => {
 export const uploadAdminLandingHeaderVideoController = async (req, res, next) => {
     try {
         const updated = await uploadLandingHeaderVideo(req.file);
+        invalidateLandingSettingsCache();
         return sendResponse(res, 200, 'Landing header video uploaded successfully', { settings: updated });
     } catch (error) {
         next(error);
@@ -41,6 +44,7 @@ export const uploadAdminLandingHeaderVideoController = async (req, res, next) =>
 export const deleteAdminLandingHeaderVideoController = async (req, res, next) => {
     try {
         const updated = await deleteLandingHeaderVideo();
+        invalidateLandingSettingsCache();
         return sendResponse(res, 200, 'Landing header video removed successfully', { settings: updated });
     } catch (error) {
         next(error);

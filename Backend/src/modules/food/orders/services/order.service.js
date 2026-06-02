@@ -1263,7 +1263,7 @@ async function notifySellerOrderCancelled(orderDoc, sellerOrders, reason) {
           { ownerType: "SELLER", ownerId: sellerId },
           {
             title: "Order Cancelled ❌",
-            body: `Order ${sellerOrder.orderId} has been cancelled by the ${reason.includes('user') ? 'user' : 'restaurant'}.`,
+            body: `The order has been cancelled by the ${reason.includes('user') ? 'user' : 'restaurant'}.`,
             data: {
               type: "seller_order_cancelled",
               orderId: sellerOrder.orderId,
@@ -3044,12 +3044,12 @@ export async function updateOrderStatusRestaurant(
       notifyList.push({ ownerType: "DELIVERY_PARTNER", ownerId: assignedRiderId });
     }
 
-    let riderTitle = `Order #${order.orderId} updated`;
+    let riderTitle = `Order updated`;
     let riderBody = `The order status is now ${String(orderStatus).replace(/_/g, " ")}.`;
 
     if (String(orderStatus).includes("cancel")) {
       riderTitle = "Order Cancelled ❌";
-      riderBody = `Order #${order.orderId} has been cancelled. Please stop your current task.`;
+      riderBody = `The order has been cancelled. Please stop your current task.`;
       
       // Sync transaction status
       try {
@@ -3777,7 +3777,7 @@ export async function confirmReachedPickupDelivery(orderId, deliveryPartnerId) {
       [{ ownerType: "RESTAURANT", ownerId: order.restaurantId }],
       {
         title: "Rider Arrived! 🛵",
-        body: `${partner?.name || "The delivery partner"} has arrived at your restaurant to pick up Order #${order.orderId}.`,
+        body: `${partner?.name || "The delivery partner"} has arrived at your restaurant to pick up the order.`,
         image: "https://i.ibb.co/3m2Yh7r/Appzeto-Brand-Image.png",
         data: {
           type: "rider_arrived",
@@ -4072,19 +4072,16 @@ function emitOrderUpdate(order, deliveryPartnerId) {
     }
     if (order.orderStatus === "delivered") {
       let riderTitle = `Order deliverd! 🏁`;
-      let riderBody = `Order #${order.orderId} has been marked as delivered.`;
+      let riderBody = `The order has been marked as delivered.`;
 
       // Special message for COD payment collection
       if (order.payment?.method === "cash") {
         riderTitle = "Payment Collected! 💵";
-        riderBody = `You have collected ₹${order.pricing?.total || 0} cash for Order #${order.orderId}.`;
+        riderBody = `You have collected ₹${order.pricing?.total || 0} cash for the order.`;
       }
 
-      void notifyOwnersSafely(
-        [
-          { ownerType: "RESTAURANT", ownerId: order.restaurantId },
-          { ownerType: "USER", ownerId: order.userId },
-        ],
+      void notifyOwnerSafely(
+        { ownerType: "USER", ownerId: order.userId },
         {
           title: `Order #${order.orderId} delivered! ✅`,
           body: `Hope you enjoyed your meal!`,
@@ -4094,7 +4091,21 @@ function emitOrderUpdate(order, deliveryPartnerId) {
             orderMongoId: order._id?.toString?.() || "",
             orderStatus: "delivered",
           },
-        },
+        }
+      );
+
+      void notifyOwnerSafely(
+        { ownerType: "RESTAURANT", ownerId: order.restaurantId },
+        {
+          title: `Order Delivered! ✅`,
+          body: `The order has been successfully delivered to the customer.`,
+          data: {
+            type: "order_status_update",
+            orderId: order.orderId,
+            orderMongoId: order._id?.toString?.() || "",
+            orderStatus: "delivered",
+          },
+        }
       );
 
       void notifyOwnerSafely(

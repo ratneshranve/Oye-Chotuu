@@ -159,6 +159,13 @@ export async function listRestaurantCategories(restaurantId, query = {}) {
     return { categories, total, page, limit };
 }
 
+let publicCategoriesCache = new Map();
+const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+
+export function invalidatePublicCategoriesCache() {
+    publicCategoriesCache.clear();
+}
+
 export async function listPublicCategories(query = {}) {
     const limit = Math.min(Math.max(parseInt(query.limit, 10) || 1000, 1), 1000);
     const page = Math.max(parseInt(query.page, 10) || 1, 1);
@@ -167,13 +174,22 @@ export async function listPublicCategories(query = {}) {
     const search = typeof query.search === 'string' ? query.search.trim() : '';
     const zoneIdRaw = typeof query.zoneId === 'string' ? query.zoneId.trim() : '';
 
+    const cacheKey = JSON.stringify({ limit, page, skip, search, zoneIdRaw });
+    const now = Date.now();
+    const cached = publicCategoriesCache.get(cacheKey);
+    if (cached && now - cached.lastFetched < CACHE_TTL_MS) {
+        return cached.data;
+    }
+
     const approvedCategoryIds = await FoodItem.distinct('categoryId', {
         approvalStatus: 'approved',
         categoryId: { $ne: null }
     });
 
     if (!approvedCategoryIds.length) {
-        return { categories: [], total: 0, page, limit };
+        const result = { categories: [], total: 0, page, limit };
+        publicCategoriesCache.set(cacheKey, { data: result, lastFetched: now });
+        return result;
     }
 
     const filter = {
@@ -201,7 +217,9 @@ export async function listPublicCategories(query = {}) {
     await backfillLegacyCategoryWorkflow(list);
     const categories = list.map((category) => serializeCategoryForResponse(category));
 
-    return { categories, total, page, limit };
+    const result = { categories, total, page, limit };
+    publicCategoriesCache.set(cacheKey, { data: result, lastFetched: now });
+    return result;
 }
 
 export async function createRestaurantCategory(restaurantId, body = {}) {
