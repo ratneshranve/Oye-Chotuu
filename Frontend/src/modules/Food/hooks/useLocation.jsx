@@ -741,18 +741,24 @@ export function useLocation() {
         return lastDbLocationRef.current
       }
 
-      const res = await userAPI.getLocation()
-      const loc = res?.data?.data?.location
-      if (loc?.latitude && loc?.longitude) {
-        // Validate coordinates are in India range BEFORE attempting geocoding
-        const isInIndiaRange = loc.latitude >= 6.5 && loc.latitude <= 37.1 && loc.longitude >= 68.7 && loc.longitude <= 97.4 && loc.longitude > 0
+      const res = await userAPI.getAddresses()
+      const addressesData = res?.data?.data?.addresses || res?.data?.addresses || []
+      const defaultAddr = addressesData.find((addr) => addr.isDefault) || addressesData[0] || null
 
-        if (!isInIndiaRange || loc.longitude < 0) {
+      if (defaultAddr && defaultAddr.location?.coordinates) {
+        const coords = defaultAddr.location.coordinates
+        const lat = coords[1]
+        const lng = coords[0]
+
+        // Validate coordinates are in India range BEFORE attempting geocoding
+        const isInIndiaRange = lat >= 6.5 && lat <= 37.1 && lng >= 68.7 && lng <= 97.4 && lng > 0
+
+        if (!isInIndiaRange || lng < 0) {
           // Coordinates are outside India - return placeholder
-          debugWarn("?? Coordinates from DB are outside India range:", { latitude: loc.latitude, longitude: loc.longitude })
+          debugWarn("?? Coordinates from DB are outside India range:", { latitude: lat, longitude: lng })
           const outOfRangeLocation = {
-            latitude: loc.latitude,
-            longitude: loc.longitude,
+            latitude: lat,
+            longitude: lng,
             city: "Current Location",
             state: "",
             country: "",
@@ -765,53 +771,23 @@ export function useLocation() {
           return outOfRangeLocation
         }
 
-        const hasUsableStoredAddress =
-          (loc.formattedAddress && loc.formattedAddress !== "Select location") ||
-          (loc.address && loc.address !== "Select location") ||
-          (loc.city && loc.city !== "Current Location")
-
-        if (hasUsableStoredAddress) {
-          const storedLocation = {
-            latitude: loc.latitude,
-            longitude: loc.longitude,
-            city: loc.city || "Current Location",
-            area: loc.area || "",
-            state: loc.state || "",
-            country: loc.country || "",
-            address: loc.address || loc.formattedAddress || "Select location",
-            formattedAddress: loc.formattedAddress || loc.address || "Select location"
-          }
-          lastDbLocationRef.current = storedLocation
-          lastDbLocationFetchAtRef.current = Date.now()
-          return storedLocation
+        const storedLocation = {
+          latitude: lat,
+          longitude: lng,
+          city: defaultAddr.city || "Current Location",
+          area: defaultAddr.area || defaultAddr.landmark || "",
+          state: defaultAddr.state || "",
+          country: defaultAddr.country || "",
+          address: defaultAddr.address || "Select location",
+          formattedAddress: defaultAddr.address || "Select location",
+          label: defaultAddr.label || ""
         }
-
-        try {
-          const addr = await reverseGeocodeWithGoogleMaps(
-            loc.latitude,
-            loc.longitude,
-            { includePlaceDetails: false }
-          )
-          const resolvedLocation = { ...addr, latitude: loc.latitude, longitude: loc.longitude }
-          lastDbLocationRef.current = resolvedLocation
-          lastDbLocationFetchAtRef.current = Date.now()
-          return resolvedLocation
-        } catch (geocodeErr) {
-          // If reverse geocoding fails, return location without coordinates in address
-          debugWarn("?? Reverse geocoding failed in fetchLocationFromDB:", geocodeErr.message)
-          const fallbackLocation = {
-            latitude: loc.latitude,
-            longitude: loc.longitude,
-            city: "Current Location",
-            area: "",
-            state: "",
-            address: "Select location", // Don't show coordinates
-            formattedAddress: "Select location", // Don't show coordinates
-          }
-          lastDbLocationRef.current = fallbackLocation
-          lastDbLocationFetchAtRef.current = Date.now()
-          return fallbackLocation
-        }
+        lastDbLocationRef.current = storedLocation
+        lastDbLocationFetchAtRef.current = Date.now()
+        localStorage.setItem("userLocation", JSON.stringify(storedLocation))
+        // Also dispatch event so other tabs/components can sync
+        window.dispatchEvent(new CustomEvent("userLocationUpdated", { detail: { location: storedLocation } }))
+        return storedLocation
       }
     } catch (err) {
       // Silently fail for 404/401 (user not authenticated) or network errors
@@ -1455,9 +1431,22 @@ export function useLocation() {
       }
     }
 
+    const handleAuthChange = () => {
+      // User logged in/out, re-fetch location from DB
+      fetchLocationFromDB().then((dbLoc) => {
+        if (dbLoc && Number.isFinite(Number(dbLoc.latitude)) && Number.isFinite(Number(dbLoc.longitude))) {
+          setLocation(dbLoc)
+          setPermissionGranted(true)
+          setLoading(false)
+        }
+      })
+    }
+
     window.addEventListener("userLocationUpdated", applyExternalLocationUpdate)
+    window.addEventListener("userAuthChanged", handleAuthChange)
     return () => {
       window.removeEventListener("userLocationUpdated", applyExternalLocationUpdate)
+      window.removeEventListener("userAuthChanged", handleAuthChange)
     }
   }, [])
 
