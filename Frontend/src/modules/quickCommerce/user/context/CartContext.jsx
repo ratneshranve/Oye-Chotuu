@@ -53,8 +53,7 @@ const readStoredQuickCart = () => {
 
 const normalizeProductId = (value) => {
   const rawValue = String(value ?? "").trim();
-  if (!rawValue) return "";
-  return rawValue.split("::")[0];
+  return rawValue;
 };
 
 const getProductId = (product) =>

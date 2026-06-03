@@ -124,6 +124,12 @@ const ProductDetailPage = () => {
 
   const [product, setProduct] = useState(initialProduct);
   const [activeImage, setActiveImage] = useState(initialProduct?.images?.[0] || "");
+  const [selectedVariant, setSelectedVariant] = useState(() => {
+    if (initialProduct?.variants && initialProduct.variants.length > 0) {
+      return initialProduct.variants[0];
+    }
+    return null;
+  });
   const [loadingProduct, setLoadingProduct] = useState(!initialProduct);
   const [productError, setProductError] = useState("");
   const [reviews, setReviews] = useState([]);
@@ -134,13 +140,18 @@ const ProductDetailPage = () => {
   const { cart, addToCart, updateQuantity, removeFromCart } = useCart();
   const { toggleWishlist: toggleWishlistGlobal, isInWishlist } = useWishlist();
   const { showToast } = useToast();
+  const currentVariantId = useMemo(() => {
+    if (!product) return "";
+    return selectedVariant ? `${product.id}::${selectedVariant.sku}` : product.id;
+  }, [product, selectedVariant]);
+
   const quantity = useMemo(() => {
     if (!product) return 0;
     const cartItem = cart.find(
-      (item) => getProductIdentifier(item) === getProductIdentifier(product),
+      (item) => (item.productId || item.itemId || item.id || item._id) === currentVariantId,
     );
     return cartItem ? cartItem.quantity : 0;
-  }, [cart, product]);
+  }, [cart, product, currentVariantId]);
 
   const isWishlisted = product
     ? isInWishlist(product.id || product._id)
@@ -200,6 +211,11 @@ const ProductDetailPage = () => {
   useEffect(() => {
     if (product?.images?.length) {
       setActiveImage(product.images[0]);
+    }
+    if (product?.variants?.length) {
+      setSelectedVariant(product.variants[0]);
+    } else {
+      setSelectedVariant(null);
     }
   }, [product]);
 
@@ -277,6 +293,90 @@ const ProductDetailPage = () => {
       );
     } finally {
       setIsSubmittingReview(false);
+    }
+  };
+
+  const displayPrice = selectedVariant
+    ? (selectedVariant.salePrice > 0 ? selectedVariant.salePrice : selectedVariant.price)
+    : (product?.price || 0);
+
+  const displayOriginalPrice = selectedVariant
+    ? Math.max(displayPrice, selectedVariant.price)
+    : (product?.originalPrice || 0);
+
+  const displayDiscount = displayOriginalPrice > displayPrice
+    ? Math.round(((displayOriginalPrice - displayPrice) / displayOriginalPrice) * 100)
+    : 0;
+
+  const displayWeight = selectedVariant
+    ? selectedVariant.name
+    : (product?.weight || product?.unit || "1 unit");
+
+  const displayStock = selectedVariant
+    ? selectedVariant.stock
+    : (product?.stock || 0);
+
+  const variantProduct = useMemo(() => {
+    if (!product) return null;
+    if (!selectedVariant) return product;
+    return {
+      ...product,
+      id: currentVariantId,
+      _id: currentVariantId,
+      productId: currentVariantId,
+      itemId: currentVariantId,
+      name: `${product.name} (${selectedVariant.name})`,
+      price: displayPrice,
+      originalPrice: displayOriginalPrice,
+      mrp: displayOriginalPrice,
+      weight: selectedVariant.name,
+      stock: selectedVariant.stock,
+      sku: selectedVariant.sku,
+    };
+  }, [product, selectedVariant, currentVariantId, displayPrice, displayOriginalPrice]);
+
+  const displayDetails = useMemo(() => {
+    if (!product) return [];
+    return [
+      {
+        label: "Unit",
+        value: displayWeight,
+      },
+      {
+        label: "Stock",
+        value: displayStock > 0 ? `${displayStock} available` : "Out of stock",
+      },
+      {
+        label: "Brand",
+        value: product.brand || "Quick Select",
+      },
+    ];
+  }, [displayWeight, displayStock, product?.brand]);
+
+  const handleAddToCart = async () => {
+    const stock = Number(displayStock ?? Infinity);
+    if (stock <= 0) {
+      showToast("This product is out of stock", "error");
+      return;
+    }
+    await addToCart(variantProduct);
+    showToast(`${variantProduct.name} added to cart`, "success");
+  };
+
+  const handleIncrement = () => {
+    const stock = Number(displayStock ?? Infinity);
+    if (quantity >= stock) {
+      showToast(`Only ${stock} in stock`, "error");
+      return;
+    }
+    updateQuantity(currentVariantId, 1);
+  };
+
+  const handleDecrement = () => {
+    if (quantity === 1) {
+      removeFromCart(currentVariantId);
+    } else {
+      updateQuantity(currentVariantId, -1);
     }
   };
 
@@ -396,72 +496,100 @@ const ProductDetailPage = () => {
             <div className="mb-5 flex items-baseline gap-4">
               <span className="text-4xl font-black text-[#0c831f] dark:text-emerald-500">
                 {"\u20B9"}
-                {product.price}
+                {displayPrice}
               </span>
-              {product.originalPrice > product.price && (
+              {displayOriginalPrice > displayPrice && (
                 <>
                   <span className="text-lg font-bold text-slate-400 dark:text-slate-500 line-through">
                     {"\u20B9"}
-                    {product.originalPrice}
+                    {displayOriginalPrice}
                   </span>
                   <span className="rounded-lg bg-red-50 dark:bg-red-950/30 px-2 py-1 text-xs font-black uppercase text-red-500">
-                    {Math.round(
-                      ((product.originalPrice - product.price) /
-                        product.originalPrice) *
-                        100,
-                    )}
-                    % OFF
+                    {displayDiscount}% OFF
                   </span>
                 </>
               )}
             </div>
 
-            <p className="max-w-2xl text-lg font-medium leading-relaxed text-slate-600 dark:text-slate-300 transition-colors">
+            <p className="max-w-2xl text-lg font-medium leading-relaxed text-slate-600 dark:text-slate-300 transition-colors font-medium">
               {product.description}
             </p>
           </div>
+
+          {/* Variant Selector */}
+          {product.variants && product.variants.length > 0 && (
+            <div className="rounded-[2rem] border border-border bg-card dark:bg-slate-900/40 p-6 transition-all shadow-sm">
+              <h3 className="mb-3 text-xs font-black uppercase tracking-widest text-[#0c831f] dark:text-emerald-500 flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#0c831f] dark:bg-emerald-500 animate-pulse" />
+                Select Variant
+              </h3>
+              <div className="flex flex-wrap gap-3">
+                {product.variants.map((v) => {
+                  const isSelected = selectedVariant?.sku === v.sku;
+                  const vPrice = v.salePrice > 0 ? v.salePrice : v.price;
+                  const vOriginalPrice = Math.max(vPrice, v.price);
+                  const hasDiscount = vOriginalPrice > vPrice;
+                  const discountPct = hasDiscount ? Math.round(((vOriginalPrice - vPrice) / vOriginalPrice) * 100) : 0;
+
+                  return (
+                    <button
+                      key={v.sku}
+                      onClick={() => setSelectedVariant(v)}
+                      className={cn(
+                        "group relative flex flex-col items-start rounded-2xl border-2 px-5 py-3 transition-all duration-300 text-left min-w-[120px] shadow-sm",
+                        isSelected
+                          ? "border-[#0c831f] bg-green-50/50 dark:bg-green-950/20 text-[#0c831f] dark:text-emerald-400 ring-2 ring-green-100 dark:ring-green-950/40"
+                          : "border-border bg-card dark:bg-slate-900 text-foreground hover:border-slate-300 dark:hover:border-slate-700 hover:shadow"
+                      )}
+                    >
+                      <span className="text-sm font-black tracking-tight">{v.name}</span>
+                      <div className="mt-1 flex items-baseline gap-1.5">
+                        <span className={cn(
+                          "text-xs font-extrabold",
+                          isSelected ? "text-[#0c831f] dark:text-emerald-400" : "text-slate-600 dark:text-slate-300"
+                        )}>
+                          ₹{vPrice}
+                        </span>
+                        {hasDiscount && (
+                          <span className="text-[10px] text-slate-400 line-through font-semibold font-medium">
+                            ₹{vOriginalPrice}
+                          </span>
+                        )}
+                      </div>
+                      {hasDiscount && (
+                        <span className="absolute -top-2 -right-2 rounded-lg bg-red-500 px-1.5 py-0.5 text-[8px] font-black uppercase text-white shadow-sm transition-transform duration-300 group-hover:scale-105">
+                          {discountPct}% OFF
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           <div className="flex flex-col items-center gap-6 rounded-[2.5rem] border border-border bg-card dark:bg-slate-900/50 p-6 sm:flex-row transition-colors">
             <div className="w-full sm:w-72">
               {quantity > 0 ? (
                 <div className="flex h-16 w-full items-center rounded-2xl bg-[#0c831f] px-2 text-white shadow-xl shadow-green-100">
                   <button
-                    onClick={() =>
-                      quantity === 1
-                        ? removeFromCart(product.id || product._id)
-                        : updateQuantity(product.id || product._id, -1)
-                    }
+                    onClick={handleDecrement}
                     className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl transition-all hover:bg-white/20"
                   >
                     <Minus size={24} strokeWidth={3} />
                   </button>
                   <span className="flex-1 text-center text-xl font-black">{quantity}</span>
                   <button
-                    disabled={quantity >= Number(product.stock ?? Infinity)}
+                    disabled={quantity >= Number(displayStock ?? Infinity)}
                     className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl transition-all hover:bg-white/20 disabled:opacity-40 disabled:cursor-not-allowed"
-                    onClick={() => {
-                      const stock = Number(product.stock ?? Infinity);
-                      if (quantity >= stock) {
-                        showToast(`Only ${stock} in stock`, "error");
-                        return;
-                      }
-                      updateQuantity(product.id || product._id, 1);
-                    }}
+                    onClick={handleIncrement}
                   >
                     <Plus size={24} strokeWidth={3} />
                   </button>
                 </div>
               ) : (
                   <Button
-                    onClick={async () => {
-                      const stock = Number(product.stock ?? Infinity);
-                      if (stock <= 0) {
-                        showToast("This product is out of stock", "error");
-                        return;
-                      }
-                      await addToCart(product);
-                      showToast(`${product.name} added to cart`, "success");
-                    }}
+                    onClick={handleAddToCart}
                     className="h-16 w-full rounded-2xl bg-[#0c831f] text-lg font-black text-white shadow-xl shadow-green-100 transition-all hover:-translate-y-1 hover:bg-[#0b721b]"
                   >
                   <Plus className="mr-2" size={24} strokeWidth={3} />
@@ -483,7 +611,7 @@ const ProductDetailPage = () => {
           </div>
 
           <div className="grid grid-cols-3 gap-4">
-            {product.details.map((detail) => (
+            {displayDetails.map((detail) => (
               <div
                 key={detail.label}
                 className="rounded-2xl border border-border bg-card p-4 text-center shadow-sm transition-colors"

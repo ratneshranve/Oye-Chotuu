@@ -61,28 +61,40 @@ const mapCart = async (idQuery) => {
     .map((item) => {
       const product = productMap[String(item.productId)];
       if (!product) return null;
-      const unitPrice =
-        Number(product.salePrice || 0) > 0
-          ? Number(product.salePrice)
-          : Number(product.price || 0);
-      const mrp = Number(product.mrp || product.price || unitPrice || 0);
+
+      const variant = item.variantSku && Array.isArray(product.variants)
+        ? product.variants.find((v) => v.sku === item.variantSku)
+        : null;
+
+      const unitPrice = variant
+        ? (Number(variant.salePrice || 0) > 0 ? Number(variant.salePrice) : Number(variant.price || 0))
+        : (Number(product.salePrice || 0) > 0 ? Number(product.salePrice) : Number(product.price || 0));
+
+      const mrp = variant
+        ? Number(variant.price || unitPrice || 0)
+        : Number(product.mrp || product.price || unitPrice || 0);
+
+      const name = variant ? `${product.name} (${variant.name})` : product.name;
+      const weight = variant ? variant.name : (product.weight || product.unit || "1 unit");
 
       return {
-        id: String(product._id),
-        productId: String(product._id),
+        id: variant ? `${product._id}::${variant.sku}` : String(product._id),
+        productId: variant ? `${product._id}::${variant.sku}` : String(product._id),
         categoryId: product.categoryId ? String(product.categoryId) : null,
         subcategoryId: product.subcategoryId ? String(product.subcategoryId) : null,
         headerId: product.headerId ? String(product.headerId) : null,
-        name: product.name,
+        name,
         image: product.mainImage || product.image || '',
         mainImage: product.mainImage || product.image || '',
         price: unitPrice,
-        salePrice: Number(product.salePrice || 0),
+        salePrice: variant ? Number(variant.salePrice || 0) : Number(product.salePrice || 0),
         mrp,
         originalPrice: mrp,
-        unit: product.unit,
+        unit: weight,
+        weight,
         quantity: item.quantity,
         lineTotal: item.quantity * unitPrice,
+        variantSku: item.variantSku || null,
       };
     })
     .filter(Boolean);
@@ -127,7 +139,9 @@ export const addToCart = async (req, res) => {
     return res.status(400).json({ success: false, message: 'sessionId/userId and productId are required' });
   }
 
-  const product = await QuickProduct.findOne({ _id: productId, ...approvedProductFilter }).lean();
+  const [parentId, variantSku] = String(productId).split("::");
+
+  const product = await QuickProduct.findOne({ _id: parentId, ...approvedProductFilter }).lean();
   if (!product) {
     return res.status(404).json({ success: false, message: 'Product not found' });
   }
@@ -138,11 +152,13 @@ export const addToCart = async (req, res) => {
     { upsert: true, new: true }
   );
 
-  const itemIndex = cart.items.findIndex((item) => String(item.productId) === String(productId));
+  const itemIndex = cart.items.findIndex(
+    (item) => String(item.productId) === parentId && item.variantSku === (variantSku || null)
+  );
   if (itemIndex >= 0) {
     cart.items[itemIndex].quantity = Math.max(1, cart.items[itemIndex].quantity + Math.max(1, quantity));
   } else {
-    cart.items.push({ productId, quantity: Math.max(1, quantity) });
+    cart.items.push({ productId: parentId, quantity: Math.max(1, quantity), variantSku: variantSku || null });
   }
 
   await cart.save();
@@ -168,7 +184,11 @@ export const updateCartItem = async (req, res) => {
     return res.status(404).json({ success: false, message: 'Cart not found' });
   }
 
-  const itemIndex = cart.items.findIndex((item) => String(item.productId) === String(productId));
+  const [parentId, variantSku] = String(productId).split("::");
+
+  const itemIndex = cart.items.findIndex(
+    (item) => String(item.productId) === parentId && item.variantSku === (variantSku || null)
+  );
   if (itemIndex < 0) {
     return res.status(404).json({ success: false, message: 'Cart item not found' });
   }
@@ -199,7 +219,11 @@ export const removeCartItem = async (req, res) => {
     return res.status(404).json({ success: false, message: 'Cart not found' });
   }
 
-  cart.items = cart.items.filter((item) => String(item.productId) !== String(productId));
+  const [parentId, variantSku] = String(productId).split("::");
+
+  cart.items = cart.items.filter(
+    (item) => !(String(item.productId) === parentId && item.variantSku === (variantSku || null))
+  );
   await cart.save();
 
   const result = await mapCart(idQuery);
