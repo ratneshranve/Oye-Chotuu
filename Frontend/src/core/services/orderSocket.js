@@ -33,6 +33,7 @@ export function getOrderSocket(getToken) {
 
     socket.on('connect', () => {
       console.log('[orderSocket] Socket connected, ID:', socket.id);
+      socket.emit('resync');
     });
 
     socket.on('disconnect', (reason) => {

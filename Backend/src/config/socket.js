@@ -400,6 +400,26 @@ export const initSocket = async (server) => {
                 });
               }
             }
+            if (state.pendingOffers && state.pendingOffers.length > 0) {
+              if (role === 'DELIVERY_PARTNER') {
+                socket.emit('pending_offers', state.pendingOffers);
+                state.pendingOffers.forEach((offer) => {
+                  socket.emit('new_order_available', offer);
+                });
+                logDeliverySocket('Resync emitted recovered offers', {
+                  socketId: socket.id,
+                  deliveryPartnerId: String(userId || ''),
+                  count: state.pendingOffers.length
+                });
+              } else if (role === 'SELLER') {
+                socket.emit('pending_offers', state.pendingOffers);
+                state.pendingOffers.forEach((offer) => {
+                  socket.emit('new_order', offer);
+                  socket.emit('order:new', offer);
+                });
+                logger.info(`Resync emitted ${state.pendingOffers.length} recovered offers for seller ${userId}`);
+              }
+            }
             socket.emit('resync_complete', { timestamp: Date.now() });
             if (role === 'DELIVERY_PARTNER') {
               logDeliverySocket('Resync complete', {

@@ -4648,15 +4648,53 @@ export async function recoverStuckOrders() {
  * - For Users: returns the most recent active order being prepared or delivered.
  */
 export async function resyncState(userId, role) {
-  if (!userId || !role) return { activeOrder: null };
+  if (!userId || !role) return { activeOrder: null, pendingOffers: [] };
 
   let activeOrder = null;
+  let pendingOffers = [];
 
   try {
     const roleUpper = String(role).toUpperCase();
     
     if (roleUpper === 'DELIVERY_PARTNER') {
       activeOrder = await getCurrentTripDelivery(userId);
+      
+      const cutoff = new Date(Date.now() - 60000);
+      const missedOrders = await FoodOrder.find({
+        "dispatch.status": "unassigned",
+        orderStatus: { $in: ["confirmed", "preparing", "ready_for_pickup"] },
+        "dispatch.offeredTo": {
+          $elemMatch: {
+            partnerId: new mongoose.Types.ObjectId(userId),
+            action: "offered",
+            offeredAt: { $gte: cutoff }
+          }
+        }
+      }).lean();
+
+      if (missedOrders.length > 0) {
+        pendingOffers = missedOrders.map(normalizeOrderForClient);
+      }
+    } else if (roleUpper === 'SELLER') {
+      const cutoff = new Date(Date.now() - 60000);
+      const missedSellerOrders = await SellerOrder.find({
+        sellerId: new mongoose.Types.ObjectId(userId),
+        status: { $in: ["placed", "pending"] },
+        createdAt: { $gte: cutoff }
+      }).lean();
+
+      if (missedSellerOrders.length > 0) {
+        pendingOffers = missedSellerOrders.map(sellerOrder => ({
+          orderId: sellerOrder.orderId,
+          sellerOrderId: sellerOrder._id?.toString?.() || "",
+          orderType: sellerOrder.orderType || "quick",
+          status: sellerOrder.status,
+          workflowStatus: sellerOrder.workflowStatus,
+          items: sellerOrder.items || [],
+          pricing: sellerOrder.pricing || {},
+          createdAt: sellerOrder.createdAt || new Date(),
+        }));
+      }
     } else if (roleUpper === 'USER') {
       const order = await FoodOrder.findOne({
         userId: new mongoose.Types.ObjectId(userId),
@@ -4679,7 +4717,7 @@ export async function resyncState(userId, role) {
     logger.error(`resyncState failed for ${role}:${userId} — ${err.message}`);
   }
 
-  return { activeOrder };
+  return { activeOrder, pendingOffers };
 }
 
 
