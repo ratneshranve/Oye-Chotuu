@@ -439,6 +439,12 @@ export const verifyDeliveryOtpAndLogin = async (phone, otp, fcmToken, platform) 
     }
   }
 
+  // Set default online on login
+  if (deliveryPartner.availabilityStatus !== 'online') {
+    deliveryPartner.availabilityStatus = 'online';
+    await deliveryPartner.save();
+  }
+
   if (deliveryPartner.status && deliveryPartner.status !== "approved") {
     const isRejected = deliveryPartner.status === "rejected";
     return {
