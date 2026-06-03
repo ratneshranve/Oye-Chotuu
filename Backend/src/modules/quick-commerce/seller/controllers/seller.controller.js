@@ -1805,20 +1805,23 @@ export const resendSellerOrderDispatchController = async (req, res) => {
     }
 
     const now = new Date();
+    
+    const newOffers = (nearbyPartners || []).map(p => ({
+      partnerId: p.partnerId,
+      at: now,
+      action: "offered",
+    }));
+
     quickOrder.dispatch = {
       ...(quickOrder.dispatch?.toObject?.() || quickOrder.dispatch || {}),
       modeAtCreation: quickOrder.dispatch?.modeAtCreation || "auto",
-      status: "assigned",
-      deliveryPartnerId: closestPartner.partnerId,
-      assignedAt: now,
+      status: "unassigned",
+      deliveryPartnerId: null,
+      assignedAt: null,
       acceptedAt: null,
       offeredTo: [
         ...(quickOrder.dispatch?.offeredTo || []).filter(Boolean),
-        {
-          partnerId: closestPartner.partnerId,
-          at: now,
-          action: "offered",
-        },
+        ...newOffers,
       ],
     };
     await quickOrder.save();
