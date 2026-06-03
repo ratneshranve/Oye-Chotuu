@@ -27,12 +27,25 @@ export default function PushSoundEnableButton() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isMobile, setIsMobile] = useState(() => isMobileDevice());
   const isAdminRoute = location.pathname.startsWith("/admin");
+  const isAuthRoute = useMemo(() => {
+    const path = location.pathname.toLowerCase();
+    return (
+      path.includes("/login") ||
+      path.includes("/signup") ||
+      path.includes("/sign-in") ||
+      path.includes("/forgot-password") ||
+      path.includes("/otp") ||
+      path.includes("/auth/")
+    );
+  }, [location.pathname]);
+
   const shouldShowPrompt = useMemo(() => {
     if (isMobile) return false;
     if (isAdminRoute) return false;
+    if (isAuthRoute) return false;
     if (permission === "denied") return false;
     return permission !== "granted" || !enabled;
-  }, [enabled, isAdminRoute, isMobile, permission]);
+  }, [enabled, isAdminRoute, isAuthRoute, isMobile, permission]);
 
   useEffect(() => {
     const syncState = () => {
