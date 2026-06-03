@@ -14,6 +14,7 @@ import SellerOrdersContext from '@/modules/seller/context/SellerOrdersContext';
 import SellerEarningsContext, { defaultEarnings } from '@/modules/seller/context/SellerEarningsContext';
 import { getOrderSocket, onSellerOrderNew, onOrderStatusUpdate, onOrderCancelled } from '@/core/services/orderSocket';
 import alertSound from '@/modules/Food/assets/audio/alert.mp3';
+import { registerWebPushForCurrentModule } from '@/modules/Food/utils/firebaseMessaging';
 
 const POLL_INTERVAL_MS = 15000;
 
@@ -79,6 +80,12 @@ const DashboardLayout = ({ children, navItems, title }) => {
     useEffect(() => {
         newOrderAlertRef.current = newOrderAlert;
     }, [newOrderAlert]);
+
+    useEffect(() => {
+        if (role === 'seller') {
+            registerWebPushForCurrentModule(location.pathname).catch(console.error);
+        }
+    }, [role, location.pathname]);
 
     useEffect(() => {
         if (role !== 'seller') {

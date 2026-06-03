@@ -536,7 +536,22 @@ const SellerProfile = () => {
         </div>
       </div>
 
-      <div className="mt-8 flex justify-center gap-4">
+      <div className="mt-8 flex justify-center flex-wrap gap-4">
+        <Button
+          type="button"
+          onClick={async () => {
+            try {
+              await sellerApi.testPushNotification();
+              toast.success("Test push notification triggered!");
+            } catch (err) {
+              toast.error("Failed to trigger push notification.");
+            }
+          }}
+          className="bg-indigo-50 hover:bg-indigo-100 text-indigo-600 border border-indigo-200 rounded-lg px-8 py-3 text-sm font-bold flex items-center gap-2 shadow-sm transition-all"
+        >
+          <Globe size={18} />
+          TEST PUSH NOTIFICATION
+        </Button>
         <Button
           type="button"
           onClick={() => setShowLogoutConfirm(true)}

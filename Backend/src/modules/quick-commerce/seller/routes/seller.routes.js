@@ -27,6 +27,7 @@ import {
   updateSellerProductController,
   updateSellerProfileController,
   verifySellerOtpController,
+  testSellerPushController,
 } from "../controllers/seller.controller.js";
 
 const router = express.Router();
@@ -66,6 +67,7 @@ router.put(
   sellerProfileUpload,
   updateSellerProfileController,
 );
+router.post("/profile/test-push", ...sellerOnly, testSellerPushController);
 
 router.get("/notifications", ...sellerOnly, getSellerNotificationsController);
 router.put(

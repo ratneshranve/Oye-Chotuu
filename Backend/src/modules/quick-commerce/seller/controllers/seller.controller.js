@@ -14,6 +14,7 @@ import { getIO, rooms } from "../../../../config/socket.js";
 import { logger } from "../../../../utils/logger.js";
 import { uploadImageBuffer } from "../../../../services/cloudinary.service.js";
 import { sendError, sendResponse } from "../../../../utils/response.js";
+import { sendTestNotification } from "../../../../core/notifications/firebase.service.js";
 import { Seller } from "../models/seller.model.js";
 import { SellerNotification } from "../models/sellerNotification.model.js";
 import { SellerOrder } from "../models/sellerOrder.model.js";
@@ -2342,5 +2343,27 @@ export const getSellerStatsController = async (req, res) => {
     });
   } catch (error) {
     return sendError(res, 500, error.message || "Failed to load stats");
+  }
+};
+
+
+export const testSellerPushController = async (req, res) => {
+  try {
+    const sellerId = sellerScope(req);
+    await sendTestNotification({
+      ownerType: "SELLER",
+      ownerId: sellerId,
+      platform: "web",
+    });
+    // Send to mobile as well if applicable
+    await sendTestNotification({
+      ownerType: "SELLER",
+      ownerId: sellerId,
+      platform: "mobile",
+    }).catch(() => {});
+    
+    return res.json({ success: true, message: "Test push notification sent successfully" });
+  } catch (error) {
+    return sendError(res, 500, error.message || "Failed to send test push notification");
   }
 };

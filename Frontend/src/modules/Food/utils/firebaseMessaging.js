@@ -1,5 +1,6 @@
 import { toast } from "sonner";
 import { userAPI, restaurantAPI, deliveryAPI, adminAPI } from "@food/api";
+import { sellerApi } from "../../seller/services/sellerApi";
 import { initializeApp, getApp, getApps } from "firebase/app";
 import fallbackNotificationSound from "@food/assets/audio/alert.mp3";
 
@@ -35,6 +36,7 @@ const pushDebugWarn = (prefix, message, data = {}) => {
 
 function normalizeModuleFromPath(pathname = window.location.pathname) {
   if (pathname.includes("/restaurant") && !pathname.includes("/restaurants")) return "restaurant";
+  if (pathname.includes("/seller")) return "seller";
   if (pathname.includes("/delivery")) return "delivery";
   if (pathname.includes("/admin")) return "admin";
   return "user";
@@ -46,7 +48,7 @@ function isRecord(value) {
 
 function getPushSoundSources(moduleName = normalizeModuleFromPath()) {
   // Delivery and restaurant should always use the alert tone for FCM pushes.
-  if (moduleName === "delivery" || moduleName === "restaurant") {
+  if (moduleName === "delivery" || moduleName === "restaurant" || moduleName === "seller") {
     return [fallbackNotificationSound];
   }
   return [pushNotificationSoundPath, fallbackNotificationSound];
@@ -445,6 +447,10 @@ async function saveTokenByModule(moduleName, token, platform = "web") {
   pushDebugLog(PUSH_DEBUG_PREFIX, "saveTokenByModule starting", { moduleName, platform, tokenPreview: `${token?.slice(0, 10)}...` });
   if (moduleName === "restaurant") {
     await restaurantAPI.saveFcmToken(token, platform);
+    return;
+  }
+  if (moduleName === "seller") {
+    await sellerApi.saveFcmToken(token, platform);
     return;
   }
   if (moduleName === "delivery") {

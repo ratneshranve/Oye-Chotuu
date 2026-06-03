@@ -20,6 +20,12 @@ const normalizeResponse = (response) => {
 const call = (request) => request.then(normalizeResponse);
 
 export const sellerApi = {
+  saveFcmToken: (token, platform = "web") => {
+    if (!token) return Promise.reject(new Error("FCM token is required"));
+    const path = platform === "mobile" ? "/fcm-tokens/mobile/save" : "/fcm-tokens/save";
+    return call(axiosInstance.post(path, { token, platform }));
+  },
+
   requestOtp: (phone) =>
     call(axiosInstance.post("/seller/auth/request-otp", { phone })),
 
@@ -68,6 +74,8 @@ export const sellerApi = {
   getEarnings: () => call(axiosInstance.get("/seller/earnings")),
 
   getProfile: () => call(axiosInstance.get("/seller/profile")),
+
+  testPushNotification: () => call(axiosInstance.post("/seller/profile/test-push")),
 
   getQuickZonesPublic: () => call(axiosInstance.get("/quick-commerce/zones/public")),
 
