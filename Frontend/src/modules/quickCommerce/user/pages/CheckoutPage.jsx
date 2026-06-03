@@ -661,7 +661,7 @@ const CheckoutPage = () => {
   ];
 
   const paymentMethods = [
-    ...(settings?.onlineEnabled === false
+    ...(settings?.onlinePaymentEnabled === false
       ? []
       : [
           {

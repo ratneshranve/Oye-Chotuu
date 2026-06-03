@@ -318,7 +318,20 @@ export default function SignupStep2() {
       toast.error("Please select an image file")
       return
     }
-    if (file.size > 5 * 1024 * 1024) {
+
+    let finalFile = file;
+    try {
+      const { compressImage } = await import('@/shared/utils/imageCompression');
+      finalFile = await compressImage(file, { 
+        maxSizeMB: 0.5, 
+        maxWidthOrHeight: 1200,
+        fileType: 'image/webp'
+      });
+    } catch (e) {
+      console.warn("Failed to compress image", e);
+    }
+
+    if (finalFile.size > 5 * 1024 * 1024) {
       toast.error("Image size should be less than 5MB")
       return
     }
@@ -328,10 +341,10 @@ export default function SignupStep2() {
       if (oldFile && oldFile._previewUrl) {
         URL.revokeObjectURL(oldFile._previewUrl)
       }
-      return { ...prev, [docType]: file }
+      return { ...prev, [docType]: finalFile }
     })
     setUploadedDocs((prev) => ({ ...prev, [docType]: { file: true } }))
-    await saveFileToDB(docType, file)
+    await saveFileToDB(docType, finalFile)
     toast.success(`${docType.replace(/([A-Z])/g, " $1").trim()} selected`)
   }
 

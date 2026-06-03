@@ -167,12 +167,14 @@ const buildMessagePayload = (payload = {}, token) => {
         message.data = data;
     }
 
+    const soundEnabled = payload.sound === true || payload.sound === 'default' || payload.data?.type === 'new_order';
+
     message.android = {
         priority: 'high',
         notification: {
-            channel_id: 'default',
-            sound: 'default',
-            default_vibrate_timings: true,
+            channel_id: soundEnabled ? 'default' : 'silent',
+            ...(soundEnabled ? { sound: 'default' } : {}),
+            default_vibrate_timings: soundEnabled,
             default_light_settings: true,
             click_action: 'FLUTTER_NOTIFICATION_CLICK'
         }

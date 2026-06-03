@@ -12,6 +12,7 @@ import { Input } from '@food/components/ui/input';
 import { Label } from '@food/components/ui/label';
 import { Textarea } from '@food/components/ui/textarea';
 import { useLocation as useGeoLocation } from "@food/hooks/useLocation";
+import { useSettings } from "@core/context/SettingsContext";
 import { initRazorpayPayment } from "@food/utils/razorpay";
 import { toast } from 'sonner';
 import { Search, Navigation, Crosshair, MapPin as MapPinIcon, X as CloseIcon, ChevronDown } from 'lucide-react';
@@ -22,6 +23,7 @@ const SubscriptionFlow = () => {
     const navigate = useNavigate();
     const routerLocation = useLocationReact();
     const { addresses, getDefaultAddress } = useProfile();
+    const { settings } = useSettings();
     const { location: geo, requestLocation } = useGeoLocation();
     const [loading, setLoading] = useState(true);
     const [processing, setProcessing] = useState(false);
@@ -507,23 +509,31 @@ const SubscriptionFlow = () => {
                 </Card>
 
                 {/* Submit Button - Premium CTA */}
-                <Button
-                    onClick={handleSubscribe}
-                    disabled={processing}
-                    className="w-full h-14 rounded-[20px] bg-gradient-to-r from-[#00AEEF] to-[#0090cc] hover:opacity-90 text-white font-semibold text-base shadow-xl shadow-[#00AEEF]/25 flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
-                >
-                    {processing ? (
-                        <>
-                            <Loader2 className="animate-spin" size={20} />
-                            Processing...
-                        </>
-                    ) : (
-                        <>
-                            <Check size={20} />
-                            Pay & Subscribe
-                        </>
-                    )}
-                </Button>
+                {settings?.onlinePaymentEnabled === false ? (
+                    <div className="w-full h-14 rounded-[20px] bg-slate-200 dark:bg-slate-800 flex items-center justify-center shadow-inner cursor-not-allowed">
+                        <p className="text-slate-500 font-semibold text-sm flex items-center gap-2">
+                            <Info size={16} /> Online payments are currently disabled
+                        </p>
+                    </div>
+                ) : (
+                    <Button
+                        onClick={handleSubscribe}
+                        disabled={processing}
+                        className="w-full h-14 rounded-[20px] bg-gradient-to-r from-[#00AEEF] to-[#0090cc] hover:opacity-90 text-white font-semibold text-base shadow-xl shadow-[#00AEEF]/25 flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
+                    >
+                        {processing ? (
+                            <>
+                                <Loader2 className="animate-spin" size={20} />
+                                Processing...
+                            </>
+                        ) : (
+                            <>
+                                <Check size={20} />
+                                Pay & Subscribe
+                            </>
+                        )}
+                    </Button>
+                )}
 
                 {/* Trust Badges */}
                 <div className="flex items-center justify-center gap-6 py-2 text-slate-400">

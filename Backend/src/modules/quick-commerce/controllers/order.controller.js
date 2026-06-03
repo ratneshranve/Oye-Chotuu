@@ -16,6 +16,7 @@ import {
 } from '../admin/services/billing.service.js';
 import * as foodTransactionService from '../../food/orders/services/foodTransaction.service.js';
 import { emitQuickCommerceStatusUpdate } from '../services/quickStatusRealtime.service.js';
+import { notifyOwnerSafely } from '../../../core/notifications/firebase.service.js';
 
 const approvedProductFilter = {
   $or: [
@@ -159,6 +160,22 @@ const emitQuickSellerOrders = (sellerOrders) => {
 
       io.to(rooms.seller(sellerOrder.sellerId)).emit('new_order', payload);
       io.to(rooms.seller(sellerOrder.sellerId)).emit('order:new', payload);
+
+      // Send push notification to seller
+      void notifyOwnerSafely(
+        { ownerType: 'SELLER', ownerId: sellerOrder.sellerId },
+        {
+          title: 'New order received',
+          body: `Order #${sellerOrder.orderId} is waiting for review.`,
+          sound: true,
+          data: {
+            type: 'new_order',
+            orderId: sellerOrder.orderId,
+            orderMongoId: sellerOrder.parentOrderId?.toString() || sellerOrder._id?.toString() || '',
+            link: `/seller/orders/${sellerOrder._id?.toString() || ''}`
+          }
+        }
+      );
     });
   } catch {
     // best-effort realtime update

@@ -473,6 +473,11 @@ export default function OTP() {
                     onPaste={index === 0 ? handlePaste : undefined}
                     disabled={isLoading}
                     aria-label={`OTP digit ${index + 1} of 4`}
+                    onFocus={(e) => {
+                      setTimeout(() => {
+                        e.target.scrollIntoView({ behavior: "smooth", block: "center" })
+                      }, 300)
+                    }}
                     className="w-12 h-12 sm:w-14 sm:h-14 text-center text-xl font-bold border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:border-[#EB590E] focus:ring-1 focus:ring-[#EB590E] bg-white dark:bg-[#2a2a2a] text-gray-900 dark:text-white transition-all outline-none"
                   />
                 ))}
@@ -519,6 +524,11 @@ export default function OTP() {
                   }}
                   disabled={isLoading}
                   placeholder="Full Name"
+                  onFocus={(e) => {
+                    setTimeout(() => {
+                      e.target.scrollIntoView({ behavior: "smooth", block: "center" })
+                    }, 300)
+                  }}
                   className={`h-12 md:h-14 text-lg bg-white dark:bg-[#1a1a1a] text-gray-900 dark:text-white border-gray-300 dark:border-gray-700 rounded-xl focus-visible:ring-1 focus-visible:ring-[#EB590E] focus-visible:border-[#EB590E] ${nameError ? "border-red-500" : ""} transition-all`}
                 />
                 {nameError && (

@@ -36,14 +36,25 @@ export const PickupActionModal = ({
   const handleBillImageSelect = async (file) => {
     if (!file) return;
 
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error('Image size should be less than 5MB');
-      return;
-    }
-
     setIsUploadingBill(true);
     try {
-      const res = await uploadAPI.uploadMedia(file, { folder: 'appzeto/delivery/bills' });
+      let finalFile = file;
+      if (file.type.startsWith('image/')) {
+        const { compressImage } = await import('@/shared/utils/imageCompression');
+        finalFile = await compressImage(file, { 
+          maxSizeMB: 0.2, // 200KB max for bills
+          maxWidthOrHeight: 1000,
+          fileType: 'image/webp'
+        });
+      }
+
+      if (finalFile.size > 5 * 1024 * 1024) {
+        toast.error('Image size should be less than 5MB');
+        setIsUploadingBill(false);
+        return;
+      }
+
+      const res = await uploadAPI.uploadMedia(finalFile, { folder: 'appzeto/delivery/bills' });
       if (res?.data?.success && res?.data?.data) {
         setBillImageUrl(res.data.data.url || res.data.data.secure_url);
         setBillImageUploaded(true);

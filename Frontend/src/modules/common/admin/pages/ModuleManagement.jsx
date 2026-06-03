@@ -79,6 +79,7 @@ const ModuleManagement = () => {
     quickCommerce: true,
   });
   const [codEnabled, setCodEnabled] = useState(true);
+  const [onlinePaymentEnabled, setOnlinePaymentEnabled] = useState(true);
   const [showLocationPopup, setShowLocationPopup] = useState(true);
 
   const fetchSettings = async () => {
@@ -96,6 +97,7 @@ const ModuleManagement = () => {
           });
         }
         setCodEnabled(settings.codEnabled ?? true);
+        setOnlinePaymentEnabled(settings.onlinePaymentEnabled ?? true);
         setShowLocationPopup(settings.showLocationPopup ?? true);
       }
     } catch (err) {
@@ -120,7 +122,7 @@ const ModuleManagement = () => {
   const handleSave = async () => {
     try {
       setSaving(true);
-      const response = await adminAPI.updateBusinessSettings({ modules, codEnabled, showLocationPopup });
+      const response = await adminAPI.updateBusinessSettings({ modules, codEnabled, onlinePaymentEnabled, showLocationPopup });
       const updatedSettings = response?.data?.data || response?.data;
 
       if (updatedSettings) {
@@ -201,6 +203,15 @@ const ModuleManagement = () => {
                 enabled={codEnabled} 
                 onToggle={() => setCodEnabled(prev => !prev)}
                 color="green"
+              />
+
+              <ModuleCard 
+                title="Online Payment" 
+                description="Allow customers to pay online via Razorpay, UPI, Cards, etc." 
+                icon={Banknote} 
+                enabled={onlinePaymentEnabled} 
+                onToggle={() => setOnlinePaymentEnabled(prev => !prev)}
+                color="orange"
               />
 
               <ModuleCard 

@@ -110,7 +110,9 @@ function emitOrderUpdate(order, deliveryPartnerId) {
       riderBody = `You have reached the customer location.`;
     } else if (status === 'delivered') {
       userTitle = `Order #${orderId} delivered!`;
-      userBody = 'Hope you enjoyed your meal! Don\'t forget to rate your experience.';
+      userBody = order.orderType === 'quick'
+        ? 'Hope you enjoyed your shopping! Don\'t forget to rate your experience.'
+        : 'Hope you enjoyed your meal! Don\'t forget to rate your experience.';
       riderTitle = 'Delivery successful!';
       riderBody = `The order has been successfully delivered.`;
 

@@ -4084,7 +4084,7 @@ function emitOrderUpdate(order, deliveryPartnerId) {
         { ownerType: "USER", ownerId: order.userId },
         {
           title: `Order #${order.orderId} delivered! ✅`,
-          body: `Hope you enjoyed your meal!`,
+          body: order.orderType === 'quick' ? `Hope you enjoyed your shopping!` : `Hope you enjoyed your meal!`,
           data: {
             type: "order_status_update",
             orderId: order.orderId,

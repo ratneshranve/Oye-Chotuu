@@ -136,7 +136,7 @@ const isActionableDeliveryOffer = (orderData = {}) => {
     orderData?.dispatch?.status || orderData?.dispatchStatus || ''
   ).trim().toLowerCase();
 
-  const actionableStatuses = ['confirmed', 'preparing', 'ready_for_pickup'];
+  const actionableStatuses = ['created', 'confirmed', 'preparing', 'ready_for_pickup'];
   const actionableDispatchStatuses = ['unassigned', 'assigned'];
 
   if (orderStatus && !actionableStatuses.includes(orderStatus)) {
@@ -442,7 +442,7 @@ export const useDeliveryNotifications = () => {
         const dispatchStatus = order?.dispatch?.status;
         return (
           ['unassigned', 'assigned'].includes(dispatchStatus) &&
-          ['confirmed', 'preparing', 'ready_for_pickup'].includes(order?.orderStatus)
+          ['created', 'confirmed', 'preparing', 'ready_for_pickup'].includes(order?.orderStatus)
         );
       });
 
@@ -1084,8 +1084,8 @@ export const useDeliveryNotifications = () => {
         socketId: socketRef.current?.id,
       });
       socketRef.current.emit('resync');
-      void recoverDeliveryState();
     }
+    void recoverDeliveryState();
   }, [deliveryPartnerId, joinDeliveryRoomIfPossible, recoverDeliveryState]);
 
   // Helper functions

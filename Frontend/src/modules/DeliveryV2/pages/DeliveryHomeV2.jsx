@@ -354,7 +354,7 @@ export default function DeliveryHomeV2({ tab = 'feed' }) {
             updateTripStatus('PICKED_UP');
           } else if (currentPhase === 'at_pickup' || ['reached_pickup', 'REACHED_PICKUP'].includes(backendStatus)) {
             updateTripStatus('REACHED_PICKUP');
-          } else if (['confirmed', 'preparing', 'ready_for_pickup'].includes(backendStatus)) {
+          } else if (['created', 'confirmed', 'preparing', 'ready_for_pickup'].includes(backendStatus)) {
             updateTripStatus('PICKING_UP');
           }
         } else {
@@ -546,7 +546,7 @@ export default function DeliveryHomeV2({ tab = 'feed' }) {
           const orderStatus = String(order?.orderStatus || order?.status || '').toLowerCase();
           return (
             ['unassigned', 'assigned'].includes(dispatchStatus) &&
-            ['confirmed', 'preparing', 'ready_for_pickup'].includes(orderStatus)
+            ['created', 'confirmed', 'preparing', 'ready_for_pickup'].includes(orderStatus)
           );
         });
 

@@ -151,6 +151,11 @@ export default function SignIn() {
                   onChange={handleChange}
                   className={`flex-1 h-12 md:h-14 text-lg bg-white dark:bg-[#1a1a1a] text-gray-900 dark:text-white border-gray-300 dark:border-gray-700 rounded-lg rounded-l-none focus-visible:ring-1 focus-visible:ring-[#EB590E] focus-visible:border-[#EB590E] ${error ? "border-red-500" : ""} transition-all`}
                   aria-invalid={error ? "true" : "false"}
+                  onFocus={(e) => {
+                    setTimeout(() => {
+                      e.target.scrollIntoView({ behavior: "smooth", block: "center" })
+                    }, 300)
+                  }}
                 />
               </div>
 

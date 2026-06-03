@@ -258,8 +258,15 @@ export const ProfileDetailsV2 = () => {
   const uploadProfileFile = async (file) => {
     try {
       setIsUploadingImage(true)
+      let finalFile = file;
+      try {
+        const { compressImage } = await import('@/shared/utils/imageCompression');
+        finalFile = await compressImage(file, { maxSizeMB: 0.5, maxWidthOrHeight: 1200, fileType: 'image/webp' });
+      } catch (e) {
+        console.warn("Failed to compress", e);
+      }
       const formData = new FormData()
-      formData.append("profilePhoto", file)
+      formData.append("profilePhoto", finalFile)
       const response = await deliveryAPI.updateProfileMultipart(formData)
       if (response?.data?.success) {
         toast.success("Profile photo updated")
@@ -324,7 +331,7 @@ export const ProfileDetailsV2 = () => {
     if (upiQrCameraInputRef.current) upiQrCameraInputRef.current.value = ""
   }
 
-  const uploadUpiQrFile = (file) => {
+  const uploadUpiQrFile = async (file) => {
     if (!file) return
 
     if (!String(file.type || "").startsWith("image/")) {
@@ -332,13 +339,21 @@ export const ProfileDetailsV2 = () => {
       return
     }
 
-    if (file.size > 5 * 1024 * 1024) {
+    let finalFile = file;
+    try {
+      const { compressImage } = await import('@/shared/utils/imageCompression');
+      finalFile = await compressImage(file, { maxSizeMB: 0.5, maxWidthOrHeight: 1200, fileType: 'image/webp' });
+    } catch (e) {
+      console.warn("Failed to compress QR", e);
+    }
+
+    if (finalFile.size > 5 * 1024 * 1024) {
       toast.error("Image size should be less than 5MB")
       return
     }
 
-    setUpiQrFile(file)
-    setUpiQrPreview(URL.createObjectURL(file))
+    setUpiQrFile(finalFile)
+    setUpiQrPreview(URL.createObjectURL(finalFile))
     toast.success("UPI QR selected")
   }
 
