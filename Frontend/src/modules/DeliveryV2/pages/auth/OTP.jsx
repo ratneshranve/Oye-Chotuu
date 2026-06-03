@@ -9,6 +9,7 @@ import { motion } from "framer-motion"
 import zozomenLogo from "@/assets/zozomenLogo.png"
 import { loadBusinessSettings, getCachedSettings } from "@common/utils/businessSettings"
 import { useCompanyName } from "@food/hooks/useCompanyName"
+import { useDeliveryStore } from '@/modules/DeliveryV2/store/useDeliveryStore'
 const debugLog = (...args) => {}
 const debugWarn = (...args) => {}
 const debugError = (...args) => {}
@@ -315,6 +316,11 @@ export default function DeliveryOTP() {
       try {
         debugLog("Storing auth data for delivery:", { hasToken: !!accessToken, hasUser: !!user })
         storeAuthData("delivery", accessToken, user, refreshToken)
+        
+        // Force online state on successful login
+        useDeliveryStore.getState().setOnline(true)
+        localStorage.setItem("app:isOnline", "true")
+
         debugLog("Auth data stored successfully")
       } catch (storageError) {
         debugError("Failed to store authentication data:", storageError)
@@ -401,6 +407,11 @@ export default function DeliveryOTP() {
       try {
         debugLog("Storing auth data for delivery (with name):", { hasToken: !!accessToken, hasUser: !!user })
         storeAuthData("delivery", accessToken, user, refreshToken)
+        
+        // Force online state on successful login
+        useDeliveryStore.getState().setOnline(true)
+        localStorage.setItem("app:isOnline", "true")
+
         debugLog("Auth data stored successfully")
       } catch (storageError) {
         debugError("Failed to store authentication data:", storageError)
