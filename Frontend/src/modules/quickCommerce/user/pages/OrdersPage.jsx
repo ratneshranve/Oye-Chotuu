@@ -234,16 +234,36 @@ const OrdersPage = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between gap-3 border-t border-slate-100 dark:border-white/5 pt-3 transition-colors">
-                  <div className="max-w-[230px] truncate text-[11px] font-medium text-slate-500 dark:text-slate-400 transition-colors">
-                    {itemSummary}
+                <div className="flex flex-col gap-2.5 border-t border-slate-100 dark:border-white/5 pt-3 transition-colors">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="max-w-[230px] truncate text-[11px] font-medium text-slate-500 dark:text-slate-400 transition-colors">
+                      {itemSummary}
+                    </div>
+                    <div className="flex shrink-0 items-center gap-1.5">
+                      <span className="text-[11px] font-medium text-slate-400">Total</span>
+                      <span className="text-sm font-semibold text-slate-900 dark:text-slate-100 transition-colors">
+                        {"\u20B9"}
+                        {order.pricing?.total ?? order.total ?? 0}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex shrink-0 items-center gap-1.5">
-                    <span className="text-[11px] font-medium text-slate-400">Total</span>
-                    <span className="text-sm font-semibold text-slate-900 dark:text-slate-100 transition-colors">
-                      {"\u20B9"}
-                      {order.pricing?.total ?? order.total ?? 0}
-                    </span>
+                  <div className="flex items-center justify-between gap-3 border-t border-slate-50 dark:border-white/5 pt-2">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        navigate(`/food/user/orders/${encodeURIComponent(String(orderLookupId))}/details`, {
+                          state: {
+                            order,
+                            orderType: "quick",
+                          },
+                        });
+                      }}
+                      className="inline-flex items-center gap-1 text-[11px] font-bold text-[#0c831f] hover:text-[#0a6d19] transition-colors bg-[#0c831f]/10 px-3 py-1.5 rounded-full"
+                    >
+                      View Details
+                      <ChevronRight size={12} className="stroke-[3]" />
+                    </button>
                     <ChevronRight size={16} className="text-slate-300 dark:text-slate-600" />
                   </div>
                 </div>

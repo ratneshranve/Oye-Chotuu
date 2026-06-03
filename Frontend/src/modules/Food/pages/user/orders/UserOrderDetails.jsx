@@ -146,7 +146,7 @@ export default function UserOrderDetails() {
   // Use fetched restaurant data if available, otherwise use order.restaurantId or order.restaurant
   const restaurantObj = restaurant || order.restaurantId || order.restaurant || {}
   const restaurantName =
-    order.restaurantName || restaurantObj.name || "Restaurant"
+    order.restaurantName || restaurantObj.name || (order?.orderType === "quick" ? "Seller Store" : "Restaurant")
 
   // Build restaurant address (try restaurant fields first, then fall back)
   const restaurantLocation = (() => {
@@ -254,11 +254,12 @@ export default function UserOrderDetails() {
 
     if (normalized.length > 0) return normalized
 
+    const isQuick = order.orderType === "quick"
     return [
       {
-        id: "food:primary",
-        label: "Restaurant",
-        pickupType: "food",
+        id: isQuick ? "quick:primary" : "food:primary",
+        label: isQuick ? "Store" : "Restaurant",
+        pickupType: isQuick ? "quick" : "food",
         name: restaurantName,
         address: restaurantLocation,
         phone: restaurantPhone,
@@ -268,7 +269,7 @@ export default function UserOrderDetails() {
 
   const handleCallRestaurant = () => {
     if (!restaurantPhone) {
-      toast.error("Restaurant phone number not available")
+      toast.error(order?.orderType === "quick" ? "Seller phone number not available" : "Restaurant phone number not available")
       return
     }
     window.location.href = `tel:${restaurantPhone}`
@@ -328,16 +329,17 @@ export default function UserOrderDetails() {
       doc.text(addressLines, 60, yPos)
       yPos += addressLines.length * 7
 
-      // Restaurant Name
+      // Restaurant/Seller Name
+      const isQuick = order.orderType === "quick"
       doc.setFont('helvetica', 'bold')
-      doc.text('Restaurant Name:', 20, yPos)
+      doc.text(isQuick ? 'Seller Name:' : 'Restaurant Name:', 20, yPos)
       doc.setFont('helvetica', 'normal')
       doc.text(restaurantName, 60, yPos)
       yPos += 7
 
-      // Restaurant Address
+      // Restaurant/Seller Address
       doc.setFont('helvetica', 'bold')
-      doc.text('Restaurant Address:', 20, yPos)
+      doc.text(isQuick ? 'Seller Address:' : 'Restaurant Address:', 20, yPos)
       doc.setFont('helvetica', 'normal')
       const restaurantAddressLines = doc.splitTextToSize(restaurantLocation || 'N/A', 130)
       doc.text(restaurantAddressLines, 60, yPos)
@@ -471,12 +473,12 @@ export default function UserOrderDetails() {
         <div className="bg-white p-4 rounded-xl shadow-sm">
           <div className="mb-4">
             <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-gray-400">
-              {order?.orderType === "mixed" ? "Pickup Details" : "Restaurant Details"}
+              {order?.orderType === "mixed" ? "Pickup Details" : order?.orderType === "quick" ? "Seller Details" : "Restaurant Details"}
             </p>
             <p className="mt-1 text-sm text-gray-500">
               {order?.orderType === "mixed"
                 ? "Both your restaurant and store sources are listed below."
-                : "Pickup source for this order."}
+                : order?.orderType === "quick" ? "Seller source for this order." : "Pickup source for this order."}
             </p>
           </div>
 
@@ -751,7 +753,7 @@ export default function UserOrderDetails() {
         </button>
       </div>
 
-      {/* Restaurant Complaint Button - Below Order Details */}
+      {/* Restaurant/Seller Complaint Button - Below Order Details */}
       {order && (
         <div className="p-4 pb-24">
           <button
@@ -781,7 +783,7 @@ export default function UserOrderDetails() {
             className="w-full bg-red-50 border border-red-200 text-red-700 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-red-100 transition-colors"
           >
             <FileText className="w-4 h-4" />
-            Restaurant Complaint
+            {order?.orderType === "quick" ? "Seller Complaint" : "Restaurant Complaint"}
           </button>
         </div>
       )}

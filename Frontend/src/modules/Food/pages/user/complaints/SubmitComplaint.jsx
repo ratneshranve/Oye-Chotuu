@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft, AlertCircle, FileText } from "lucide-react"
 import { orderAPI } from "@food/api"
+import { customerApi } from "../../../../quickCommerce/user/services/customerApi"
 import useAppBackNavigation from "@food/hooks/useAppBackNavigation"
 import { toast } from "sonner"
 const debugLog = (...args) => {}
@@ -115,13 +116,24 @@ export default function SubmitComplaint() {
         ? orderMongoId.toString()
         : String(orderMongoId)
 
-      debugLog("Submitting complaint for orderId:", orderIdString)
-      const response = await orderAPI.submitComplaint({
-        orderId: orderIdString,
-        complaintType: formData.complaintType,
-        subject: formData.subject,
-        description: formData.description,
-      })
+      let response
+      if (order?.orderType === 'quick') {
+        debugLog("Submitting quick support ticket for orderId:", orderIdString)
+        response = await customerApi.createSupportTicket({
+          type: "order",
+          orderId: orderIdString,
+          issueType: formData.complaintType,
+          description: `${formData.subject}: ${formData.description}`
+        })
+      } else {
+        debugLog("Submitting food support ticket for orderId:", orderIdString)
+        response = await orderAPI.submitComplaint({
+          orderId: orderIdString,
+          complaintType: formData.complaintType,
+          subject: formData.subject,
+          description: formData.description,
+        })
+      }
 
       if (response?.data?.success) {
         toast.success("Complaint submitted successfully")
@@ -183,7 +195,7 @@ export default function SubmitComplaint() {
               Order #{order.orderId || order._id}
             </p>
             <p className="text-xs text-gray-500">
-              {order.restaurantName || 'Restaurant'}
+              {order.restaurantName || (order.orderType === 'quick' ? 'Seller' : 'Restaurant')}
             </p>
           </div>
         </div>
@@ -261,7 +273,7 @@ export default function SubmitComplaint() {
           <div className="text-sm text-blue-800">
             <p className="font-semibold mb-1">What happens next?</p>
             <p className="text-blue-700">
-              Your complaint will be sent to the restaurant. They will review and respond to your complaint. You can track the status in your complaints section.
+              Your complaint will be sent to the {order.orderType === 'quick' ? 'support team' : 'restaurant'}. They will review and respond to your complaint. You can track the status in your complaints section.
             </p>
           </div>
         </div>
