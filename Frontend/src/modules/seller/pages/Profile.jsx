@@ -406,36 +406,38 @@ const SellerProfile = () => {
 
             <div className="space-y-6">
               <div className="bg-slate-50 p-6 rounded-2xl border-2 border-slate-100/50 space-y-6">
-                <div className="flex items-center justify-between gap-6">
-                  <div className="flex items-center gap-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6">
+                  <div className="flex items-start sm:items-center gap-4 flex-1 min-w-0">
                     <div
-                      className={`h-12 w-12 rounded-xl flex items-center justify-center transition-all ${
+                      className={`h-12 w-12 shrink-0 rounded-xl flex items-center justify-center transition-all ${
                         formData.lat
                           ? "bg-emerald-100 text-emerald-600 shadow-[0_8px_20px_-6px_rgba(16,185,129,0.3)]"
                           : "bg-white text-slate-400 shadow-sm"
                       }`}>
                       <MapPin size={24} />
                     </div>
-                    <div className="space-y-1">
-                      <p className="text-sm font-black text-slate-900">
+                    <div className="space-y-1 flex-1 min-w-0">
+                      <p className="text-sm font-black text-slate-900 truncate">
                         {formData.lat
                           ? "Store Location Pin"
                           : "Location Not Defined"}
                       </p>
-                      <p className="text-xs text-slate-500 font-medium max-w-[400px] leading-relaxed">
+                      <p className="text-xs text-slate-500 font-medium leading-relaxed break-words">
                         {formData.address ||
                           "Click change to precisely mark your shop location on the map for delivery accuracy."}
                       </p>
                     </div>
                   </div>
                   {isEditing && (
-                    <Button
-                      type="button"
-                      onClick={() => setIsMapOpen(true)}
-                      disabled={isLocationSaving}
-                      className="bg-white text-slate-900 border-2 border-slate-200 hover:border-slate-900 rounded-lg px-8 py-3 text-[10px] font-black tracking-[2px] shadow-sm hover:shadow-md transition-all whitespace-nowrap">
-                      {isLocationSaving ? "UPDATING..." : "CHANGE PIN"}
-                    </Button>
+                    <div className="shrink-0 ml-16 sm:ml-0">
+                      <Button
+                        type="button"
+                        onClick={() => setIsMapOpen(true)}
+                        disabled={isLocationSaving}
+                        className="w-full sm:w-auto bg-white text-slate-900 border-2 border-slate-200 hover:border-slate-900 rounded-lg px-6 py-3 text-[10px] font-black tracking-[2px] shadow-sm hover:shadow-md transition-all">
+                        {isLocationSaving ? "UPDATING..." : "CHANGE PIN"}
+                      </Button>
+                    </div>
                   )}
                 </div>
 

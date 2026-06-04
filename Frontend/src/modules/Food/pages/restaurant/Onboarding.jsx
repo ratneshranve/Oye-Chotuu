@@ -24,6 +24,7 @@ import { getGoogleMapsApiKey } from "@food/utils/googleMapsApiKey"
 import { clearModuleAuth, clearAuthData } from "@food/utils/auth"
 import { ImageSourcePicker } from "@food/components/ImageSourcePicker"
 import { convertBase64ToFile, isFlutterBridgeAvailable, openCamera } from "@food/utils/imageUploadUtils"
+import { getCachedSettings } from "@common/utils/businessSettings"
 const debugLog = (...args) => {}
 const debugWarn = (...args) => {}
 const debugError = (...args) => {}
@@ -421,6 +422,8 @@ export default function RestaurantOnboarding() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState("")
   const [isLoggingOut, setIsLoggingOut] = useState(false)
+  const cachedSettings = getCachedSettings()
+  const isHomeBakeryEnabled = cachedSettings?.modules?.homeBakery !== false
 
   const handleLogout = async () => {
     if (isLoggingOut) return
@@ -1493,7 +1496,7 @@ export default function RestaurantOnboarding() {
                 </SelectTrigger>
                 <SelectContent className="bg-white">
                   <SelectItem value="restaurant">Restaurant</SelectItem>
-                  <SelectItem value="home_bakery">Home Bakery</SelectItem>
+                  {isHomeBakeryEnabled && <SelectItem value="home_bakery">Home Bakery</SelectItem>}
                 </SelectContent>
               </Select>
             </div>
