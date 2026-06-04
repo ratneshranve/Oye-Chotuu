@@ -483,6 +483,27 @@ export async function acceptOrderDelivery(orderId, deliveryPartnerId) {
           },
         },
       );
+
+      if (order.orderType === 'quick' || order.orderType === 'mixed') {
+        const sellerOrders = await SellerOrder.find({ parentOrderId: order._id }).select('sellerId').lean();
+        if (sellerOrders.length > 0) {
+          const partner = await FoodDeliveryPartner.findById(deliveryPartnerId).select('name').lean();
+          await notifyOwnersSafely(
+            sellerOrders.map(so => ({ ownerType: 'SELLER', ownerId: so.sellerId })),
+            {
+              title: 'Delivery Partner Assigned 🛵',
+              body: `${partner?.name || 'A delivery partner'} has been assigned to deliver the order.`,
+              data: {
+                type: 'delivery_accepted',
+                orderId: String(order.orderId || order._id.toString()),
+                orderMongoId: String(order._id),
+                partnerName: partner?.name || '',
+                link: '/seller/orders',
+              },
+            }
+          );
+        }
+      }
     } catch (error) {
       logger.error(
         `Error notifying delivery acceptance for ${order._id}: ${
@@ -915,6 +936,29 @@ export async function completeDelivery(orderId, deliveryPartnerId, body = {}) {
   if (order.orderType === 'quick' || order.orderType === 'mixed') {
     void quickOrderService.syncSellerOrderFromDelivery(order._id, 'delivered')
       .catch(err => logger.warn(`Seller order sync (delivery) failed: ${err?.message}`));
+
+    void (async () => {
+      try {
+        const sellerOrders = await SellerOrder.find({ parentOrderId: order._id }).select('sellerId').lean();
+        if (sellerOrders.length > 0) {
+          await notifyOwnersSafely(
+            sellerOrders.map(so => ({ ownerType: 'SELLER', ownerId: so.sellerId })),
+            {
+              title: 'Order Delivered ✅',
+              body: `The order has been successfully delivered to the customer.`,
+              data: {
+                type: 'delivery_completed',
+                orderId: String(order.orderId || order._id.toString()),
+                orderMongoId: String(order._id),
+                link: '/seller/orders',
+              },
+            }
+          );
+        }
+      } catch (error) {
+        logger.error(`Error notifying sellers about delivery completion for ${order._id}: ${error?.message || error}`);
+      }
+    })();
   }
 
   emitOrderUpdate(order, deliveryPartnerId);

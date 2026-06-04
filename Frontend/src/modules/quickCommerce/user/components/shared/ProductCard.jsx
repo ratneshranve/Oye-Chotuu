@@ -158,6 +158,17 @@ const ProductCard = React.memo(
       ],
     );
 
+    const hasSalePrice = product.salePrice > 0 && product.price > product.salePrice;
+    const hasOriginalPrice = product.originalPrice > product.price && product.originalPrice > 0;
+    
+    const displayPrice = hasSalePrice ? product.salePrice : product.price;
+    const strikethroughPrice = hasSalePrice ? product.price : (hasOriginalPrice ? product.originalPrice : null);
+    const discountPercent = hasSalePrice 
+      ? Math.round(((product.price - product.salePrice) / product.price) * 100)
+      : hasOriginalPrice 
+        ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
+        : 0;
+
     return (
       <div
         className={cn(
@@ -174,12 +185,10 @@ const ProductCard = React.memo(
           {/* Top Image Section */}
           <div className="relative overflow-hidden w-full h-[90px] md:h-[110px] p-1 md:p-2">
             {/* Badge (Professional Tag) */}
-            {(badge || product.discount || product.originalPrice > product.price) && (
+            {(badge || product.discount || discountPercent > 0) && (
               <div className="absolute top-0.5 left-0.5 z-10">
                 <ScallopedBadge
-                  text={badge || product.discount || (product.originalPrice > product.price && product.originalPrice > 0
-                    ? `${Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF`
-                    : null)}
+                  text={badge || product.discount || (discountPercent > 0 ? `${discountPercent}% OFF` : null)}
                 />
               </div>
             )}
@@ -245,11 +254,11 @@ const ProductCard = React.memo(
             <div className="mt-auto flex items-center justify-between gap-1 pt-0.5 border-t border-slate-200/20">
               <div className="flex flex-col justify-center">
                 <span className="text-[12.5px] md:text-[14px] font-black text-slate-900 leading-none">
-                  ₹{Number(product.price || 0).toLocaleString()}
+                  ₹{Number(displayPrice || 0).toLocaleString()}
                 </span>
-                {product.originalPrice > product.price && (
+                {strikethroughPrice && (
                   <span className="text-[8.5px] md:text-[9.5px] text-slate-400 line-through font-bold leading-none mt-0.5">
-                    ₹{Number(product.originalPrice || 0).toLocaleString()}
+                    ₹{Number(strikethroughPrice || 0).toLocaleString()}
                   </span>
                 )}
               </div>
