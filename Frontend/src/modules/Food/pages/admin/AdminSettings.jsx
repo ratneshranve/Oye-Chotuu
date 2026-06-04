@@ -12,6 +12,8 @@ import {
 } from "@food/components/ui/card";
 import { toast } from "sonner";
 import { Lock, Eye, EyeOff, Save, Loader2, Shield, User, Mail, Truck } from "lucide-react";
+import SubAdminManagement from "./SubAdminManagement";
+
 const debugLog = (...args) => {}
 const debugWarn = (...args) => {}
 const debugError = (...args) => {}
@@ -50,7 +52,7 @@ export default function AdminSettings() {
             setAdminInfo({
               name: local.name || "Admin User",
               email: local.email || "",
-              role: local.role || "admin",
+              role: local.role?.toUpperCase() === 'ADMIN' ? 'ADMIN' : (local.role || 'admin'),
             });
           }
         } catch (_) {}
@@ -336,6 +338,11 @@ export default function AdminSettings() {
           </form>
         </CardContent>
       </Card>
+
+      {/* Sub-Admin Management (Visible only to super admin) */}
+      {adminInfo && adminInfo.role?.toUpperCase() === "ADMIN" && (
+        <SubAdminManagement />
+      )}
     </div>
   );
 }

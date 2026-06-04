@@ -7,7 +7,7 @@ const router = express.Router();
 
 // All routes require ADMIN role
 router.use(authMiddleware);
-router.use(requireRoles('ADMIN'));
+router.use(requireRoles('ADMIN', 'SUB_ADMIN'));
 
 router.get('/stats', MilkAdminController.getStats);
 

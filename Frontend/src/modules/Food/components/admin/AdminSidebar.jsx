@@ -141,6 +141,20 @@ export default function AdminSidebar({ isOpen = false, onClose, onCollapseChange
   const navigate = useNavigate()
   const [searchQuery, setSearchQuery] = useState("")
   const [badges, setBadges] = useState({})
+  
+  const [adminInfo, setAdminInfo] = useState(() => {
+    try {
+      const saved = localStorage.getItem('admin_user');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // Ensure default role is ADMIN if missing
+        if (!parsed.role || parsed.role.toLowerCase() === 'admin') parsed.role = 'ADMIN';
+        return parsed;
+      }
+    } catch (e) {}
+    return null;
+  });
+
   const [enabledModules, setEnabledModules] = useState(() => {
     const cached = getCachedSettings()?.modules || {};
     return {
@@ -807,7 +821,7 @@ export default function AdminSidebar({ isOpen = false, onClose, onCollapseChange
               </h2>
               <div className="mt-2 rounded-xl border border-neutral-800 bg-neutral-900/80 p-1">
                 <div className="grid grid-cols-2 gap-1">
-                  {enabledModules.food && (
+                  {enabledModules.food && (!adminInfo?.servicesAccess || adminInfo.role === 'ADMIN' || adminInfo.servicesAccess.includes('food')) && (
                     <button
                       key="food-module-btn"
                       type="button"
@@ -822,7 +836,7 @@ export default function AdminSidebar({ isOpen = false, onClose, onCollapseChange
                       ChotuuFood
                     </button>
                   )}
-                  {enabledModules.quickCommerce && (
+                  {enabledModules.quickCommerce && (!adminInfo?.servicesAccess || adminInfo.role === 'ADMIN' || adminInfo.servicesAccess.includes('quickCommerce')) && (
                     <button
                       key="quick-module-btn"
                       type="button"
@@ -838,7 +852,8 @@ export default function AdminSidebar({ isOpen = false, onClose, onCollapseChange
                     </button>
                   )}
 
-                  <button
+                  {(!adminInfo?.servicesAccess || adminInfo.role === 'ADMIN' || adminInfo.servicesAccess.includes('dudhwala')) && (
+                    <button
                     key="dudhwala-module-btn"
                     type="button"
                     onClick={() => switchAdminModule("dudhwala")}
@@ -851,9 +866,11 @@ export default function AdminSidebar({ isOpen = false, onClose, onCollapseChange
                   >
                     ChotuuDudhwala
                   </button>
+                  )}
 
-                  <button
-                    key="global-settings-btn"
+                  {(!adminInfo || adminInfo.role === 'ADMIN') && (
+                    <button
+                      key="global-settings-btn"
                     type="button"
                     onClick={() => switchAdminModule("common")}
                     className={cn(
@@ -866,6 +883,7 @@ export default function AdminSidebar({ isOpen = false, onClose, onCollapseChange
                   >
                     Global Settings
                   </button>
+                  )}
                 </div>
               </div>
             </div>

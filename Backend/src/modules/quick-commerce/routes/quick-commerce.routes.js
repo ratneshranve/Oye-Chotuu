@@ -128,7 +128,7 @@ const optionalAuth = (req, res, next) => {
 };
 
 const router = express.Router();
-const adminOnly = [authMiddleware, requireRoles("ADMIN")];
+const adminOnly = [authMiddleware, requireRoles("ADMIN", "SUB_ADMIN")];
 
 router.get("/health", (_req, res) =>
   res.json({ success: true, module: "quick-commerce", status: "ok" }),

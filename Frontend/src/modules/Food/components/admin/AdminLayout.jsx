@@ -25,6 +25,14 @@ export default function AdminLayout() {
     } catch (e) {
       debugError('Error loading sidebar collapsed state:', e)
     }
+
+    const handleAuthRefreshFailed = (e) => {
+      if (e.detail?.module === 'admin') {
+        window.location.href = '/admin/login';
+      }
+    };
+    window.addEventListener('authRefreshFailed', handleAuthRefreshFailed);
+    return () => window.removeEventListener('authRefreshFailed', handleAuthRefreshFailed);
   }, [])
 
   const handleCollapseChange = (collapsed) => {

@@ -4,10 +4,18 @@ import { FoodUser } from '../users/user.model.js';
 import { FoodRestaurant } from '../../modules/food/restaurant/models/restaurant.model.js';
 import { FoodDeliveryPartner } from '../../modules/food/delivery/models/deliveryPartner.model.js';
 import { Seller } from '../../modules/quick-commerce/seller/models/seller.model.js';
+import { FoodAdmin } from '../admin/admin.model.js';
 
 export const requireAdmin = (req, res, next) => {
-    if (req.user?.role !== 'ADMIN') {
+    if (req.user?.role !== 'ADMIN' && req.user?.role !== 'SUB_ADMIN') {
         return sendError(res, 403, 'Admin access required');
+    }
+    next();
+};
+
+export const requireSuperAdmin = (req, res, next) => {
+    if (req.user?.role !== 'ADMIN') {
+        return sendError(res, 403, 'Super Admin access required');
     }
     next();
 };
@@ -47,6 +55,12 @@ export const authMiddleware = (req, res, next) => {
         } else if (decoded.role === 'SELLER') {
             Seller.findById(decoded.userId).select('isActive').lean().then((doc) => {
                 if (!doc || doc.isActive === false) return sendError(res, 401, 'Seller account is deactivated');
+                next();
+            }).catch(() => sendError(res, 401, 'Authentication failed'));
+            return;
+        } else if (decoded.role === 'SUB_ADMIN') {
+            FoodAdmin.findById(decoded.userId).select('isActive').lean().then((doc) => {
+                if (!doc || doc.isActive === false) return sendError(res, 401, 'Sub-Admin account is deactivated');
                 next();
             }).catch(() => sendError(res, 401, 'Authentication failed'));
             return;

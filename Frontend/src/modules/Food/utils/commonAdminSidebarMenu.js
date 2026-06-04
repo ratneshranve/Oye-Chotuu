@@ -28,5 +28,17 @@ export const commonAdminSidebarMenu = [
         ]
       }
     ]
+  },
+  {
+    type: "section",
+    label: "Sub Admins",
+    items: [
+      {
+        type: "link",
+        label: "Manage Sub Admins",
+        path: "/admin/global-settings/sub-admins",
+        icon: "Users",
+      }
+    ]
   }
 ];

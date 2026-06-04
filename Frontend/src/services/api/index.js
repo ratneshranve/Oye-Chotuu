@@ -269,6 +269,15 @@ export const adminAPI = {
     const fcmToken = typeof localStorage !== "undefined" ? localStorage.getItem("fcm_web_registered_token_admin") : null;
     return authService.logoutAll(token, fcmToken, "web");
   },
+  // Sub-Admin Management
+  getSubAdmins: () =>
+    apiClient.get("/food/admin/sub-admins", { contextModule: "admin" }),
+  createSubAdmin: (body) =>
+    apiClient.post("/food/admin/sub-admins", body ?? {}, { contextModule: "admin" }),
+  updateSubAdmin: (id, body) =>
+    apiClient.put(`/food/admin/sub-admins/${String(id)}`, body ?? {}, { contextModule: "admin" }),
+  deleteSubAdmin: (id) =>
+    apiClient.delete(`/food/admin/sub-admins/${String(id)}`, { contextModule: "admin" }),
   // Restaurant approvals and join requests
   getPendingRestaurants: () =>
     apiClient.get("/food/admin/restaurants/pending", {

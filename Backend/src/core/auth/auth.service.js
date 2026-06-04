@@ -248,6 +248,10 @@ export const adminLogin = async (email, password) => {
     throw new AuthError("Invalid credentials");
   }
 
+  if (admin.isActive === false) {
+    throw new AuthError("Your account has been deactivated.");
+  }
+
   const payload = { userId: admin._id.toString(), role: admin.role };
 
   const accessToken = signAccessToken(payload);

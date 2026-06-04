@@ -29,6 +29,7 @@ const adminSchema = new mongoose.Schema(
 
         role: {
             type: String,
+            enum: ['ADMIN', 'SUB_ADMIN'],
             default: 'ADMIN'
         },
         isActive: {
@@ -37,7 +38,7 @@ const adminSchema = new mongoose.Schema(
         },
         servicesAccess: {
             type: [String],
-            enum: ['food', 'quickCommerce'],
+            enum: ['food', 'quickCommerce', 'dudhwala'],
             default: ['food']
         }
     },
