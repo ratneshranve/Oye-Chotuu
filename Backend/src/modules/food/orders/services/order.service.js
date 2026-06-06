@@ -3034,42 +3034,8 @@ export async function updateOrderStatusRestaurant(
       }
     }
 
-    const notifyList = [
-      { ownerType: "USER", ownerId: order.userId },
-      { ownerType: "RESTAURANT", ownerId: restaurantId },
-    ];
-
-    const assignedRiderId = order.dispatch?.deliveryPartnerId;
-    if (assignedRiderId) {
-      notifyList.push({ ownerType: "DELIVERY_PARTNER", ownerId: assignedRiderId });
-    }
-
-    let riderTitle = `Order updated`;
-    let riderBody = `The order status is now ${String(orderStatus).replace(/_/g, " ")}.`;
-
-    if (String(orderStatus).includes("cancel")) {
-      riderTitle = "Order Cancelled ❌";
-      riderBody = `The order has been cancelled. Please stop your current task.`;
-      
-      // Sync transaction status
-      try {
-        const isOnlinePaid =
-          order.payment?.method === "razorpay" &&
-          (order.payment?.status === "paid" ||
-            order.payment?.status === "refunded");
-        await foodTransactionService.updateTransactionStatus(order._id, 'cancelled_by_restaurant', {
-            status: isOnlinePaid ? 'refunded' : 'failed',
-            note: `Order cancelled by restaurant/admin`,
-            recordedByRole: 'RESTAURANT',
-            recordedById: restaurantId
-        });
-      } catch (err) {
-        logger.warn(`updateOrderStatusRestaurant transaction sync failed: ${err?.message || err}`);
-      }
-    }
-
     await notifyOwnersSafely(
-      notifyList,
+      [{ ownerType: "USER", ownerId: order.userId }],
       {
         title: title,
         body: body,
@@ -3083,6 +3049,65 @@ export async function updateOrderStatusRestaurant(
         },
       },
     );
+
+    await notifyOwnersSafely(
+      [{ ownerType: "RESTAURANT", ownerId: restaurantId }],
+      {
+        title: title,
+        body: body,
+        image: "https://i.ibb.co/3m2Yh7r/Appzeto-Brand-Image.png",
+        data: {
+          type: "order_status_update",
+          orderId: order.orderId,
+          orderMongoId: order._id?.toString?.() || "",
+          orderStatus: String(orderStatus || ""),
+          link: `/restaurant/orders/${order._id?.toString?.() || ""}`,
+        },
+      },
+    );
+
+    const assignedRiderId = order.dispatch?.deliveryPartnerId;
+    if (assignedRiderId) {
+      let riderTitle = `Order updated`;
+      let riderBody = `The order status is now ${String(orderStatus).replace(/_/g, " ")}.`;
+
+      if (String(orderStatus).includes("cancel")) {
+        riderTitle = "Order Cancelled ❌";
+        riderBody = `The order has been cancelled. Please stop your current task.`;
+        
+        // Sync transaction status
+        try {
+          const isOnlinePaid =
+            order.payment?.method === "razorpay" &&
+            (order.payment?.status === "paid" ||
+              order.payment?.status === "refunded");
+          await foodTransactionService.updateTransactionStatus(order._id, 'cancelled_by_restaurant', {
+              status: isOnlinePaid ? 'refunded' : 'failed',
+              note: `Order cancelled by restaurant/admin`,
+              recordedByRole: 'RESTAURANT',
+              recordedById: restaurantId
+          });
+        } catch (err) {
+          logger.warn(`updateOrderStatusRestaurant transaction sync failed: ${err?.message || err}`);
+        }
+      }
+
+      await notifyOwnersSafely(
+        [{ ownerType: "DELIVERY_PARTNER", ownerId: assignedRiderId }],
+        {
+          title: riderTitle,
+          body: riderBody,
+          image: "https://i.ibb.co/3m2Yh7r/Appzeto-Brand-Image.png",
+          data: {
+            type: "order_status_update",
+            orderId: order.orderId,
+            orderMongoId: order._id?.toString?.() || "",
+            orderStatus: String(orderStatus || ""),
+            link: `/delivery/orders/${order._id?.toString?.() || ""}`,
+          },
+        },
+      );
+    }
   } catch (err) {
     console.error("[DEBUG] Error emitting status update to restaurant:", err);
   }
@@ -4090,6 +4115,7 @@ function emitOrderUpdate(order, deliveryPartnerId) {
             orderId: order.orderId,
             orderMongoId: order._id?.toString?.() || "",
             orderStatus: "delivered",
+            link: `/food/user/orders/${order._id?.toString?.() || ""}`,
           },
         }
       );
@@ -4104,6 +4130,7 @@ function emitOrderUpdate(order, deliveryPartnerId) {
             orderId: order.orderId,
             orderMongoId: order._id?.toString?.() || "",
             orderStatus: "delivered",
+            link: `/restaurant/orders/${order._id?.toString?.() || ""}`,
           },
         }
       );
@@ -4119,6 +4146,37 @@ function emitOrderUpdate(order, deliveryPartnerId) {
             orderMongoId: order._id?.toString?.() || "",
             paymentMethod: order.payment?.method,
             amountCollected: String(order.pricing?.total || 0),
+            link: `/delivery/orders/${order._id?.toString?.() || ""}`,
+          },
+        }
+      );
+    } else if (order.orderStatus === "picked_up") {
+      void notifyOwnerSafely(
+        { ownerType: "USER", ownerId: order.userId },
+        {
+          title: `Order Picked Up! 🛵`,
+          body: `Your order has been picked up and is on the way.`,
+          data: {
+            type: "order_status_update",
+            orderId: order.orderId,
+            orderMongoId: order._id?.toString?.() || "",
+            orderStatus: "picked_up",
+            link: `/food/user/orders/${order._id?.toString?.() || ""}`,
+          },
+        }
+      );
+
+      void notifyOwnerSafely(
+        { ownerType: "RESTAURANT", ownerId: order.restaurantId },
+        {
+          title: `Order Picked Up! 🛵`,
+          body: `The delivery partner has picked up the order.`,
+          data: {
+            type: "order_status_update",
+            orderId: order.orderId,
+            orderMongoId: order._id?.toString?.() || "",
+            orderStatus: "picked_up",
+            link: `/restaurant/orders/${order._id?.toString?.() || ""}`,
           },
         }
       );
@@ -4138,6 +4196,7 @@ export async function updateOrderStatusDelivery(orderId, deliveryPartnerId, orde
     order.orderStatus = orderStatus;
     pushStatusHistory(order, { byRole: 'DELIVERY_PARTNER', byId: deliveryPartnerId, from, to: orderStatus });
     await order.save();
+    emitOrderUpdate(order, deliveryPartnerId);
     enqueueOrderEvent('delivery_status_updated', {
         orderMongoId: order._id?.toString?.(),
         orderId: order.orderId,
