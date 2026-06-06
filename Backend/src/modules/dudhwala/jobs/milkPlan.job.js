@@ -1,7 +1,8 @@
 import cron from 'node-cron';
 import { MilkActivePlan } from '../models/MilkActivePlan.model.js';
 import { logger } from '../../../utils/logger.js';
-
+import { sendPushNotification } from '../../../core/notifications/firebase.service.js';
+import { FoodUser } from '../../../core/users/user.model.js';
 /**
  * Daily Milk Plan Processor
  * Runs every day at midnight (00:00)
@@ -38,6 +39,25 @@ export const processDailyMilkPlans = async () => {
           remarks: 'Plan expired automatically as remaining days reached 0.'
         });
         expiredCount++;
+      } else if (plan.remainingDays === 3 || plan.remainingDays === 2) {
+        // Send FCM Push Notification 2-3 days before expiry
+        try {
+          const user = await FoodUser.findById(plan.userId).lean();
+          if (user && user.fcmTokens && user.fcmTokens.length > 0) {
+            const payload = {
+              title: "Milk Plan Expiring Soon! 🥛",
+              body: `Your milk subscription will expire in ${plan.remainingDays} days. Please renew to avoid any interruption in delivery.`,
+              data: {
+                type: "milk_plan_expiring",
+                planId: plan._id.toString()
+              }
+            };
+            await sendPushNotification(user.fcmTokens, payload);
+            logger.info(`Sent expiry notification to user ${plan.userId} for plan ${plan._id}`);
+          }
+        } catch (notifErr) {
+          logger.error(`Failed to send milk plan expiry push to user ${plan.userId}: ${notifErr.message}`);
+        }
       }
       
       await plan.save();
