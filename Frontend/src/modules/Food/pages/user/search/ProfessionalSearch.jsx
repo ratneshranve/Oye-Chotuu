@@ -1,5 +1,5 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from "react"
-import { useSearchParams, Link, useNavigate } from "react-router-dom"
+import { useSearchParams, Link, useNavigate, useLocation } from "react-router-dom"
 import { 
   ArrowLeft, Star, Clock, Search, SlidersHorizontal, 
   ChevronDown, Bookmark, BadgePercent, Mic, Grid2x2,
@@ -39,7 +39,7 @@ const SEARCH_HISTORY_KEY = "professional_search_history_v1"
 
 export default function ProfessionalSearch() {
   const [searchParams, setSearchParams] = useSearchParams()
-  const location = useRouterLocation()
+  const location = useLocation()
   const initialQuery = location.state?.query || searchParams.get("q") || ""
   const navigate = useNavigate()
   const { location: userCoords } = useGeoLocation()

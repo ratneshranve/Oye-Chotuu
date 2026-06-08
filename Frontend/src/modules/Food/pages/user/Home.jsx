@@ -313,11 +313,8 @@ export default function Home() {
 
   const handleSearchFocus = useCallback(() => {
     if (activeTab === "quick") navigate("/quick/search");
-    else {
-      if (heroSearch) setSearchValue(heroSearch);
-      openSearch();
-    }
-  }, [activeTab, heroSearch, navigate, openSearch, setSearchValue]);
+    else navigate("/food/user/search");
+  }, [activeTab, navigate]);
 
   // --- Render ---
   return (
