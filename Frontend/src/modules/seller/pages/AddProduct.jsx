@@ -668,6 +668,7 @@ const AddProduct = () => {
                         <>
                           <input
                             type="file"
+                            accept="image/*"
                             className="absolute inset-0 opacity-0 cursor-pointer z-10"
                             onChange={(e) => handleImageUpload(e, "gallery")}
                           />

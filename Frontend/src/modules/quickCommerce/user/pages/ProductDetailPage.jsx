@@ -525,7 +525,7 @@ const ProductDetailPage = () => {
               </h3>
               <div className="flex flex-wrap gap-3">
                 {product.variants.map((v) => {
-                  const isSelected = selectedVariant?.sku === v.sku;
+                  const isSelected = selectedVariant?._id ? selectedVariant._id === v._id : (selectedVariant?.name === v.name && selectedVariant?.sku === v.sku);
                   const vPrice = v.salePrice > 0 ? v.salePrice : v.price;
                   const vOriginalPrice = Math.max(vPrice, v.price);
                   const hasDiscount = vOriginalPrice > vPrice;

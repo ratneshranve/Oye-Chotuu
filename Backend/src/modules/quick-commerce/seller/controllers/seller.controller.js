@@ -357,7 +357,7 @@ const slugify = (value) =>
     .replace(/^-+|-+$/g, "") || "item";
 
 const createSellerSku = () =>
-  `SKU-${Date.now().toString(36).slice(-6).toUpperCase()}`;
+  `SKU-${Date.now().toString(36).slice(-6).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
 
 const serializeSellerProfile = (seller) => ({
   _id: seller._id,
@@ -610,9 +610,21 @@ const reconcileSellerDeliveredOrders = async (sellerId) => {
   }
 };
 
-const parseProductPayload = (req, existingProduct = null) => {
+const parseProductPayload = async (req, existingProduct = null) => {
   const mainUpload = arr(req.files?.mainImage)[0];
   const galleryUploads = arr(req.files?.galleryImages);
+
+  let mainImageUrl = str(req.body?.mainImage) || existingProduct?.mainImage || "";
+  if (mainUpload) {
+    mainImageUrl = await uploadImageBuffer(mainUpload.buffer, "seller/products");
+  }
+
+  let galleryImageUrls = arr(existingProduct?.galleryImages);
+  if (galleryUploads.length > 0) {
+    const urls = await Promise.all(galleryUploads.map(file => uploadImageBuffer(file.buffer, "seller/products")));
+    galleryImageUrls = urls.filter(Boolean);
+  }
+
   const variants = parseVariants(req.body?.variants, {
     price: req.body?.price,
     salePrice: req.body?.salePrice,
@@ -654,21 +666,9 @@ const parseProductPayload = (req, existingProduct = null) => {
     brand: str(req.body?.brand) || existingProduct?.brand || "",
     weight: str(req.body?.weight) || existingProduct?.weight || "",
     tags: parseTags(req.body?.tags ?? existingProduct?.tags),
-    mainImage:
-      toDataUrl(mainUpload) ||
-      str(req.body?.mainImage) ||
-      existingProduct?.mainImage ||
-      "",
-    image:
-      toDataUrl(mainUpload) ||
-      str(req.body?.mainImage) ||
-      existingProduct?.mainImage ||
-      existingProduct?.image ||
-      "",
-    galleryImages:
-      galleryUploads.length > 0
-        ? galleryUploads.map(toDataUrl).filter(Boolean)
-        : arr(existingProduct?.galleryImages),
+    mainImage: mainImageUrl,
+    image: mainImageUrl || existingProduct?.image || "",
+    galleryImages: galleryImageUrls,
     mrp: num(
       req.body?.mrp,
       req.body?.salePrice ??
@@ -979,7 +979,7 @@ export const getSellerProductByIdController = async (req, res) => {
 export const createSellerProductController = async (req, res) => {
   try {
     const sellerId = sellerScope(req);
-    const basePayload = parseProductPayload(req);
+    const basePayload = await parseProductPayload(req);
     const categoryIds = await resolveSellerCategoryIds({
       headerId: req.body?.headerId,
       categoryId: req.body?.categoryId,
@@ -1024,7 +1024,7 @@ export const updateSellerProductController = async (req, res) => {
       subcategoryId: req.body?.subcategoryId || existing.subcategoryId,
     });
 
-    const payload = parseProductPayload(req, existing);
+    const payload = await parseProductPayload(req, existing);
 
     Object.assign(existing, {
       ...payload,

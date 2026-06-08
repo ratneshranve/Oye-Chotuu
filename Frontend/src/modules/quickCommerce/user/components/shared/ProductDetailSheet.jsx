@@ -506,7 +506,7 @@ const ProductDetailSheet = () => {
                                                             onClick={() => setSelectedVariant(v)}
                                                             className={cn(
                                                                 'px-4 py-2 font-[600] rounded-lg text-[13px] transition-all border-2',
-                                                                selectedVariant?.sku === v.sku
+                                                                (selectedVariant?._id && v._id) ? selectedVariant._id === v._id : (selectedVariant?.name === v.name && selectedVariant?.sku === v.sku)
                                                                     ? 'bg-green-50 dark:bg-green-950/30 border-[#0c831f] text-[#0c831f] shadow-md shadow-green-100/50 dark:shadow-none'
                                                                     : 'bg-white dark:bg-slate-800 border-gray-200 dark:border-white/5 text-gray-600 dark:text-slate-400 hover:border-gray-300 dark:hover:border-white/10 hover:shadow-sm'
                                                             )}
@@ -846,13 +846,13 @@ const ProductDetailSheet = () => {
                                                     onClick={() => setSelectedVariant(v)}
                                                     className={cn(
                                                         "flex-shrink-0 px-4 py-2 font-bold rounded-xl text-sm transition-all relative overflow-hidden",
-                                                        selectedVariant?.sku === v.sku
+                                                        (selectedVariant?._id && v._id) ? selectedVariant._id === v._id : (selectedVariant?.name === v.name && selectedVariant?.sku === v.sku)
                                                             ? "bg-white border-2 border-blue-600 text-blue-700 shadow-sm shadow-blue-100"
                                                             : "bg-gray-50 border border-gray-200 text-gray-600"
                                                     )}
                                                 >
                                                     {v.name}
-                                                    {selectedVariant?.sku === v.sku && (
+                                                    {((selectedVariant?._id && v._id) ? selectedVariant._id === v._id : (selectedVariant?.name === v.name && selectedVariant?.sku === v.sku)) && (
                                                         <div className="absolute top-0 right-0 w-3 h-3 bg-blue-600 rounded-bl-lg" />
                                                     )}
                                                 </button>
