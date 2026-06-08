@@ -90,7 +90,14 @@ export default function SelectAddress() {
   }
 
   const onChangeForm = (e) => {
-    const { name, value } = e.target
+    let { name, value } = e.target
+    if (name === "street" || name === "additionalDetails") {
+      value = value.replace(/[^a-zA-Z0-9\s]/g, "")
+    } else if (name === "city" || name === "state") {
+      value = value.replace(/[^a-zA-Z\s]/g, "")
+    } else if (name === "zipCode") {
+      value = value.replace(/\D/g, "").slice(0, 6)
+    }
     setForm((prev) => ({ ...prev, [name]: value }))
   }
 

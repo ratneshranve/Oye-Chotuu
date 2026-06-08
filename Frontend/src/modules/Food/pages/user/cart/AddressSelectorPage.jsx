@@ -657,7 +657,7 @@ export default function AddressSelectorPage() {
               <Input 
                 placeholder="Search or drag to update street/area" 
                 value={addressFormData.street} 
-                onChange={e => setAddressFormData({...addressFormData, street: e.target.value})}
+                onChange={e => setAddressFormData({...addressFormData, street: e.target.value.replace(/[^a-zA-Z0-9\s]/g, "")})}
                 onFocus={() => scrollFieldIntoView("street")}
                 ref={(el) => { manualFieldRefs.current.street = el }}
                 className="mb-4 h-12 rounded-xl bg-gray-50 dark:bg-gray-800/50"
@@ -668,7 +668,7 @@ export default function AddressSelectorPage() {
               <Input 
                 placeholder="E.g. Flat 402, 4th Floor, AppZeto Building" 
                 value={addressFormData.additionalDetails} 
-                onChange={e => setAddressFormData({...addressFormData, additionalDetails: e.target.value})}
+                onChange={e => setAddressFormData({...addressFormData, additionalDetails: e.target.value.replace(/[^a-zA-Z0-9\s]/g, "")})}
                 onFocus={() => scrollFieldIntoView("additionalDetails")}
                 ref={(el) => { manualFieldRefs.current.additionalDetails = el }}
                 className="h-12 rounded-xl border-orange-200 dark:border-orange-900/40 focus:ring-orange-500"
@@ -680,7 +680,7 @@ export default function AddressSelectorPage() {
                 <Label className="text-xs mb-1 block">City</Label>
                 <Input 
                   value={addressFormData.city} 
-                  onChange={e => setAddressFormData({...addressFormData, city: e.target.value})} 
+                  onChange={e => setAddressFormData({...addressFormData, city: e.target.value.replace(/[^a-zA-Z\s]/g, "")})} 
                   onFocus={() => scrollFieldIntoView("city")}
                   ref={(el) => { manualFieldRefs.current.city = el }}
                   className="h-12 rounded-xl"
@@ -691,7 +691,7 @@ export default function AddressSelectorPage() {
                 <Label className="text-xs mb-1 block">State</Label>
                 <Input 
                   value={addressFormData.state} 
-                  onChange={e => setAddressFormData({...addressFormData, state: e.target.value})} 
+                  onChange={e => setAddressFormData({...addressFormData, state: e.target.value.replace(/[^a-zA-Z\s]/g, "")})} 
                   onFocus={() => scrollFieldIntoView("state")}
                   ref={(el) => { manualFieldRefs.current.state = el }}
                   className="h-12 rounded-xl"
@@ -705,7 +705,7 @@ export default function AddressSelectorPage() {
               <Input 
                 placeholder="Pincode" 
                 value={addressFormData.zipCode || ""} 
-                onChange={e => setAddressFormData({...addressFormData, zipCode: e.target.value})} 
+                onChange={e => setAddressFormData({...addressFormData, zipCode: e.target.value.replace(/\D/g, "").slice(0, 6)})} 
                 onFocus={() => scrollFieldIntoView("zipCode")}
                 ref={(el) => { manualFieldRefs.current.zipCode = el }}
                 className="h-12 rounded-xl"
