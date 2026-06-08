@@ -621,7 +621,7 @@ const SellerProfile = () => {
               <input 
                 type="text" 
                 value={deleteInput} 
-                onChange={(e) => setDeleteInput(e.target.value)} 
+                onChange={(e) => setDeleteInput(e.target.value.toUpperCase())} 
                 className="w-full p-2 border border-slate-300 rounded-lg bg-slate-50 text-slate-900 text-center uppercase font-bold"
                 placeholder="DELETE"
               />

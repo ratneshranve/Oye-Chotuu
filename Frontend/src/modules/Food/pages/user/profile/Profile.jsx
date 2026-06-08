@@ -1243,7 +1243,7 @@ export default function Profile() {
               <input 
                 type="text" 
                 value={deleteInput} 
-                onChange={(e) => setDeleteInput(e.target.value)} 
+                onChange={(e) => setDeleteInput(e.target.value.toUpperCase())} 
                 className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
                 placeholder="DELETE"
               />

@@ -288,7 +288,7 @@ export const ProfileV2 = () => {
               <input 
                 type="text" 
                 value={deleteInput} 
-                onChange={(e) => setDeleteInput(e.target.value)} 
+                onChange={(e) => setDeleteInput(e.target.value.toUpperCase())} 
                 className="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-900 text-center uppercase font-bold outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all"
                 placeholder="DELETE"
               />
