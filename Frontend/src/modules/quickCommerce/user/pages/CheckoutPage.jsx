@@ -1550,7 +1550,13 @@ const CheckoutPage = () => {
         const res = await customerApi.getActiveCoupons();
         if (res.data.success) {
           const list = res.data.result || res.data.results || [];
-          setCoupons(list);
+          const now = new Date();
+          const validCoupons = list.filter(c => {
+            const from = c.validFrom ? new Date(c.validFrom) : null;
+            const till = c.validTill ? new Date(c.validTill) : null;
+            return c.isActive !== false && (!from || from <= now) && (!till || till >= now);
+          });
+          setCoupons(validCoupons);
         }
       } catch {
         // silently ignore
@@ -1608,7 +1614,7 @@ const CheckoutPage = () => {
     const {
       deliveryFeeCharged,
       handlingFeeCharged,
-      taxTotal,
+      platformFeeCharged,
       gstAmount,
       grandTotal,
       snapshots,
@@ -1625,7 +1631,7 @@ const CheckoutPage = () => {
       subtotal,
       deliveryFeeCharged,
       handlingFeeCharged,
-      taxTotal,
+      platformFeeCharged,
       gstAmount,
       grandTotal,
       snapshots,

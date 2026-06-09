@@ -617,7 +617,7 @@ const ProductManagement = () => {
                                                     <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest ml-1">Product Title</label>
                                                     <input
                                                         value={formData.name}
-                                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                                        onChange={(e) => setFormData({ ...formData, name: e.target.value.replace(/[^a-zA-Z0-9\s]/g, '') })}
                                                         className="w-full px-4 py-2.5 bg-slate-100 border-none rounded-xl text-sm font-semibold outline-none ring-primary/5 focus:ring-2"
                                                         placeholder="e.g. Premium Basmati Rice"
                                                     />
@@ -777,6 +777,8 @@ const ProductManagement = () => {
                                                                 news[i].price = e.target.value;
                                                                 setFormData({ ...formData, variants: news });
                                                             }}
+                                                            min="0"
+                                                            onKeyDown={(e) => { if (e.key === '-' || e.key === 'e') e.preventDefault(); }}
                                                             placeholder="Price"
                                                             className="bg-white px-3 py-2 rounded-xl text-xs ring-1 ring-slate-100 outline-none"
                                                         />
@@ -788,6 +790,8 @@ const ProductManagement = () => {
                                                                 news[i].stock = e.target.value;
                                                                 setFormData({ ...formData, variants: news });
                                                             }}
+                                                            min="0"
+                                                            onKeyDown={(e) => { if (e.key === '-' || e.key === 'e') e.preventDefault(); }}
                                                             placeholder="Stock"
                                                             className="bg-white px-3 py-2 rounded-xl text-xs ring-1 ring-slate-100 outline-none"
                                                         />
@@ -816,7 +820,7 @@ const ProductManagement = () => {
                                                 <div className="space-y-3">
                                                     {formData.variants.map((variant, idx) => (
                                                         <div key={idx} className="p-4 bg-slate-50 rounded-2xl border border-slate-100 grid grid-cols-12 gap-4 items-end group relative">
-                                                            <div className="col-span-4 space-y-1">
+                                                            <div className="col-span-3 space-y-1">
                                                                 <label className="text-[8px] font-bold text-slate-400 uppercase tracking-widest ml-1">Variant Name</label>
                                                                 <input
                                                                     value={variant.name}
@@ -839,6 +843,8 @@ const ProductManagement = () => {
                                                                         newVariants[idx].price = e.target.value;
                                                                         setFormData({ ...formData, variants: newVariants });
                                                                     }}
+                                                                    min="0"
+                                                                    onKeyDown={(e) => { if (e.key === '-' || e.key === 'e') e.preventDefault(); }}
                                                                     placeholder="0.00"
                                                                     className="w-full px-3 py-2 bg-white ring-1 ring-slate-200 border-none rounded-lg text-xs font-bold outline-none focus:ring-2 focus:ring-primary/10"
                                                                 />
@@ -853,11 +859,13 @@ const ProductManagement = () => {
                                                                         newVariants[idx].salePrice = e.target.value;
                                                                         setFormData({ ...formData, variants: newVariants });
                                                                     }}
+                                                                    min="0"
+                                                                    onKeyDown={(e) => { if (e.key === '-' || e.key === 'e') e.preventDefault(); }}
                                                                     placeholder="0.00"
                                                                     className="w-full px-3 py-2 bg-emerald-50/50 ring-1 ring-emerald-100 border-none rounded-lg text-xs font-bold text-emerald-700 outline-none focus:ring-2 focus:ring-emerald-200"
                                                                 />
                                                             </div>
-                                                            <div className="col-span-1 space-y-1">
+                                                            <div className="col-span-2 space-y-1">
                                                                 <label className="text-[8px] font-bold text-slate-400 uppercase tracking-widest ml-1">Stock</label>
                                                                 <input
                                                                     type="number"
@@ -867,6 +875,8 @@ const ProductManagement = () => {
                                                                         newVariants[idx].stock = e.target.value;
                                                                         setFormData({ ...formData, variants: newVariants });
                                                                     }}
+                                                                    min="0"
+                                                                    onKeyDown={(e) => { if (e.key === '-' || e.key === 'e') e.preventDefault(); }}
                                                                     placeholder="0"
                                                                     className="w-full px-3 py-2 bg-white ring-1 ring-slate-200 border-none rounded-lg text-xs font-bold outline-none focus:ring-2 focus:ring-primary/10"
                                                                 />

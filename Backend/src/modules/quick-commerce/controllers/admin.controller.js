@@ -1478,3 +1478,99 @@ export const settleAdminRiderCash = async (req, res) => {
     });
   }
 };
+
+export const getAdminCoupons = async (req, res) => {
+  try {
+    const { status, search } = req.query;
+    const collection = mongoose.connection.db.collection('quick_coupons');
+    const query = {};
+
+    if (search) {
+      query.$or = [
+        { code: { $regex: String(search).trim(), $options: 'i' } },
+        { description: { $regex: String(search).trim(), $options: 'i' } },
+        { title: { $regex: String(search).trim(), $options: 'i' } }
+      ];
+    }
+
+    const coupons = await collection.find(query).sort({ createdAt: -1 }).toArray();
+    
+    let filtered = coupons;
+    const now = new Date();
+    
+    if (status === 'active') {
+      filtered = coupons.filter(c => {
+        const from = c.validFrom ? new Date(c.validFrom) : null;
+        const till = c.validTill ? new Date(c.validTill) : null;
+        return c.isActive !== false && (!from || from <= now) && (!till || till >= now);
+      });
+    } else if (status === 'expired') {
+      filtered = coupons.filter(c => {
+        const till = c.validTill ? new Date(c.validTill) : null;
+        return c.isActive === false || (till && till < now);
+      });
+    }
+
+    return res.json({ success: true, results: filtered, result: filtered });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const createAdminCoupon = async (req, res) => {
+  try {
+    const collection = mongoose.connection.db.collection('quick_coupons');
+    const payload = {
+      ...req.body,
+      code: req.body.code?.toUpperCase(),
+      isActive: true,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    const result = await collection.insertOne(payload);
+    return res.json({ success: true, result: { ...payload, _id: result.insertedId } });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const updateAdminCoupon = async (req, res) => {
+  try {
+    const collection = mongoose.connection.db.collection('quick_coupons');
+    const id = req.params.id;
+    
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ success: false, message: 'Invalid coupon ID' });
+    }
+
+    const payload = { ...req.body, updatedAt: new Date() };
+    delete payload._id;
+    if (payload.code) payload.code = payload.code.toUpperCase();
+    
+    const result = await collection.updateOne({ _id: new mongoose.Types.ObjectId(id) }, { $set: payload });
+    
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ success: false, message: 'Coupon not found' });
+    }
+
+    return res.json({ success: true, message: 'Updated successfully' });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const deleteAdminCoupon = async (req, res) => {
+  try {
+    const collection = mongoose.connection.db.collection('quick_coupons');
+    const id = req.params.id;
+    
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ success: false, message: 'Invalid coupon ID' });
+    }
+
+    await collection.deleteOne({ _id: new mongoose.Types.ObjectId(id) });
+    return res.json({ success: true });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};

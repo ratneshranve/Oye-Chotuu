@@ -82,6 +82,10 @@ import {
   getAdminRiderCashDetails,
   settleAdminRiderCash,
   updateAdminWithdrawalStatus,
+  getAdminCoupons,
+  createAdminCoupon,
+  updateAdminCoupon,
+  deleteAdminCoupon,
 } from "../controllers/admin.controller.js";
 import {
   getSellerCommissionBootstrap,
@@ -323,6 +327,13 @@ router.post(
   ...adminOnly,
   reorderAdminOfferSections,
 );
+
+// Coupons Management
+router.get("/admin/coupons", ...adminOnly, getAdminCoupons);
+router.post("/admin/coupons", ...adminOnly, createAdminCoupon);
+router.put("/admin/coupons/:id", ...adminOnly, updateAdminCoupon);
+router.delete("/admin/coupons/:id", ...adminOnly, deleteAdminCoupon);
+
 
 // Seller Commission Management
 router.get(
