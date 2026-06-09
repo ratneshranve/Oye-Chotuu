@@ -124,6 +124,10 @@ export default function AddressSelectorPage() {
   const [addressAutocompleteValue, setAddressAutocompleteValue] = useState("")
   const [keywordAddressSuggestions, setKeywordAddressSuggestions] = useState([])
   const [isKeywordSearching, setIsKeywordSearching] = useState(false)
+  const [streetSuggestions, setStreetSuggestions] = useState([])
+  const [isStreetSearching, setIsStreetSearching] = useState(false)
+  const skipStreetSearchRef = useRef(false)
+  const ignoreReverseGeocodeRef = useRef(false)
   const [lockMapToAutocomplete, setLockMapToAutocomplete] = useState(true)
   const [GOOGLE_MAPS_API_KEY, setGOOGLE_MAPS_API_KEY] = useState(null)
   const [mapUnavailable, setMapUnavailable] = useState(false)
@@ -215,6 +219,50 @@ export default function AddressSelectorPage() {
     return () => clearTimeout(t)
   }, [addressAutocompleteValue, showAddressForm, location, ENABLE_NOMINATIM_SEARCH])
 
+  // Nominatim search for primary street field
+  useEffect(() => {
+    if (!showAddressForm) return
+    if (skipStreetSearchRef.current) {
+      skipStreetSearchRef.current = false
+      return
+    }
+    const q = String(addressFormData.street || "").trim()
+    if (!ENABLE_NOMINATIM_SEARCH || q.length < 3) {
+      setStreetSuggestions([])
+      setIsStreetSearching(false)
+      return
+    }
+
+    const t = setTimeout(async () => {
+      try {
+        setIsStreetSearching(true)
+        const refLat = location?.latitude ?? 22.7196
+        const refLng = location?.longitude ?? 75.8577
+        const url = `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=5&q=${encodeURIComponent(q)}`
+        const res = await fetch(url, { headers: { Accept: "application/json" } })
+        const json = await res.json()
+        const mapped = (Array.isArray(json) ? json : []).map(r => ({
+          id: r.place_id || r.osm_id,
+          display: r.display_name || "",
+          lat: Number(r.lat),
+          lng: Number(r.lon),
+          address: r.address || {},
+        }))
+        const withDistance = mapped
+          .filter(x => Number.isFinite(x.lat) && Number.isFinite(x.lng))
+          .map(x => ({ ...x, distanceMeters: calculateDistance(refLat, refLng, x.lat, x.lng) }))
+          .sort((a, b) => (a.distanceMeters ?? Infinity) - (b.distanceMeters ?? Infinity))
+          .slice(0, 4)
+        setStreetSuggestions(withDistance)
+      } catch (e) {
+        setStreetSuggestions([])
+      } finally {
+        setIsStreetSearching(false)
+      }
+    }, 400)
+    return () => clearTimeout(t)
+  }, [addressFormData.street, showAddressForm, location, ENABLE_NOMINATIM_SEARCH])
+
   // Map Initialization logic
   useEffect(() => {
     if (!MAPS_ENABLED || mapUnavailable || !showAddressForm || !mapContainerRef.current || !GOOGLE_MAPS_API_KEY) return
@@ -245,6 +293,10 @@ export default function AddressSelectorPage() {
           ]
         })
         googleMapRef.current = map
+
+        map.addListener("dragstart", () => {
+          ignoreReverseGeocodeRef.current = false
+        })
 
         // Debounce handleMapMoveEnd to avoid excessive API calls
         let idleTimeout = null
@@ -394,7 +446,7 @@ export default function AddressSelectorPage() {
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value))
 
   const handleMapMoveEnd = async (lat, lng) => {
-    if (!ENABLE_LOCATION_REVERSE_GEOCODE) return
+    if (!ENABLE_LOCATION_REVERSE_GEOCODE || ignoreReverseGeocodeRef.current) return
     
     // Prevent redundant calls for the same coordinates
     const coordKey = `${lat.toFixed(5)},${lng.toFixed(5)}`
@@ -574,6 +626,7 @@ export default function AddressSelectorPage() {
                       <button
                         key={s.id}
                         onClick={() => {
+                          ignoreReverseGeocodeRef.current = true
                           const { lat, lng, display, address: a } = s
                           setMapPosition([lat, lng])
                           if (googleMapRef.current) {
@@ -652,18 +705,71 @@ export default function AddressSelectorPage() {
                </div>
             </div>
 
-            <div>
+            <div className="relative">
               <Label className="text-sm font-bold mb-2 block">Primary Address (Street / Area / Landmark)</Label>
-              <Input 
-                placeholder="Search or drag to update street/area" 
-                value={addressFormData.street} 
-                onChange={e => setAddressFormData({...addressFormData, street: e.target.value.replace(/[^a-zA-Z0-9\s]/g, "")})}
-                onFocus={() => scrollFieldIntoView("street")}
-                ref={(el) => { manualFieldRefs.current.street = el }}
-                className="mb-4 h-12 rounded-xl bg-gray-50 dark:bg-gray-800/50"
-                required
-              />
+              <div className="relative">
+                <Input 
+                  placeholder="Search or drag to update street/area" 
+                  value={addressFormData.street} 
+                  onChange={e => {
+                    skipStreetSearchRef.current = false
+                    setAddressFormData({...addressFormData, street: e.target.value.replace(/[^a-zA-Z0-9\s]/g, "")})
+                  }}
+                  onFocus={() => scrollFieldIntoView("street")}
+                  ref={(el) => { manualFieldRefs.current.street = el }}
+                  className="mb-4 h-12 rounded-xl bg-gray-50 dark:bg-gray-800/50"
+                  required
+                />
+                {isStreetSearching && (
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 -mt-2">
+                     <div className="animate-spin rounded-full h-4 w-4 border-2 border-[#cc2532] border-t-transparent" />
+                  </div>
+                )}
+              </div>
 
+              {streetSuggestions.length > 0 && (
+                <div className="absolute top-[72px] left-0 right-0 mb-4 bg-white dark:bg-[#1a1a1a] rounded-xl shadow-2xl border border-gray-100 dark:border-gray-800 overflow-hidden z-30 animate-in fade-in slide-in-from-top-2 duration-200">
+                  <p className="px-4 py-2 text-[10px] font-bold uppercase tracking-wider text-gray-400 bg-gray-50 dark:bg-gray-800/50">Suggestions</p>
+                  {streetSuggestions.map((s) => (
+                    <button
+                      key={s.id}
+                      type="button"
+                      onClick={() => {
+                        ignoreReverseGeocodeRef.current = true
+                        skipStreetSearchRef.current = true
+                        const { lat, lng, display, address: a } = s
+                        setMapPosition([lat, lng])
+                        if (googleMapRef.current) {
+                          googleMapRef.current.panTo({ lat, lng })
+                          googleMapRef.current.setZoom(17)
+                        }
+                        const city = a.city || a.town || a.village || a.county || ""
+                        const state = a.state || ""
+                        const zipCode = a.postcode || ""
+                        const cleanDisplay = display.replace(/[^a-zA-Z0-9\s]/g, "")
+                        setAddressFormData((prev) => ({
+                          ...prev,
+                          street: cleanDisplay || prev.street,
+                          city: city || prev.city,
+                          state: state || prev.state,
+                          zipCode: zipCode || prev.zipCode,
+                        }))
+                        setStreetSuggestions([])
+                      }}
+                      className="w-full px-4 py-3 flex items-start gap-3 hover:bg-orange-50 dark:hover:bg-orange-900/10 transition-colors text-left border-b border-gray-50 dark:border-gray-800 last:border-none"
+                    >
+                      <MapPin className="h-4 w-4 text-gray-400 mt-1 flex-shrink-0" />
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{s.display}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{s.address?.city || s.address?.state}</p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div>
               <Label className="text-sm font-bold mb-2 block text-orange-600 dark:text-orange-400">Secondary Address (House No. / Flat / Floor)</Label>
               <Input 
                 placeholder="E.g. Flat 402, 4th Floor, AppZeto Building" 

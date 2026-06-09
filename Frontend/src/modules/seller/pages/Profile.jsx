@@ -135,8 +135,8 @@ const SellerProfile = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "name") {
-      // Disallow numbers in seller name
-      const cleaned = value.replace(/[0-9]/g, "");
+      // Disallow numbers and special characters in seller name
+      const cleaned = value.replace(/[^a-zA-Z\s]/g, "");
       setFormData({ ...formData, [name]: cleaned });
     } else if (name === "phone") {
       // Allow only digits, max 10 characters

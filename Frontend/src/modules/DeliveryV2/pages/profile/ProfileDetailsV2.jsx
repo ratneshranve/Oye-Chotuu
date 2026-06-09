@@ -852,7 +852,7 @@ export const ProfileDetailsV2 = () => {
         <div className="space-y-5 pb-10">
           <div className="grid gap-4">
              {[
-               { label: "Account Holder", key: "accountHolderName", icon: User, maxLength: 60 },
+               { label: "Account Holder", key: "accountHolderName", icon: User, maxLength: 60, isAlphabetOnly: true },
                { label: "Account Number", key: "accountNumber", icon: Banknote, maxLength: 18, isNumeric: true },
                { label: "IFSC Code", key: "ifscCode", icon: Shield, format: (v) => v.toUpperCase(), maxLength: 11 },
                { label: "Bank Name", key: "bankName", icon: MapPin, maxLength: 60 },
@@ -869,6 +869,7 @@ export const ProfileDetailsV2 = () => {
                     onChange={(e) => {
                         let val = e.target.value;
                         if (field.isNumeric) val = val.replace(/\D/g, "");
+                        if (field.isAlphabetOnly) val = val.replace(/[^a-zA-Z\s]/g, "");
                         if (field.maxLength && val.length > field.maxLength) return;
                         if (field.format) val = field.format(val);
                         setBankDetails({...bankDetails, [field.key]: val})

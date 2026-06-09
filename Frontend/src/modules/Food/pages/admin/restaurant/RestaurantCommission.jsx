@@ -585,11 +585,19 @@ export default function RestaurantCommission() {
                   <input
                     type="number"
                     step={formData.defaultCommission.type === "percentage" ? "0.1" : "0.01"}
+                    min="0"
                     value={formData.defaultCommission.value}
-                    onChange={(e) => setFormData(prev => ({
-                      ...prev,
-                      defaultCommission: { ...prev.defaultCommission, value: e.target.value }
-                    }))}
+                    onKeyDown={(e) => {
+                      if (e.key === '-') e.preventDefault();
+                    }}
+                    onChange={(e) => {
+                      let val = e.target.value;
+                      if (parseFloat(val) < 0) val = Math.abs(parseFloat(val)).toString();
+                      setFormData(prev => ({
+                        ...prev,
+                        defaultCommission: { ...prev.defaultCommission, value: val }
+                      }))
+                    }}
                     className={`w-full px-3 py-2 text-sm border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
                       formErrors.defaultCommission ? "border-red-500" : "border-slate-300"
                     }`}

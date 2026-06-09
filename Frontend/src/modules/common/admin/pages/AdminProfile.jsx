@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+﻿import { useState, useEffect, useRef } from "react";
 import { adminAPI, uploadAPI } from "@/services/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -87,7 +87,7 @@ export default function AdminProfile() {
             phone: fallback.phone || "",
             profileImage: fallback.profileImage || "",
           });
-          toast.info("Showing saved profile. Backend disconnected — updates may not persist.");
+          toast.info("Showing saved profile. Backend disconnected â€” updates may not persist.");
           return;
         }
       } catch (_) {}
@@ -413,7 +413,11 @@ export default function AdminProfile() {
                   id="name"
                   type="text"
                   value={formData.name}
-                  onChange={(e) => handleInputChange("name", e.target.value)}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (/[^a-zA-Z0-9\s]/.test(val)) return;
+                    handleInputChange("name", val);
+                  }}
                   placeholder="Enter your full name"
                   required
                   disabled={!isEditMode || saving || uploading}
@@ -448,7 +452,13 @@ export default function AdminProfile() {
                   id="phone"
                   type="tel"
                   value={formData.phone}
-                  onChange={(e) => handleInputChange("phone", e.target.value)}
+                  maxLength={10}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (/[^\d]/.test(val)) return;
+                    if (val.length > 10) return;
+                    handleInputChange("phone", val);
+                  }}
                   placeholder="Enter phone number (optional)"
                   disabled={!isEditMode || saving || uploading}
                   className={`h-11 ${!isEditMode ? "bg-neutral-50 cursor-not-allowed" : ""}`}
@@ -673,3 +683,5 @@ export default function AdminProfile() {
     </div>
   );
 }
+
+

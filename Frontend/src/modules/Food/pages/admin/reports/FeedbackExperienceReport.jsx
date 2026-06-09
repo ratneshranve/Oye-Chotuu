@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react"
+﻿import { useState, useMemo, useEffect } from "react"
 import { Search, Download, ChevronDown, Filter, Star, RefreshCw, Calendar, Trash2, Eye, User, Mail, Phone, MessageSquare } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@food/components/ui/dropdown-menu"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@food/components/ui/dialog"
@@ -207,7 +207,7 @@ export default function FeedbackExperienceReport() {
                   <div className="relative">
                     <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                     <input
-                      type="date"
+                      type="date" max={new Date().toISOString().split('T')[0]}
                       value={filters.fromDate}
                       onChange={(e) => setFilters(prev => ({ ...prev, fromDate: e.target.value }))}
                       className="w-full pl-10 pr-4 py-2.5 text-sm rounded-lg border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -222,7 +222,7 @@ export default function FeedbackExperienceReport() {
                   <div className="relative">
                     <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                     <input
-                      type="date"
+                      type="date" max={new Date().toISOString().split('T')[0]}
                       value={filters.toDate}
                       onChange={(e) => setFilters(prev => ({ ...prev, toDate: e.target.value }))}
                       className="w-full pl-10 pr-4 py-2.5 text-sm rounded-lg border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -570,5 +570,7 @@ export default function FeedbackExperienceReport() {
     </div>
   )
 }
+
+
 
 

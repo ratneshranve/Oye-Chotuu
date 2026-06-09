@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react"
+﻿import { useState, useMemo, useEffect } from "react"
 import { Search, Wallet, Settings, Folder, Download, ChevronDown, FileText, FileSpreadsheet, Check, Columns, Loader2 } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@food/components/ui/dropdown-menu"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@food/components/ui/dialog"
@@ -21,7 +21,7 @@ const formatBonusAmount = (transaction) => {
   
   // Clean the bonus string - remove superscript characters
   let cleaned = transaction.bonus.toString()
-    .replace(/�/g, '') // Remove superscript 1
+    .replace(/¹/g, '') // Remove superscript 1
     .replace(/[\u2070-\u207F\u2080-\u208F]/g, '') // Remove all superscript characters
     .trim()
   
@@ -326,7 +326,12 @@ export default function DeliverymanBonus() {
                   type="number"
                   step="0.01"
                   value={formData.amount}
-                  onChange={(e) => handleInputChange("amount", e.target.value)}
+                  min="0"
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (val !== "" && Number(val) < 0) return;
+                    handleInputChange("amount", val);
+                  }}
                   placeholder="Enter amount"
                   className={`w-full px-4 py-2.5 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm ${
                     formErrors.amount ? "border-red-500" : "border-slate-300"
@@ -562,4 +567,5 @@ export default function DeliverymanBonus() {
     </div>
   )
 }
+
 

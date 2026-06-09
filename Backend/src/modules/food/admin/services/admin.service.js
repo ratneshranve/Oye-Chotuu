@@ -5013,9 +5013,26 @@ export async function getCashLimitSettlements(query = {}) {
 
     const filter = {};
     if (query.search) {
+        const term = String(query.search).trim();
         // Search by razorpay ID or find partner IDs to search by partner
-        if (query.search.startsWith('pay_')) {
-            filter.razorpayPaymentId = query.search;
+        if (term.startsWith('pay_')) {
+            filter.razorpayPaymentId = term;
+        } else {
+            const searchRegex = new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+            const partners = await FoodDeliveryPartner.find({
+                $or: [
+                    { name: searchRegex },
+                    { phone: searchRegex },
+                    { profilePartnerId: searchRegex }
+                ]
+            }).select('_id').lean();
+            
+            if (partners.length > 0) {
+                filter.deliveryPartnerId = { $in: partners.map(p => p._id) };
+            } else {
+                // Force empty result if search matches no partners
+                filter._id = null;
+            }
         }
     }
 

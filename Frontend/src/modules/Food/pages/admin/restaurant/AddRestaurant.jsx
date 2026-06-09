@@ -1049,13 +1049,13 @@ export default function AddRestaurant() {
         <div className="space-y-3">
           <Input
             value={step1.location?.area || ""}
-            onChange={(e) => setStep1({ ...step1, location: { ...step1.location, area: e.target.value } })}
+            onChange={(e) => setStep1({ ...step1, location: { ...step1.location, area: e.target.value.replace(/[^a-zA-Z0-9\s]/g, "") } })}
             className="bg-white text-sm"
             placeholder="Area / Sector / Locality*"
           />
           <Input
             value={step1.location?.city || ""}
-            onChange={(e) => setStep1({ ...step1, location: { ...step1.location, city: e.target.value } })}
+            onChange={(e) => setStep1({ ...step1, location: { ...step1.location, city: e.target.value.replace(/[^a-zA-Z\s]/g, "") } })}
             className="bg-white text-sm"
             placeholder="City*"
           />
@@ -1073,15 +1073,22 @@ export default function AddRestaurant() {
           />
           <Input
             value={step1.location?.state || ""}
-            onChange={(e) => setStep1({ ...step1, location: { ...step1.location, state: e.target.value } })}
+            onChange={(e) => setStep1({ ...step1, location: { ...step1.location, state: e.target.value.replace(/[^a-zA-Z\s]/g, "") } })}
             className="bg-white text-sm"
             placeholder="State (optional)"
           />
           <Input
             value={step1.location?.pincode || ""}
-            onChange={(e) => setStep1({ ...step1, location: { ...step1.location, pincode: e.target.value } })}
+            onChange={(e) => {
+              const val = e.target.value.replace(/\D/g, "");
+              if (val.length <= 6) {
+                setStep1({ ...step1, location: { ...step1.location, pincode: val } });
+              }
+            }}
             className="bg-white text-sm"
             placeholder="Pin code (optional)"
+            maxLength={6}
+            inputMode="numeric"
           />
           <Input
             value={step1.location?.landmark || ""}
@@ -1260,7 +1267,7 @@ export default function AddRestaurant() {
           <Label className="text-xs text-gray-700">Estimated delivery time*</Label>
           <Input
             value={step2.estimatedDeliveryTime || ""}
-            onChange={(e) => setStep2({ ...step2, estimatedDeliveryTime: e.target.value })}
+            onChange={(e) => setStep2({ ...step2, estimatedDeliveryTime: e.target.value.replace(/[^a-zA-Z0-9\s-]/g, "") })}
             autoComplete="off"
             className="mt-1 bg-white text-sm"
             placeholder="e.g., 25-30 mins"

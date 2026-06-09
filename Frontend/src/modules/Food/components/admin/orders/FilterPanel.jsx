@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { X } from "lucide-react"
 
 export default function FilterPanel({ 
@@ -12,7 +13,23 @@ export default function FilterPanel({
   hidePaymentStatus = false,
   hideDeliveryType = false
 }) {
+  const [error, setError] = useState("")
+
   if (!isOpen) return null
+
+  const handleApply = () => {
+    if (filters.minAmount && filters.maxAmount && Number(filters.minAmount) > Number(filters.maxAmount)) {
+      setError("Min amount cannot be greater than max amount")
+      return
+    }
+    setError("")
+    onApply()
+  }
+
+  const handleReset = () => {
+    setError("")
+    onReset()
+  }
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={onClose}>
@@ -110,8 +127,14 @@ export default function FilterPanel({
               </label>
               <input
                 type="number"
+                min="0"
                 value={filters.minAmount || ""}
-                onChange={(e) => setFilters(prev => ({ ...prev, minAmount: e.target.value }))}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (val !== "" && Number(val) < 0) return;
+                  setError("")
+                  setFilters(prev => ({ ...prev, minAmount: val }))
+                }}
                 placeholder="0"
                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
@@ -122,13 +145,20 @@ export default function FilterPanel({
               </label>
               <input
                 type="number"
+                min="0"
                 value={filters.maxAmount || ""}
-                onChange={(e) => setFilters(prev => ({ ...prev, maxAmount: e.target.value }))}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (val !== "" && Number(val) < 0) return;
+                  setError("")
+                  setFilters(prev => ({ ...prev, maxAmount: val }))
+                }}
                 placeholder="10000"
                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
           </div>
+          {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
 
           {/* Date Range */}
           <div className="grid grid-cols-2 gap-4">
@@ -138,6 +168,7 @@ export default function FilterPanel({
               </label>
               <input
                 type="date"
+                max={new Date().toISOString().split("T")[0]}
                 value={filters.fromDate || ""}
                 onChange={(e) => setFilters(prev => ({ ...prev, fromDate: e.target.value }))}
                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
@@ -149,6 +180,7 @@ export default function FilterPanel({
               </label>
               <input
                 type="date"
+                max={new Date().toISOString().split("T")[0]}
                 value={filters.toDate || ""}
                 onChange={(e) => setFilters(prev => ({ ...prev, toDate: e.target.value }))}
                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
@@ -178,13 +210,13 @@ export default function FilterPanel({
 
         <div className="sticky bottom-0 bg-slate-50 border-t border-slate-200 px-6 py-4 flex items-center justify-end gap-3">
           <button
-            onClick={onReset}
+            onClick={handleReset}
             className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 transition-all"
           >
             Reset
           </button>
           <button
-            onClick={onApply}
+            onClick={handleApply}
             className="px-4 py-2 text-sm font-medium rounded-lg bg-emerald-500 text-white hover:bg-emerald-600 transition-all shadow-md"
           >
             Apply Filters
