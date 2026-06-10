@@ -24,7 +24,14 @@ import { sellerApi } from "../services/sellerApi";
 
 const AddProduct = () => {
   const navigate = useNavigate();
-  const [modalTab, setModalTab] = useState("general");
+  const [modalTab, setModalTab] = useState(() => {
+    return sessionStorage.getItem("addProductTab") || "general";
+  });
+
+  React.useEffect(() => {
+    sessionStorage.setItem("addProductTab", modalTab);
+  }, [modalTab]);
+
   const [isSaving, setIsSaving] = useState(false);
   const mainImageInputRef = React.useRef(null);
 

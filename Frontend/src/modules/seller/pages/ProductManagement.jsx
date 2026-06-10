@@ -492,7 +492,7 @@ const ProductManagement = () => {
       </div>
 
       {/* Toolbox */}
-      <BlurFade delay={0.25}>
+      <BlurFade delay={0.25} className="relative z-50">
         <Card className="relative z-30 border-none shadow-sm ring-1 ring-slate-100 p-3 bg-white/60 backdrop-blur-xl">
           <div className="flex flex-col lg:flex-row gap-3 items-center">
             <div className="relative flex-1 group w-full">
@@ -515,7 +515,7 @@ const ProductManagement = () => {
                 className="w-full pl-10 pr-4 py-2.5 bg-slate-100/50 border-none rounded-lg text-sm font-semibold text-slate-700 placeholder:text-slate-500 focus:ring-2 focus:ring-primary/5 transition-all outline-none"
               />
             </div>
-            <div className="relative flex gap-2 shrink-0 w-full lg:w-auto">
+            <div className="relative flex gap-2 shrink-0 w-full lg:w-auto" ref={filterDropdownRef}>
               <select
                 value={filterCategory}
                 onChange={(e) => setFilterCategory(e.target.value)}
@@ -538,6 +538,91 @@ const ProductManagement = () => {
                 <HiOutlineFunnel className="h-4 w-4" />
                 <span>Filters</span>
               </button>
+
+              {isFilterOpen && (
+                <div
+                  className="absolute z-[9999] right-0 top-full mt-2 w-64 rounded-xl border border-slate-200 bg-white shadow-xl p-4 space-y-3"
+                >
+                  <div>
+                    <p className="text-[11px] font-semibold text-slate-600 uppercase tracking-[0.18em] mb-1">
+                      Status
+                    </p>
+                    <select
+                      value={filterStatus}
+                      onChange={(e) => setFilterStatus(e.target.value)}
+                      className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 focus:ring-2 focus:ring-primary/10 outline-none bg-white"
+                    >
+                      <option value="All">All</option>
+                      <option value="Active">Active</option>
+                      <option value="Low Stock">Low Stock</option>
+                      <option value="Out of Stock">Out of Stock</option>
+                    </select>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <p className="text-[11px] font-semibold text-slate-600 uppercase tracking-[0.18em] mb-1">
+                        Min Price
+                      </p>
+                      <input
+                        type="number"
+                        min="0"
+                        value={priceMin}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          if (val === "" || Number(val) >= 0) setPriceMin(val);
+                        }}
+                        placeholder="e.g. 100"
+                        className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 focus:ring-2 focus:ring-primary/10 outline-none bg-white"
+                      />
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-semibold text-slate-600 uppercase tracking-[0.18em] mb-1">
+                        Max Price
+                      </p>
+                      <input
+                        type="number"
+                        min="1"
+                        value={priceMax}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          if (val === "" || Number(val) >= 1) setPriceMax(val);
+                        }}
+                        placeholder="e.g. 1000"
+                        className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 focus:ring-2 focus:ring-primary/10 outline-none bg-white"
+                      />
+                    </div>
+                  </div>
+                  {priceMin !== "" && priceMax !== "" && Number(priceMin) > Number(priceMax) && (
+                    <p className="text-[10px] font-semibold text-rose-500">
+                      Min Price cannot be greater than Max Price.
+                    </p>
+                  )}
+                  <div className="flex items-center justify-between pt-1">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFilterCategory("all");
+                        setFilterStatus("All");
+                        setPriceMin("");
+                        setPriceMax("");
+                        setSearchTerm("");
+                        setSearchParams({});
+                      }}
+                      className="text-[11px] font-bold text-slate-600 hover:text-slate-700"
+                    >
+                      Clear
+                    </button>
+                    <button
+                      type="button"
+                      disabled={priceMin !== "" && priceMax !== "" && Number(priceMin) > Number(priceMax)}
+                      onClick={() => setIsFilterOpen(false)}
+                      className="px-3 py-1.5 text-[11px] font-semibold rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Done
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </Card>
@@ -695,85 +780,7 @@ const ProductManagement = () => {
         </Card>
       </BlurFade>
 
-      {isFilterOpen && (
-        <div
-          ref={filterDropdownRef}
-          className="absolute z-[9999] right-36 top-[350px] w-64 rounded-xl border border-slate-200 bg-white shadow-xl p-4 space-y-3"
-        >
-          <div>
-            <p className="text-[11px] font-semibold text-slate-600 uppercase tracking-[0.18em] mb-1">
-              Status
-            </p>
-            <select
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 focus:ring-2 focus:ring-primary/10 outline-none bg-white"
-            >
-              <option value="All">All</option>
-              <option value="Active">Active</option>
-              <option value="Low Stock">Low Stock</option>
-              <option value="Out of Stock">Out of Stock</option>
-            </select>
-          </div>
-          <div className="grid grid-cols-2 gap-2">
-            <div>
-              <p className="text-[11px] font-semibold text-slate-600 uppercase tracking-[0.18em] mb-1">
-                Min Price
-              </p>
-              <input
-                type="number"
-                min="0"
-                value={priceMin}
-                onChange={(e) => {
-                  const val = e.target.value;
-                  if (val === "" || Number(val) >= 0) setPriceMin(val);
-                }}
-                placeholder="e.g. 100"
-                className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 focus:ring-2 focus:ring-primary/10 outline-none bg-white"
-              />
-            </div>
-            <div>
-              <p className="text-[11px] font-semibold text-slate-600 uppercase tracking-[0.18em] mb-1">
-                Max Price
-              </p>
-              <input
-                type="number"
-                min="1"
-                value={priceMax}
-                onChange={(e) => {
-                  const val = e.target.value;
-                  if (val === "" || Number(val) >= 1) setPriceMax(val);
-                }}
-                placeholder="e.g. 1000"
-                className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 focus:ring-2 focus:ring-primary/10 outline-none bg-white"
-              />
-            </div>
-          </div>
-          <div className="flex items-center justify-between pt-1">
-            <button
-              type="button"
-              onClick={() => {
-                setFilterCategory("all");
-                setFilterStatus("All");
-                setPriceMin("");
-                setPriceMax("");
-                setSearchTerm("");
-                setSearchParams({});
-              }}
-              className="text-[11px] font-bold text-slate-600 hover:text-slate-700"
-            >
-              Clear
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsFilterOpen(false)}
-              className="px-3 py-1.5 text-[11px] font-semibold rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50"
-            >
-              Done
-            </button>
-          </div>
-        </div>
-      )}
+
 
       <div className="mt-4">
         <Pagination

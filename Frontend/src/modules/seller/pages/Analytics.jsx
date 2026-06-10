@@ -634,7 +634,7 @@ const Analytics = () => {
               </div>
             </div>
 
-            <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 border-t border-slate-50 pt-8">
+            <div className="mt-8 grid grid-cols-3 gap-2 sm:gap-4 border-t border-slate-50 pt-8">
               <div className="text-center">
                 <div className="h-10 w-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mx-auto mb-2">
                   <HiOutlineMapPin className="h-5 w-5" />

@@ -226,6 +226,7 @@ export default function Coupons() {
       setSubmitSuccess("Coupon created successfully")
       resetForm()
       await fetchOffers()
+      setIsAddOpen(false)
     } catch (err) {
       debugError("Error creating coupon:", err)
       setSubmitError(err?.response?.data?.message || "Failed to create coupon")
