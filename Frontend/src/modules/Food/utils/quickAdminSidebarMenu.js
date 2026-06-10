@@ -76,8 +76,6 @@ export const quickAdminSidebarMenu = [
       { type: "link", label: "Money Requests", path: "/admin/quick-commerce/withdrawals", icon: "CreditCard" },
       { type: "link", label: "Seller Payments", path: "/admin/quick-commerce/seller-transactions", icon: "Receipt" },
       { type: "link", label: "Collect Cash", path: "/admin/quick-commerce/cash-collection", icon: "IndianRupee" },
-      { type: "link", label: "Customers", path: "/admin/quick-commerce/customers", icon: "Users" },
-      { type: "link", label: "FAQs", path: "/admin/quick-commerce/faqs", icon: "MessageSquare" },
       {
         type: "expandable",
         label: "Orders",

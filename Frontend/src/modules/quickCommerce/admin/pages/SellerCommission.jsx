@@ -361,8 +361,14 @@ export default function SellerCommission() {
                 <label className="text-sm font-medium">Value</label>
                 <input 
                   type="number" 
+                  min="0"
                   value={formData.defaultCommission.value} 
-                  onChange={(e) => setFormData(prev => ({ ...prev, defaultCommission: { ...prev.defaultCommission, value: e.target.value } }))}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (val === '' || Number(val) >= 0) {
+                      setFormData(prev => ({ ...prev, defaultCommission: { ...prev.defaultCommission, value: val } }));
+                    }
+                  }}
                   className={`w-full px-3 py-2 text-sm border rounded-lg ${formErrors.defaultCommission ? "border-red-500" : "border-slate-300"}`}
                   placeholder="e.g., 10"
                 />

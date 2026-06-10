@@ -299,7 +299,7 @@ export default function RestaurantComplaints() {
 
       {/* Update Modal */}
       <Dialog open={!!editingComplaint} onOpenChange={(open) => !open && setEditingComplaint(null)}>
-        <DialogContent>
+        <DialogContent className="p-6 bg-white">
           <DialogHeader>
             <DialogTitle>Update Complaint</DialogTitle>
             <DialogDescription>

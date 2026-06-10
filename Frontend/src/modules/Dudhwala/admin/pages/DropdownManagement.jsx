@@ -266,9 +266,15 @@ const DropdownManagement = () => {
                                                 <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
                                                 <Input 
                                                     type="number" 
+                                                    min="0"
                                                     className="pl-8 h-10 rounded-xl border-slate-200" 
                                                     value={pricingForm.pricePerDay}
-                                                    onChange={e => setPricingForm({...pricingForm, pricePerDay: parseFloat(e.target.value)})}
+                                                    onChange={e => {
+                                                        const val = e.target.value;
+                                                        if (val === '' || Number(val) >= 0) {
+                                                            setPricingForm({...pricingForm, pricePerDay: val === '' ? '' : parseFloat(val)})
+                                                        }
+                                                    }}
                                                 />
                                             </div>
                                         </div>
@@ -290,10 +296,21 @@ const DropdownManagement = () => {
                                         <div className="space-y-1">
                                             <label className="text-[10px] font-bold text-slate-400 uppercase ml-1">Value / Key</label>
                                             <Input 
+                                                type={activeTab === 'plan_duration' ? 'number' : 'text'}
+                                                min={activeTab === 'plan_duration' ? '0' : undefined}
                                                 className="h-10 rounded-xl border-slate-200 focus:ring-sky-500" 
                                                 placeholder="e.g. buffalo_milk" 
                                                 value={configForm.value}
-                                                onChange={e => setConfigForm({...configForm, value: e.target.value})}
+                                                onChange={e => {
+                                                    const val = e.target.value;
+                                                    if (activeTab === 'plan_duration') {
+                                                        if (val === '' || Number(val) >= 0) {
+                                                            setConfigForm({...configForm, value: val});
+                                                        }
+                                                    } else {
+                                                        setConfigForm({...configForm, value: val});
+                                                    }
+                                                }}
                                             />
                                         </div>
                                         {activeTab === 'time_slot' && (

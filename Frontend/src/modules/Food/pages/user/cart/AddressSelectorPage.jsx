@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect, useRef, useCallback } from "react"
 import { useNavigate } from "react-router-dom"
-import { ChevronLeft, ChevronRight, Plus, MapPin, MoreHorizontal, Navigation, Home, Building2, Briefcase, Phone, X, Crosshair, Search } from "lucide-react"
+import { ChevronLeft, ChevronRight, Plus, MapPin, MoreHorizontal, Navigation, Home, Building2, Briefcase, Phone, X, Crosshair, Search, Edit2, Trash2 } from "lucide-react"
 import { Button } from "@food/components/ui/button"
 import { Input } from "@food/components/ui/input"
 import { Label } from "@food/components/ui/label"
@@ -101,7 +101,8 @@ export default function AddressSelectorPage() {
   const navigate = useNavigate()
   const goBack = useAppBackNavigation()
   const { location, loading, requestLocation } = useGeoLocation()
-  const { addresses = [], addAddress, updateAddress, setDefaultAddress, userProfile } = useProfile()
+  const { addresses = [], addAddress, updateAddress, deleteAddress, setDefaultAddress, userProfile } = useProfile()
+  const [editingAddressId, setEditingAddressId] = useState(null)
   const [showAddressForm, setShowAddressForm] = useState(false)
   const [mapPosition, setMapPosition] = useState([22.7196, 75.8577]) // Default Indore coordinates [lat, lng]
   const [addressFormData, setAddressFormData] = useState({
@@ -396,11 +397,45 @@ export default function AddressSelectorPage() {
   }
 
   const handleAddAddressClick = () => {
+    setEditingAddressId(null)
+    setAddressFormData({ street: "", city: "", state: "", zipCode: "", additionalDetails: "", label: "Home", phone: "" })
     setShowAddressForm(true)
   }
 
   const handleCancelAddressForm = () => {
     setShowAddressForm(false)
+    setEditingAddressId(null)
+  }
+
+  const handleEdit = (e, addr) => {
+    e.stopPropagation()
+    setAddressFormData({
+      street: addr.street || "",
+      city: addr.city || "",
+      state: addr.state || "",
+      zipCode: addr.zipCode || addr.postalCode || "",
+      additionalDetails: addr.additionalDetails || "",
+      label: addr.label || "Home",
+      phone: addr.phone || "",
+    })
+    const lat = addr.latitude || addr.location?.coordinates?.[1]
+    const lng = addr.longitude || addr.location?.coordinates?.[0]
+    if (lat && lng) {
+       setMapPosition([lat, lng])
+    }
+    setEditingAddressId(getAddressId(addr))
+    setShowAddressForm(true)
+  }
+
+  const handleDelete = async (e, id) => {
+    e.stopPropagation()
+    if (!window.confirm("Are you sure you want to delete this address?")) return
+    try {
+      await deleteAddress(id)
+      toast.success("Address deleted successfully")
+    } catch (error) {
+      toast.error("Failed to delete address")
+    }
   }
 
   const scrollFieldIntoView = useCallback((fieldName) => {
@@ -515,14 +550,20 @@ export default function AddressSelectorPage() {
         latitude: mapPosition[0],
         longitude: mapPosition[1]
       }
-      const created = await addAddress(payload)
-      if (created) {
-        const id = getAddressId(created)
+      let savedAddress
+      if (editingAddressId) {
+        savedAddress = await updateAddress(editingAddressId, payload)
+      } else {
+        savedAddress = await addAddress(payload)
+      }
+      if (savedAddress) {
+        const id = getAddressId(savedAddress) || getAddressId(payload) || editingAddressId
         if (id) await setDefaultAddress(id)
-        persistSelectedLocation(buildLocationPayloadFromAddress(created || payload))
+        persistSelectedLocation(buildLocationPayloadFromAddress(savedAddress || payload))
         try { localStorage.setItem("deliveryAddressMode", "saved") } catch {}
-        toast.success("Address saved")
+        toast.success(editingAddressId ? "Address updated" : "Address saved")
         setShowAddressForm(false)
+        setEditingAddressId(null)
         setAddressAutocompleteValue("")
         setKeywordAddressSuggestions([])
         
@@ -582,7 +623,7 @@ export default function AddressSelectorPage() {
           <Button variant="ghost" size="icon" onClick={handleCancelAddressForm} className="rounded-full">
             <ChevronLeft className="h-6 w-6" />
           </Button>
-          <h1 className="text-lg font-bold">Add delivery location</h1>
+          <h1 className="text-lg font-bold">{editingAddressId ? "Edit delivery location" : "Add delivery location"}</h1>
         </div>
 
         <div
@@ -898,24 +939,28 @@ export default function AddressSelectorPage() {
               addresses.map((addr, idx) => {
                 const Icon = getAddressIcon(addr)
                 return (
-                  <button
+                  <div
                     key={getAddressId(addr) || idx}
-                    onClick={() => handleSelectSavedAddress(addr)}
                     className="w-full flex items-start gap-4 p-4 bg-slate-50 dark:bg-[#1a1a1a] rounded-xl hover:bg-orange-50 dark:hover:bg-orange-900/10 transition-colors text-left group"
                   >
-                    <div className="h-10 w-10 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center shadow-sm">
+                    <div className="h-10 w-10 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center shadow-sm cursor-pointer" onClick={() => handleSelectSavedAddress(addr)}>
                       <Icon className="h-5 w-5 text-gray-600 dark:text-gray-400" />
                     </div>
-                    <div className="flex-1 min-w-0">
+                    <div className="flex-1 min-w-0 cursor-pointer" onClick={() => handleSelectSavedAddress(addr)}>
                       <p className="font-bold text-gray-900 dark:text-white capitalize">{addr.label || "Address"}</p>
                       <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 mt-0.5">
                         {[addr.additionalDetails, addr.street, addr.city, addr.state].filter(Boolean).join(", ")}
                       </p>
                     </div>
-                    <div className="h-6 w-6 rounded-full border border-gray-200 dark:border-gray-700 mt-2 flex items-center justify-center group-hover:border-[#cc2532]">
-                       <ChevronRight className="h-3 w-3 text-gray-400 group-hover:text-[#cc2532]" />
+                    <div className="flex items-center gap-1 self-center">
+                      <button onClick={(e) => handleEdit(e, addr)} className="p-2 text-gray-400 hover:text-orange-600 rounded-full transition-colors" title="Edit">
+                        <Edit2 className="h-4 w-4" />
+                      </button>
+                      <button onClick={(e) => handleDelete(e, getAddressId(addr))} className="p-2 text-gray-400 hover:text-red-600 rounded-full transition-colors" title="Delete">
+                        <Trash2 className="h-4 w-4" />
+                      </button>
                     </div>
-                  </button>
+                  </div>
                 )
               })
             )}

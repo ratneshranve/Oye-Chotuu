@@ -157,9 +157,15 @@ const WhyChotuuManagement = () => {
                                 <label className="text-[10px] font-bold text-slate-400 uppercase ml-1">Order</label>
                                 <Input 
                                     type="number"
+                                    min="0"
                                     className="h-10 rounded-xl border-slate-200" 
                                     value={form.order}
-                                    onChange={e => setForm({...form, order: parseInt(e.target.value)})}
+                                    onChange={e => {
+                                        const val = e.target.value;
+                                        if (val === '' || Number(val) >= 0) {
+                                            setForm({...form, order: val === '' ? '' : parseInt(val)})
+                                        }
+                                    }}
                                 />
                             </div>
                             <div className="space-y-1.5">

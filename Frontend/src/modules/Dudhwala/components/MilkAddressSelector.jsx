@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect, useRef, useCallback } from "react";
-import { ChevronLeft, ChevronRight, Plus, MapPin, Home, Building2, Briefcase, Search, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus, MapPin, Home, Building2, Briefcase, Search, X, Edit2, Trash2 } from "lucide-react";
 import { Button } from "@food/components/ui/button";
 import { Input } from "@food/components/ui/input";
 import { Label } from "@food/components/ui/label";
@@ -62,6 +62,38 @@ export default function MilkAddressSelector({ onSelect, onCancel }) {
   const [baseMapHeight, setBaseMapHeight] = useState(320);
   const formBodyRef = useRef(null);
   const manualFieldRefs = useRef({});
+  const [editingAddressId, setEditingAddressId] = useState(null);
+
+  const handleEdit = (e, addr) => {
+    e.stopPropagation();
+    setAddressFormData({
+      street: addr.street || "",
+      city: addr.city || "",
+      state: addr.state || "",
+      pincode: addr.pincode || "",
+      additionalDetails: addr.additionalDetails || "",
+      label: addr.label || "Home",
+    });
+    if (addr.location?.coordinates) {
+       setMapPosition([addr.location.coordinates[1], addr.location.coordinates[0]]);
+    }
+    setEditingAddressId(addr._id);
+    setShowAddressForm(true);
+  };
+
+  const handleDelete = async (e, id) => {
+    e.stopPropagation();
+    if (!window.confirm("Are you sure you want to delete this address?")) return;
+    try {
+      const res = await dudhwalaAPI.deleteAddress(id);
+      if (res.data.success) {
+        toast.success("Address deleted successfully");
+        fetchAddresses();
+      }
+    } catch (error) {
+      toast.error("Failed to delete address");
+    }
+  };
 
   useEffect(() => {
     fetchAddresses();
@@ -185,15 +217,23 @@ export default function MilkAddressSelector({ onSelect, onCancel }) {
         ...addressFormData,
         location: { type: "Point", coordinates: [mapPosition[1], mapPosition[0]] }
       };
-      const res = await dudhwalaAPI.addAddress(payload);
+      
+      let res;
+      if (editingAddressId) {
+        res = await dudhwalaAPI.updateAddress(editingAddressId, payload);
+      } else {
+        res = await dudhwalaAPI.addAddress(payload);
+      }
+
       if (res.data.success) {
-        toast.success("Address saved for Milk Subscriptions");
-        setAddresses([res.data.data, ...addresses]);
+        toast.success(editingAddressId ? "Address updated successfully" : "Address saved for Milk Subscriptions");
+        await fetchAddresses();
         setShowAddressForm(false);
+        setEditingAddressId(null);
         onSelect(res.data.data);
       }
     } catch (error) {
-      toast.error("Failed to save address");
+      toast.error(editingAddressId ? "Failed to update address" : "Failed to save address");
     } finally {
       setLoadingAddress(false);
     }
@@ -203,10 +243,10 @@ export default function MilkAddressSelector({ onSelect, onCancel }) {
     return (
       <AnimatedPage className="fixed inset-0 z-[60] bg-white dark:bg-[#0a0a0a] flex flex-col">
         <div className="bg-white dark:bg-[#1a1a1a] border-b border-gray-100 dark:border-gray-800 px-4 py-3 flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => setShowAddressForm(false)} className="rounded-full">
+          <Button variant="ghost" size="icon" onClick={() => { setShowAddressForm(false); setEditingAddressId(null); }} className="rounded-full">
             <ChevronLeft className="h-6 w-6" />
           </Button>
-          <h1 className="text-lg font-bold text-sky-600">Add Milk Delivery Address</h1>
+          <h1 className="text-lg font-bold text-sky-600">{editingAddressId ? "Edit" : "Add"} Milk Delivery Address</h1>
         </div>
 
         <div className="flex-1 overflow-y-auto pb-32">
@@ -228,7 +268,7 @@ export default function MilkAddressSelector({ onSelect, onCancel }) {
                <Label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Street / Area</Label>
                <Input 
                  value={addressFormData.street} 
-                 onChange={e => setAddressFormData({...addressFormData, street: e.target.value})}
+                 onChange={e => setAddressFormData({...addressFormData, street: e.target.value.replace(/[^a-zA-Z0-9\s,.-]/g, '')})}
                  className="mt-1 h-12 rounded-xl focus:ring-sky-500"
                />
             </div>
@@ -237,18 +277,18 @@ export default function MilkAddressSelector({ onSelect, onCancel }) {
                <Input 
                  placeholder="E.g. Flat 402, 4th Floor"
                  value={addressFormData.additionalDetails} 
-                 onChange={e => setAddressFormData({...addressFormData, additionalDetails: e.target.value})}
+                 onChange={e => setAddressFormData({...addressFormData, additionalDetails: e.target.value.replace(/[^a-zA-Z0-9\s,.-]/g, '')})}
                  className="mt-1 h-12 rounded-xl border-sky-100 focus:ring-sky-500"
                />
             </div>
             <div className="grid grid-cols-2 gap-4">
                <div>
                   <Label className="text-xs font-bold text-slate-400 uppercase tracking-widest">City</Label>
-                  <Input value={addressFormData.city} onChange={e => setAddressFormData({...addressFormData, city: e.target.value})} className="mt-1 h-12 rounded-xl" />
+                  <Input value={addressFormData.city} onChange={e => setAddressFormData({...addressFormData, city: e.target.value.replace(/[^a-zA-Z0-9\s]/g, '')})} className="mt-1 h-12 rounded-xl" />
                </div>
                <div>
                   <Label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Pincode</Label>
-                  <Input value={addressFormData.pincode} onChange={e => setAddressFormData({...addressFormData, pincode: e.target.value})} className="mt-1 h-12 rounded-xl" />
+                  <Input value={addressFormData.pincode} onChange={e => setAddressFormData({...addressFormData, pincode: e.target.value.replace(/\D/g, '').slice(0, 6)})} className="mt-1 h-12 rounded-xl" />
                </div>
             </div>
             <div>
@@ -294,7 +334,11 @@ export default function MilkAddressSelector({ onSelect, onCancel }) {
       <div className="flex-1 overflow-y-auto p-4">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xs font-black uppercase tracking-widest text-slate-400">Your Milk Addresses</h2>
-          <Button variant="ghost" className="text-sky-600 p-0 h-auto font-bold" onClick={() => setShowAddressForm(true)}>
+          <Button variant="ghost" className="text-sky-600 p-0 h-auto font-bold" onClick={() => {
+             setEditingAddressId(null);
+             setAddressFormData({ street: "", city: "", state: "", pincode: "", additionalDetails: "", label: "Home" });
+             setShowAddressForm(true);
+          }}>
             <Plus className="h-4 w-4 mr-1" /> Add New
           </Button>
         </div>
@@ -311,15 +355,14 @@ export default function MilkAddressSelector({ onSelect, onCancel }) {
             addresses.map((addr) => {
               const Icon = getAddressIcon(addr);
               return (
-                <button
+                <div
                   key={addr._id}
-                  onClick={() => onSelect(addr)}
                   className="w-full flex items-start gap-4 p-5 bg-white dark:bg-[#1a1a1a] rounded-3xl border border-slate-100 dark:border-slate-800 hover:border-sky-200 transition-all text-left shadow-sm hover:shadow-md"
                 >
-                  <div className="h-12 w-12 rounded-2xl bg-sky-50 dark:bg-sky-900/20 flex items-center justify-center text-sky-600 flex-shrink-0">
+                  <div className="h-12 w-12 rounded-2xl bg-sky-50 dark:bg-sky-900/20 flex items-center justify-center text-sky-600 flex-shrink-0 cursor-pointer" onClick={() => onSelect(addr)}>
                     <Icon className="h-6 w-6" />
                   </div>
-                  <div className="min-w-0 flex-1">
+                  <div className="min-w-0 flex-1 cursor-pointer" onClick={() => onSelect(addr)}>
                     <div className="flex items-center gap-2 mb-1">
                        <p className="font-bold text-slate-900 dark:text-white capitalize">{addr.label || 'Home'}</p>
                        {addr.isDefault && <span className="text-[10px] bg-sky-100 text-sky-700 px-2 py-0.5 rounded-full font-bold uppercase">Default</span>}
@@ -327,8 +370,15 @@ export default function MilkAddressSelector({ onSelect, onCancel }) {
                     <p className="text-sm text-slate-500 line-clamp-1">{addr.street}, {addr.additionalDetails}</p>
                     <p className="text-[11px] text-slate-400 font-medium">{addr.city}, {addr.pincode}</p>
                   </div>
-                  <ChevronRight className="h-5 w-5 text-slate-300 self-center" />
-                </button>
+                  <div className="flex items-center gap-1 self-center">
+                    <button onClick={(e) => handleEdit(e, addr)} className="p-2 text-slate-400 hover:text-sky-600 bg-slate-50 hover:bg-sky-50 rounded-full transition-colors" title="Edit">
+                      <Edit2 className="h-4 w-4" />
+                    </button>
+                    <button onClick={(e) => handleDelete(e, addr._id)} className="p-2 text-slate-400 hover:text-red-600 bg-slate-50 hover:bg-red-50 rounded-full transition-colors" title="Delete">
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
               );
             })
           )}
