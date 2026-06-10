@@ -730,6 +730,12 @@ export default function ItemDetailsPage() {
         }))
         .filter((variant) => variant.name || variant.persistedId || variant.price)
 
+      if (!preparationTime || String(preparationTime).trim() === "") {
+        toast.error("Please select a preparation time")
+        setUploadingImages(false)
+        return
+      }
+
       if (normalizedVariants.some((variant) => !variant.name)) {
         toast.error("Each variant must have a name")
         setUploadingImages(false)

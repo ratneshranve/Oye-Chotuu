@@ -250,7 +250,9 @@ export const HistoryV2 = () => {
                          <div className="grid grid-cols-3 gap-4 pt-4 border-t border-gray-50">
                              <div>
                                 <p className="text-[11px] font-medium text-gray-400 mb-1">Time</p>
-                                <p className="text-sm font-bold text-gray-950">{trip.time || '--:--'}</p>
+                                <p className="text-sm font-bold text-gray-950">
+                                   {trip.date ? new Date(trip.date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }) : (trip.time || '--:--')}
+                                </p>
                              </div>
                              <div className="text-center">
                                 <p className="text-[11px] font-medium text-gray-400 mb-1">COD</p>

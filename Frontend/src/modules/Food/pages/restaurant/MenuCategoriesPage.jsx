@@ -49,9 +49,31 @@ export default function MenuCategoriesPage() {
   const goBack = useRestaurantBackNavigation()
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
-  const [showModal, setShowModal] = useState(false)
-  const [editingCategory, setEditingCategory] = useState(null)
-  const [formData, setFormData] = useState(defaultFormData)
+  const [showModal, setShowModal] = useState(() => {
+    try {
+      return sessionStorage.getItem('menu_category_draft_show') === 'true'
+    } catch { return false }
+  })
+  const [editingCategory, setEditingCategory] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem('menu_category_draft_editing')
+      return saved && saved !== 'undefined' ? JSON.parse(saved) : null
+    } catch { return null }
+  })
+  const [formData, setFormData] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem('menu_category_draft_form')
+      return saved && saved !== 'undefined' ? JSON.parse(saved) : defaultFormData
+    } catch { return defaultFormData }
+  })
+
+  useEffect(() => {
+    try {
+      sessionStorage.setItem('menu_category_draft_show', showModal)
+      sessionStorage.setItem('menu_category_draft_editing', JSON.stringify(editingCategory))
+      sessionStorage.setItem('menu_category_draft_form', JSON.stringify(formData))
+    } catch {}
+  }, [showModal, editingCategory, formData])
   const [selectedImageFile, setSelectedImageFile] = useState(null)
   const [imagePreview, setImagePreview] = useState(null)
   const [uploadingImage, setUploadingImage] = useState(false)
