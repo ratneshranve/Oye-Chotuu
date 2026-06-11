@@ -2625,12 +2625,13 @@ export default function Cart() {
                       <input
                         type="text"
                         value={recipientDetails.name}
-                        onChange={(e) =>
+                        onChange={(e) => {
+                          const sanitizedValue = e.target.value.replace(/[^a-zA-Z\s]/g, "");
                           setRecipientDetails((prev) => ({
                             ...prev,
-                            name: e.target.value,
-                          }))
-                        }
+                            name: sanitizedValue,
+                          }));
+                        }}
                         placeholder="Enter recipient name"
                         className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#111111] px-3 py-2.5 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:border-[#cc2532]"
                       />
@@ -2642,12 +2643,13 @@ export default function Cart() {
                       <input
                         type="tel"
                         value={recipientDetails.phone}
-                        onChange={(e) =>
+                        onChange={(e) => {
+                          const sanitizedValue = e.target.value.replace(/\D/g, "").slice(0, 10);
                           setRecipientDetails((prev) => ({
                             ...prev,
-                            phone: sanitizeRecipientPhone(e.target.value),
-                          }))
-                        }
+                            phone: sanitizedValue,
+                          }));
+                        }}
                         placeholder="Enter recipient phone"
                         className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#111111] px-3 py-2.5 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:border-[#cc2532]"
                       />

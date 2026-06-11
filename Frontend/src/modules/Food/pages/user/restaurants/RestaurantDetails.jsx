@@ -2085,15 +2085,13 @@ function RestaurantDetailsContent() {
           {/* Middle Row: Location & Open Status */}
           <div className="flex items-center justify-between gap-4">
             <div 
-              className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer flex-1 min-w-0"
-              onClick={() => setShowLocationSheet(true)}
+              className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 flex-1 min-w-0"
             >
               <div className="flex items-center gap-2 truncate">
                 <MapPin className="h-4 w-4 text-gray-400 flex-shrink-0" />
                 <span className="truncate">
                   {restaurant?.distance || "1.2 km"} | {restaurant?.location || "Location"}
                 </span>
-                <ChevronDown className="h-4 w-4 text-gray-400 flex-shrink-0" />
               </div>
             </div>
 
@@ -2151,9 +2149,6 @@ function RestaurantDetailsContent() {
                    <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-tight">
                      {highlightOffers[highlightIndex] || "Special Offer"}
                    </h3>
-                   <p className="text-[11px] font-medium text-gray-400">
-                     Tap to view all offers
-                   </p>
                 </div>
              </div>
 
