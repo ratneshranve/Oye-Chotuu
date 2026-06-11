@@ -47,10 +47,9 @@ export const PocketBalanceV2 = () => {
         const wallet = walletRes?.data?.data?.wallet || {};
         
         // Use wallet data from backend instead of non-existent profile.walletBalance
-        // Sum earnings and bonus for combined pocket balance
-        const earnings = Number(wallet.totalEarned || wallet.totalBalance || 0);
+        // Use pocketBalance directly to accurately reflect pending/completed withdrawals
         const bonus = Number(wallet.totalBonus || wallet.bonus || 0);
-        const pocketBalance = earnings + bonus;
+        const pocketBalance = Number(wallet.pocketBalance) || 0;
         
         const withdrawalLimit = Number(wallet.deliveryWithdrawalLimit) || 100;
         const withdrawableAmount = pocketBalance; 

@@ -4884,26 +4884,28 @@ export async function updateDeliveryWithdrawalStatus(id, { status, adminNote, re
     if (!existing) throw new ValidationError('Withdrawal request not found');
     if (existing.status !== 'pending') throw new ValidationError(`Withdrawal is already ${existing.status}`);
 
+    // If approved, deduct from wallet balance using central transaction service FIRST
+    // so if it fails, the withdrawal request status is not updated to 'approved'
+    if (status.toLowerCase() === 'approved' || status.toLowerCase() === 'processed') {
+        const amount = Number(existing.amount || 0);
+        if (amount > 0) {
+            await debitWallet({
+                entityType: 'deliveryBoy',
+                entityId: existing.deliveryPartnerId?._id || existing.deliveryPartnerId,
+                amount: amount,
+                description: `Withdrawal Approved - ${existing.orderId || existing._id}`,
+                category: 'settlement_payout',
+                metadata: { withdrawalId: existing._id, transactionId },
+                allowNegative: true
+            });
+        }
+    }
+
     const updated = await FoodDeliveryWithdrawal.findByIdAndUpdate(
         id,
         { $set: update },
         { new: true }
     ).populate('deliveryPartnerId', 'name phone profilePartnerId').lean();
-
-    // If approved, deduct from wallet balance using central transaction service
-    if (status.toLowerCase() === 'approved' || status.toLowerCase() === 'processed') {
-        const amount = Number(updated.amount || 0);
-        if (amount > 0) {
-            await debitWallet({
-                entityType: 'deliveryBoy',
-                entityId: updated.deliveryPartnerId?._id || updated.deliveryPartnerId,
-                amount: amount,
-                description: `Withdrawal Approved - ${updated.orderId || updated.id}`,
-                category: 'settlement_payout',
-                metadata: { withdrawalId: updated._id, transactionId }
-            });
-        }
-    }
 
     return updated;
 }

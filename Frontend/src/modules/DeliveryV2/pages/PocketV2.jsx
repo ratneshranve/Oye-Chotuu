@@ -81,9 +81,8 @@ export const PocketV2 = () => {
         const bankDetails = profile?.documents?.bankDetails || profile?.bankDetails;
         const isFilled = !!(bankDetails?.accountNumber || profile?.bankAccountNumber);
 
-        const walletEarnings = Number(wallet.totalEarned || wallet.totalBalance || 0);
         const walletBonus = Number(wallet.totalBonus || wallet.bonus || 0);
-        const combinedPocketBalance = walletEarnings + walletBonus;
+        const combinedPocketBalance = Number(wallet.pocketBalance) || 0;
 
         setWalletState({
           totalBalance: combinedPocketBalance,
