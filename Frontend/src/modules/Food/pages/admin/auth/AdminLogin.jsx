@@ -186,7 +186,7 @@ export default function AdminLogin() {
                   type="email"
                   placeholder="admin@domain.com"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value.toLowerCase())}
                   disabled={isLoading}
                   autoComplete="off"
                   required

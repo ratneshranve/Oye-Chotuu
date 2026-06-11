@@ -533,6 +533,176 @@ export default function Feedback() {
           </div>
         )}
       </div>
+      
+      {/* Reviews Filter Bottom Sheet */}
+      <AnimatePresence>
+        {isFilterOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setIsFilterOpen(false)}
+              className="fixed inset-0 bg-black/50 z-[100]"
+            />
+            <motion.div
+              initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl z-[101] p-6 pb-10 shadow-2xl"
+            >
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-bold text-gray-900">Filter Reviews</h3>
+                <button onClick={() => setIsFilterOpen(false)} className="p-2 bg-gray-100 rounded-full">
+                  <X className="w-5 h-5 text-gray-600" />
+                </button>
+              </div>
+              
+              <div className="space-y-6">
+                <div>
+                  <p className="text-sm font-bold text-gray-900 mb-3">Sort By</p>
+                  <div className="grid grid-cols-2 gap-3">
+                    {["newest", "oldest", "bestRated", "worstRated"].map((opt) => (
+                      <button
+                        key={opt}
+                        onClick={() => setFilterValues({ ...filterValues, sortBy: opt })}
+                        className={`py-3 rounded-xl text-sm font-bold border transition-colors ${
+                          filterValues.sortBy === opt 
+                            ? "bg-[#49AB14] text-white border-[#49AB14]" 
+                            : "bg-white text-gray-600 border-gray-200"
+                        }`}
+                      >
+                        {opt === "newest" ? "Newest First" : 
+                         opt === "oldest" ? "Oldest First" : 
+                         opt === "bestRated" ? "Highest Rating" : "Lowest Rating"}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-3 mt-8">
+                <button onClick={handleFilterReset} className="flex-1 py-4 bg-gray-100 text-gray-700 font-bold rounded-xl">
+                  Reset
+                </button>
+                <button onClick={handleFilterApply} className="flex-1 py-4 bg-[#49AB14] text-white font-bold rounded-xl shadow-lg shadow-[#49AB14]/30">
+                  Apply Filter
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Complaints Filter Bottom Sheet */}
+      <AnimatePresence>
+        {isComplaintsFilterOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setIsComplaintsFilterOpen(false)}
+              className="fixed inset-0 bg-black/50 z-[100]"
+            />
+            <motion.div
+              initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl z-[101] p-6 pb-10 shadow-2xl"
+            >
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-bold text-gray-900">Filter Complaints</h3>
+                <button onClick={() => setIsComplaintsFilterOpen(false)} className="p-2 bg-gray-100 rounded-full">
+                  <X className="w-5 h-5 text-gray-600" />
+                </button>
+              </div>
+              
+              <div className="space-y-6">
+                <div>
+                  <p className="text-sm font-bold text-gray-900 mb-3">Issue Type</p>
+                  <div className="flex flex-wrap gap-2">
+                    {["Food Quality", "Delivery Delay", "Wrong Item", "Missing Item", "Packaging"].map((type) => {
+                      const isSelected = complaintsFilterValues.issueType.includes(type);
+                      return (
+                        <button
+                          key={type}
+                          onClick={() => {
+                            const newTypes = isSelected 
+                              ? complaintsFilterValues.issueType.filter(t => t !== type)
+                              : [...complaintsFilterValues.issueType, type];
+                            setComplaintsFilterValues({ ...complaintsFilterValues, issueType: newTypes });
+                          }}
+                          className={`px-4 py-2 rounded-full text-xs font-bold border transition-colors ${
+                            isSelected
+                              ? "bg-[#49AB14] text-white border-[#49AB14]" 
+                              : "bg-white text-gray-600 border-gray-200"
+                          }`}
+                        >
+                          {type}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-3 mt-8">
+                <button onClick={handleComplaintsFilterReset} className="flex-1 py-4 bg-gray-100 text-gray-700 font-bold rounded-xl">
+                  Reset
+                </button>
+                <button onClick={handleComplaintsFilterApply} className="flex-1 py-4 bg-[#49AB14] text-white font-bold rounded-xl shadow-lg shadow-[#49AB14]/30">
+                  Apply Filter
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Date Selector Bottom Sheet */}
+      <AnimatePresence>
+        {isDateSelectorOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setIsDateSelectorOpen(false)}
+              className="fixed inset-0 bg-black/50 z-[100]"
+            />
+            <motion.div
+              initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl z-[101] p-6 pb-10 shadow-2xl"
+            >
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-bold text-gray-900">Select Date Range</h3>
+                <button onClick={() => setIsDateSelectorOpen(false)} className="p-2 bg-gray-100 rounded-full">
+                  <X className="w-5 h-5 text-gray-600" />
+                </button>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { id: "today", label: "Today" },
+                  { id: "yesterday", label: "Yesterday" },
+                  { id: "last5days", label: "Last 5 Days" },
+                  { id: "thisWeek", label: "This Week" },
+                  { id: "lastWeek", label: "Last Week" },
+                  { id: "thisMonth", label: "This Month" },
+                  { id: "lastMonth", label: "Last Month" },
+                ].map((range) => (
+                  <button
+                    key={range.id}
+                    onClick={() => handleDateRangeSelect(range.id)}
+                    className={`py-3 rounded-xl text-sm font-bold border transition-colors ${
+                      selectedDateRange === range.id 
+                        ? "bg-[#49AB14] text-white border-[#49AB14]" 
+                        : "bg-white text-gray-600 border-gray-200"
+                    }`}
+                  >
+                    {range.label}
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
       <BottomNavOrders />
     </div>
   )
