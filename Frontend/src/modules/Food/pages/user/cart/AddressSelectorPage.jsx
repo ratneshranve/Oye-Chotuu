@@ -617,7 +617,7 @@ export default function AddressSelectorPage() {
     const mapHeight = baseMapHeight 
     return (
       <AnimatedPage
-        className="fixed inset-0 z-50 bg-white dark:bg-[#0a0a0a] flex flex-col h-screen overflow-hidden"
+        className="fixed inset-0 z-50 bg-white dark:bg-[#0a0a0a] flex flex-col overflow-hidden"
       >
         <div className="flex-shrink-0 bg-white dark:bg-[#1a1a1a] border-b border-gray-100 dark:border-gray-800 px-4 py-3 flex items-center gap-4">
           <Button variant="ghost" size="icon" onClick={handleCancelAddressForm} className="rounded-full">
@@ -879,11 +879,11 @@ export default function AddressSelectorPage() {
         </div>
 
         <div
-          className="fixed left-0 right-0 p-4 bg-white dark:bg-[#1a1a1a] border-t dark:border-gray-800 transition-[bottom] duration-150"
+          className="absolute left-0 right-0 px-4 pt-4 pb-8 bg-white dark:bg-[#1a1a1a] z-50 shadow-[0_-10px_30px_rgba(0,0,0,0.1)] rounded-t-3xl transition-[bottom] duration-150 border-t border-gray-100 dark:border-gray-800"
           style={{ bottom: `${keyboardInset}px` }}
         >
           <Button 
-            className="w-full h-12 text-white font-bold text-lg" 
+            className="w-full h-14 text-white font-bold text-lg rounded-xl shadow-lg" 
             style={{backgroundColor: '#cc2532'}}
             onClick={handleAddressFormSubmit}
             disabled={loadingAddress}
