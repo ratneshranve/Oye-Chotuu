@@ -174,7 +174,13 @@ const HeaderCategories = () => {
       // Ensure type is always header
       data.append("type", "header");
       Object.keys(formData).forEach((key) => {
-        if (key !== "type") data.append(key, formData[key]);
+        if (key !== "type") {
+          let value = formData[key];
+          if ((key === "adminCommission" || key === "handlingFees") && value === "") {
+            value = 0;
+          }
+          data.append(key, value);
+        }
       });
 
       if (imageFile) {
@@ -632,7 +638,7 @@ const HeaderCategories = () => {
                       type="number"
                       value={formData.adminCommission}
                       onChange={(e) =>
-                        setFormData({ ...formData, adminCommission: parseFloat(e.target.value) || 0 })
+                        setFormData({ ...formData, adminCommission: e.target.value === "" ? "" : parseFloat(e.target.value) })
                       }
                       className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
                       placeholder="0"
@@ -648,7 +654,7 @@ const HeaderCategories = () => {
                       type="number"
                       value={formData.handlingFees}
                       onChange={(e) =>
-                        setFormData({ ...formData, handlingFees: parseFloat(e.target.value) || 0 })
+                        setFormData({ ...formData, handlingFees: e.target.value === "" ? "" : parseFloat(e.target.value) })
                       }
                       className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
                       placeholder="0"

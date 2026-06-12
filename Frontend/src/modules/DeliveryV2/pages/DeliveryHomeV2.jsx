@@ -114,20 +114,19 @@ export default function DeliveryHomeV2({ tab = 'feed' }) {
   const handleGeolocationError = useCallback((error) => {
     const hasKnownRiderLocation = Boolean(useDeliveryStore.getState().riderLocation);
 
-    if (!error) {
-      if (!hasKnownRiderLocation) {
-        toast.error('GPS Needed!');
-      }
-      return;
-    }
-
-    if (error.code === error.PERMISSION_DENIED) {
+    if (error && error.code === error.PERMISSION_DENIED) {
       toast.error('Location permission denied. Please allow location access.');
       return;
     }
 
+    if (error && error.code === error.TIMEOUT) {
+      console.warn('GPS signal weak or timeout, retrying...');
+      return;
+    }
+
     if (!hasKnownRiderLocation) {
-      toast.error('GPS Needed!');
+      // Avoid spamming this toast if there's a transient issue like POSITION_UNAVAILABLE
+      console.warn('GPS error:', error);
     }
   }, []);
 
