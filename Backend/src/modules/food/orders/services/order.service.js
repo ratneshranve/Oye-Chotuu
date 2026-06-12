@@ -245,7 +245,7 @@ async function fetchPickupSourcesByType(items = []) {
   const [restaurants, sellers] = await Promise.all([
     foodSourceIds.length
       ? FoodRestaurant.find({ _id: { $in: foodSourceIds.filter((id) => mongoose.isValidObjectId(id)).map((id) => new mongoose.Types.ObjectId(id)) } })
-          .select("restaurantName location addressLine1 area city state zoneId status")
+          .select("restaurantName location addressLine1 area city state zoneId status isAcceptingOrders")
           .lean()
       : [],
     quickSourceIds.length
@@ -262,6 +262,7 @@ async function fetchPickupSourcesByType(items = []) {
       sourceId: String(restaurant._id),
       sourceName: restaurant.restaurantName || restaurant.name || "Restaurant",
       status: restaurant.status,
+      isAcceptingOrders: restaurant.isAcceptingOrders,
       location: restaurant.location,
       zoneId: restaurant.zoneId || null,
       address:
@@ -1703,6 +1704,8 @@ export async function calculateOrder(userId, dto) {
   if (!primaryRestaurant) throw new ValidationError("Restaurant not found");
   if (primaryRestaurant.status !== "approved")
     throw new ValidationError("Restaurant not available");
+  if (primaryRestaurant.isAcceptingOrders === false)
+    throw new ValidationError("Restaurant is currently offline and not accepting orders");
 
   const inactiveQuickSource = [...sourceMap.values()].find(
     (source) =>
@@ -1964,6 +1967,8 @@ export async function createOrder(userId, dto) {
     if (!primaryRestaurant) throw new ValidationError("Restaurant not found");
     if (primaryRestaurant.status !== "approved")
       throw new ValidationError("Restaurant not accepting orders");
+    if (primaryRestaurant.isAcceptingOrders === false)
+      throw new ValidationError("Restaurant is currently offline and not accepting orders");
   }
   const inactiveQuickSource = [...sourceMap.values()].find(
     (source) =>
