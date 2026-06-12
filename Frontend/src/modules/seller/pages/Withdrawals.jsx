@@ -24,6 +24,8 @@ import { sellerApi } from "../services/sellerApi";
 import { toast } from "sonner";
 import { useSellerEarnings } from "../context/SellerEarningsContext";
 import Pagination from "@shared/components/ui/Pagination";
+import { jsPDF } from "jspdf";
+import autoTable from "jspdf-autotable";
 
 const Withdrawals = () => {
     const { earningsData: data, earningsLoading: loading, refreshEarnings } = useSellerEarnings();
@@ -68,26 +70,45 @@ const Withdrawals = () => {
 
     const handleDownloadReceipt = (item) => {
         const id = item.id || item.ref || item.reference || 'withdrawal';
-        const lines = [];
-        lines.push('Withdrawal Receipt');
-        lines.push(`ID,${id}`);
-        lines.push(`Status,${item.status ?? ''}`);
-        lines.push(`Date,${item.date ?? ''}`);
-        lines.push(`Time,${item.time ?? ''}`);
-        lines.push(`Amount,₹${Math.abs(item.amount ?? 0).toLocaleString()}`);
-        lines.push(`Method,${item.customer ?? 'Bank Transfer'}`);
-        if (item.reason) {
-            lines.push(`Reason,${item.reason}`);
+        try {
+            const doc = new jsPDF();
+            
+            doc.setFontSize(20);
+            doc.setFont("helvetica", "bold");
+            doc.text("Withdrawal Receipt", 14, 22);
+            
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "normal");
+            doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 30);
+            
+            const bodyData = [
+                ["ID", String(id)],
+                ["Status", String(item.status ?? '')],
+                ["Date", String(item.date ?? '')],
+                ["Time", String(item.time ?? '')],
+                ["Amount", `Rs. ${Math.abs(item.amount ?? 0).toLocaleString()}`],
+                ["Method", String(item.customer ?? 'Bank Transfer')]
+            ];
+
+            if (item.reason) {
+                bodyData.push(["Reason", String(item.reason)]);
+            }
+
+            autoTable(doc, {
+                startY: 40,
+                head: [["Detail", "Value"]],
+                body: bodyData,
+                theme: "striped",
+                headStyles: { fillColor: [79, 70, 229] }, // indigo-600
+                margin: { top: 10 }
+            });
+            
+            doc.save(`withdrawal-receipt-${id}.pdf`);
+            toast.success('Receipt downloaded successfully!');
+        } catch (error) {
+            console.error('PDF generation error:', error);
+            toast.error('Failed to generate receipt PDF');
         }
-        const csvContent = lines.join('\n');
-        const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `withdrawal-receipt-${id}.csv`;
-        a.click();
-        URL.revokeObjectURL(url);
-        toast.success('Receipt downloaded');
     };
 
     const handleSubmitRequest = async (e) => {

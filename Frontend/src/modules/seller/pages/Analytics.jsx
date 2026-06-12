@@ -45,6 +45,8 @@ import ShimmerButton from "@/components/ui/shimmer-button";
 import Modal from "@shared/components/ui/Modal";
 import { sellerApi } from "../services/sellerApi";
 import { toast } from "sonner";
+import { jsPDF } from "jspdf";
+import autoTable from "jspdf-autotable";
 
 
 const Analytics = () => {
@@ -143,71 +145,126 @@ const Analytics = () => {
     if (isExporting) return;
     setIsExporting(true);
     try {
-      const escapeCsv = (v) => {
-        const s = String(v ?? "").replace(/"/g, '""');
-        return /[",\n\r]/.test(s) ? `"${s}"` : s;
-      };
-      const lines = [];
-      lines.push("Analytics Report");
-      lines.push(`Generated,${new Date().toISOString()}`);
-      lines.push("");
+      const doc = new jsPDF();
+      
+      // Title
+      doc.setFontSize(20);
+      doc.setFont("helvetica", "bold");
+      doc.text("Analytics Report", 14, 22);
+      
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 30);
+      
+      let yPos = 40;
 
+      // jsPDF does not support ₹ symbol in default fonts, replace with Rs.
+      const safeText = (text) => String(text || "—").replace(/₹/g, 'Rs. ');
+
+      // Overview Table
       const ov = statsData?.overview ?? {};
-      lines.push("Overview");
-      lines.push("Metric,Value");
-      ["Total Sales", "Total Orders", "Avg Order Value", "Conversion Rate"].forEach((label, i) => {
-        const key = ["totalSales", "totalOrders", "avgOrderValue", "conversionRate"][i];
-        lines.push(`${escapeCsv(label)},${escapeCsv(ov[key] ?? "—")}`);
+      autoTable(doc, {
+        startY: yPos,
+        head: [["Metric", "Value"]],
+        body: [
+          ["Total Sales", safeText(ov.totalSales)],
+          ["Total Orders", safeText(ov.totalOrders)],
+          ["Avg Order Value", safeText(ov.avgOrderValue)],
+          ["Conversion Rate", safeText(ov.conversionRate)]
+        ],
+        theme: "striped",
+        headStyles: { fillColor: [59, 130, 246] }
       });
-      lines.push("");
+      yPos = doc.lastAutoTable ? doc.lastAutoTable.finalY + 15 : yPos + 40;
 
+      // Sales Trend
       const trend = statsData?.salesTrend ?? [];
       if (trend.length) {
-        lines.push("Sales Trend");
-        lines.push("Period,Sales,Traffic");
-        trend.forEach((d) => {
-          lines.push(`${escapeCsv(d.name)},${escapeCsv(d.sales)},${escapeCsv(d.traffic)}`);
+        doc.setFontSize(14);
+        doc.setFont("helvetica", "bold");
+        doc.text("Sales Trend", 14, yPos);
+        yPos += 5;
+        
+        const trendData = trend.map(d => [safeText(d.name), safeText(d.sales), safeText(d.traffic)]);
+        autoTable(doc, {
+          startY: yPos,
+          head: [["Period", "Sales", "Traffic"]],
+          body: trendData,
+          theme: "striped",
+          headStyles: { fillColor: [59, 130, 246] }
         });
-        lines.push("");
+        yPos = doc.lastAutoTable ? doc.lastAutoTable.finalY + 15 : yPos + 40;
       }
 
+      // Top Products
       const top = statsData?.topProducts ?? [];
       if (top.length) {
-        lines.push("Top Products");
-        lines.push("Product,Sales,Revenue,Trend %");
-        top.forEach((p) => {
-          lines.push(`${escapeCsv(p.name)},${escapeCsv(p.sales)},${escapeCsv(p.revenue)},${escapeCsv(p.trend)}`);
+        if (yPos > 240) {
+            doc.addPage();
+            yPos = 20;
+        }
+        doc.setFontSize(14);
+        doc.setFont("helvetica", "bold");
+        doc.text("Top Products", 14, yPos);
+        yPos += 5;
+
+        const topData = top.map(p => [safeText(p.name), safeText(p.sales), safeText(p.revenue), safeText(p.trend)]);
+        autoTable(doc, {
+          startY: yPos,
+          head: [["Product", "Sales", "Revenue", "Trend %"]],
+          body: topData,
+          theme: "striped",
+          headStyles: { fillColor: [59, 130, 246] }
         });
-        lines.push("");
+        yPos = doc.lastAutoTable ? doc.lastAutoTable.finalY + 15 : yPos + 40;
       }
 
+      // Category Mix
       const cat = statsData?.categoryMix ?? [];
       if (cat.length) {
-        lines.push("Category Mix");
-        lines.push("Category,Volume");
-        cat.forEach((c) => {
-          lines.push(`${escapeCsv(c.subject)},${escapeCsv(c.A)}`);
+        if (yPos > 240) {
+            doc.addPage();
+            yPos = 20;
+        }
+        doc.setFontSize(14);
+        doc.setFont("helvetica", "bold");
+        doc.text("Category Mix", 14, yPos);
+        yPos += 5;
+
+        const catData = cat.map(c => [safeText(c.subject), safeText(c.A)]);
+        autoTable(doc, {
+          startY: yPos,
+          head: [["Category", "Volume"]],
+          body: catData,
+          theme: "striped",
+          headStyles: { fillColor: [59, 130, 246] }
         });
-        lines.push("");
+        yPos = doc.lastAutoTable ? doc.lastAutoTable.finalY + 15 : yPos + 40;
       }
 
+      // Traffic Sources
       const traffic = statsData?.trafficSources ?? [];
       if (traffic.length) {
-        lines.push("Traffic Sources");
-        lines.push("Source,Value");
-        traffic.forEach((t) => {
-          lines.push(`${escapeCsv(t.name)},${escapeCsv(t.value)}`);
+        if (yPos > 240) {
+            doc.addPage();
+            yPos = 20;
+        }
+        doc.setFontSize(14);
+        doc.setFont("helvetica", "bold");
+        doc.text("Traffic Sources", 14, yPos);
+        yPos += 5;
+
+        const trafficData = traffic.map(t => [safeText(t.name), safeText(t.value)]);
+        autoTable(doc, {
+          startY: yPos,
+          head: [["Source", "Value"]],
+          body: trafficData,
+          theme: "striped",
+          headStyles: { fillColor: [59, 130, 246] }
         });
       }
 
-      const csvContent = lines.join("\n");
-      const blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv;charset=utf-8;" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `analytics-report-${new Date().toISOString().slice(0, 10)}.csv`;
-      a.click();
-      URL.revokeObjectURL(url);
+      doc.save(`analytics-report-${new Date().toISOString().slice(0, 10)}.pdf`);
       toast.success("Report downloaded successfully!");
     } catch (e) {
       console.error(e);
