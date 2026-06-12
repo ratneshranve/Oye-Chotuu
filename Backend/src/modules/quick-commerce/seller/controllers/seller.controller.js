@@ -980,6 +980,15 @@ export const createSellerProductController = async (req, res) => {
   try {
     const sellerId = sellerScope(req);
     const basePayload = await parseProductPayload(req);
+    
+    if (basePayload.salePrice > basePayload.price) {
+      return sendError(res, 400, "Discount price cannot be greater than original price");
+    }
+    
+    if (basePayload.variants?.some(v => v.salePrice > v.price)) {
+      return sendError(res, 400, "Variant discount price cannot be greater than original price");
+    }
+
     const categoryIds = await resolveSellerCategoryIds({
       headerId: req.body?.headerId,
       categoryId: req.body?.categoryId,
@@ -1025,6 +1034,14 @@ export const updateSellerProductController = async (req, res) => {
     });
 
     const payload = await parseProductPayload(req, existing);
+
+    if (payload.salePrice > payload.price) {
+      return sendError(res, 400, "Discount price cannot be greater than original price");
+    }
+
+    if (payload.variants?.some(v => v.salePrice > v.price)) {
+      return sendError(res, 400, "Variant discount price cannot be greater than original price");
+    }
 
     Object.assign(existing, {
       ...payload,

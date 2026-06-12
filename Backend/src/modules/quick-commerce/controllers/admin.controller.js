@@ -628,6 +628,15 @@ export const createProduct = async (req, res) => {
     return res.status(400).json({ success: false, message: 'name and valid categoryId are required' });
   }
 
+  if (Number(salePrice || 0) > Number(price || 0)) {
+    return res.status(400).json({ success: false, message: 'Discount price cannot be greater than original price' });
+  }
+
+  const parsedVariants = parseVariants(variants);
+  if (parsedVariants.some(v => v.salePrice > v.price)) {
+    return res.status(400).json({ success: false, message: 'Variant discount price cannot be greater than original price' });
+  }
+
   const category = await QuickCategory.findById(categoryId).lean();
   if (!category) {
     return res.status(404).json({ success: false, message: 'Category not found' });
@@ -664,7 +673,7 @@ export const createProduct = async (req, res) => {
       .split(',')
       .map((tag) => tag.trim())
       .filter(Boolean),
-    variants: parseVariants(variants),
+    variants: parsedVariants,
     deliveryTime: deliveryTime || '10 mins',
     badge: badge || '',
     isActive: (status || 'active') === 'active',
@@ -681,6 +690,20 @@ export const updateProduct = async (req, res) => {
 
   const images = await getProductImages(req);
   const body = req.body || {};
+
+  const nextPrice = body.price !== undefined ? parseNumber(body.price, product.price) : product.price;
+  const nextSalePrice = body.salePrice !== undefined ? parseNumber(body.salePrice, 0) : product.salePrice;
+
+  if (nextSalePrice > nextPrice) {
+    return res.status(400).json({ success: false, message: 'Discount price cannot be greater than original price' });
+  }
+
+  if (body.variants !== undefined) {
+    const parsedVariants = parseVariants(body.variants);
+    if (parsedVariants.some(v => v.salePrice > v.price)) {
+      return res.status(400).json({ success: false, message: 'Variant discount price cannot be greater than original price' });
+    }
+  }
 
   if (body.name !== undefined) product.name = body.name;
   if (body.slug !== undefined || body.name !== undefined) {
