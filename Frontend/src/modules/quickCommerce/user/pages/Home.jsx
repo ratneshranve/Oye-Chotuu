@@ -609,7 +609,7 @@ const Home = ({ embedded = false, onThemeChange, embeddedHeaderColor = null }) =
     });
   }, [products, categoryProducts, activeCategory, categoryMap]);
 
-  const sectionsForRenderer = headerSections.length ? headerSections : experienceSections;
+  const sectionsForRenderer = (activeCategory && activeCategory._id !== "all") ? headerSections : experienceSections;
 
   const opacity = useTransform(scrollY, [0, 300], [1, 0.6]);
   const y = useTransform(scrollY, [0, 300], [0, 80]);
@@ -996,9 +996,9 @@ const Home = ({ embedded = false, onThemeChange, embeddedHeaderColor = null }) =
                     Array(5).fill(0).map((_, i) => (
                       <div key={i} className="w-[125px] md:w-[155px] lg:w-[175px] h-[220px] shrink-0 bg-white dark:bg-slate-800/60 rounded-[20px] animate-pulse border border-blue-50/50" />
                     ))
-                  ) : products.slice(0, 12).map((product) => (
+                  ) : filteredProducts.slice(0, 12).map((product) => (
                     <div
-                      key={product.id}
+                      key={product.id || product._id}
                       className="w-[125px] md:w-[155px] lg:w-[175px] shrink-0 snap-start">
                       <ProductCard
                         product={product}

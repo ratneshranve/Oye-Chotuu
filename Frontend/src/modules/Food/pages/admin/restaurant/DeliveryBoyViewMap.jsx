@@ -24,6 +24,7 @@ export default function DeliveryBoyViewMap() {
   const [mapLoading, setMapLoading] = useState(true)
   const [zones, setZones] = useState([])
   const [deliveryBoys, setDeliveryBoys] = useState([])
+  const [totalDeliveryBoys, setTotalDeliveryBoys] = useState(0)
   const deliveryMetaByIdRef = useRef(new Map())
   const [loading, setLoading] = useState(true)
   const [locationSearch, setLocationSearch] = useState("")
@@ -39,7 +40,7 @@ export default function DeliveryBoyViewMap() {
       (deliveryNode) => {
         const nextDeliveryBoys = Object.entries(deliveryNode || {})
           .map(([deliveryId, payload]) => {
-            const location = payload?.location || {}
+            const location = payload?.location || payload || {}
             const lat = Number(location?.lat)
             const lng = Number(location?.lng)
             const isOnline =
@@ -106,20 +107,27 @@ export default function DeliveryBoyViewMap() {
     }
   }, [mapLoading])
 
-  // Draw zones and delivery boy markers when map and data are ready
+  // Draw zones when map and zones data are ready
   useEffect(() => {
     if (!mapLoading && mapInstanceRef.current && window.google) {
       if (zones.length > 0) {
         drawAllZonesOnMap(window.google, mapInstanceRef.current)
-      }
-      if (deliveryBoys.length > 0) {
-        // drawDeliveryBoyMarkers is async, so handle it properly
-        drawDeliveryBoyMarkers(window.google, mapInstanceRef.current).catch(error => {
-          debugError("Error drawing delivery boy markers:", error)
-        })
+      } else {
+        // Clear zones if array is empty
+        zonesPolygonsRef.current.forEach(p => p && p.setMap(null))
+        zonesPolygonsRef.current = []
       }
     }
-  }, [zones, mapLoading, deliveryBoys])
+  }, [zones, mapLoading])
+
+  // Draw delivery boys when map and delivery boys data are ready
+  useEffect(() => {
+    if (!mapLoading && mapInstanceRef.current && window.google) {
+      drawDeliveryBoyMarkers(window.google, mapInstanceRef.current).catch(error => {
+        debugError("Error drawing delivery boy markers:", error)
+      })
+    }
+  }, [deliveryBoys, mapLoading])
 
   const fetchZones = async () => {
     try {
@@ -139,9 +147,7 @@ export default function DeliveryBoyViewMap() {
   const fetchDeliveryPartnerDirectory = async () => {
     try {
       const response = await adminAPI.getDeliveryPartners({
-        limit: 1000,
-        status: "approved",
-        isActive: true,
+        limit: 2000,
         includeAvailability: false
       })
 
@@ -163,7 +169,23 @@ export default function DeliveryBoyViewMap() {
             phone: boy?.phone || boy?.fullData?.phone || "N/A"
           })
         })
+        
         deliveryMetaByIdRef.current = nextMap
+        setTotalDeliveryBoys(response.data.data.deliveryPartners.length)
+
+        setDeliveryBoys(prevBoys => prevBoys.map(boy => {
+          const meta = nextMap.get(boy._id) || {}
+          return {
+            ...boy,
+            name: meta.name || meta.fullName || boy.name,
+            phone: meta.phone || boy.phone,
+            fullData: {
+              ...(boy.fullData || {}),
+              name: meta.name || meta.fullName || boy.name,
+              phone: meta.phone || boy.phone
+            }
+          }
+        }))
       }
     } catch (error) {
       debugError("Error fetching delivery partner directory:", error)
@@ -614,24 +636,36 @@ export default function DeliveryBoyViewMap() {
 
           {/* Legend */}
           {!mapLoading && (
-            <div className="mt-4 p-4 bg-slate-50 rounded-lg border border-slate-200">
-              <h3 className="text-sm font-semibold text-slate-900 mb-2">Map Information</h3>
-              <div className="text-xs text-slate-600 space-y-1">
-                {zones.length > 0 && (
-                  <p>
-                    Click on any <span className="font-semibold text-blue-600">zone</span> on the map to view details. Total zones: <strong>{zones.length}</strong>
-                  </p>
-                )}
-                {deliveryBoys.length > 0 && (
-                  <p>
-                    Click on any <span className="font-semibold text-green-600">green bike icon</span> to view delivery boy details. Online delivery boys: <strong>{deliveryBoys.length}</strong>
-                  </p>
-                )}
-                {deliveryBoys.length === 0 && (
-                  <p className="text-amber-600">
-                    No online delivery boys found. Delivery boys will appear when they go online.
-                  </p>
-                )}
+            <div className="mt-4 flex flex-col sm:flex-row gap-4 p-4 bg-slate-50 rounded-lg border border-slate-200">
+              <div className="flex-1">
+                <h3 className="text-sm font-semibold text-slate-900 mb-2">Map Information</h3>
+                <div className="text-xs text-slate-600 space-y-1">
+                  {zones.length > 0 && (
+                    <p>
+                      Click on any <span className="font-semibold text-blue-600">zone</span> on the map to view details.
+                    </p>
+                  )}
+                  {deliveryBoys.length > 0 && (
+                    <p>
+                      Click on any <span className="font-semibold text-green-600">green bike icon</span> to view delivery boy details.
+                    </p>
+                  )}
+                  {deliveryBoys.length === 0 && (
+                    <p className="text-amber-600">
+                      No online delivery boys found on the map right now.
+                    </p>
+                  )}
+                </div>
+              </div>
+              <div className="flex gap-4 sm:border-l border-slate-200 sm:pl-4 pt-4 sm:pt-0 border-t sm:border-t-0">
+                <div className="bg-white px-4 py-2 rounded shadow-sm border border-slate-100 min-w-[120px]">
+                  <p className="text-xs text-slate-500 mb-1 font-medium">Total Boys</p>
+                  <p className="text-xl font-bold text-slate-800">{totalDeliveryBoys}</p>
+                </div>
+                <div className="bg-white px-4 py-2 rounded shadow-sm border border-slate-100 min-w-[120px]">
+                  <p className="text-xs text-slate-500 mb-1 font-medium">Online Now</p>
+                  <p className="text-xl font-bold text-green-600">{deliveryBoys.length}</p>
+                </div>
               </div>
             </div>
           )}
