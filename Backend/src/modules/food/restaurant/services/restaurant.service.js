@@ -1318,6 +1318,10 @@ export const listApprovedRestaurants = async (query = {}) => {
         filter.businessType = { $ne: 'home_bakery' };
     }
 
+    if (String(query.customOrdersEnabled) === 'true') {
+        filter.customOrdersEnabled = true;
+    }
+
     if (query.city && String(query.city).trim()) {
         const city = String(query.city).trim().slice(0, 80);
         const rx = { $regex: escapeRegex(city), $options: 'i' };

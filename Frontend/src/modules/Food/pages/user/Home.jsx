@@ -38,6 +38,7 @@ import {
   Plus,
   Check,
   Share2,
+  Cake,
 } from "lucide-react";
 import { motion, AnimatePresence, useScroll } from "framer-motion";
 import {
@@ -406,6 +407,29 @@ export default function Home() {
                 backendOrigin={BACKEND_ORIGIN}
               />
             </Suspense>
+
+            <div className="px-4 py-6 md:py-8 mt-2 mx-auto max-w-7xl">
+              <div className="bg-rose-50 dark:bg-rose-950/20 rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-4 border border-rose-100 dark:border-rose-900/30 shadow-sm relative overflow-hidden">
+                <div className="absolute -right-10 -top-10 opacity-10 pointer-events-none">
+                  <Cake className="w-40 h-40 text-rose-500" />
+                </div>
+                <div className="flex-1 z-10 text-center sm:text-left">
+                  <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                    Custom Cake Chahiye? Bas Chotuu Ko Bataiye!
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">
+                    Explore our curated list of bakeries that create personalized cakes just for you.
+                  </p>
+                </div>
+                <div className="z-10">
+                  <Button asChild className="bg-rose-500 hover:bg-rose-600 text-white rounded-xl shadow-md border-0 px-6 py-5 w-full sm:w-auto text-base font-semibold transition-transform hover:scale-105 active:scale-95">
+                    <Link to="/food/user/custom-cakes">
+                      Explore Custom Cakes
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+            </div>
 
             <Suspense fallback={<RestaurantGridSkeleton count={3} />}>
               <RestaurantGrid

@@ -147,6 +147,10 @@ export default function UserLayout({ children }) {
     normalizedPath === "/user" ||
     normalizedPath === "/dining" ||
     normalizedPath === "/user/dining" ||
+    normalizedPath === "/bakery" ||
+    normalizedPath === "/user/bakery" ||
+    normalizedPath === "/bakery/list" ||
+    normalizedPath === "/user/bakery/list" ||
     normalizedPath === "/under-250" ||
     normalizedPath === "/user/under-250" ||
     isProfileRoot ||
