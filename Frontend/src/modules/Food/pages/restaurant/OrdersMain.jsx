@@ -120,7 +120,7 @@ const transformOrderForList = (order) => ({
 });
 
 // Completed Orders List Component
-function CompletedOrders({ onSelectOrder, refreshToken = 0 }) {
+function CompletedOrders({ onSelectOrder, refreshToken = 0 , searchTerm = "" }) {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -222,7 +222,12 @@ function CompletedOrders({ onSelectOrder, refreshToken = 0 }) {
         </div>
       ) : (
         <div>
-          {orders.map((order) => {
+          {orders.filter(order => {
+            if (!searchTerm) return true;
+            const term = searchTerm.toLowerCase();
+            return String(order.orderId || order.mongoId || order._id || "").toLowerCase().includes(term) ||
+                   String(order.customerName || "").toLowerCase().includes(term);
+          }).map((order) => {
             const deliveredDate = order.deliveredAt
               ? new Date(order.deliveredAt).toLocaleDateString("en-US", {
                   month: "short",
@@ -323,7 +328,7 @@ function CompletedOrders({ onSelectOrder, refreshToken = 0 }) {
 }
 
 // Cancelled Orders List Component
-function CancelledOrders({ onSelectOrder, refreshToken = 0 }) {
+function CancelledOrders({ onSelectOrder, refreshToken = 0 , searchTerm = "" }) {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -428,7 +433,12 @@ function CancelledOrders({ onSelectOrder, refreshToken = 0 }) {
         </div>
       ) : (
         <div>
-          {orders.map((order) => {
+          {orders.filter(order => {
+            if (!searchTerm) return true;
+            const term = searchTerm.toLowerCase();
+            return String(order.orderId || order.mongoId || order._id || "").toLowerCase().includes(term) ||
+                   String(order.customerName || "").toLowerCase().includes(term);
+          }).map((order) => {
             const cancelledDate = order.cancelledAt
               ? new Date(order.cancelledAt).toLocaleDateString("en-US", {
                   month: "short",
@@ -1058,7 +1068,7 @@ function CustomCakesList() {
   );
 }
 
-function AllOrders({ onSelectOrder, onCancel }) {
+function AllOrders({ onSelectOrder, onCancel , searchTerm = "" }) {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -1178,7 +1188,12 @@ function AllOrders({ onSelectOrder, onCancel }) {
         </div>
       ) : (
         <div>
-          {orders.map((order) => {
+          {orders.filter(order => {
+            if (!searchTerm) return true;
+            const term = searchTerm.toLowerCase();
+            return String(order.orderId || order.mongoId || order._id || "").toLowerCase().includes(term) ||
+                   String(order.customerName || "").toLowerCase().includes(term);
+          }).map((order) => {
             const normalizedStatus = String(order.status || "").toLowerCase();
             let etaDisplay = order.eta;
 
@@ -1227,6 +1242,7 @@ function AllOrders({ onSelectOrder, onCancel }) {
 }
 
 export default function OrdersMain() {
+  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const [activeFilter, setActiveFilter] = useState("all");
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -2018,13 +2034,26 @@ export default function OrdersMain() {
 
   // Handle PDF download
   const handlePrint = async () => {
-    const orderToPrint = currentPopupOrder;
-    if (!orderToPrint) {
+    const baseOrder = currentPopupOrder;
+    if (!baseOrder) {
       debugWarn("No order data available for PDF generation");
       return;
     }
 
     try {
+      // Fetch full order details to ensure we have customer name and full items
+      let orderToPrint = baseOrder;
+      try {
+        const res = await restaurantAPI.getOrderById(baseOrder.orderId || baseOrder._id || baseOrder.mongoId);
+        if (res?.data?.success && res.data.data?.order) {
+          orderToPrint = res.data.data.order;
+        } else if (res?.data?.order) {
+          orderToPrint = res.data.order;
+        }
+      } catch (err) {
+        debugWarn("Failed to fetch full order for PDF, using base order", err);
+      }
+
       // Create new PDF document
       const doc = new jsPDF();
 
@@ -2060,25 +2089,38 @@ export default function OrdersMain() {
 
       doc.text(`Date: ${orderDate}`, 20, 52);
 
+      // Customer Name
+      const customerName = orderToPrint.userId?.name || orderToPrint.user?.name || orderToPrint.customerName || orderToPrint.userName || "Customer";
+      doc.setFont("helvetica", "bold");
+      doc.text("Customer Name:", 20, 59);
+      doc.setFont("helvetica", "normal");
+      doc.text(customerName, 60, 59);
+
       // Customer address
-      if (orderToPrint.customerAddress) {
+      const deliveryAddress = orderToPrint.deliveryAddress || orderToPrint.address || orderToPrint.customerAddress;
+      let yPos = 66;
+      if (deliveryAddress) {
         doc.setFont("helvetica", "bold");
-        doc.text("Delivery Address:", 20, 62);
+        doc.text("Delivery Address:", 20, yPos);
         doc.setFont("helvetica", "normal");
         const addressText =
+          deliveryAddress.formattedAddress ||
           [
-            orderToPrint.customerAddress.street,
-            orderToPrint.customerAddress.city,
-            orderToPrint.customerAddress.state,
+            deliveryAddress.street,
+            deliveryAddress.additionalDetails,
+            deliveryAddress.city,
+            deliveryAddress.state,
+            deliveryAddress.zipCode
           ]
             .filter(Boolean)
             .join(", ") || "Address not available";
-        const addressLines = doc.splitTextToSize(addressText, 170);
-        doc.text(addressLines, 20, 69);
+        const addressLines = doc.splitTextToSize(addressText, 130);
+        doc.text(addressLines, 60, yPos);
+        yPos += addressLines.length * 7;
       }
+      yPos += 5; // spacing before items table
 
       // Items table
-      let yPos = 85;
       const printableItems = getRestaurantVisibleItems(orderToPrint.items);
       if (printableItems.length > 0) {
         doc.setFont("helvetica", "bold");
@@ -2086,12 +2128,18 @@ export default function OrdersMain() {
         yPos += 8;
 
         // Prepare table data
-        const tableData = printableItems.map((item) => [
-          item.name || "Item",
-          item.quantity || 1,
-          `₹${(item.price || 0).toFixed(2)}`,
-          `₹${((item.price || 0) * (item.quantity || 1)).toFixed(2)}`,
-        ]);
+        const tableData = printableItems.map((item) => {
+          const itemName = item.name || item.foodName || item.productName || "Item";
+          const finalName = item.variantName ? `${itemName} (${item.variantName})` : itemName;
+          const qty = item.quantity || item.qty || 1;
+          const price = Number(item.price || 0);
+          return [
+            finalName,
+            String(qty),
+            `Rs. ${price.toFixed(2)}`,
+            `Rs. ${(price * qty).toFixed(2)}`,
+          ];
+        });
 
         autoTable(doc, {
           startY: yPos,
@@ -2118,7 +2166,8 @@ export default function OrdersMain() {
       // Total
       doc.setFont("helvetica", "bold");
       doc.setFontSize(12);
-      doc.text(`Total: ₹${(orderToPrint.total || 0).toFixed(2)}`, 20, yPos);
+      const totalAmount = orderToPrint.pricing?.total || orderToPrint.total || 0;
+      doc.text(`Total: Rs. ${Number(totalAmount).toFixed(2)}`, 20, yPos);
 
       // Payment status
       yPos += 10;
@@ -2298,7 +2347,7 @@ export default function OrdersMain() {
           <AllOrders
             onSelectOrder={handleSelectOrder}
             onCancel={handleCancelClick}
-          />
+           searchTerm={searchTerm} />
         );
       case "preparing":
         return (
@@ -2307,35 +2356,35 @@ export default function OrdersMain() {
             onCancel={handleCancelClick}
             refreshToken={ordersRefreshToken}
             onStatusChanged={requestOrdersRefresh}
-          />
+           searchTerm={searchTerm} />
         );
       case "ready":
         return (
           <ReadyOrders
             onSelectOrder={handleSelectOrder}
             refreshToken={ordersRefreshToken}
-          />
+           searchTerm={searchTerm} />
         );
       case "out-for-delivery":
         return (
           <OutForDeliveryOrders
             onSelectOrder={handleSelectOrder}
             refreshToken={ordersRefreshToken}
-          />
+           searchTerm={searchTerm} />
         );
       case "scheduled":
         return (
           <ScheduledOrders
             onSelectOrder={handleSelectOrder}
             refreshToken={ordersRefreshToken}
-          />
+           searchTerm={searchTerm} />
         );
       case "completed":
         return (
           <CompletedOrders
             onSelectOrder={handleSelectOrder}
             refreshToken={ordersRefreshToken}
-          />
+           searchTerm={searchTerm} />
         );
       case "table-booking":
         return <TableBookings />;
@@ -2346,7 +2395,7 @@ export default function OrdersMain() {
           <CancelledOrders
             onSelectOrder={handleSelectOrder}
             refreshToken={ordersRefreshToken}
-          />
+           searchTerm={searchTerm} />
         );
       default:
         return <EmptyState />;
@@ -2361,7 +2410,7 @@ export default function OrdersMain() {
     <div className="min-h-screen bg-gray-100 flex flex-col">
       {/* Restaurant Navbar - Sticky at top */}
       <div className="sticky top-0 z-50 bg-white">
-        <RestaurantNavbar showNotifications={true} />
+        <RestaurantNavbar showNotifications={true} onSearchChange={setSearchTerm} />
       </div>
 
       {/* Top Filter Bar - Sticky below navbar */}
@@ -3687,7 +3736,12 @@ function PreparingOrders({
         </div>
       ) : (
         <div>
-          {orders.map((order) => {
+          {orders.filter(order => {
+            if (!searchTerm) return true;
+            const term = searchTerm.toLowerCase();
+            return String(order.orderId || order.mongoId || order._id || "").toLowerCase().includes(term) ||
+                   String(order.customerName || "").toLowerCase().includes(term);
+          }).map((order) => {
             // Calculate remaining ETA (countdown)
             const elapsedMs = currentTime - order.preparingTimestamp;
             const elapsedMinutes = Math.floor(elapsedMs / 60000);
@@ -3846,7 +3900,12 @@ function ReadyOrders({ onSelectOrder, refreshToken = 0 }) {
         </div>
       ) : (
         <div>
-          {orders.map((order) => (
+          {orders.filter(order => {
+            if (!searchTerm) return true;
+            const term = searchTerm.toLowerCase();
+            return String(order.orderId || order.mongoId || order._id || "").toLowerCase().includes(term) ||
+                   String(order.customerName || "").toLowerCase().includes(term);
+          }).map((order) => (
             <OrderCard
               key={order.orderId || order.mongoId}
               {...order}
@@ -3860,7 +3919,7 @@ function ReadyOrders({ onSelectOrder, refreshToken = 0 }) {
 }
 
 // Out for Delivery Orders List
-const OutForDeliveryOrders = ({ onSelectOrder, refreshToken = 0 }) => {
+const OutForDeliveryOrders = ({ onSelectOrder, refreshToken = 0 , searchTerm = "" }) => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -3961,7 +4020,12 @@ const OutForDeliveryOrders = ({ onSelectOrder, refreshToken = 0 }) => {
         </div>
       ) : (
         <div>
-          {orders.map((order) => (
+          {orders.filter(order => {
+            if (!searchTerm) return true;
+            const term = searchTerm.toLowerCase();
+            return String(order.orderId || order.mongoId || order._id || "").toLowerCase().includes(term) ||
+                   String(order.customerName || "").toLowerCase().includes(term);
+          }).map((order) => (
             <OrderCard
               key={order.orderId || order.mongoId}
               {...order}
@@ -3975,7 +4039,7 @@ const OutForDeliveryOrders = ({ onSelectOrder, refreshToken = 0 }) => {
 };
 
 // Scheduled Orders List
-function ScheduledOrders({ onSelectOrder, refreshToken = 0 }) {
+function ScheduledOrders({ onSelectOrder, refreshToken = 0 , searchTerm = "" }) {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -4057,7 +4121,12 @@ function ScheduledOrders({ onSelectOrder, refreshToken = 0 }) {
         </div>
       ) : (
         <div>
-          {orders.map((order) => {
+          {orders.filter(order => {
+            if (!searchTerm) return true;
+            const term = searchTerm.toLowerCase();
+            return String(order.orderId || order.mongoId || order._id || "").toLowerCase().includes(term) ||
+                   String(order.customerName || "").toLowerCase().includes(term);
+          }).map((order) => {
              const scheduledTime = new Date(order.scheduledAt).toLocaleString("en-US", {
                day: "numeric",
                month: "short",

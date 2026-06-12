@@ -2572,7 +2572,7 @@ export default function OrderTracking() {
             })()}
             showArrow={false}
           />
-          {!isDeliveredOrder && (
+          {!isDeliveredOrder && orderStatus !== 'cancelled' && (
             <SectionItem
               icon={MessageSquare}
               title={order?.note ? "Edit delivery instructions" : "Add delivery instructions"}

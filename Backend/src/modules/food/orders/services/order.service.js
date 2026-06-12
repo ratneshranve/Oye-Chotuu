@@ -4784,9 +4784,21 @@ export async function resyncState(userId, role) {
   return { activeOrder, pendingOffers };
 }
 
+export async function updateOrderInstructions(orderId, userId, instructions) {
+  const identity = buildOrderIdentityFilter(orderId);
+  if (!identity) throw new ValidationError('Order id required');
 
+  const order = await FoodOrder.findOne({ ...identity, userId });
+  if (!order) {
+    throw new NotFoundError('Order not found');
+  }
 
+  order.note = String(instructions || '').trim();
+  await order.save();
 
+  if (typeof emitOrderUpdate === 'function') {
+    emitOrderUpdate(order, order.dispatch?.deliveryPartnerId);
+  }
 
-
-
+  return sanitizeOrderForExternal(order);
+}

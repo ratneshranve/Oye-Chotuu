@@ -24,6 +24,7 @@ export default function RestaurantNavbar({
   showSearch = true,
   showOfflineOnlineTag = true,
   showNotifications = true,
+  onSearchChange,
 }) {
   const navigate = useNavigate()
   const [isSearchActive, setIsSearchActive] = useState(false)
@@ -276,10 +277,12 @@ export default function RestaurantNavbar({
   const handleSearchClose = () => {
     setIsSearchActive(false)
     setSearchValue("")
+    if (onSearchChange) onSearchChange("")
   }
 
   const handleSearchChange = (e) => {
     setSearchValue(e.target.value)
+    if (onSearchChange) onSearchChange(e.target.value)
   }
 
   const handleMenuClick = () => {
