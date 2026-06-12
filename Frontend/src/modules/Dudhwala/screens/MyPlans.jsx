@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Milk, Calendar, Clock, ChevronRight, Pause, Play, AlertCircle, Loader2, CheckCircle2, History, XCircle } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Milk, Calendar, Clock, ChevronRight, Pause, Play, AlertCircle, Loader2, CheckCircle2, History, XCircle, RefreshCw } from 'lucide-react';
 import { Button } from '@food/components/ui/button';
 import { Card, CardContent } from '@food/components/ui/card';
 import { Badge } from '@food/components/ui/badge';
@@ -11,6 +11,10 @@ import { toast } from 'react-hot-toast';
 const MyPlans = () => {
     const [loading, setLoading] = useState(true);
     const [plans, setPlans] = useState({ active: [], history: [] });
+    const [isRefreshing, setIsRefreshing] = useState(false);
+    const [pullDistance, setPullDistance] = useState(0);
+    const [startY, setStartY] = useState(0);
+    const containerRef = useRef(null);
 
     useEffect(() => {
         fetchPlans();
@@ -40,7 +44,7 @@ const MyPlans = () => {
         }
     };
 
-    if (loading) {
+    if (loading && !isRefreshing) {
         return (
             <div className="flex h-screen items-center justify-center bg-white">
                 <Loader2 className="h-8 w-8 animate-spin text-sky-600" />
@@ -48,9 +52,61 @@ const MyPlans = () => {
         );
     }
 
+    const handleTouchStart = (e) => {
+        if (window.scrollY === 0) {
+            setStartY(e.touches[0].clientY);
+        }
+    };
+
+    const handleTouchMove = (e) => {
+        if (startY > 0 && window.scrollY === 0) {
+            const y = e.touches[0].clientY;
+            const distance = y - startY;
+            if (distance > 0) {
+                setPullDistance(Math.min(distance * 0.4, 80)); // Add resistance and cap at 80px
+            }
+        }
+    };
+
+    const handleTouchEnd = async () => {
+        if (pullDistance >= 60 && !isRefreshing) {
+            setIsRefreshing(true);
+            setPullDistance(60); // Hold at refresh position
+            await fetchPlans();
+            setIsRefreshing(false);
+        }
+        setPullDistance(0);
+        setStartY(0);
+    };
+
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-[#0a0a0a] pb-20">
-            <div className="px-4 pt-4 pb-2">
+        <div 
+            ref={containerRef}
+            className="min-h-screen bg-slate-50 dark:bg-[#0a0a0a] pb-20 relative overflow-hidden"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+        >
+            {/* Pull to Refresh Indicator */}
+            <motion.div 
+                className="absolute left-0 right-0 flex justify-center z-50 pointer-events-none"
+                animate={{ y: pullDistance > 0 ? pullDistance - 40 : -40 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            >
+                <div className="bg-white rounded-full p-2 shadow-md flex items-center justify-center">
+                    <RefreshCw 
+                        size={20} 
+                        className={`text-sky-600 ${isRefreshing ? 'animate-spin' : ''}`} 
+                        style={{ transform: `rotate(${pullDistance * 3}deg)` }}
+                    />
+                </div>
+            </motion.div>
+
+            <motion.div
+                animate={{ y: isRefreshing ? 20 : pullDistance > 0 ? pullDistance : 0 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            >
+                <div className="px-4 pt-4 pb-2">
                 <h1 className="text-2xl font-semibold tracking-tight">My Milk Plans</h1>
                 <p className="text-sm text-slate-500">Manage your active and past subscriptions.</p>
             </div>
@@ -154,6 +210,7 @@ const MyPlans = () => {
                     </div>
                 </div>
             )}
+            </motion.div>
 
             <BottomNavigation />
         </div>
