@@ -409,26 +409,61 @@ export default function Home() {
             </Suspense>
 
             <div className="px-4 py-6 md:py-8 mt-2 mx-auto max-w-7xl">
-              <div className="bg-rose-50 dark:bg-rose-950/20 rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-4 border border-rose-100 dark:border-rose-900/30 shadow-sm relative overflow-hidden">
-                <div className="absolute -right-10 -top-10 opacity-10 pointer-events-none">
-                  <Cake className="w-40 h-40 text-rose-500" />
+              <motion.div 
+                whileHover={{ scale: 1.02 }}
+                className="bg-gradient-to-r from-fuchsia-500 via-pink-500 to-rose-500 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-[0_8px_30px_rgb(236,72,153,0.3)] relative overflow-hidden"
+              >
+                {/* Funky Background Patterns */}
+                <div className="absolute -right-4 -top-4 opacity-20 pointer-events-none mix-blend-overlay">
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                  >
+                    <Cake className="w-48 h-48 text-white" />
+                  </motion.div>
                 </div>
+                
+                <div className="absolute left-10 -bottom-10 opacity-20 pointer-events-none mix-blend-overlay">
+                  <motion.div
+                    animate={{ y: [0, -20, 0], rotate: [-10, 10, -10] }}
+                    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                  >
+                    <Star className="w-24 h-24 text-yellow-300" />
+                  </motion.div>
+                </div>
+
+                <div className="absolute right-1/3 top-4 opacity-30 pointer-events-none mix-blend-overlay">
+                  <motion.div
+                    animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                  >
+                    <Heart className="w-12 h-12 text-white fill-white" />
+                  </motion.div>
+                </div>
+
                 <div className="flex-1 z-10 text-center sm:text-left">
-                  <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-                    Custom Cake Chahiye? Bas Chotuu Ko Bataiye!
+                  <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-2 drop-shadow-md tracking-tight">
+                    Custom Cake Chahiye? <br className="hidden sm:block" /> Bas Chotuu Ko Bataiye! 🎂
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">
-                    Explore our curated list of bakeries that create personalized cakes just for you.
+                  <p className="text-white/90 text-sm sm:text-base font-medium drop-shadow-sm max-w-md mx-auto sm:mx-0">
+                    Dream it, we bake it! Explore bakeries ready to craft your perfect personalized cake. ✨
                   </p>
                 </div>
+                
                 <div className="z-10">
-                  <Button asChild className="bg-rose-500 hover:bg-rose-600 text-white rounded-xl shadow-md border-0 px-6 py-5 w-full sm:w-auto text-base font-semibold transition-transform hover:scale-105 active:scale-95">
-                    <Link to="/food/user/custom-cakes">
-                      Explore Custom Cakes
+                  <Button asChild className="bg-white text-pink-600 hover:bg-pink-50 rounded-2xl shadow-[0_8px_15px_rgba(0,0,0,0.1)] border-0 px-8 py-6 w-full sm:w-auto text-lg font-bold transition-all hover:scale-105 active:scale-95 group">
+                    <Link to="/food/user/custom-cakes" className="flex items-center gap-2">
+                      Explore Now
+                      <motion.div
+                        animate={{ x: [0, 5, 0] }}
+                        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                      >
+                        🚀
+                      </motion.div>
                     </Link>
                   </Button>
                 </div>
-              </div>
+              </motion.div>
             </div>
 
             <Suspense fallback={<RestaurantGridSkeleton count={3} />}>

@@ -203,14 +203,7 @@ export const adminSidebarMenu = [
       { type: "link", label: "Landing Page Management", path: "/admin/food/hero-banner-management", icon: "Image" },
     ],
   },
-  {
-    type: "section",
-    label: "DINING MANAGEMENT",
-    items: [
-      { type: "link", label: "Dining Banners", path: "/admin/food/dining-management", icon: "UtensilsCrossed" },
-      { type: "link", label: "Dining List", path: "/admin/food/dining-list", icon: "FileText" },
-    ],
-  },
+
   {
     type: "section",
     label: "SYSTEM SETTINGS",
