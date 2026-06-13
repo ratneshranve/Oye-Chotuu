@@ -106,6 +106,7 @@ import * as imgUtils from "@food/utils/imageUtils";
 import { useFoodHomeData } from "@food/hooks/useFoodHomeData";
 import { getCachedSettings } from "@/modules/common/utils/businessSettings";
 import bakeryIcon from "@food/assets/explore more icons/bakery.png";
+import customLogo from "@food/assets/customl_ogo.png";
 
 // Extracted Sub-components
 const BannerSection = lazy(() => import("@food/components/user/home/BannerSection"));
@@ -408,61 +409,54 @@ export default function Home() {
               />
             </Suspense>
 
-            <div className="px-4 py-6 md:py-8 mt-2 mx-auto max-w-7xl">
+            <div className="px-4 py-4 md:py-6 mt-2 mx-auto max-w-7xl">
               <motion.div 
-                whileHover={{ scale: 1.02 }}
-                className="bg-gradient-to-r from-fuchsia-500 via-pink-500 to-rose-500 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-[0_8px_30px_rgb(236,72,153,0.3)] relative overflow-hidden"
+                whileHover={{ scale: 1.01 }}
+                className="bg-gradient-to-r from-fuchsia-600 via-pink-500 to-rose-500 rounded-2xl p-5 sm:p-6 md:p-8 flex flex-col-reverse lg:flex-row items-center justify-between gap-6 sm:gap-8 shadow-[0_8px_30px_rgb(236,72,153,0.3)] relative overflow-hidden"
               >
-                {/* Funky Background Patterns */}
-                <div className="absolute -right-4 -top-4 opacity-20 pointer-events-none mix-blend-overlay">
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                  >
-                    <Cake className="w-48 h-48 text-white" />
-                  </motion.div>
-                </div>
-                
-                <div className="absolute left-10 -bottom-10 opacity-20 pointer-events-none mix-blend-overlay">
-                  <motion.div
-                    animate={{ y: [0, -20, 0], rotate: [-10, 10, -10] }}
-                    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                  >
-                    <Star className="w-24 h-24 text-yellow-300" />
-                  </motion.div>
-                </div>
+                {/* Background Decor */}
+                <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-32 h-32 bg-purple-500/20 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2 pointer-events-none" />
 
-                <div className="absolute right-1/3 top-4 opacity-30 pointer-events-none mix-blend-overlay">
-                  <motion.div
-                    animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  >
-                    <Heart className="w-12 h-12 text-white fill-white" />
-                  </motion.div>
-                </div>
-
-                <div className="flex-1 z-10 text-center sm:text-left">
-                  <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-2 drop-shadow-md tracking-tight">
-                    Custom Cake Chahiye? <br className="hidden sm:block" /> Bas Chotuu Ko Bataiye! 🎂
-                  </h3>
-                  <p className="text-white/90 text-sm sm:text-base font-medium drop-shadow-sm max-w-md mx-auto sm:mx-0">
-                    Dream it, we bake it! Explore bakeries ready to craft your perfect personalized cake. ✨
-                  </p>
-                </div>
-                
-                <div className="z-10">
-                  <Button asChild className="bg-white text-pink-600 hover:bg-pink-50 rounded-2xl shadow-[0_8px_15px_rgba(0,0,0,0.1)] border-0 px-8 py-6 w-full sm:w-auto text-lg font-bold transition-all hover:scale-105 active:scale-95 group">
-                    <Link to="/food/user/custom-cakes" className="flex items-center gap-2">
+                {/* Left Side: Text Content & Button */}
+                <div className="flex-1 z-10 flex flex-col items-center lg:items-start text-center lg:text-left gap-4 w-full">
+                  <div className="flex flex-col gap-1 sm:gap-2">
+                    <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white drop-shadow-md tracking-tight leading-tight">
+                      Custom Cake Chahiye? <br className="hidden lg:block" />
+                      <span className="text-yellow-200">Bas Chotuu Ko Bataiye!</span> 🎂
+                    </h3>
+                    <p className="text-white/95 text-sm sm:text-base font-semibold drop-shadow-sm">
+                      Dream it, we bake it! ✨
+                    </p>
+                  </div>
+                  
+                  <Button asChild className="mt-2 bg-white text-pink-600 hover:bg-pink-50 hover:text-pink-700 rounded-xl shadow-[0_6px_15px_rgba(0,0,0,0.1)] border-0 px-6 py-5 w-full sm:w-auto text-base font-bold transition-all hover:-translate-y-1 active:scale-95 group whitespace-nowrap">
+                    <Link to="/food/user/custom-cakes" className="flex items-center justify-center gap-2">
                       Explore Now
                       <motion.div
-                        animate={{ x: [0, 5, 0] }}
+                        animate={{ x: [0, 4, 0] }}
                         transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                        className="text-lg"
                       >
                         🚀
                       </motion.div>
                     </Link>
                   </Button>
                 </div>
+                
+                {/* Right Side: Logo Container (No box, larger) */}
+                <motion.div 
+                  initial={{ rotate: -5, scale: 0.9 }}
+                  animate={{ rotate: 0, scale: 1 }}
+                  transition={{ type: "spring", stiffness: 200, damping: 10 }}
+                  className="z-10 w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 shrink-0 flex items-center justify-center pointer-events-none"
+                >
+                  <img 
+                    src={customLogo} 
+                    alt="Custom Cake Logo" 
+                    className="w-full h-full object-contain drop-shadow-[0_10px_25px_rgba(0,0,0,0.25)]"
+                  />
+                </motion.div>
               </motion.div>
             </div>
 
