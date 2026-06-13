@@ -3,7 +3,7 @@ import { useNavigate, Link, useLocation } from "react-router-dom"
 import { ShieldCheck, Phone, ArrowRight, Loader2, ConciergeBell, Soup, Utensils, Home } from "lucide-react"
 import { Button } from "@food/components/ui/button"
 import { deliveryAPI } from "@food/api"
-import { clearModuleAuth } from "@food/utils/auth"
+import { clearModuleAuth, isModuleAuthenticated } from "@food/utils/auth"
 import { useCompanyName } from "@food/hooks/useCompanyName"
 import { toast } from "sonner"
 import { motion } from "framer-motion"
@@ -53,6 +53,12 @@ export default function DeliverySignIn() {
   const [isSending, setIsSending] = useState(false)
   const [logoUrl, setLogoUrl] = useState(() => getCachedSettings()?.logo?.url || null)
   const [keyboardInset, setKeyboardInset] = useState(0)
+
+  useEffect(() => {
+    if (isModuleAuthenticated("delivery")) {
+      navigate("/food/delivery", { replace: true })
+    }
+  }, [navigate])
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -157,7 +163,7 @@ export default function DeliverySignIn() {
       }
 
       // Navigate to OTP page
-      navigate("/food/delivery/otp")
+      navigate("/food/delivery/otp", { replace: true })
     } catch (err) {
       debugError("Send OTP Error:", err)
       const message =

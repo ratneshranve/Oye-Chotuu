@@ -543,7 +543,7 @@ export default function DeliveryOTP() {
         <div className="w-full relative overflow-hidden bg-[#005b96] pb-4">
           {/* Back Button */}
           <button
-            onClick={() => navigate("/food/delivery/login")}
+            onClick={() => navigate("/food/delivery/login", { replace: true })}
             className="absolute top-6 left-6 p-2 bg-white/20 hover:bg-white/30 text-white rounded-full transition-all duration-200 z-20 backdrop-blur-md"
           >
             <ArrowLeft className="w-5 h-5" />
