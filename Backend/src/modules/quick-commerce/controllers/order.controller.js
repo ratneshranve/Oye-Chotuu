@@ -126,10 +126,15 @@ const normalizeRequestedItems = (items) => {
   if (!Array.isArray(items)) return [];
 
   return items
-    .map((item) => ({
-      productId: String(item?.productId || item?.itemId || item?.id || item?._id || '').trim(),
-      quantity: Math.max(1, Number(item?.quantity || 1)),
-    }))
+    .map((item) => {
+      const rawId = String(item?.productId || item?.itemId || item?.id || item?._id || '').trim();
+      const [parentId, variantSku] = rawId.split("::");
+      return {
+        productId: parentId,
+        variantSku: variantSku || item?.variantSku || null,
+        quantity: Math.max(1, Number(item?.quantity || 1)),
+      };
+    })
     .filter((item) => item.productId && mongoose.isValidObjectId(item.productId));
 };
 
@@ -226,14 +231,22 @@ export const placeOrder = async (req, res) => {
       .map((item) => {
         const product = productMap[String(item.productId)];
         if (!product) return null;
-        const unitPrice =
-          Number(product.salePrice || 0) > 0
-            ? Number(product.salePrice)
-            : Number(product.price || 0);
+        
+        const variant = item.variantSku && Array.isArray(product.variants)
+          ? product.variants.find((v) => v.sku === item.variantSku)
+          : null;
+          
+        const unitPrice = variant
+          ? (Number(variant.salePrice || 0) > 0 ? Number(variant.salePrice) : Number(variant.price || 0))
+          : (Number(product.salePrice || 0) > 0 ? Number(product.salePrice) : Number(product.price || 0));
+          
+        const name = variant ? `${product.name} (${variant.name})` : product.name;
+
         return {
           productId: product._id,
+          variantSku: item.variantSku || null,
           sellerId: product.sellerId || null,
-          name: product.name,
+          name: name,
           image: product.image || product.mainImage || '',
           price: unitPrice,
           quantity: item.quantity,
@@ -256,14 +269,22 @@ export const placeOrder = async (req, res) => {
         .map((item) => {
           const product = fallbackProductMap[String(item.productId)];
           if (!product) return null;
-          const unitPrice =
-            Number(product.salePrice || 0) > 0
-              ? Number(product.salePrice)
-              : Number(product.price || 0);
+          
+          const variant = item.variantSku && Array.isArray(product.variants)
+            ? product.variants.find((v) => v.sku === item.variantSku)
+            : null;
+            
+          const unitPrice = variant
+            ? (Number(variant.salePrice || 0) > 0 ? Number(variant.salePrice) : Number(variant.price || 0))
+            : (Number(product.salePrice || 0) > 0 ? Number(product.salePrice) : Number(product.price || 0));
+            
+          const name = variant ? `${product.name} (${variant.name})` : product.name;
+
           return {
             productId: product._id,
+            variantSku: item.variantSku || null,
             sellerId: product.sellerId || null,
-            name: product.name,
+            name: name,
             image: product.image || product.mainImage || '',
             price: unitPrice,
             quantity: item.quantity,
