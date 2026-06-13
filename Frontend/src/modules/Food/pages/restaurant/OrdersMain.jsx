@@ -3479,6 +3479,7 @@ function PreparingOrders({
   onCancel,
   refreshToken = 0,
   onStatusChanged,
+  searchTerm = "",
 }) {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -3799,7 +3800,7 @@ function PreparingOrders({
 }
 
 // Ready Orders List
-function ReadyOrders({ onSelectOrder, refreshToken = 0 }) {
+function ReadyOrders({ onSelectOrder, refreshToken = 0, searchTerm = "" }) {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
