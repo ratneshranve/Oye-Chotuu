@@ -571,11 +571,12 @@ const transformOrderForTracking = (apiOrder, previousOrder = null, explicitResta
     tracking: apiOrder?.tracking || previousOrder?.tracking || {},
     deliveryState: apiOrder?.deliveryState || previousOrder?.deliveryState || null,
     createdAt: apiOrder?.createdAt || previousOrder?.createdAt || null,
-    totalAmount: apiOrder?.pricing?.total || apiOrder?.totalAmount || previousOrder?.totalAmount || 0,
+    totalAmount: apiOrder?.payment?.amountDue || apiOrder?.payableAmount || apiOrder?.totalAmount || apiOrder?.pricing?.total || previousOrder?.totalAmount || 0,
     deliveryFee: apiOrder?.pricing?.deliveryFee || apiOrder?.deliveryFee || previousOrder?.deliveryFee || 0,
     gst: apiOrder?.pricing?.tax || apiOrder?.pricing?.gst || apiOrder?.gst || apiOrder?.tax || previousOrder?.gst || 0,
     packagingFee: apiOrder?.pricing?.packagingFee || apiOrder?.packagingFee || 0,
     platformFee: apiOrder?.pricing?.platformFee || apiOrder?.platformFee || 0,
+    handlingFee: apiOrder?.pricing?.handlingFee || apiOrder?.handlingFee || previousOrder?.handlingFee || 0,
     discount: apiOrder?.pricing?.discount || apiOrder?.discount || 0,
     subtotal: apiOrder?.pricing?.subtotal || apiOrder?.subtotal || 0,
     paymentMethod: apiOrder?.paymentMethod || apiOrder?.payment?.method || previousOrder?.paymentMethod || null,
@@ -2894,6 +2895,13 @@ export default function OrderTracking() {
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-gray-600">Platform Fee</span>
                   <span className="text-gray-900 font-medium">₹{Number(order.platformFee).toFixed(2)}</span>
+                </div>
+              )}
+
+              {Number(order?.handlingFee) > 0 && (
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-gray-600">Handling Fee</span>
+                  <span className="text-gray-900 font-medium">₹{Number(order.handlingFee).toFixed(2)}</span>
                 </div>
               )}
 

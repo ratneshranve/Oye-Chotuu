@@ -699,7 +699,7 @@ const CheckoutPage = () => {
     ? selectedCoupon.discountAmount || selectedCoupon.discount || 0
     : 0;
   const discountedItemsTotal = cart.reduce((sum, item) => {
-    const unitPrice = Number(item.salePrice || item.price || 0);
+    const unitPrice = Number(item.price || 0);
     return sum + unitPrice * Number(item.quantity || 0);
   }, 0);
   const originalItemsTotal = cart.reduce((sum, item) => {
@@ -712,7 +712,7 @@ const CheckoutPage = () => {
 
   const displayCartItems = showAllCartItems ? cart : cart;
   const getCheckoutProductId = (item) =>
-    String(item?.productId || item?.itemId || item?.id || item?._id || "").split("::")[0];
+    String(item?.productId || item?.itemId || item?.id || item?._id || "");
   const getCheckoutCartItemsForSync = () =>
     cart
       .map((item) => ({
@@ -1607,7 +1607,7 @@ const CheckoutPage = () => {
     const subtotal = cart.reduce(
       (sum, item) =>
         sum +
-        Number(item.salePrice || item.price || 0) *
+        Number(item.price || 0) *
           Number(item.quantity || 0),
       0,
     );

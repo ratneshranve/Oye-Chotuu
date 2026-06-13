@@ -220,6 +220,10 @@ const Orders = () => {
           commission: Number(order.pricing?.commission || 0),
           total: Number(order.pricing?.total || 0),
           receivable: resolveSellerReceivable(order),
+          deliveryFee: Number(order.pricing?.deliveryFee || 0),
+          handlingFee: Number(order.pricing?.handlingFee || 0),
+          platformFee: Number(order.pricing?.platformFee || 0),
+          gstAmount: Number(order.pricing?.gstAmount || order.pricing?.gst || 0),
         },
         orderType: String(order.orderType || "quick").toLowerCase(),
         status: getLegacyStatusFromOrder(order),
@@ -480,12 +484,18 @@ const Orders = () => {
       });
 
       // Add title
-      doc.setFontSize(16);
+      doc.setFontSize(18);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(12, 131, 31); // OyeChotuu Green
+      doc.text('OyeChotuu', 148, 15, { align: 'center' });
+
+      doc.setFontSize(14);
       doc.setTextColor(30, 30, 30);
-      doc.text('Orders Export', 148, 15, { align: 'center' });
+      doc.text('Orders Export', 148, 22, { align: 'center' });
       
       // Add export info
       doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
       doc.setTextColor(100, 100, 100);
       const exportDate = new Date().toLocaleDateString('en-GB', {
         day: 'numeric',
@@ -494,33 +504,43 @@ const Orders = () => {
         hour: '2-digit',
         minute: '2-digit'
       });
-      doc.text(`Exported on: ${exportDate} | Total Records: ${data.length}`, 148, 22, { align: 'center' });
+      doc.text(`Exported on: ${exportDate} | Total Records: ${data.length}`, 148, 28, { align: 'center' });
       
       const headers = [[
-        "SI", "Order ID", "Customer Name", "Phone", "Date & Time", "Receivable", "Status", "Address", "Payment"
+        "SI", "Order ID", "Customer", "Phone", "Date & Time", "Receivable", "Status", "Address", "Payment"
       ]];
       
       const tableData = data.map((o, index) => [
         index + 1,
-        o.id,
-        o.customer?.name ?? "",
-        o.customer?.phone ?? "",
+        o.orderId || o.id,
+        o.customer?.name ?? "-",
+        o.customer?.phone ?? "-",
         `${o.date} ${o.time}`,
         `Rs. ${Number(o.total || 0).toFixed(2)}`,
-        (o.status || "").toUpperCase(),
-        o.address ?? "",
-        o.payment ?? ""
+        (o.status || "").replace(/_/g, ' ').toUpperCase(),
+        o.address ?? "-",
+        o.payment ?? "-"
       ]);
 
       autoTable(doc, {
         head: headers,
         body: tableData,
-        startY: 28,
-        styles: { fontSize: 7, cellPadding: 2 },
-        headStyles: { fillColor: [59, 130, 246], textColor: 255, fontStyle: 'bold', fontSize: 8 },
-        alternateRowStyles: { fillColor: [248, 250, 252] },
-        columnStyles: { 0: { cellWidth: 12 } },
-        margin: { top: 28, left: 10, right: 10 },
+        startY: 35,
+        styles: { fontSize: 8, cellPadding: 3, overflow: 'linebreak' },
+        headStyles: { fillColor: [12, 131, 31], textColor: 255, fontStyle: 'bold', fontSize: 9 },
+        alternateRowStyles: { fillColor: [245, 250, 245] },
+        columnStyles: { 
+          0: { cellWidth: 10 },
+          1: { cellWidth: 30 },
+          2: { cellWidth: 30 },
+          3: { cellWidth: 25 },
+          4: { cellWidth: 30 },
+          5: { cellWidth: 25, halign: 'right' },
+          6: { cellWidth: 30 },
+          7: { cellWidth: 'auto' },
+          8: { cellWidth: 25 }
+        },
+        margin: { top: 35, left: 10, right: 10 },
       });
 
       doc.save(`orders-export-${new Date().toISOString().slice(0, 10)}.pdf`);
@@ -1313,16 +1333,63 @@ const Orders = () => {
                             </div>
                             <div className="flex justify-between text-xs">
                               <span className="font-bold text-slate-600">
+                                Delivery fee
+                              </span>
+                              <span className="font-black text-slate-900">
+                                {formatMoney(selectedOrder.pricing?.deliveryFee)}
+                              </span>
+                            </div>
+                            <div className="flex justify-between text-xs">
+                              <span className="font-bold text-slate-600">
+                                Handling charge
+                              </span>
+                              <span className="font-black text-slate-900">
+                                {formatMoney(selectedOrder.pricing?.handlingFee)}
+                              </span>
+                            </div>
+                            <div className="flex justify-between text-xs">
+                              <span className="font-bold text-slate-600">
+                                Platform fee
+                              </span>
+                              <span className="font-black text-slate-900">
+                                {formatMoney(selectedOrder.pricing?.platformFee)}
+                              </span>
+                            </div>
+                            <div className="flex justify-between text-xs">
+                              <span className="font-bold text-slate-600">
+                                GST
+                              </span>
+                              <span className="font-black text-slate-900">
+                                {formatMoney(selectedOrder.pricing?.gstAmount)}
+                              </span>
+                            </div>
+                            <div className="h-px bg-primary/10 my-2" />
+                            <div className="flex justify-between text-xs">
+                              <span className="font-bold text-slate-900">
+                                Customer paid
+                              </span>
+                              <span className="font-black text-slate-900">
+                                {formatMoney(
+                                  (selectedOrder.pricing?.subtotal || 0) +
+                                  (selectedOrder.pricing?.deliveryFee || 0) +
+                                  (selectedOrder.pricing?.handlingFee || 0) +
+                                  (selectedOrder.pricing?.platformFee || 0) +
+                                  (selectedOrder.pricing?.gstAmount || 0)
+                                )}
+                              </span>
+                            </div>
+                            <div className="flex justify-between text-xs">
+                              <span className="font-bold text-slate-600">
                                 Commission
                               </span>
                               <span className="font-black text-rose-600">
-                                {formatMoney(selectedOrder.pricing?.commission)}
+                                -{formatMoney(selectedOrder.pricing?.commission)}
                               </span>
                             </div>
                             <div className="h-px bg-primary/10 my-2" />
                             <div className="flex justify-between text-sm">
                               <span className="font-black text-slate-900">
-                                Receivable
+                                Seller Receivable
                               </span>
                               <span className="font-black text-primary">
                                 {formatMoney(selectedOrder.total)}

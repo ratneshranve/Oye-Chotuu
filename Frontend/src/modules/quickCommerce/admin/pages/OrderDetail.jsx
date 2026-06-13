@@ -216,7 +216,9 @@ export default function OrderDetail() {
                     <h3 style="margin-top:24px;">Summary</h3>
                     <p>Subtotal: ${formatCurrency(order.pricing?.subtotal)}</p>
                     <p>Delivery Fee: ${formatCurrency(order.pricing?.deliveryFee)}</p>
+                    <p>Handling Fee: ${formatCurrency(order.pricing?.handlingFee)}</p>
                     <p>Platform Fee: ${formatCurrency(order.pricing?.platformFee)}</p>
+                    <p>GST: ${formatCurrency(order.pricing?.gstAmount || order.pricing?.gst)}</p>
                     <p><strong>Total: ${formatCurrency(payableTotal)}</strong></p>
                 </body>
             </html>
@@ -344,8 +346,16 @@ export default function OrderDetail() {
                                 <span className="text-sm font-bold text-emerald-600">{formatCurrency(order.pricing?.deliveryFee)}</span>
                             </div>
                             <div className="flex items-center justify-between w-full max-w-[240px]">
+                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Handling Fee</span>
+                                <span className="text-sm font-bold text-slate-700">{formatCurrency(order.pricing?.handlingFee)}</span>
+                            </div>
+                            <div className="flex items-center justify-between w-full max-w-[240px]">
                                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Platform Fee</span>
                                 <span className="text-sm font-bold text-slate-700">{formatCurrency(order.pricing?.platformFee)}</span>
+                            </div>
+                            <div className="flex items-center justify-between w-full max-w-[240px]">
+                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">GST</span>
+                                <span className="text-sm font-bold text-slate-700">{formatCurrency(order.pricing?.gstAmount || order.pricing?.gst)}</span>
                             </div>
                             <div className="h-px w-full max-w-[240px] bg-slate-200 my-2" />
                             <div className="flex items-center justify-between w-full max-w-[240px]">

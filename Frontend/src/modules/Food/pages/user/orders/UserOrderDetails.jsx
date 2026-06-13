@@ -292,10 +292,15 @@ export default function UserOrderDetails() {
       // Title
       doc.setFontSize(16)
       doc.setFont('helvetica', 'bold')
-      doc.text(`${companyName} Order: Summary and Receipt`, 105, 20, { align: 'center' })
+      doc.text('OyeChotuu Order: Summary and Receipt', 105, 20, { align: 'center' })
+      
+      // Store/Restaurant Name (Subtitle)
+      doc.setFontSize(12)
+      doc.setFont('helvetica', 'italic')
+      doc.text(restaurantName || '', 105, 28, { align: 'center' })
 
       // Order details section
-      let yPos = 35
+      let yPos = 40
       doc.setFontSize(10)
       doc.setFont('helvetica', 'normal')
 
@@ -329,15 +334,8 @@ export default function UserOrderDetails() {
       doc.text(addressLines, 60, yPos)
       yPos += addressLines.length * 7
 
-      // Restaurant/Seller Name
-      const isQuick = order.orderType === "quick"
-      doc.setFont('helvetica', 'bold')
-      doc.text(isQuick ? 'Seller Name:' : 'Restaurant Name:', 20, yPos)
-      doc.setFont('helvetica', 'normal')
-      doc.text(restaurantName, 60, yPos)
-      yPos += 7
-
       // Restaurant/Seller Address
+      const isQuick = order.orderType === "quick"
       doc.setFont('helvetica', 'bold')
       doc.text(isQuick ? 'Seller Address:' : 'Restaurant Address:', 20, yPos)
       doc.setFont('helvetica', 'normal')
@@ -374,8 +372,9 @@ export default function UserOrderDetails() {
       // Total
       doc.setFontSize(12)
       doc.setFont('helvetica', 'bold')
-      doc.text('Total:', 145, finalY + 10, { align: 'right' })
-      doc.text(`Rs. ${Number(pricing.total || 0).toFixed(2)}`, 195, finalY + 10, { align: 'right' })
+      doc.text('Total:', 135, finalY + 10, { align: 'right' })
+      const finalAmount = order.payment?.amountDue || order.payableAmount || order.totalAmount || pricing.total || 0
+      doc.text(`Rs. ${Number(finalAmount).toFixed(2)}`, 190, finalY + 10, { align: 'right' })
 
       // Save PDF instantly
       const fileName = `Order_Summary_${orderIdDisplay}_${Date.now()}.pdf`
@@ -630,6 +629,14 @@ export default function UserOrderDetails() {
                 ₹{Number(pricing.platformFee || 0).toFixed(2)}
               </span>
             </div>
+            {Number(pricing.handlingFee) > 0 && (
+              <div className="flex justify-between">
+                <span className="text-gray-500">Handling fee</span>
+                <span className="text-gray-800">
+                  ₹{Number(pricing.handlingFee).toFixed(2)}
+                </span>
+              </div>
+            )}
             <div className="flex justify-between">
               <span className="text-gray-500">Subscription / other fees</span>
               <span className="text-gray-800">
@@ -640,7 +647,7 @@ export default function UserOrderDetails() {
             <div className="border-t border-gray-100 my-2 pt-2 flex justify-between items-center">
               <span className="font-bold text-gray-800">Paid</span>
               <span className="font-bold text-gray-800">
-                ₹{Number(pricing.total || 0).toFixed(2)}
+                ₹{Number(order.payment?.amountDue || order.payableAmount || order.totalAmount || pricing.total || 0).toFixed(2)}
               </span>
             </div>
           </div>
