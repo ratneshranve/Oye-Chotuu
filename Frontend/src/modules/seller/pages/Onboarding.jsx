@@ -516,14 +516,7 @@ export default function SellerOnboarding() {
 
   return (
     <div className="relative min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(251,191,36,0.18),_transparent_28%),linear-gradient(180deg,#f8fafc_0%,#fffaf2_100%)] px-4 py-6 font-['Outfit'] sm:py-8 md:px-8">
-      <button
-        type="button"
-        onClick={logout}
-        className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:bg-slate-50 hover:text-slate-800 md:right-8 md:top-8"
-        title="Exit and logout"
-      >
-        <X className="h-5 w-5" />
-      </button>
+
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-8 lg:grid-cols-[1.05fr_1.4fr]">
           <div
