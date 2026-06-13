@@ -462,52 +462,73 @@ const Orders = () => {
     return ["confirmed", "packed", "out_for_delivery"].includes(sellerStatus);
   };
 
-  const exportOrders = () => {
+  const exportOrders = async () => {
     const data = filteredOrders;
     if (!data.length) {
       showToast("No orders to export", "warning");
       return;
     }
-    const escapeCsv = (v) => {
-      const s = String(v ?? "").replace(/"/g, '""');
-      return /[",\n\r]/.test(s) ? `"${s}"` : s;
-    };
-    const headers = [
-      "Order ID",
-      "Customer",
-      "Phone",
-      "Date",
-      "Time",
-      "Receivable",
-      "Status",
-      "Address",
-      "Payment",
-    ];
-    const rows = data.map((o) => [
-      o.id,
-      o.customer?.name ?? "",
-      o.customer?.phone ?? "",
-      o.date,
-      o.time,
-      o.total,
-      o.status,
-      o.address ?? "",
-      o.payment ?? "",
-    ]);
-    const csvContent = [
-      headers.map(escapeCsv).join(","),
-      ...rows.map((row) => row.map(escapeCsv).join(",")),
-    ].join("\n");
-    const blob = new Blob(["\uFEFF" + csvContent], {
-      type: "text/csv;charset=utf-8;",
-    });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `orders-export-${new Date().toISOString().slice(0, 10)}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
-    showToast(`Exported ${data.length} order(s) as CSV`, "success");
+    
+    try {
+      const { default: jsPDF } = await import('jspdf');
+      const { default: autoTable } = await import('jspdf-autotable');
+      
+      const doc = new jsPDF({
+        orientation: 'landscape',
+        unit: 'mm',
+        format: 'a4'
+      });
+
+      // Add title
+      doc.setFontSize(16);
+      doc.setTextColor(30, 30, 30);
+      doc.text('Orders Export', 148, 15, { align: 'center' });
+      
+      // Add export info
+      doc.setFontSize(10);
+      doc.setTextColor(100, 100, 100);
+      const exportDate = new Date().toLocaleDateString('en-GB', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      doc.text(`Exported on: ${exportDate} | Total Records: ${data.length}`, 148, 22, { align: 'center' });
+      
+      const headers = [[
+        "SI", "Order ID", "Customer Name", "Phone", "Date & Time", "Receivable", "Status", "Address", "Payment"
+      ]];
+      
+      const tableData = data.map((o, index) => [
+        index + 1,
+        o.id,
+        o.customer?.name ?? "",
+        o.customer?.phone ?? "",
+        `${o.date} ${o.time}`,
+        `Rs. ${Number(o.total || 0).toFixed(2)}`,
+        (o.status || "").toUpperCase(),
+        o.address ?? "",
+        o.payment ?? ""
+      ]);
+
+      autoTable(doc, {
+        head: headers,
+        body: tableData,
+        startY: 28,
+        styles: { fontSize: 7, cellPadding: 2 },
+        headStyles: { fillColor: [59, 130, 246], textColor: 255, fontStyle: 'bold', fontSize: 8 },
+        alternateRowStyles: { fillColor: [248, 250, 252] },
+        columnStyles: { 0: { cellWidth: 12 } },
+        margin: { top: 28, left: 10, right: 10 },
+      });
+
+      doc.save(`orders-export-${new Date().toISOString().slice(0, 10)}.pdf`);
+      showToast(`Exported ${data.length} order(s) as PDF`, "success");
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      showToast("Failed to generate PDF. Please try again.", "error");
+    }
   };
 
   return (

@@ -55,7 +55,7 @@ const SAFE_RESTAURANT_PIN = typeof RESTAURANT_PIN_SVG !== 'undefined' ? RESTAURA
 const debugLog = (...args) => console.log('[OrderTracking]', ...args)
 const debugWarn = (...args) => console.warn('[OrderTracking]', ...args)
 const debugError = (...args) => console.error('[OrderTracking]', ...args)
-const INVOICE_BRAND_NAME = "Appzeto"
+const INVOICE_BRAND_NAME = "OyeChotuu"
 
 
 // Animated checkmark component
@@ -1910,7 +1910,7 @@ export default function OrderTracking() {
           textColor: [31, 41, 55],
         },
         columnStyles: {
-          0: { cellWidth: 250 },
+          0: { cellWidth: 280 },
           1: { halign: "center", cellWidth: 55 },
           2: { halign: "right", cellWidth: 90 },
           3: { halign: "right", cellWidth: 90 },
@@ -1918,7 +1918,7 @@ export default function OrderTracking() {
       })
 
       y = (doc.lastAutoTable?.finalY || y) + 24
-      const totalsXLabel = pageWidth - margin - 150
+      const totalsXLabel = pageWidth - margin - 180
       const totalsXValue = pageWidth - margin
       const totals = [
         ["Subtotal", formatInvoiceCurrency(order?.subtotal)],
