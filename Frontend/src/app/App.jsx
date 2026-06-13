@@ -7,14 +7,17 @@ function App() {
 
   useEffect(() => {
     const hasSeen = sessionStorage.getItem('hasSeenSplash')
-    const pathname = window.location.pathname || '/'
+    
+    // In native apps (WebView), the actual path is often stored in the hash due to HashRouter.
+    const hashPath = window.location.hash ? window.location.hash.replace(/^#/, '') : '';
+    const effectivePath = hashPath || window.location.pathname || '/';
     
     // Determine if the route belongs to the user panel (exclude admin, seller, restaurant, and delivery)
     const isUserRoute = 
-      !pathname.startsWith('/admin') && 
-      !pathname.startsWith('/seller') && 
-      !pathname.startsWith('/food/restaurant') && 
-      !pathname.startsWith('/food/delivery')
+      !effectivePath.startsWith('/admin') && 
+      !effectivePath.startsWith('/seller') && 
+      !effectivePath.startsWith('/food/restaurant') && 
+      !effectivePath.startsWith('/food/delivery')
 
     if (!hasSeen && isUserRoute) {
       setShowSplash(true)
