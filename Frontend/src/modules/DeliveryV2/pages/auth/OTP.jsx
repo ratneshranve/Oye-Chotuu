@@ -142,10 +142,7 @@ export default function DeliveryOTP() {
       inputRefs.current[index + 1]?.focus()
     }
 
-    // Auto-submit when all 4 digits are entered and we are in OTP step
-    if (!showNameInput && newOtp.every((digit) => digit !== "") && newOtp.length === 4) {
-      handleVerify(newOtp.join(""))
-    }
+    // No auto-submit, user must click Verify & Continue
   }
 
   const handleKeyDown = (index, e) => {
@@ -176,11 +173,7 @@ export default function DeliveryOTP() {
           }
         })
         setOtp(newOtp)
-        if (digits.length === 4) {
-          handleVerify(newOtp.join(""))
-        } else {
-          inputRefs.current[digits.length]?.focus()
-        }
+        inputRefs.current[Math.min(digits.length, 3)]?.focus()
       })
     }
   }
@@ -196,11 +189,7 @@ export default function DeliveryOTP() {
       }
     })
     setOtp(newOtp)
-    if (!showNameInput && digits.length === 4) {
-      handleVerify(newOtp.join(""))
-      return
-    }
-    inputRefs.current[digits.length]?.focus()
+    inputRefs.current[Math.min(digits.length, 3)]?.focus()
   }
 
   const handleVerify = async (otpValue = null) => {

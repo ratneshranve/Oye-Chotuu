@@ -385,7 +385,7 @@ export default function SignupStep2() {
       uploadedDocs.drivingLicensePhoto
     )
 
-    if (!hasProfilePhoto || !hasAadharPhoto || !hasPanPhoto || !hasDrivingLicensePhoto) {
+    if (!hasProfilePhoto || !hasAadharPhoto || !hasPanPhoto) {
       toast.error("Please upload all required documents")
       return
     }
@@ -635,7 +635,7 @@ export default function SignupStep2() {
           <DocumentUpload docType="profilePhoto" label="Profile Photo" required={true} />
           <DocumentUpload docType="aadharPhoto" label="Aadhar Card Photo" required={true} />
           <DocumentUpload docType="panPhoto" label="PAN Card Photo" required={true} />
-          <DocumentUpload docType="drivingLicensePhoto" label="Driving License Photo" required={true} />
+          <DocumentUpload docType="drivingLicensePhoto" label="Driving License Photo (Optional)" required={false} />
 
           {/* Submit Button */}
           <button
@@ -644,14 +644,12 @@ export default function SignupStep2() {
               isSubmitting ||
               !hasDocumentValue(documents.profilePhoto, uploadedDocs.profilePhoto) ||
               !hasDocumentValue(documents.aadharPhoto, uploadedDocs.aadharPhoto) ||
-              !hasDocumentValue(documents.panPhoto, uploadedDocs.panPhoto) ||
-              !hasDocumentValue(documents.drivingLicensePhoto, uploadedDocs.drivingLicensePhoto)
+              !hasDocumentValue(documents.panPhoto, uploadedDocs.panPhoto)
             }
             className={`w-full py-4 rounded-lg font-bold text-white text-base transition-colors mt-6 ${isSubmitting ||
               !hasDocumentValue(documents.profilePhoto, uploadedDocs.profilePhoto) ||
               !hasDocumentValue(documents.aadharPhoto, uploadedDocs.aadharPhoto) ||
-              !hasDocumentValue(documents.panPhoto, uploadedDocs.panPhoto) ||
-              !hasDocumentValue(documents.drivingLicensePhoto, uploadedDocs.drivingLicensePhoto)
+              !hasDocumentValue(documents.panPhoto, uploadedDocs.panPhoto)
               ? "bg-gray-400 cursor-not-allowed"
               : "bg-[#00B761] hover:bg-[#00A055]"
               }`}
