@@ -604,17 +604,17 @@ export default function SellerOnboarding() {
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-bold text-slate-500">Seller name <span className="text-red-500">*</span></label>
-                  <input required className="rounded-2xl border border-slate-200 px-4 py-3 font-semibold outline-none focus:border-slate-900" placeholder="Seller name" value={form.name} onChange={(e) => updateField("name", e.target.value.replace(/[^a-zA-Z\s]/g, ""))} />
+                  <input required className="w-full rounded-2xl border border-slate-200 px-4 py-3 font-semibold outline-none focus:border-slate-900" placeholder="Seller name" value={form.name} onChange={(e) => updateField("name", e.target.value.replace(/[^a-zA-Z\s]/g, ""))} />
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-bold text-slate-500">Shop name <span className="text-red-500">*</span></label>
-                  <input required className="rounded-2xl border border-slate-200 px-4 py-3 font-semibold outline-none focus:border-slate-900" placeholder="Shop name" value={form.shopName} onChange={(e) => updateField("shopName", e.target.value.replace(/[^a-zA-Z\s]/g, ""))} />
+                  <input required className="w-full rounded-2xl border border-slate-200 px-4 py-3 font-semibold outline-none focus:border-slate-900" placeholder="Shop name" value={form.shopName} onChange={(e) => updateField("shopName", e.target.value.replace(/[^a-zA-Z\s]/g, ""))} />
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-bold text-slate-500">Email <span className="text-red-500">*</span></label>
                   <input
                     required
-                    className={`rounded-2xl border px-4 py-3 font-semibold outline-none focus:border-slate-900 ${form.email && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(form.email) ? "border-red-400 bg-red-50" : "border-slate-200"}`}
+                    className={`w-full rounded-2xl border px-4 py-3 font-semibold outline-none focus:border-slate-900 ${form.email && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(form.email) ? "border-red-400 bg-red-50" : "border-slate-200"}`}
                     placeholder="Email (e.g. name@domain.com)"
                     type="email"
                     value={form.email}
@@ -626,11 +626,11 @@ export default function SellerOnboarding() {
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-bold text-slate-500">Primary phone <span className="text-red-500">*</span></label>
-                  <input className="rounded-2xl border border-slate-200 bg-slate-100 px-4 py-3 font-semibold text-slate-500 outline-none" placeholder="Primary phone" value={form.phone} readOnly title="Linked from the seller OTP login" />
+                  <input className="w-full rounded-2xl border border-slate-200 bg-slate-100 px-4 py-3 font-semibold text-slate-500 outline-none" placeholder="Primary phone" value={form.phone} readOnly title="Linked from the seller OTP login" />
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-bold text-slate-500">Business type <span className="text-red-500">*</span></label>
-                  <select required className="rounded-2xl border border-slate-200 px-4 py-3 font-semibold outline-none focus:border-slate-900" value={form.businessType} onChange={(e) => updateField("businessType", e.target.value)}>
+                  <select required className="w-full rounded-2xl border border-slate-200 px-4 py-3 font-semibold outline-none focus:border-slate-900" value={form.businessType} onChange={(e) => updateField("businessType", e.target.value)}>
                   <option value="">Select business type</option>
                   {businessTypes.map((item) => (
                     <option key={item} value={item}>
@@ -643,7 +643,7 @@ export default function SellerOnboarding() {
                   <label className="text-xs font-bold text-slate-500">Alternate phone <span className="text-red-500">*</span></label>
                   <input
                     required
-                    className={`rounded-2xl border px-4 py-3 font-semibold outline-none focus:border-slate-900 ${form.alternatePhone && form.alternatePhone === form.phone ? "border-red-400 bg-red-50" : "border-slate-200"}`}
+                    className={`w-full rounded-2xl border px-4 py-3 font-semibold outline-none focus:border-slate-900 ${form.alternatePhone && form.alternatePhone === form.phone ? "border-red-400 bg-red-50" : "border-slate-200"}`}
                     placeholder="Alternate phone"
                     value={form.alternatePhone}
                     onChange={(e) => updateField("alternatePhone", e.target.value.replace(/\D/g, "").slice(0, 10))}
@@ -657,7 +657,7 @@ export default function SellerOnboarding() {
                   <label className="text-xs font-bold text-slate-500">Support email <span className="text-red-500">*</span></label>
                   <input
                     required
-                    className={`rounded-2xl border px-4 py-3 font-semibold outline-none focus:border-slate-900 ${form.supportEmail && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(form.supportEmail) ? "border-red-400 bg-red-50" : "border-slate-200"}`}
+                    className={`w-full rounded-2xl border px-4 py-3 font-semibold outline-none focus:border-slate-900 ${form.supportEmail && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(form.supportEmail) ? "border-red-400 bg-red-50" : "border-slate-200"}`}
                     placeholder="Support email (e.g. support@example.com)"
                     type="email"
                     value={form.supportEmail}
@@ -774,7 +774,7 @@ export default function SellerOnboarding() {
                   <label className="text-xs font-bold text-slate-500">Service zone <span className="text-red-500">*</span></label>
                   <select
                     required
-                    className="rounded-2xl border border-slate-200 px-4 py-3 font-semibold outline-none focus:border-slate-900"
+                    className="w-full rounded-2xl border border-slate-200 px-4 py-3 font-semibold outline-none focus:border-slate-900"
                     value={`${form.zoneSource}:${form.zoneId}`}
                     onChange={(e) => {
                       const [zoneSource, zoneId] = e.target.value.split(":");
@@ -818,17 +818,17 @@ export default function SellerOnboarding() {
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-bold text-slate-500">Bank name <span className="text-red-500">*</span></label>
-                  <input required className="rounded-2xl border border-slate-200 px-4 py-3 font-semibold outline-none focus:border-slate-900" placeholder="Bank name" value={form.bankName} onChange={(e) => updateField("bankName", e.target.value.replace(/[^a-zA-Z\s]/g, ""))} />
+                  <input required className="w-full rounded-2xl border border-slate-200 px-4 py-3 font-semibold outline-none focus:border-slate-900" placeholder="Bank name" value={form.bankName} onChange={(e) => updateField("bankName", e.target.value.replace(/[^a-zA-Z\s]/g, ""))} />
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-bold text-slate-500">Account holder name <span className="text-red-500">*</span></label>
-                  <input required className="rounded-2xl border border-slate-200 px-4 py-3 font-semibold outline-none focus:border-slate-900" placeholder="Account holder name" value={form.accountHolderName} onChange={(e) => updateField("accountHolderName", e.target.value.replace(/[^a-zA-Z\s]/g, ""))} />
+                  <input required className="w-full rounded-2xl border border-slate-200 px-4 py-3 font-semibold outline-none focus:border-slate-900" placeholder="Account holder name" value={form.accountHolderName} onChange={(e) => updateField("accountHolderName", e.target.value.replace(/[^a-zA-Z\s]/g, ""))} />
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-bold text-slate-500">Account number <span className="text-red-500">*</span></label>
                   <input
                     required
-                    className={`rounded-2xl border px-4 py-3 font-semibold outline-none focus:border-slate-900 ${form.accountNumber && !/^\d{6,20}$/.test(form.accountNumber) ? "border-red-400 bg-red-50" : "border-slate-200"}`}
+                    className={`w-full rounded-2xl border px-4 py-3 font-semibold outline-none focus:border-slate-900 ${form.accountNumber && !/^\d{6,20}$/.test(form.accountNumber) ? "border-red-400 bg-red-50" : "border-slate-200"}`}
                     placeholder="Account number (6–20 digits)"
                     value={form.accountNumber}
                     maxLength={20}
@@ -842,7 +842,7 @@ export default function SellerOnboarding() {
                   <label className="text-xs font-bold text-slate-500">IFSC code <span className="text-red-500">*</span></label>
                   <input
                     required
-                    className={`rounded-2xl border px-4 py-3 font-semibold uppercase outline-none focus:border-slate-900 ${form.ifscCode && !/^[A-Z]{4}0[A-Z0-9]{6}$/.test(form.ifscCode) ? "border-red-400 bg-red-50" : "border-slate-200"}`}
+                    className={`w-full rounded-2xl border px-4 py-3 font-semibold uppercase outline-none focus:border-slate-900 ${form.ifscCode && !/^[A-Z]{4}0[A-Z0-9]{6}$/.test(form.ifscCode) ? "border-red-400 bg-red-50" : "border-slate-200"}`}
                     placeholder="IFSC code (e.g. ABCD0EF1234)"
                     value={form.ifscCode}
                     maxLength={11}
@@ -856,7 +856,7 @@ export default function SellerOnboarding() {
                   <label className="text-xs font-bold text-slate-500">Account type <span className="text-red-500">*</span></label>
                 <select
                   required
-                  className="rounded-2xl border border-slate-200 px-4 py-3 font-semibold outline-none focus:border-slate-900"
+                  className="w-full rounded-2xl border border-slate-200 px-4 py-3 font-semibold outline-none focus:border-slate-900"
                   value={form.accountType}
                   onChange={(e) => updateField("accountType", e.target.value)}
                 >
@@ -875,7 +875,7 @@ export default function SellerOnboarding() {
                   <label className="text-xs font-bold text-slate-500">UPI ID <span className="text-red-500">*</span></label>
                   <input
                     required
-                    className={`rounded-2xl border px-4 py-3 font-semibold outline-none focus:border-slate-900 ${form.upiId && !/^[a-zA-Z0-9._-]+@[a-zA-Z0-9]+$/.test(form.upiId) ? "border-red-400 bg-red-50" : "border-slate-200"}`}
+                    className={`w-full rounded-2xl border px-4 py-3 font-semibold outline-none focus:border-slate-900 ${form.upiId && !/^[a-zA-Z0-9._-]+@[a-zA-Z0-9]+$/.test(form.upiId) ? "border-red-400 bg-red-50" : "border-slate-200"}`}
                     placeholder="UPI ID (e.g. name@okhdfcbank)"
                     value={form.upiId}
                     onChange={(e) => updateField("upiId", e.target.value)}
@@ -909,7 +909,7 @@ export default function SellerOnboarding() {
                   <label className="text-xs font-bold text-slate-500">PAN number <span className="text-red-500">*</span></label>
                   <input
                     required
-                    className={`rounded-2xl border px-4 py-3 font-semibold uppercase outline-none focus:border-slate-900 ${form.panNumber && !/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(form.panNumber) ? "border-red-400 bg-red-50" : "border-slate-200"}`}
+                    className={`w-full rounded-2xl border px-4 py-3 font-semibold uppercase outline-none focus:border-slate-900 ${form.panNumber && !/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(form.panNumber) ? "border-red-400 bg-red-50" : "border-slate-200"}`}
                     placeholder="PAN number (e.g. ABCDE1234F)"
                     value={form.panNumber}
                     maxLength={10}
@@ -938,7 +938,7 @@ export default function SellerOnboarding() {
                   <label className="text-xs font-bold text-slate-500">GST number {form.gstRegistered && <span className="text-red-500">*</span>}</label>
                   <input
                     required={form.gstRegistered}
-                    className={`rounded-2xl border px-4 py-3 font-semibold uppercase outline-none focus:border-slate-900 ${form.gstRegistered && form.gstNumber && !/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(form.gstNumber) ? "border-red-400 bg-red-50" : "border-slate-200"}`}
+                    className={`w-full rounded-2xl border px-4 py-3 font-semibold uppercase outline-none focus:border-slate-900 ${form.gstRegistered && form.gstNumber && !/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(form.gstNumber) ? "border-red-400 bg-red-50" : "border-slate-200"}`}
                     placeholder="GST number (e.g. 22ABCDE1234F1Z5)"
                     value={form.gstNumber}
                     maxLength={15}
@@ -950,13 +950,13 @@ export default function SellerOnboarding() {
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-bold text-slate-500">GST legal name {form.gstRegistered && <span className="text-red-500">*</span>}</label>
-                  <input required={form.gstRegistered} className="rounded-2xl border border-slate-200 px-4 py-3 font-semibold outline-none focus:border-slate-900" placeholder="GST legal name" value={form.gstLegalName} onChange={(e) => updateField("gstLegalName", e.target.value.replace(/[^a-zA-Z\s]/g, ""))} />
+                  <input required={form.gstRegistered} className="w-full rounded-2xl border border-slate-200 px-4 py-3 font-semibold outline-none focus:border-slate-900" placeholder="GST legal name" value={form.gstLegalName} onChange={(e) => updateField("gstLegalName", e.target.value.replace(/[^a-zA-Z\s]/g, ""))} />
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-bold text-slate-500">FSSAI number <span className="text-red-500">*</span></label>
                   <input
                     required
-                    className={`rounded-2xl border px-4 py-3 font-semibold outline-none focus:border-slate-900 ${form.fssaiNumber && !/^\d{14}$/.test(form.fssaiNumber) ? "border-red-400 bg-red-50" : "border-slate-200"}`}
+                    className={`w-full rounded-2xl border px-4 py-3 font-semibold outline-none focus:border-slate-900 ${form.fssaiNumber && !/^\d{14}$/.test(form.fssaiNumber) ? "border-red-400 bg-red-50" : "border-slate-200"}`}
                     placeholder="FSSAI number (14 digits)"
                     value={form.fssaiNumber}
                     maxLength={14}
@@ -1000,7 +1000,7 @@ export default function SellerOnboarding() {
                   <label className="text-xs font-bold text-slate-500">Shop license number <span className="text-red-500">*</span></label>
                   <input
                     required
-                    className={`rounded-2xl border px-4 py-3 font-semibold outline-none focus:border-slate-900 ${form.shopLicenseNumber && !/^[A-Za-z0-9\/\-]{5,20}$/.test(form.shopLicenseNumber) ? "border-red-400 bg-red-50" : "border-slate-200"}`}
+                    className={`w-full rounded-2xl border px-4 py-3 font-semibold outline-none focus:border-slate-900 ${form.shopLicenseNumber && !/^[A-Za-z0-9\/\-]{5,20}$/.test(form.shopLicenseNumber) ? "border-red-400 bg-red-50" : "border-slate-200"}`}
                     placeholder="Shop license number (e.g. MH/2023/12345)"
                     value={form.shopLicenseNumber}
                     maxLength={20}
