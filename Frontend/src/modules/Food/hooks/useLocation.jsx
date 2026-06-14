@@ -328,402 +328,80 @@ export function useLocation() {
     }
   }
 
-  // Google Places API removed - using OLA Maps only
+  /* ===================== LOCATION RESOLUTION (Google Maps + Fallbacks) ===================== */
+  const resolveDetailedLocation = async (latitude, longitude, forceFresh = false) => {
+    let primaryAddr = null;
+    let fallbackAddr = null;
 
-  /* Removed Google Geocoding/Places (maps.googleapis.com). Uses BigDataCloud reverse-geocode only. */
-  const reverseGeocodeWithGoogleMaps = async (latitude, longitude, _options = {}) =>
-    reverseGeocodeDirect(latitude, longitude, _options?.forceFresh || false)
+    const isDetailed = (addr) => {
+      if (!addr) return false;
+      if (!addr.area || addr.area.trim() === "") return false;
+      if (addr.formattedAddress && addr.city && addr.formattedAddress.toLowerCase() === addr.city.toLowerCase()) return false;
+      return true;
+    };
 
-
-  /* ===================== OLA MAPS REVERSE GEOCODE (DEPRECATED - KEPT FOR FALLBACK) ===================== */
-  const reverseGeocodeWithOLAMaps = async (latitude, longitude) => {
+    // 1. Primary API (Backend Google Maps)
     try {
-      debugLog("?? Fetching address from OLA Maps for:", latitude, longitude)
-
-      // Add timeout to prevent hanging
+      debugLog("📍 Trying Primary API for:", latitude, longitude);
+      // Timeout to prevent hanging
       const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error("OLA Maps API timeout")), 10000)
-      )
+        setTimeout(() => reject(new Error("Primary API timeout")), 10000)
+      );
+      const apiPromise = locationAPI.reverseGeocode(latitude, longitude);
+      const res = await Promise.race([apiPromise, timeoutPromise]);
 
-      const apiPromise = locationAPI.reverseGeocode(latitude, longitude)
-      const res = await Promise.race([apiPromise, timeoutPromise])
-
-      // Log full response for debugging
-      debugLog("?? Full OLA Maps API Response:", JSON.stringify(res?.data, null, 2))
-
-      // Check if response is valid
-      if (!res || !res.data) {
-        throw new Error("Invalid response from OLA Maps API")
+      if (res?.data?.success && res?.data?.data) {
+        const data = res.data.data;
+        primaryAddr = {
+          city: data.city || "Unknown City",
+          state: data.state || "",
+          country: data.country || "",
+          area: data.area || data.locality || "",
+          address: data.formattedAddress || "",
+          formattedAddress: data.formattedAddress || "",
+        };
+        debugLog("✅ Primary API Success:", primaryAddr);
       }
-
-      // Check if API call was successful
-      if (res.data.success === false) {
-        throw new Error(res.data.message || "OLA Maps API returned error")
-      }
-
-      // Backend returns: { success: true, data: { results: [{ formatted_address, address_components: { city, state, country, area } }] } }
-      const backendData = res?.data?.data || {}
-
-      // Debug: Check backend data structure
-      debugLog("?? Backend data structure:", {
-        hasResults: !!backendData.results,
-        hasResult: !!backendData.result,
-        keys: Object.keys(backendData),
-        dataType: typeof backendData,
-        backendData: JSON.stringify(backendData, null, 2).substring(0, 500) // First 500 chars
-      })
-
-      // Handle different OLA Maps response structures
-      // Backend processes OLA Maps response and returns: { results: [{ formatted_address, address_components: { city, state, area } }] }
-      let result = null;
-      if (backendData.results && Array.isArray(backendData.results) && backendData.results.length > 0) {
-        result = backendData.results[0];
-        debugLog("? Using results[0] from backend")
-      } else if (backendData.result && Array.isArray(backendData.result) && backendData.result.length > 0) {
-        result = backendData.result[0];
-        debugLog("? Using result[0] from backend")
-      } else if (backendData.results && !Array.isArray(backendData.results)) {
-        result = backendData.results;
-        debugLog("? Using results object from backend")
-      } else {
-        result = backendData;
-        debugLog("?? Using backendData directly (fallback)")
-      }
-
-      if (!result) {
-        debugWarn("?? No result found in backend data")
-        result = {};
-      }
-
-      debugLog("?? Parsed result:", {
-        hasFormattedAddress: !!result.formatted_address,
-        hasAddressComponents: !!result.address_components,
-        formattedAddress: result.formatted_address,
-        addressComponents: result.address_components
-      })
-
-      // Extract address_components - handle both object and array formats
-      let addressComponents = {};
-      if (result.address_components) {
-        if (Array.isArray(result.address_components)) {
-          // Google Maps style array
-          result.address_components.forEach(comp => {
-            const types = comp.types || [];
-            if (types.includes('sublocality') || types.includes('sublocality_level_1')) {
-              addressComponents.area = comp.long_name || comp.short_name;
-            } else if (types.includes('neighborhood') && !addressComponents.area) {
-              addressComponents.area = comp.long_name || comp.short_name;
-            } else if (types.includes('locality')) {
-              addressComponents.city = comp.long_name || comp.short_name;
-            } else if (types.includes('administrative_area_level_1')) {
-              addressComponents.state = comp.long_name || comp.short_name;
-            } else if (types.includes('country')) {
-              addressComponents.country = comp.long_name || comp.short_name;
-            }
-          });
-        } else {
-          // Object format
-          addressComponents = result.address_components;
-        }
-      } else if (result.components) {
-        addressComponents = result.components;
-      }
-
-      debugLog("?? Parsed result structure:", {
-        result,
-        addressComponents,
-        hasArrayComponents: Array.isArray(result.address_components),
-        hasObjectComponents: !Array.isArray(result.address_components) && !!result.address_components
-      })
-
-      // Extract address details - try multiple possible response structures
-      let city = addressComponents?.city ||
-        result?.city ||
-        result?.locality ||
-        result?.address_components?.city ||
-        ""
-
-      let state = addressComponents?.state ||
-        result?.state ||
-        result?.administrative_area_level_1 ||
-        result?.address_components?.state ||
-        ""
-
-      let country = addressComponents?.country ||
-        result?.country ||
-        result?.country_name ||
-        result?.address_components?.country ||
-        ""
-
-      let formattedAddress = result?.formatted_address ||
-        result?.formattedAddress ||
-        result?.address ||
-        ""
-
-      // PRIORITY 1: Extract area from formatted_address FIRST (most reliable for Indian addresses)
-      // Indian address format: "Area, City, State" e.g., "New Palasia, Indore, Madhya Pradesh"
-      // ALWAYS try formatted_address FIRST - it's the most reliable source and preserves full names like "New Palasia"
-      let area = ""
-      if (formattedAddress) {
-        const addressParts = formattedAddress.split(',').map(part => part.trim()).filter(part => part.length > 0)
-
-        debugLog("?? Parsing formatted address for area:", { formattedAddress, addressParts, city, state, currentArea: area })
-
-        // ZOMATO-STYLE: If we have 3+ parts, first part is ALWAYS the area/locality
-        // Format: "New Palasia, Indore, Madhya Pradesh" -> area = "New Palasia"
-        if (addressParts.length >= 3) {
-          const firstPart = addressParts[0]
-          const secondPart = addressParts[1] // Usually city
-          const thirdPart = addressParts[2]  // Usually state
-
-          // First part is the area (e.g., "New Palasia")
-          // Second part is usually city (e.g., "Indore")
-          // Third part is usually state (e.g., "Madhya Pradesh")
-          if (firstPart && firstPart.length > 2 && firstPart.length < 50) {
-            // Make sure first part is not the same as city or state
-            const firstLower = firstPart.toLowerCase()
-            const cityLower = (city || secondPart || "").toLowerCase()
-            const stateLower = (state || thirdPart || "").toLowerCase()
-
-            if (firstLower !== cityLower &&
-              firstLower !== stateLower &&
-              !firstPart.match(/^\d+/) && // Not a number
-              !firstPart.match(/^\d+\s*(km|m|meters?)$/i) && // Not a distance
-              !firstLower.includes("district") && // Not a district name
-              !firstLower.includes("city")) { // Not a city name
-              area = firstPart
-              debugLog("??? EXTRACTED AREA from formatted address (3+ parts):", area)
-
-              // Also update city if second part matches better
-              if (secondPart && (!city || secondPart.toLowerCase() !== city.toLowerCase())) {
-                city = secondPart
-              }
-              // Also update state if third part matches better
-              if (thirdPart && (!state || thirdPart.toLowerCase() !== state.toLowerCase())) {
-                state = thirdPart
-              }
-            }
-          }
-        } else if (addressParts.length === 2 && !area) {
-          // Two parts: Could be "Area, City" or "City, State"
-          const firstPart = addressParts[0]
-          const secondPart = addressParts[1]
-
-          // Check if first part is city (if we already have city name)
-          const isFirstCity = city && firstPart.toLowerCase() === city.toLowerCase()
-
-          // If first part is NOT the city, it's likely the area
-          if (!isFirstCity &&
-            firstPart.length > 2 &&
-            firstPart.length < 50 &&
-            !firstPart.toLowerCase().includes("district") &&
-            !firstPart.toLowerCase().includes("city") &&
-            !firstPart.match(/^\d+/)) {
-            area = firstPart
-            debugLog("? Extracted area from 2 part address:", area)
-            // Update city if second part exists
-            if (secondPart && !city) {
-              city = secondPart
-            }
-          } else if (isFirstCity) {
-            // First part is city, second part might be state
-            // No area in this case, but update state if needed
-            if (secondPart && !state) {
-              state = secondPart
-            }
-          }
-        } else if (addressParts.length === 1 && !area) {
-          // Single part - could be just city or area
-          const singlePart = addressParts[0]
-          if (singlePart && singlePart.length > 2 && singlePart.length < 50) {
-            // If it doesn't match city exactly, it might be an area
-            if (!city || singlePart.toLowerCase() !== city.toLowerCase()) {
-              // Don't use as area if it looks like a city name (contains common city indicators)
-              if (!singlePart.toLowerCase().includes("city") &&
-                !singlePart.toLowerCase().includes("district")) {
-                // Could be area, but be cautious - only use if we're sure
-                debugLog("?? Single part address - ambiguous, not using as area:", singlePart)
-              }
-            }
-          }
-        }
-      }
-
-      // PRIORITY 2: If still no area from formatted_address, try from address_components (fallback)
-      // Note: address_components might have incomplete/truncated names like "Palacia" instead of "New Palasia"
-      // So we ALWAYS prefer formatted_address extraction over address_components
-      if (!area && addressComponents) {
-        // Try all possible area fields (but exclude state and generic names!)
-        const possibleAreaFields = [
-          addressComponents.sublocality,
-          addressComponents.sublocality_level_1,
-          addressComponents.neighborhood,
-          addressComponents.sublocality_level_2,
-          addressComponents.locality,
-          addressComponents.area, // Check area last
-        ].filter(field => {
-          // Filter out invalid/generic area names
-          if (!field) return false
-          const fieldLower = field.toLowerCase()
-          return fieldLower !== state.toLowerCase() &&
-            fieldLower !== city.toLowerCase() &&
-            !fieldLower.includes("district") &&
-            !fieldLower.includes("city") &&
-            field.length > 3 // Minimum length
-        })
-
-        if (possibleAreaFields.length > 0) {
-          const fallbackArea = possibleAreaFields[0]
-          // CRITICAL: If formatted_address exists and has a different area, prefer formatted_address
-          // This ensures "New Palasia" from formatted_address beats "Palacia" from address_components
-          if (formattedAddress && formattedAddress.toLowerCase().includes(fallbackArea.toLowerCase())) {
-            // formatted_address contains the fallback area, so it's likely more complete
-            // Try one more time to extract from formatted_address
-            debugLog("?? address_components has area but formatted_address might have full name, re-checking formatted_address")
-          } else {
-            area = fallbackArea
-            debugLog("? Extracted area from address_components (fallback):", area)
-          }
-        }
-      }
-
-      // Also check address_components array structure (Google Maps style)
-      if (!area && result?.address_components && Array.isArray(result.address_components)) {
-        const components = result.address_components
-        // Find sublocality or neighborhood in the components array
-        const sublocality = components.find(comp =>
-          comp.types?.includes('sublocality') ||
-          comp.types?.includes('sublocality_level_1') ||
-          comp.types?.includes('neighborhood')
-        )
-        if (sublocality?.long_name || sublocality?.short_name) {
-          area = sublocality.long_name || sublocality.short_name
-        }
-      }
-
-      // FINAL FALLBACK: If area is still empty, force extract from formatted_address
-      // This is the last resort - be very aggressive (ZOMATO-STYLE)
-      // Even if formatted_address only has 2 parts (City, State), try to extract area
-      if (!area && formattedAddress) {
-        const parts = formattedAddress.split(',').map(p => p.trim()).filter(p => p.length > 0)
-        debugLog("?? Final fallback: Parsing formatted_address for area", { parts, city, state })
-
-        if (parts.length >= 2) {
-          const potentialArea = parts[0]
-          // Very lenient check - if it's not obviously city/state, use it as area
-          const potentialAreaLower = potentialArea.toLowerCase()
-          const cityLower = (city || "").toLowerCase()
-          const stateLower = (state || "").toLowerCase()
-
-          if (potentialArea &&
-            potentialArea.length > 2 &&
-            potentialArea.length < 50 &&
-            !potentialArea.match(/^\d+/) &&
-            potentialAreaLower !== cityLower &&
-            potentialAreaLower !== stateLower &&
-            !potentialAreaLower.includes("district") &&
-            !potentialAreaLower.includes("city")) {
-            area = potentialArea
-            debugLog("??? FORCE EXTRACTED area (final fallback):", area)
-          }
-        }
-      }
-
-      // Final validation and logging
-      debugLog("??? FINAL PARSED OLA Maps response:", {
-        city,
-        state,
-        country,
-        area,
-        formattedAddress,
-        hasArea: !!area,
-        areaLength: area?.length || 0
-      })
-
-      // CRITICAL: If formattedAddress has only 2 parts, OLA Maps didn't provide sublocality
-      // Try to get more detailed location using coordinates-based search
-      if (!area && formattedAddress) {
-        const parts = formattedAddress.split(',').map(p => p.trim()).filter(p => p.length > 0)
-
-        // If we have 3+ parts, extract area from first part
-        if (parts.length >= 3) {
-          // ZOMATO PATTERN: "New Palasia, Indore, Madhya Pradesh"
-          // First part = Area, Second = City, Third = State
-          const potentialArea = parts[0]
-          // Validate it's not state, city, or generic names
-          const potentialAreaLower = potentialArea.toLowerCase()
-          if (potentialAreaLower !== state.toLowerCase() &&
-            potentialAreaLower !== city.toLowerCase() &&
-            !potentialAreaLower.includes("district") &&
-            !potentialAreaLower.includes("city")) {
-            area = potentialArea
-            if (!city && parts[1]) city = parts[1]
-            if (!state && parts[2]) state = parts[2]
-            debugLog("??? ZOMATO-STYLE EXTRACTION:", { area, city, state })
-          }
-        } else if (parts.length === 2) {
-          // Only 2 parts: "Indore, Madhya Pradesh" - area is missing
-          // OLA Maps API didn't provide sublocality
-          debugWarn("?? Only 2 parts in address - OLA Maps didn't provide sublocality")
-          // Try to extract from other fields in the response
-          // Check if result has any other location fields
-          if (result.locality && result.locality !== city) {
-            area = result.locality
-            debugLog("? Using locality as area:", area)
-          } else if (result.neighborhood) {
-            area = result.neighborhood
-            debugLog("? Using neighborhood as area:", area)
-          } else {
-            // Leave area empty - will show city instead
-            area = ""
-          }
-        }
-      }
-
-      // FINAL VALIDATION: Never use state as area!
-      if (area && state && area.toLowerCase() === state.toLowerCase()) {
-        debugWarn("?????? REJECTING area (same as state):", area)
-        area = ""
-      }
-
-      // FINAL VALIDATION: Reject district names
-      if (area && area.toLowerCase().includes("district")) {
-        debugWarn("?????? REJECTING area (contains district):", area)
-        area = ""
-      }
-
-      // If we have a valid formatted address or city, return it
-      if (formattedAddress || city) {
-        const finalLocation = {
-          city: city || "Unknown City",
-          state: state || "",
-          country: country || "",
-          area: area || "", // Area is CRITICAL - must be extracted
-          address: formattedAddress || `${city || "Current Location"}`,
-          formattedAddress: formattedAddress || `${city || "Current Location"}`,
-        }
-
-        debugLog("??? RETURNING LOCATION DATA:", finalLocation)
-        return finalLocation
-      }
-
-      // If no valid data, throw to trigger fallback
-      throw new Error("No valid address data from OLA Maps")
     } catch (err) {
-      debugWarn("?? OLA Maps geocoding failed, trying BigDataCloud:", err.message)
-      // Fallback to direct reverse geocoding (BigDataCloud)
-      try {
-        return await reverseGeocodeWithGoogleMaps(latitude, longitude)
-      } catch (fallbackErr) {
-        // If all fail, return minimal location data
-        debugError("? All reverse geocoding failed:", fallbackErr)
-        return {
-          city: "Current Location",
-          address: `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`,
-          formattedAddress: `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`,
+      debugWarn("⚠️ Primary API failed:", err.message);
+    }
+
+    if (isDetailed(primaryAddr)) {
+      return primaryAddr;
+    }
+
+    // 2. Fallback API (BigDataCloud)
+    try {
+      debugLog("⚠️ Primary incomplete/failed. Trying Fallback API for:", latitude, longitude);
+      fallbackAddr = await reverseGeocodeDirect(latitude, longitude, forceFresh);
+      debugLog("✅ Fallback API Success:", fallbackAddr);
+    } catch (err) {
+      debugWarn("⚠️ Fallback API failed:", err.message);
+    }
+
+    // Pick best
+    if (isDetailed(fallbackAddr)) return fallbackAddr;
+
+    // If neither is detailed, try to parse area from formattedAddress of primary
+    if (primaryAddr && primaryAddr.formattedAddress) {
+      const parts = primaryAddr.formattedAddress.split(',').map(p => p.trim());
+      if (parts.length >= 3 && !primaryAddr.area) {
+        const potentialArea = parts[0];
+        const potentialAreaLower = potentialArea.toLowerCase();
+        const cityLower = (primaryAddr.city || "").toLowerCase();
+        const stateLower = (primaryAddr.state || "").toLowerCase();
+        if (potentialAreaLower !== cityLower && potentialAreaLower !== stateLower && !potentialAreaLower.match(/^\d+/)) {
+          primaryAddr.area = potentialArea;
+          debugLog("🎯 FORCE EXTRACTED area (final fallback):", primaryAddr.area);
         }
       }
+      if (primaryAddr.area || primaryAddr.city) return primaryAddr;
     }
+
+    if (fallbackAddr && fallbackAddr.city && fallbackAddr.city !== "Unknown City") return fallbackAddr;
+    if (primaryAddr) return primaryAddr;
+
+    throw new Error("Both geocoding APIs failed to return a valid location");
   }
 
   /* ===================== DB FETCH ===================== */
@@ -843,14 +521,14 @@ export function useLocation() {
               })
 
               // Validate coordinates are in India range BEFORE attempting geocoding
-              // India: Latitude 6.5� to 37.1� N, Longitude 68.7� to 97.4� E
+              // India: Latitude 6.5 to 37.1 N, Longitude 68.7 to 97.4 E
               const isInIndiaRange = latitude >= 6.5 && latitude <= 37.1 && longitude >= 68.7 && longitude <= 97.4 && longitude > 0
 
-              // Reverse geocode (BigDataCloud via reverseGeocodeWithGoogleMaps wrapper)
+              // Resolve detailed location
               let addr
               if (!isInIndiaRange || longitude < 0) {
                 // Coordinates are outside India - skip geocoding and use placeholder
-                debugWarn("?? Coordinates outside India range, skipping geocoding:", { latitude, longitude })
+                debugWarn("⚠️ Coordinates outside India range, skipping geocoding:", { latitude, longitude })
                 addr = {
                   city: "Current Location",
                   state: "",
@@ -860,45 +538,23 @@ export function useLocation() {
                   formattedAddress: "Select location",
                 }
               } else {
-                debugLog("?? Calling reverse geocode with coordinates:", { latitude, longitude })
+                debugLog("📍 Calling reverse geocode with coordinates:", { latitude, longitude })
                 try {
-                  addr = await reverseGeocodeWithGoogleMaps(latitude, longitude, {
-                    includePlaceDetails: Boolean(forceFresh && showLoading),
-                    forceFresh: forceFresh
-                  })
-                  debugLog("? Reverse geocoding successful:", addr)
-                } catch (geocodeErr) {
-                  debugWarn("?? Primary geocoding failed, trying fallback:", geocodeErr.message)
-                  try {
-                    // Fallback to direct reverse geocode (BigDataCloud)
-                    addr = await reverseGeocodeDirect(latitude, longitude, forceFresh)
-                    debugLog("? Fallback geocoding successful:", addr)
-
-                    // Validate fallback result - if it still has placeholder values, don't use it
-                    if (addr.city === "Current Location" || addr.address.includes(latitude.toFixed(4))) {
-                      debugWarn("?? Fallback geocoding returned placeholder, will not save")
-                      addr = {
-                        city: "Current Location",
-                        state: "",
-                        country: "",
-                        area: "",
-                        address: "Select location",
-                        formattedAddress: "Select location",
-                      }
-                    }
-                  } catch (fallbackErr) {
-                    debugError("? All geocoding methods failed:", fallbackErr.message)
-                    addr = {
-                      city: "Current Location",
-                      state: "",
-                      country: "",
-                      area: "",
-                      address: "Select location",
-                      formattedAddress: "Select location",
-                    }
+                  addr = await resolveDetailedLocation(latitude, longitude, forceFresh)
+                  debugLog("✅ Reverse geocoding successful:", addr)
+                } catch (err) {
+                  debugError("❌ All geocoding methods failed:", err.message)
+                  addr = {
+                    city: "Current Location",
+                    state: "",
+                    country: "",
+                    area: "",
+                    address: "Select location",
+                    formattedAddress: "Select location",
                   }
                 }
               }
+
               debugLog("Reverse geocode result:", addr)
               if (addr?.formattedAddress && addr.formattedAddress !== "Select location") {
                 lastResolvedAddressRef.current = addr
@@ -937,8 +593,31 @@ export function useLocation() {
                 finalLoc.formattedAddress === "Select location" ||
                 (!finalLoc.city && !finalLoc.address && !finalLoc.formattedAddress && !finalLoc.area);
 
+              // PREVENT OVERWRITING DETAILED ADDRESS WITH INCOMPLETE ONE
+              if (!hasPlaceholder) {
+                const isNewDetailed = finalLoc.area && finalLoc.area.trim() !== "";
+                if (!isNewDetailed) {
+                  const cachedStr = localStorage.getItem("userLocation");
+                  if (cachedStr) {
+                    try {
+                      const cached = JSON.parse(cachedStr);
+                      const isOldDetailed = cached.area && cached.area.trim() !== "";
+                      if (isOldDetailed && cached.latitude && cached.longitude) {
+                        const dist = getDistanceMeters(cached.latitude, cached.longitude, latitude, longitude);
+                        if (dist < 200) {
+                          debugWarn("⚠️ Aborting overwrite: existing detailed address is within 200m. Reusing it.");
+                          Object.assign(finalLoc, cached);
+                          // Since we reused cached, we update accuracy with new accuracy
+                          finalLoc.accuracy = accuracy || null;
+                        }
+                      }
+                    } catch (e) {}
+                  }
+                }
+              }
+
               if (hasPlaceholder) {
-                debugWarn("?? Skipping save - location contains placeholder values:", finalLoc)
+                debugWarn("⚠️ Skipping save - location contains placeholder values:", finalLoc)
                 // Don't save placeholder values to localStorage or DB
                 // Just set in state for display but don't persist
                 const coordOnlyLoc = {
