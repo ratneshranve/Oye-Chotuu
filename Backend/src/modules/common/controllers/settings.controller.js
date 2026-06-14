@@ -91,6 +91,7 @@ export async function updateGlobalSettings(req, res, next) {
                 food: modules.food !== undefined ? modules.food : settings.modules?.food,
                 homeBakery: modules.homeBakery !== undefined ? modules.homeBakery : settings.modules?.homeBakery,
                 quickCommerce: modules.quickCommerce !== undefined ? modules.quickCommerce : settings.modules?.quickCommerce,
+                dudhwala: modules.dudhwala !== undefined ? modules.dudhwala : settings.modules?.dudhwala,
             };
         }
         if (codEnabled !== undefined) {

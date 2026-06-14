@@ -14,6 +14,9 @@ import DesktopNavbar from "./DesktopNavbar"
 import QuickBottomNav from "@/modules/quickCommerce/user/components/layout/BottomNav"
 import DudhwalaBottomNav from "@/modules/Dudhwala/components/BottomNavigation"
 import { useUserNotifications } from "../../hooks/useUserNotifications"
+import { useServiceability } from "@/modules/common/hooks/useServiceability"
+import { useZone } from "@food/hooks/useZone"
+import { useLocation as useAppLocation } from "@food/hooks/useLocation"
 
 // Create SearchOverlay context with default value
 const SearchOverlayContext = createContext({
@@ -119,6 +122,20 @@ export default function UserLayout({ children }) {
   // Note: Authentication checks and redirects are handled by ProtectedRoute components
   // UserLayout should not interfere with authentication redirects
 
+  // Determine active tab based on route for serviceability check
+  let activeTab = 'food';
+  if (location.pathname === '/quick' || location.pathname.startsWith('/quick/')) {
+    activeTab = 'quick';
+  } else if (location.pathname === '/dudhwala' || location.pathname.startsWith('/dudhwala/')) {
+    activeTab = 'milk';
+  }
+
+  const { isModuleEnabled } = useServiceability(activeTab);
+  const { location: appLocation } = useAppLocation();
+  const { isOutOfService } = useZone(appLocation);
+  
+  const hideExtras = !isModuleEnabled || isOutOfService;
+
   // Show bottom navigation only on home page, dining page, under-250 page, and profile page
   const path = location.pathname.startsWith("/food")
     ? location.pathname.substring(5) || "/"
@@ -169,15 +186,15 @@ export default function UserLayout({ children }) {
                   {/* <Navbar /> */}
                   {/* Desktop Navbar - Hidden on mobile, visible on medium+ screens */}
                   <div className="hidden md:block">
-                    {showFoodBottomNav && <DesktopNavbar showLogo={!isUnder250} />}
+                    {showFoodBottomNav && <DesktopNavbar showLogo={!isUnder250} hideExtras={hideExtras} />}
                   </div>
                   <LocationPrompt />
                   <main className={showFoodBottomNav ? "md:pt-40" : ""}>
                     {children || <Outlet />}
                   </main>
-                  {showFoodBottomNav && <BottomNavigation />}
-                  {isSharedQuickProfile && <QuickBottomNav />}
-                  {isSharedDudhwalaProfile && <DudhwalaBottomNav />}
+                  {!hideExtras && showFoodBottomNav && <BottomNavigation />}
+                  {!hideExtras && isSharedQuickProfile && <QuickBottomNav />}
+                  {!hideExtras && isSharedDudhwalaProfile && <DudhwalaBottomNav />}
                 </LocationSelectorProvider>
               </SearchOverlayProvider>
           </OrdersProvider>

@@ -18,7 +18,7 @@ const debugWarn = (...args) => {}
 const debugError = (...args) => {}
 
 
-export default function DesktopNavbar({ showLogo = true }) {
+export default function DesktopNavbar({ showLogo = true, hideExtras = false }) {
     const location = useLocation()
     const { isAuthenticated } = useAuth()
     const navigate = useNavigate()
@@ -227,8 +227,9 @@ export default function DesktopNavbar({ showLogo = true }) {
                         </div>
 
                         {/* Center: Search Bar & Veg Mode */}
-                        <div className="flex-1 max-w-3xl mx-4 flex items-center gap-4">
-                            {/* Search Bar */}
+                        {!hideExtras && (
+                            <div className="flex-1 max-w-3xl mx-4 flex items-center gap-4">
+                                {/* Search Bar */}
                             <div className="relative flex-1">
                                 <div className="relative bg-gray-100 dark:bg-[#2a2a2a] rounded-lg transition-all duration-300 focus-within:ring-2 focus-within:ring-[#cc2532] focus-within:bg-white dark:focus-within:bg-[#1a1a1a] border border-transparent focus-within:border-[#cc2532]/20">
                                     <div className="flex items-center px-3 py-2">
@@ -279,11 +280,13 @@ export default function DesktopNavbar({ showLogo = true }) {
                                     className="data-[state=checked]:bg-green-600 data-[state=unchecked]:bg-gray-300 dark:data-[state=unchecked]:bg-gray-600 h-5 w-9"
                                 />
                             </div>
-                        </div>
+                            </div>
+                        )}
 
                         {/* Right: Wallet and Cart Icons */}
-                        <div className="flex items-center gap-2 lg:gap-3 flex-shrink-0">
-                            {/* Wallet Icon */}
+                        {!hideExtras && (
+                            <div className="flex items-center gap-2 lg:gap-3 flex-shrink-0">
+                                {/* Wallet Icon */}
                             <Link to="/food/user/wallet">
                                 <Button
                                     variant="ghost"
@@ -309,14 +312,16 @@ export default function DesktopNavbar({ showLogo = true }) {
                                     )}
                                 </Button>
                             </Link>
-                        </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
 
             {/* Bottom Row: Navigation Tabs & Veg Mode */}
-            <div className={`w-full pb-3 ${(isBannerRoute && !hasScrolledPastBanner) ? "bg-transparent !bg-transparent" : "bg-white dark:bg-[#1a1a1a]"}`}>
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {!hideExtras && (
+                <div className={`w-full pb-3 ${(isBannerRoute && !hasScrolledPastBanner) ? "bg-transparent !bg-transparent" : "bg-white dark:bg-[#1a1a1a]"}`}>
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-center h-12">
                         {/* Navigation Tabs - Centered with spacing */}
                         <div className="flex items-center space-x-24">
@@ -420,10 +425,11 @@ export default function DesktopNavbar({ showLogo = true }) {
                                     />
                                 )}
                             </Link>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            )}
         </nav>
     )
 }

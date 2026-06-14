@@ -26,6 +26,7 @@ const globalSettingsSchema = new mongoose.Schema(
             homeBakery: { type: Boolean, default: false },
 
             quickCommerce: { type: Boolean, default: true },
+            dudhwala: { type: Boolean, default: true },
         },
         codEnabled: { type: Boolean, default: true },
         onlinePaymentEnabled: { type: Boolean, default: true },

@@ -200,6 +200,26 @@ export function useLocation() {
   const [error, setError] = useState(null)
   const [permissionGranted, setPermissionGranted] = useState(false)
 
+  const [deliveryAddressMode, setDeliveryAddressMode] = useState(() => {
+    if (typeof window === "undefined") return "saved";
+    return window.localStorage.getItem("deliveryAddressMode") || "saved";
+  });
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setDeliveryAddressMode(window.localStorage.getItem("deliveryAddressMode") || "saved");
+    };
+    window.addEventListener("deliveryAddressModeChanged", handleStorageChange);
+    // Also listen to normal storage events for cross-tab sync
+    window.addEventListener("storage", (e) => {
+      if (e.key === "deliveryAddressMode") handleStorageChange();
+    });
+    return () => {
+      window.removeEventListener("deliveryAddressModeChanged", handleStorageChange);
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
   const watchIdRef = useRef(null)
   const updateTimerRef = useRef(null)
   const prevLocationCoordsRef = useRef({ latitude: null, longitude: null })
@@ -1383,6 +1403,7 @@ export function useLocation() {
     loading,
     error,
     permissionGranted,
+    deliveryAddressMode,
     requestLocation,
     startWatchingLocation,
     stopWatchingLocation,

@@ -105,6 +105,8 @@ import VegModePopups from "@food/components/user/VegModePopups";
 import * as imgUtils from "@food/utils/imageUtils";
 import { useFoodHomeData } from "@food/hooks/useFoodHomeData";
 import { getCachedSettings } from "@/modules/common/utils/businessSettings";
+import { useServiceability } from "@/modules/common/hooks/useServiceability";
+import ServiceUnavailable from "@/modules/common/components/ServiceUnavailable";
 import bakeryIcon from "@food/assets/explore more icons/bakery.png";
 import customLogo from "@food/assets/customl_ogo.png";
 
@@ -177,32 +179,13 @@ export default function Home() {
   const routerLocation = useRouterLocation();
 
   // --- Location Logic ---
-  const { location } = useLocation();
-  const { zoneId: liveZoneId, isInService: isLiveInService } = useZone(location);
-  const defaultSavedAddress = useMemo(() => getDefaultAddress?.() || null, [getDefaultAddress]);
-  const defaultSavedAddressLocation = useMemo(() => {
-    if (!defaultSavedAddress) return null;
-    const coords = defaultSavedAddress.location?.coordinates;
-    if (Array.isArray(coords) && coords.length >= 2) {
-      return {
-        latitude: coords[1],
-        longitude: coords[0],
-        address: defaultSavedAddress.address || "",
-        formattedAddress: defaultSavedAddress.address || "",
-        city: defaultSavedAddress.city || "",
-        state: defaultSavedAddress.state || "",
-        area: defaultSavedAddress.area || defaultSavedAddress.landmark || "",
-        additionalDetails: defaultSavedAddress.flatNo || "",
-        label: defaultSavedAddress.label || ""
-      };
-    }
-    return null;
-  }, [defaultSavedAddress]);
-  const { zoneId: savedZoneId, isInService: isSavedInService } = useZone(defaultSavedAddressLocation);
+  const { location, deliveryAddressMode } = useLocation();
+  const { zoneId: effectiveZoneId, isInService: isLiveInService, isOutOfService: isEffectiveOutOfService } = useZone(location);
 
-  const deliveryAddressMode = getStoredDeliveryAddressMode();
-  const effectiveZoneId = (deliveryAddressMode === "current" ? liveZoneId : savedZoneId) || liveZoneId;
-  const effectiveLocation = (deliveryAddressMode === "current" ? location : defaultSavedAddressLocation) || location;
+  // --- Serviceability ---
+  const { isModuleEnabled, loading: serviceabilityLoading } = useServiceability(activeTab);
+  
+  const hideExtras = !isModuleEnabled || isEffectiveOutOfService;
 
   // --- Core Data Hook ---
   const {
@@ -215,7 +198,7 @@ export default function Home() {
     state
   } = useFoodHomeData({
     zoneId: effectiveZoneId,
-    location: effectiveLocation,
+    location: location,
     vegMode,
     backendOrigin: BACKEND_ORIGIN,
     availabilityTick
@@ -332,7 +315,7 @@ export default function Home() {
             activeTab={activeTab}
             setActiveTab={handleTabChange}
             location={location}
-            savedAddressText={imgUtils.formatSavedAddress(effectiveLocation)}
+            savedAddressText={imgUtils.formatSavedAddress(location)}
             handleLocationClick={() => openLocationSelector()}
             handleSearchFocus={handleSearchFocus}
             placeholderIndex={placeholderIndex}
@@ -341,6 +324,7 @@ export default function Home() {
             onVegModeChange={handleVegModeChange}
             headerVideoUrl={landing.videoUrl}
             quickThemeColor={quickThemeColor}
+            hideExtras={hideExtras}
             bannerComponent={
               <div className="h-[130px] sm:h-36 md:h-44 mt-3 relative z-10 w-full bg-transparent" />
             }
@@ -349,7 +333,21 @@ export default function Home() {
       </div>
 
       <AnimatePresence initial={false} mode="wait">
-        {activeTab === "food" ? (
+        {hideExtras ? (
+          <motion.div
+            key="unavailable"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="bg-white dark:bg-[#0a0a0a]"
+          >
+            <ServiceUnavailable 
+              type={!isModuleEnabled ? "module" : "zone"} 
+              moduleName={activeTab === 'food' ? 'Food Delivery' : activeTab === 'quick' ? 'ChotuuMart' : 'ChotuuDudhwala'}
+              onRefresh={() => window.location.reload()}
+            />
+          </motion.div>
+        ) : activeTab === "food" ? (
           <motion.div
             key="food-content"
             initial={{ opacity: 0 }}
@@ -568,8 +566,8 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      {activeTab === "food" && hasFoodCartItems && <Suspense fallback={null}><MiniCart /></Suspense>}
-      <Suspense fallback={null}><OrderTrackingCard hasBottomNav /></Suspense>
+      {activeTab === "food" && hasFoodCartItems && !hideExtras && <Suspense fallback={null}><MiniCart /></Suspense>}
+      {!hideExtras && <Suspense fallback={null}><OrderTrackingCard hasBottomNav /></Suspense>}
     </div>
   );
 }

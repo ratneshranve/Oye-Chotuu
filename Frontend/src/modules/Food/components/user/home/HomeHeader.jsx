@@ -163,6 +163,7 @@ export default function HomeHeader({
   quickThemeColor,
   onQuickTabIntent,
   bannerComponent,
+  hideExtras = false,
 }) {
   const navigate = useNavigate();
   const [isListening, setIsListening] = useState(false);
@@ -362,13 +363,15 @@ export default function HomeHeader({
         </button>
 
         <div className="flex items-center gap-2 shrink-0">
-          <Link
-            to={walletPath}
-            className="h-[38px] w-[38px] rounded-full bg-white border border-gray-200 flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.08)]"
-            aria-label="Open wallet"
-          >
-            <Wallet className="h-[19px] w-[19px] text-[#282c3f]" strokeWidth={2} />
-          </Link>
+          {!hideExtras && (
+            <>
+              <Link
+                to={walletPath}
+                className="h-[38px] w-[38px] rounded-full bg-white border border-gray-200 flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.08)]"
+                aria-label="Open wallet"
+              >
+                <Wallet className="h-[19px] w-[19px] text-[#282c3f]" strokeWidth={2} />
+              </Link>
 
           <Popover>
             <PopoverTrigger asChild>
@@ -444,6 +447,8 @@ export default function HomeHeader({
           >
             <ShoppingCart className="h-[20px] w-[20px] text-[#282c3f]" strokeWidth={2} />
           </Link>
+            </>
+          )}
         </div>
       </div>
 
@@ -536,7 +541,7 @@ export default function HomeHeader({
 
       <div className={cn("relative z-10 pb-0 px-3 overflow-visible", isFood ? "pt-3" : "pt-0")}>
         {isFood && isSticky && <div className="h-[46px] mb-2" />}
-        {isFood && (
+        {isFood && !hideExtras && (
           <div 
             className={cn("flex items-center gap-2 mb-2", 
               isSticky ? "fixed top-0 left-0 right-0 z-[100] px-4 py-2 pb-3 shadow-md backdrop-blur-xl border-b border-black/5 dark:border-white/5" : "relative w-full px-0"

@@ -346,7 +346,10 @@ export default function AddressSelectorPage() {
         
         // Persist
         persistSelectedLocation(loc)
-        try { localStorage.setItem("deliveryAddressMode", "current") } catch {}
+        try { 
+          localStorage.setItem("deliveryAddressMode", "current");
+          window.dispatchEvent(new Event("deliveryAddressModeChanged"));
+        } catch {}
         
         // Update map
         if (googleMapRef.current) {
@@ -385,7 +388,10 @@ export default function AddressSelectorPage() {
     if (id) {
       await setDefaultAddress(id)
       persistSelectedLocation(buildLocationPayloadFromAddress(address))
-      try { localStorage.setItem("deliveryAddressMode", "saved") } catch {}
+      try { 
+        localStorage.setItem("deliveryAddressMode", "saved");
+        window.dispatchEvent(new Event("deliveryAddressModeChanged"));
+      } catch {}
       toast.success("Address selected")
       
       // Use "from" state if available, otherwise default to home page
@@ -560,7 +566,10 @@ export default function AddressSelectorPage() {
         const id = getAddressId(savedAddress) || getAddressId(payload) || editingAddressId
         if (id) await setDefaultAddress(id)
         persistSelectedLocation(buildLocationPayloadFromAddress(savedAddress || payload))
-        try { localStorage.setItem("deliveryAddressMode", "saved") } catch {}
+        try { 
+          localStorage.setItem("deliveryAddressMode", "saved");
+          window.dispatchEvent(new Event("deliveryAddressModeChanged"));
+        } catch {}
         toast.success(editingAddressId ? "Address updated" : "Address saved")
         setShowAddressForm(false)
         setEditingAddressId(null)
