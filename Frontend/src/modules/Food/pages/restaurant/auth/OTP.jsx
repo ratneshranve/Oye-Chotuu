@@ -145,13 +145,6 @@ export default function RestaurantOTP() {
     if (value && index < 3) {
       inputRefs.current[index + 1]?.focus()
     }
-
-    if (newOtp.every((digit) => digit !== "") && newOtp.length === 4) {
-      if (!hasSubmittedRef.current) {
-        hasSubmittedRef.current = true
-        handleVerify(newOtp.join(""))
-      }
-    }
   }
 
   const handleKeyDown = (index, e) => {
@@ -178,11 +171,7 @@ export default function RestaurantOTP() {
           }
         })
         setOtp(newOtp)
-        if (digits.length === 4) {
-          handleVerify(newOtp.join(""))
-        } else {
-          inputRefs.current[digits.length]?.focus()
-        }
+        inputRefs.current[Math.min(digits.length, 3)]?.focus()
       })
     }
   }
@@ -198,11 +187,7 @@ export default function RestaurantOTP() {
       }
     })
     setOtp(newOtp)
-    if (digits.length === 4) {
-      handleVerify(newOtp.join(""))
-    } else {
-      inputRefs.current[digits.length]?.focus()
-    }
+    inputRefs.current[Math.min(digits.length, 3)]?.focus()
   }
 
   const handleVerify = async (otpValue = null) => {
