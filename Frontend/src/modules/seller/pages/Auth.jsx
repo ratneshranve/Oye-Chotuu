@@ -363,19 +363,39 @@ export default function SellerAuth() {
 
               <div className="space-y-5">
                 <div className="space-y-4">
-                  <div className="flex items-center border border-gray-200 rounded-xl p-1.5 bg-white focus-within:border-[#16a34a] focus-within:ring-1 focus-within:ring-[#16a34a] transition-all">
-                    <div className="bg-[#EAFaf1] p-2 rounded-lg flex items-center justify-center shrink-0">
-                      <KeyRound className="w-4 h-4 text-[#16a34a]" />
-                    </div>
-                    <input
-                      type="tel"
-                      inputMode="numeric"
-                      maxLength={4}
-                      value={otp}
-                      onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 4))}
-                      placeholder="Enter 4-digit OTP"
-                      className="w-full bg-transparent pl-3 pr-2 py-1.5 text-sm text-gray-900 font-semibold outline-none placeholder:text-gray-400 placeholder:font-normal tracking-[0.25em] focus:tracking-[0.4em] transition-all"
-                    />
+                  <div className="flex justify-between gap-3 sm:gap-4 max-w-[280px] mx-auto">
+                    {[0, 1, 2, 3].map((index) => (
+                      <input
+                        key={index}
+                        type="tel"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        maxLength={1}
+                        value={otp[index] || ""}
+                        onChange={(e) => {
+                          const val = e.target.value.replace(/\D/g, "");
+                          let newOtp = otp.split("");
+                          newOtp[index] = val;
+                          setOtp(newOtp.join("").slice(0, 4));
+                          if (val && index < 3) {
+                            e.target.nextElementSibling?.focus();
+                          }
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === "Backspace" && !otp[index] && index > 0) {
+                            e.target.previousElementSibling?.focus();
+                          }
+                        }}
+                        onPaste={(e) => {
+                          e.preventDefault();
+                          const pastedData = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 4);
+                          if (pastedData) {
+                            setOtp(pastedData);
+                          }
+                        }}
+                        className="w-12 h-12 sm:w-14 sm:h-14 text-center text-xl font-bold border-2 border-gray-200 rounded-xl focus:border-[#16a34a] focus:ring-1 focus:ring-[#16a34a] bg-white text-gray-900 transition-all outline-none"
+                      />
+                    ))}
                   </div>
                 </div>
 
