@@ -159,8 +159,7 @@ export default function SellerAuth() {
       navigate(
         sellerUser?.approved === false && sellerUser?.onboardingSubmitted !== true
           ? "/seller/onboarding"
-          : nextSellerPath,
-        { replace: true },
+          : nextSellerPath
       );
     } catch (error) {
       toast.error(error?.response?.data?.message || error?.message || "OTP verification failed");
