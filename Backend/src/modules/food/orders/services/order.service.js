@@ -2535,7 +2535,7 @@ export async function tryAutoAssign(orderId, options = {}) {
             { ownerType: 'DELIVERY_PARTNER', ownerId: best.partnerId },
             {
                 title: 'New order assigned! 🛵',
-                body: `You have 60 seconds to accept Order #${order.orderId}.`,
+                body: `You have 30 seconds to accept Order #${order.orderId}.`,
                 data: {
                     type: 'new_order',
                     orderId: order.orderId,
@@ -2548,19 +2548,19 @@ export async function tryAutoAssign(orderId, options = {}) {
         logger.error(`SmartDispatch: Failed to notify partner ${best.partnerId}: ${err.message}`);
     }
 
-    // ⏱️ Schedule a timeout check in 60 seconds
+    // ⏱️ Schedule a timeout check in 30 seconds
     await addOrderJob({
         action: 'DISPATCH_TIMEOUT_CHECK',
         orderMongoId: order._id.toString(),
         orderId: order.orderId,
         partnerId: best.partnerId.toString()
-    }, { delay: 60000 }); // 60 seconds
+    }, { delay: 30000 }); // 30 seconds
 
     return order;
 }
 
 /**
- * Triggered by worker after 60 seconds of zero response.
+ * Triggered by worker after 30 seconds of zero response.
  */
 export async function processDispatchTimeout(orderId, partnerId) {
     const order = await FoodOrder.findById(orderId);

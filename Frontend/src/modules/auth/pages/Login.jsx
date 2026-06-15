@@ -59,8 +59,8 @@ export default function UnifiedOTPFastLogin() {
     }
   }, [keyboardInset])
 
-  const fromPath = location.state?.from?.pathname || location.state?.from || "/portal"
-  const fromSearch = location.state?.from?.search || ""
+  const fromPath = typeof location.state?.from === "string" ? location.state.from : (location.state?.from?.pathname || "/portal")
+  const fromSearch = typeof location.state?.from === "object" ? (location.state?.from?.search || "") : ""
   const redirectTo = fromPath + fromSearch
 
   useEffect(() => {

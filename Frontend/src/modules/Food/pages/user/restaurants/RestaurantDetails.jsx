@@ -2052,7 +2052,7 @@ function RestaurantDetailsContent() {
       </div>
 
       {/* Main Content Card - "Same to Same" Redesign */}
-      <div className="bg-[#F8F9FA] dark:bg-[#0a0a0a] -mt-4 relative z-10 px-4 pt-0 min-h-[50vh]">
+      <div className="bg-[#F8F9FA] dark:bg-[#0a0a0a] relative z-10 px-4 pt-4 min-h-[50vh]">
         <div className="max-w-7xl mx-auto space-y-4">
           {/* Info Card */}
           <div className="bg-white dark:bg-[#1a1a1a] rounded-[28px] shadow-[0_10px_40px_rgb(0,0,0,0.04)] border border-gray-100 dark:border-gray-800 p-5 space-y-4">
@@ -2542,7 +2542,11 @@ function RestaurantDetailsContent() {
                                     onClick={(e) => {
                                       e.stopPropagation()
                                       if (!shouldShowGrayscale) {
-                                        updateItemQuantity(item, quantity + 1, e)
+                                        if (hasFoodVariants(item) || item.customisable) {
+                                          handleItemClick(item)
+                                        } else {
+                                          updateItemQuantity(item, quantity + 1, e)
+                                        }
                                       }
                                     }}
                                     disabled={shouldShowGrayscale}
@@ -2560,7 +2564,11 @@ function RestaurantDetailsContent() {
                                   onClick={(e) => {
                                     e.stopPropagation()
                                     if (!shouldShowGrayscale) {
-                                      updateItemQuantity(item, 1, e)
+                                      if (hasFoodVariants(item) || item.customisable) {
+                                        handleItemClick(item)
+                                      } else {
+                                        updateItemQuantity(item, 1, e)
+                                      }
                                     }
                                   }}
                                   disabled={shouldShowGrayscale}
@@ -2763,7 +2771,11 @@ function RestaurantDetailsContent() {
                                               onClick={(e) => {
                                                 e.stopPropagation()
                                                 if (!shouldShowGrayscale) {
-                                                  updateItemQuantity(item, quantity + 1, e)
+                                                  if (hasFoodVariants(item) || item.customisable) {
+                                                    handleItemClick(item)
+                                                  } else {
+                                                    updateItemQuantity(item, quantity + 1, e)
+                                                  }
                                                 }
                                               }}
                                               disabled={shouldShowGrayscale}
@@ -2781,7 +2793,11 @@ function RestaurantDetailsContent() {
                                             onClick={(e) => {
                                               e.stopPropagation()
                                               if (!shouldShowGrayscale) {
-                                                updateItemQuantity(item, 1, e)
+                                                if (hasFoodVariants(item) || item.customisable) {
+                                                  handleItemClick(item)
+                                                } else {
+                                                  updateItemQuantity(item, 1, e)
+                                                }
                                               }
                                             }}
                                             disabled={shouldShowGrayscale}
