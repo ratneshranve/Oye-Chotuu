@@ -2137,7 +2137,7 @@ export default function Cart() {
                 )}
               </div>
 
-              {/* Delivery Time */}
+              {/* Delivery Time
               <div className="relative overflow-hidden rounded-3xl border border-orange-200/80 bg-[linear-gradient(135deg,#fff7ed_0%,#ffffff_52%,#fef2f2_100%)] px-4 py-5 shadow-[0_16px_50px_rgba(235,89,14,0.12)] dark:border-orange-900/50 dark:bg-[linear-gradient(135deg,rgba(60,24,10,0.92)_0%,rgba(26,26,26,0.98)_48%,rgba(58,16,23,0.92)_100%)] md:px-6">
                 <div className="pointer-events-none absolute -right-12 -top-14 h-40 w-40 rounded-full bg-orange-200/50 blur-3xl dark:bg-orange-500/10" />
                 <div className="pointer-events-none absolute -left-10 bottom-0 h-24 w-24 rounded-full bg-rose-200/60 blur-2xl dark:bg-rose-500/10" />
@@ -2228,6 +2228,7 @@ export default function Cart() {
                   </div>
                 )}
               </div>
+              */}
 
 
               {/* Note & Cutlery */}
