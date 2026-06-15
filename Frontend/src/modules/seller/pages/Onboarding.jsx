@@ -353,6 +353,22 @@ export default function SellerOnboarding() {
       return;
     }
 
+    const openTimeStr = normalizeTimeValue(hoursDraft.openingTime);
+    const closeTimeStr = normalizeTimeValue(hoursDraft.closingTime);
+    if (openTimeStr && closeTimeStr) {
+      const [openH, openM] = openTimeStr.split(":").map(Number);
+      const [closeH, closeM] = closeTimeStr.split(":").map(Number);
+      const openMins = (openH || 0) * 60 + (openM || 0);
+      const closeMins = (closeH || 0) * 60 + (closeM || 0);
+      if (openMins === closeMins) {
+        toast.error("Opening time and closing time cannot be same");
+        return;
+      } else if (closeMins < openMins) {
+        toast.error("Closing time cannot be less than opening time");
+        return;
+      }
+    }
+
     const openingHoursLabel = buildOpeningHoursLabel(
       hoursDraft.openingTime,
       hoursDraft.closingTime,

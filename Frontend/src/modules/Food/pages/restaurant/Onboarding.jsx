@@ -1175,6 +1175,21 @@ export default function RestaurantOnboarding() {
     if (!step2.closingTime?.trim()) {
       errors.push("Closing time is required")
     }
+    if (step2.openingTime?.trim() && step2.closingTime?.trim()) {
+      const openTimeStr = normalizeTimeValue(step2.openingTime);
+      const closeTimeStr = normalizeTimeValue(step2.closingTime);
+      if (openTimeStr && closeTimeStr) {
+        const [openH, openM] = openTimeStr.split(":").map(Number);
+        const [closeH, closeM] = closeTimeStr.split(":").map(Number);
+        const openMins = (openH || 0) * 60 + (openM || 0);
+        const closeMins = (closeH || 0) * 60 + (closeM || 0);
+        if (openMins === closeMins) {
+          errors.push("Opening time and closing time cannot be same");
+        } else if (closeMins < openMins) {
+          errors.push("Closing time cannot be less than opening time");
+        }
+      }
+    }
     if (!step2.openDays || step2.openDays.length === 0) {
       errors.push("Please select at least one open day")
     }
