@@ -37,6 +37,7 @@ import { addOrderJob } from '../../../../queues/producers/order.producer.js';
 import { fetchPolyline } from '../utils/googleMaps.js';
 import { getFirebaseDB } from '../../../../config/firebase.js';
 import * as foodTransactionService from './foodTransaction.service.js';
+import { isStatusAdvance } from './order.helpers.js';
 
 const ORDER_ID_PREFIX = "FOD-";
 const ORDER_ID_LENGTH = 6;
@@ -2973,6 +2974,11 @@ export async function updateOrderStatusRestaurant(
   });
   if (!order) throw new NotFoundError("Order not found");
   const from = order.orderStatus;
+
+  if (!isStatusAdvance(from, orderStatus)) {
+    throw new ValidationError(`Current order status '${from}' is further ahead than '${orderStatus}'. Order cannot be moved backwards or updated after cancellation.`);
+  }
+
   order.orderStatus = orderStatus;
   pushStatusHistory(order, {
     byRole: "RESTAURANT",

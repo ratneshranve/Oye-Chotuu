@@ -132,7 +132,7 @@ export default function BakeryList() {
 
   return (
     <AnimatedPage className="min-h-screen bg-gradient-to-b from-pink-50/20 dark:from-[#0a0a0a] via-white dark:via-[#0a0a0a] to-amber-50/10 dark:to-[#0a0a0a]">
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 py-4 sm:py-6 md:py-8 lg:py-10 space-y-4 sm:space-y-6 lg:space-y-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 pt-4 pb-24 md:py-8 lg:py-10 space-y-4 sm:space-y-6 lg:space-y-8">
         <ScrollReveal>
           <div className="flex items-center gap-3 sm:gap-4 lg:gap-5 mb-4 lg:mb-6">
             <Link to="/food/user">
@@ -214,10 +214,6 @@ export default function BakeryList() {
                                 <div className="flex items-center gap-1">
                                   <Clock className="h-4 w-4 flex-shrink-0 text-rose-500" />
                                   <span className="whitespace-nowrap">{bakery.deliveryTime}</span>
-                                </div>
-                                <div className="flex items-center gap-1">
-                                  <MapPin className="h-4 w-4 flex-shrink-0 text-rose-500" />
-                                  <span className="whitespace-nowrap">{bakery.distance}</span>
                                 </div>
                               </div>
                             </div>
