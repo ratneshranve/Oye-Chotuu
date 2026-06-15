@@ -11,7 +11,7 @@ import { loadBusinessSettings, getCachedSettings } from "@common/utils/businessS
 
 export default function UnifiedOTPFastLogin() {
   const RESEND_COOLDOWN_SECONDS = 60
-  const [phoneNumber, setPhoneNumber] = useState("")
+  const [phoneNumber, setPhoneNumber] = useState(() => sessionStorage.getItem("userLoginPhone") || "")
   const [otp, setOtp] = useState("")
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
@@ -443,7 +443,11 @@ export default function UnifiedOTPFastLogin() {
                     required
                     autoFocus
                     value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, "").slice(0, 10))}
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/\D/g, "").slice(0, 10);
+                      setPhoneNumber(val);
+                      sessionStorage.setItem("userLoginPhone", val);
+                    }}
                     maxLength={10}
                     className="w-full bg-transparent pl-2 pr-2 py-1.5 text-sm text-gray-900 font-semibold outline-none placeholder:text-gray-400 placeholder:font-normal"
                     placeholder="Enter phone number"

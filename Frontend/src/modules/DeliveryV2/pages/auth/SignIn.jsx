@@ -25,9 +25,11 @@ export default function DeliverySignIn() {
   const location = useLocation()
   const searchParams = new URLSearchParams(location.search)
   const referralCode = searchParams.get("ref") || ""
-  const [formData, setFormData] = useState({
-    phone: "",
-    countryCode: "+91",
+  const [formData, setFormData] = useState(() => {
+    return {
+      phone: sessionStorage.getItem("deliverySignInPhone") || "",
+      countryCode: "+91",
+    }
   })
 
   // Pre-fill form from sessionStorage if data exists (e.g., when coming back from OTP)
@@ -185,6 +187,7 @@ export default function DeliverySignIn() {
       ...formData,
       phone: value,
     })
+    sessionStorage.setItem("deliverySignInPhone", value)
   }
 
   const handleCountryCodeChange = (value) => {

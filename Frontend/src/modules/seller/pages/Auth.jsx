@@ -21,7 +21,7 @@ export default function SellerAuth() {
   const companyName = useCompanyName();
   const [step, setStep] = useState("phone");
   const [isLoading, setIsLoading] = useState(false);
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState(() => sessionStorage.getItem("sellerAuthPhone") || "");
   const [otp, setOtp] = useState("");
   const [otpPhone, setOtpPhone] = useState("");
   const [logoUrl, setLogoUrl] = useState(() => getCachedSettings()?.logo?.url || null)
@@ -311,7 +311,11 @@ export default function SellerAuth() {
                       inputMode="numeric"
                       placeholder="Enter phone number"
                       value={phone}
-                      onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/\D/g, "").slice(0, 10);
+                        setPhone(val);
+                        sessionStorage.setItem("sellerAuthPhone", val);
+                      }}
                       className="w-full bg-transparent pl-2 pr-2 py-1.5 text-sm text-gray-900 font-semibold outline-none placeholder:text-gray-400 placeholder:font-normal"
                     />
                   </div>
