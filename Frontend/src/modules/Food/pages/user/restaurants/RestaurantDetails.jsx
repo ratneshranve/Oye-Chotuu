@@ -1447,12 +1447,15 @@ function RestaurantDetailsContent() {
       return
     }
 
+    const isBakery = restaurant?.businessType === 'homebakery' || restaurant?.businessType === 'home_bakery';
+    const entityName = isBakery ? "Bakery" : "Restaurant";
+
     const isAlreadyFavorite = isFavorite(restaurantSlug)
 
     if (isAlreadyFavorite) {
       // Remove from collection
       removeFavorite(restaurantSlug)
-      toast.success("Restaurant removed from collection")
+      toast.success(`${entityName} removed from collection`)
     } else {
       // Add to collection
       addFavorite({
@@ -1465,7 +1468,7 @@ function RestaurantDetailsContent() {
         priceRange: restaurant.priceRange || "",
         image: restaurant.profileImageUrl?.url || restaurant.image || ""
       })
-      toast.success("Restaurant added to collection")
+      toast.success(`${entityName} added to collection`)
     }
 
     setShowMenuOptionsSheet(false)
@@ -3067,45 +3070,6 @@ function RestaurantDetailsContent() {
                       </div>
                     </div>
 
-                    {/* Top picks */}
-                    <div className="space-y-2">
-                      <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Top picks:</h3>
-                      <button
-                        onClick={() =>
-                          setFilters((prev) => ({
-                            ...prev,
-                            highlyReordered: !prev.highlyReordered,
-                          }))
-                        }
-                        className={`flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 transition-all w-full ${filters.highlyReordered
-                          ? "border-[#cc2532] dark:border-[#cc2532] bg-red-50 dark:bg-[#cc2532]/20 text-[#cc2532] dark:text-[#cc2532]"
-                          : "border-gray-200 dark:border-gray-700 bg-white dark:bg-[#2a2a2a] text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600"
-                          }`}
-                      >
-                        <RotateCcw className="h-4 w-4" />
-                        <span className="font-medium">Highly reordered</span>
-                      </button>
-                    </div>
-
-                    {/* Dietary preference */}
-                    <div className="space-y-2">
-                      <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Dietary preference:</h3>
-                      <button
-                        onClick={() =>
-                          setFilters((prev) => ({
-                            ...prev,
-                            spicy: !prev.spicy,
-                          }))
-                        }
-                        className={`flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 transition-all w-full ${filters.spicy
-                          ? "border-red-500 dark:border-red-400 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400"
-                          : "border-gray-200 dark:border-gray-700 bg-white dark:bg-[#2a2a2a] text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600"
-                          }`}
-                      >
-                        <Flame className="h-4 w-4" />
-                        <span className="font-medium">Spicy</span>
-                      </button>
-                    </div>
                   </div>
 
                   {/* Bottom Action Bar */}

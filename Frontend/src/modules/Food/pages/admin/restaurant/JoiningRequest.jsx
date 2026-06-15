@@ -807,7 +807,9 @@ export default function JoiningRequest() {
                 <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
                   <UtensilsCrossed className="w-5 h-5 text-blue-600" />
                 </div>
-                <h2 className="text-xl font-bold text-slate-900">Restaurant Details - {selectedRequest.restaurantName || "N/A"}</h2>
+                <h2 className="text-xl font-bold text-slate-900">
+                  {selectedRequest?.businessType === 'homebakery' ? 'Bakery' : 'Restaurant'} Details - {selectedRequest.restaurantName || "N/A"}
+                </h2>
               </div>
               <button
                 onClick={closeDetailsModal}
@@ -1063,20 +1065,7 @@ export default function JoiningRequest() {
                     <div>
                       <h4 className="text-lg font-semibold text-slate-900 mb-4">Cuisine & Details</h4>
                       <div className="space-y-3">
-                        <div>
-                          <p className="text-xs text-slate-500 mb-1">Cuisines</p>
-                          <div className="flex flex-wrap gap-2">
-                            {r?.cuisines && Array.isArray(r.cuisines) && r.cuisines.length > 0 ? (
-                              r.cuisines.map((cuisine, idx) => (
-                                <span key={idx} className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
-                                  {cuisine}
-                                </span>
-                              ))
-                            ) : (
-                              <span className="text-sm text-slate-700">N/A</span>
-                            )}
-                          </div>
-                        </div>
+
                         {typeof r?.pureVegRestaurant === "boolean" && (
                           <div>
                             <p className="text-xs text-slate-500 mb-1">Food Type</p>

@@ -1629,7 +1629,9 @@ export default function RestaurantsList() {
             {/* Modal Header */}
             <div className="px-8 py-6 border-b border-slate-100 flex items-center justify-between bg-white/80 backdrop-blur-md sticky top-0 z-10">
               <div>
-                <h2 className="text-2xl font-bold text-slate-900">Restaurant Details</h2>
+                <h2 className="text-2xl font-bold text-slate-900">
+                  {selectedRestaurant?.originalData?.businessType === 'homebakery' || selectedRestaurant?.businessType === 'homebakery' ? 'Bakery' : 'Restaurant'} Details
+                </h2>
                 <p className="text-sm text-slate-500 mt-1">Detailed overview and information</p>
               </div>
               <div className="flex items-center gap-2">
