@@ -765,7 +765,8 @@ export default function RestaurantOnboarding() {
 
   // Load from localStorage on mount and check URL parameter
   useEffect(() => {
-    setVerifiedPhoneNumber(getVerifiedPhoneFromStoredRestaurant())
+    const currentPhone = getVerifiedPhoneFromStoredRestaurant()
+    setVerifiedPhoneNumber(currentPhone)
 
     // Check if step is specified in URL (from OTP login redirect)
     const stepParam = searchParams.get("step")
@@ -778,7 +779,17 @@ export default function RestaurantOnboarding() {
       goToStep(1, { replace: true })
     }
 
-    const localData = loadOnboardingFromLocalStorage()
+    let localData = loadOnboardingFromLocalStorage()
+    
+    // If the phone number changed, clear old onboarding data
+    if (localData && localData.step1 && localData.step1.ownerPhone && currentPhone) {
+      if (normalizePhoneDigits(localData.step1.ownerPhone) !== normalizePhoneDigits(currentPhone)) {
+        clearOnboardingFromLocalStorage()
+        clearOnboardingFileCache()
+        localData = null // act as if no local data
+      }
+    }
+
     if (localData) {
       if (localData.step1) {
         setStep1({
