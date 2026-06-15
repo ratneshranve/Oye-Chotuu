@@ -23,6 +23,7 @@ import {
   getMyOrders,
   getOrderById,
   placeOrder,
+  verifyPayment,
 } from "../controllers/order.controller.js";
 import {
   addToWishlist,
@@ -164,6 +165,7 @@ router.delete("/cart/remove/:productId", optionalAuth, removeCartItem);
 router.delete("/cart/clear", optionalAuth, clearCart);
 
 router.post("/orders", optionalAuth, placeOrder);
+router.post("/orders/:orderId/verify-payment", optionalAuth, verifyPayment);
 router.get("/orders", optionalAuth, getMyOrders);
 router.get("/orders/:orderId", optionalAuth, getOrderById);
 router.post("/orders/:orderId/cancel", optionalAuth, cancelOrder);

@@ -43,6 +43,8 @@ import {
   leaveOrderRoom,
   onOrderStatusUpdate,
 } from "@/core/services/orderSocket";
+import { initRazorpayPayment } from "@food/utils/razorpay";
+import { getCompanyNameAsync } from "@common/utils/businessSettings";
 import ProductCard from "../components/shared/ProductCard";
 import {
   Dialog,
@@ -1644,6 +1646,14 @@ const CheckoutPage = () => {
     try {
       if (!getCheckoutCartItemsForSync().length) {
         showToast("Cart is empty", "error");
+        setIsPlacingOrder(false);
+        return;
+      }
+
+      if (!isAuthenticated) {
+        showToast("Please login to place an order", "error");
+        navigate("/user/auth/login", { state: { from: routerLocation } });
+        setIsPlacingOrder(false);
         return;
       }
 
@@ -1676,8 +1686,86 @@ const CheckoutPage = () => {
 
       if (response.data.success) {
         const order = response.data.result;
+        const razorpayData = response.data.razorpay;
         const placedOrderId =
           order?.orderId || order?.orderNumber || order?.id || order?._id || "";
+
+        if (selectedPayment === "online" && razorpayData) {
+          try {
+            const companyName = await getCompanyNameAsync();
+            const userName = userProfile?.name || user?.name || "Customer";
+            const userEmail = userProfile?.email || user?.email || "customer@example.com";
+            const formattedPhone = String(userProfile?.phone || user?.phone || "").replace(/\D/g, "").slice(-10);
+
+            await initRazorpayPayment({
+              key: razorpayData.key,
+              amount: razorpayData.amount,
+              currency: razorpayData.currency || "INR",
+              order_id: razorpayData.orderId,
+              name: companyName || "Oye Chotuu",
+              description: `Order ${placedOrderId} - ₹${(razorpayData.amount / 100).toFixed(2)}`,
+              prefill: {
+                name: userName,
+                email: userEmail,
+                contact: formattedPhone
+              },
+              handler: async (paymentResponse) => {
+                try {
+                  const verifyRes = await customerApi.verifyPayment(order._id || order.orderId || placedOrderId, {
+                    razorpayOrderId: paymentResponse.razorpay_order_id,
+                    razorpayPaymentId: paymentResponse.razorpay_payment_id,
+                    razorpaySignature: paymentResponse.razorpay_signature
+                  });
+
+                  if (verifyRes.data.success) {
+                    clearCart();
+                    try {
+                      if (typeof window !== "undefined") {
+                        window.localStorage.removeItem(CHECKOUT_STORAGE_KEY);
+                        window.localStorage.removeItem(RECIPIENT_STORAGE_KEY);
+                      }
+                    } catch {}
+
+                    showToast(`Order placed successfully.`, "success");
+                    setOrderId(placedOrderId);
+                    setShowSuccess(true);
+
+                    if (postOrderNavigateRef.current) clearTimeout(postOrderNavigateRef.current);
+                    postOrderNavigateRef.current = setTimeout(() => {
+                      postOrderNavigateRef.current = null;
+                      navigate(getQuickOrderDetailPath(placedOrderId));
+                    }, 1200);
+                  } else {
+                    showToast("Payment verification failed", "error");
+                    navigate(getQuickOrderDetailPath(placedOrderId));
+                  }
+                } catch (verifyError) {
+                  showToast("Payment verification failed", "error");
+                  try { await customerApi.cancelOrder(placedOrderId); } catch (e) {}
+                  navigate(getQuickOrderDetailPath(placedOrderId));
+                }
+              },
+              modal: {
+                ondismiss: async () => {
+                  showToast("Payment cancelled. Order cancelled.", "warning");
+                  try { await customerApi.cancelOrder(placedOrderId); } catch (e) {}
+                  navigate(getQuickOrderDetailPath(placedOrderId));
+                }
+              }
+            });
+            setIsPlacingOrder(false);
+            return;
+          } catch (rzpErr) {
+            console.error("Razorpay init error:", rzpErr);
+            showToast("Failed to initialize payment gateway", "error");
+            try { await customerApi.cancelOrder(placedOrderId); } catch (e) {}
+            navigate(getQuickOrderDetailPath(placedOrderId));
+            setIsPlacingOrder(false);
+            return;
+          }
+        }
+
+        // COD flow or fallback if Razorpay missing
         clearCart();
         try {
           if (typeof window !== "undefined") {
@@ -1697,7 +1785,7 @@ const CheckoutPage = () => {
         }
         postOrderNavigateRef.current = setTimeout(() => {
           postOrderNavigateRef.current = null;
-          navigate(getQuickOrderDetailPath(placedOrderId || order?._id || order?.id));
+          navigate(getQuickOrderDetailPath(placedOrderId));
         }, 1200);
       }
     } catch (error) {

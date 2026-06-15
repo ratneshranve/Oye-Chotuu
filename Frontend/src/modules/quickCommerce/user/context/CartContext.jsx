@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { customerApi } from "../services/customerApi";
 import { useAuth } from "@core/context/AuthContext";
 import { useCart as useFoodCart } from "@food/context/CartContext";
@@ -195,7 +196,7 @@ const persistQuickCartSnapshot = (items) => {
   }
 };
 
-const useStandaloneQuickCart = (isBridged = false) => {
+const useStandaloneQuickCart = (isBridged = false, navigate, location) => {
   const { isAuthenticated } = useAuth();
   const [cart, setCart] = useState(() => readStoredQuickCart());
 
@@ -291,6 +292,14 @@ const useStandaloneQuickCart = (isBridged = false) => {
   }, [cart, isBridged]);
 
   const addToCart = async (product) => {
+    if (!isAuthenticated) {
+      if (navigate) {
+        navigate("/user/auth/login", { state: { from: location } });
+      } else {
+        window.location.href = "/user/auth/login";
+      }
+      return;
+    }
     const id = getProductId(product);
     if (!id) return;
     setCart((prev) => {
@@ -454,8 +463,10 @@ const useStandaloneQuickCart = (isBridged = false) => {
 export const CartProvider = ({ children }) => {
   const { isAuthenticated } = useAuth();
   const foodCart = useFoodCart();
+  const navigate = useNavigate();
+  const location = useLocation();
   const isUsingFoodCart = foodCart?._isProvider === true;
-  const standaloneCart = useStandaloneQuickCart(isUsingFoodCart);
+  const standaloneCart = useStandaloneQuickCart(isUsingFoodCart, navigate, location);
 
   const quickItemsFromFoodCart = useMemo(
     () => (Array.isArray(foodCart?.cart) ? foodCart.cart.filter(isQuickCartItem) : []),
@@ -474,6 +485,10 @@ export const CartProvider = ({ children }) => {
     }
 
     const addToCart = async (product) => {
+      if (!isAuthenticated) {
+        navigate("/user/auth/login", { state: { from: location } });
+        return { ok: false };
+      }
       const normalizedProduct = normalizeQuickProductForSharedCart(product);
       
       // Call foodCart.addToCart and check the result for type mismatch

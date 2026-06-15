@@ -91,16 +91,7 @@ export default function DeliverySignIn() {
     }
   }, [])
 
-  useEffect(() => {
-    if (keyboardInset > 0) {
-      const activeElement = document.activeElement;
-      if (activeElement && (activeElement.tagName === "INPUT" || activeElement.tagName === "TEXTAREA")) {
-        setTimeout(() => {
-          activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
-        }, 150);
-      }
-    }
-  }, [keyboardInset]);
+
 
   // Get selected country details dynamically
   const selectedCountry = countryCodes.find(c => c.code === formData.countryCode) || countryCodes[2] // Default to India (+91)
@@ -202,7 +193,7 @@ export default function DeliverySignIn() {
 
   return (
     <div
-      className={`h-[100dvh] bg-[#fafafa] flex flex-col relative font-sans ${keyboardInset > 0 ? "overflow-y-auto overflow-x-hidden" : "overflow-hidden"}`}
+      className="h-[100dvh] bg-[#fafafa] flex flex-col relative font-sans overflow-hidden"
       style={{ paddingBottom: keyboardInset ? `${keyboardInset + 24}px` : undefined }}
     >
       {/* Top Blue Section */}
@@ -286,7 +277,7 @@ export default function DeliverySignIn() {
         </div>
       </div>
 
-      <div className="flex-1 max-w-[420px] mx-auto w-full px-4 flex flex-col mt-16 md:mt-20 relative z-20 pb-4 h-full">
+      <div className="flex-1 max-w-[420px] mx-auto w-full px-4 flex flex-col mt-16 md:mt-20 relative z-20 pb-4 h-full overflow-y-auto">
         {/* Main Card */}
         <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-gray-100 shrink-0 mb-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <div className="text-center mb-5">

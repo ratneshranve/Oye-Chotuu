@@ -94,15 +94,10 @@ export default function RestaurantLogin() {
   const ensurePhoneFieldVisible = () => {
     // Wait for keyboard to animate in
     window.setTimeout(() => {
-      const content = document.getElementById('login-content')
-      if (content) {
-        content.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      } else {
-        phoneInputRef.current?.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-        })
-      }
+      phoneInputRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      })
     }, 300)
   }
 
@@ -141,7 +136,7 @@ export default function RestaurantLogin() {
 
   return (
     <div
-      className={`h-[100dvh] bg-[#fafafa] flex flex-col relative font-sans ${keyboardInset > 0 ? "overflow-y-auto overflow-x-hidden" : "overflow-hidden"}`}
+      className="h-[100dvh] bg-[#fafafa] flex flex-col relative font-sans overflow-hidden"
       style={{ paddingBottom: keyboardInset ? `${keyboardInset + 24}px` : undefined }}
     >
       {/* Top Green Section */}
@@ -225,7 +220,7 @@ export default function RestaurantLogin() {
         </div>
       </div>
 
-      <div id="login-content" className="flex-1 max-w-[420px] mx-auto w-full px-4 flex flex-col mt-16 md:mt-20 relative z-20 pb-4 h-full">
+      <div id="login-content" className="flex-1 max-w-[420px] mx-auto w-full px-4 flex flex-col mt-16 md:mt-20 relative z-20 pb-4 h-full overflow-y-auto">
         {/* Main Card */}
         <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-gray-100 shrink-0 mb-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <div className="text-center mb-5">

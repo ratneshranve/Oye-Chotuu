@@ -48,16 +48,7 @@ export default function UnifiedOTPFastLogin() {
     }
   }, [])
 
-  useEffect(() => {
-    if (keyboardInset > 0) {
-      const activeElement = document.activeElement
-      if (activeElement && (activeElement.tagName === "INPUT" || activeElement.tagName === "TEXTAREA")) {
-        setTimeout(() => {
-          activeElement.scrollIntoView({ behavior: "smooth", block: "center" })
-        }, 150)
-      }
-    }
-  }, [keyboardInset])
+
 
   const fromPath = typeof location.state?.from === "string" ? location.state.from : (location.state?.from?.pathname || "/portal")
   const fromSearch = typeof location.state?.from === "object" ? (location.state?.from?.search || "") : ""
@@ -317,7 +308,7 @@ export default function UnifiedOTPFastLogin() {
 
   return (
     <div
-      className={`h-[100dvh] bg-[#fafafa] flex flex-col relative font-sans ${keyboardInset > 0 ? "overflow-y-auto overflow-x-hidden" : "overflow-hidden"}`}
+      className="h-[100dvh] bg-[#fafafa] flex flex-col relative font-sans overflow-hidden"
       style={{ paddingBottom: keyboardInset ? `${keyboardInset + 24}px` : undefined }}
     >
       {/* Top Red Section */}
@@ -407,7 +398,7 @@ export default function UnifiedOTPFastLogin() {
       </div>
 
 
-      <div className="flex-1 max-w-[420px] mx-auto w-full px-4 flex flex-col mt-16 md:mt-20 relative z-20 pb-4 h-full">
+      <div className="flex-1 max-w-[420px] mx-auto w-full px-4 flex flex-col mt-16 md:mt-20 relative z-20 pb-4 h-full overflow-y-auto">
         {/* Main Card */}
         <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-gray-100 shrink-0 mb-4">
           <div className="text-center mb-5">
@@ -607,7 +598,7 @@ export default function UnifiedOTPFastLogin() {
         <div className="text-center space-y-1 shrink-0 mt-auto pt-4 mb-2">
           <p className="text-[10px] text-gray-500 font-medium">By continuing, you agree to our</p>
           <div className="flex items-center justify-center gap-1.5 text-[10px] font-semibold">
-            <Link to="/food/user/profile/terms" className="text-[#CB202D] hover:underline">Terms of Service</Link>
+            <Link to="/food/user/profile/terms" className="text-[#CB202D] hover:underline">Terms & Conditions</Link>
             <span className="text-gray-400">•</span>
             <Link to="/food/user/profile/privacy" className="text-[#CB202D] hover:underline">Privacy Policy</Link>
             <span className="text-gray-400">•</span>
