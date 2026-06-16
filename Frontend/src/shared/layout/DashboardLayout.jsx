@@ -7,7 +7,7 @@ import BottomNav from './BottomNav';
 import { sellerApi } from '@/modules/seller/services/sellerApi';
 import { useAuth } from '@/core/context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BellRing, Check, X, Clock } from 'lucide-react';
+import { BellRing, Check, X, Clock, Volume2, VolumeX } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import SellerOrdersContext from '@/modules/seller/context/SellerOrdersContext';
@@ -58,6 +58,7 @@ const DashboardLayout = ({ children, navItems, title }) => {
     /** Total seconds in this acceptance window (for progress bar), set when modal opens */
     const acceptWindowTotalRef = useRef(60);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [isMuted, setIsMuted] = useState(false);
     const { user, logout, role } = useAuth();
     const location = useLocation();
 
@@ -73,13 +74,24 @@ const DashboardLayout = ({ children, navItems, title }) => {
     const fetchOrdersRef = useRef(null);
     const earningsFetchedRef = useRef(false);
     const lastEarningsErrorToastAtRef = useRef(0);
+    const alertAudioRef = useRef(null);
 
     useEffect(() => {
         shownOrderIdsRef.current = shownOrderIds;
     }, [shownOrderIds]);
     useEffect(() => {
         newOrderAlertRef.current = newOrderAlert;
+        if (!newOrderAlert && alertAudioRef.current) {
+            alertAudioRef.current.pause();
+            alertAudioRef.current.currentTime = 0;
+        }
     }, [newOrderAlert]);
+
+    useEffect(() => {
+        if (alertAudioRef.current) {
+            alertAudioRef.current.muted = isMuted;
+        }
+    }, [isMuted]);
 
     useEffect(() => {
         if (role === 'seller') {
@@ -139,8 +151,13 @@ const DashboardLayout = ({ children, navItems, title }) => {
                 shownOrderIdsRef.current = new Set(shownOrderIdsRef.current).add(newOrder.orderId);
                 newOrderAlertRef.current = newOrder;
 
-                const audio = new Audio(resolveAudioSource(alertSound));
-                audio.play().catch(() => {});
+                if (!alertAudioRef.current) {
+                    alertAudioRef.current = new Audio(resolveAudioSource(alertSound));
+                    alertAudioRef.current.loop = true;
+                }
+                alertAudioRef.current.muted = isMuted;
+                alertAudioRef.current.currentTime = 0;
+                alertAudioRef.current.play().catch(() => {});
             } catch (error) {
                 console.error("Polling Error:", error);
             } finally {
@@ -346,6 +363,11 @@ const DashboardLayout = ({ children, navItems, title }) => {
         }
     };
 
+    const toggleMute = (e) => {
+        e.stopPropagation();
+        setIsMuted(!isMuted);
+    };
+
     return (
         <div className="min-h-screen mesh-gradient-light relative overflow-x-hidden">
             {/* Background Blobs for depth */}
@@ -389,8 +411,16 @@ const DashboardLayout = ({ children, navItems, title }) => {
                             initial={{ scale: 0.9, opacity: 0, y: 20 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                            className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border border-slate-100"
+                            className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border border-slate-100 relative"
                         >
+                            <button
+                                onClick={toggleMute}
+                                className="absolute top-4 right-4 p-2 hover:bg-slate-100 rounded-xl transition-colors text-slate-400 hover:text-slate-600"
+                                aria-label={isMuted ? "Unmute sound" : "Mute sound"}
+                            >
+                                {isMuted ? <VolumeX className="h-6 w-6" /> : <Volume2 className="h-6 w-6" />}
+                            </button>
+
                             <div className="flex flex-col items-center text-center">
                                 <div className="h-20 w-20 bg-primary/10 rounded-full flex items-center justify-center mb-6 animate-bounce">
                                     <BellRing className="h-10 w-10 text-primary" />
