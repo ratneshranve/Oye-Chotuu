@@ -26,6 +26,27 @@ export default function BottomNavigation() {
   const location = useLocation()
   const [profileImage, setProfileImage] = useState(null)
   const [imageError, setImageError] = useState(false)
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
+
+  // Handle Keyboard Open
+  useEffect(() => {
+    let initialHeight = window.innerHeight
+
+    const handleResize = () => {
+      const currentHeight = window.innerHeight
+      if (initialHeight - currentHeight > 150) {
+        setIsKeyboardOpen(true)
+      } else {
+        setIsKeyboardOpen(false)
+        if (currentHeight > initialHeight) {
+          initialHeight = currentHeight
+        }
+      }
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   const isActive = (path) => {
     if (path === "/delivery") return location.pathname === "/delivery"
@@ -82,6 +103,8 @@ export default function BottomNavigation() {
       window.removeEventListener('deliveryProfileRefresh', handleProfileRefresh)
     }
   }, [])
+
+  if (isKeyboardOpen) return null
 
   return (
     <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">

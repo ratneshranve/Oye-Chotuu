@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react"
 import { Link, useLocation } from "react-router-dom"
 import { Home, CalendarDays, Bell, User } from "lucide-react"
 import { useAuth } from "@core/context/AuthContext"
@@ -8,7 +9,26 @@ export default function BottomNavigation() {
   const { isAuthenticated } = useAuth()
   const pathname = location.pathname
   const redirectTo = `${location.pathname || "/dudhwala"}${location.search || ""}${location.hash || ""}`
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
 
+  useEffect(() => {
+    let initialHeight = window.innerHeight
+
+    const handleResize = () => {
+      const currentHeight = window.innerHeight
+      if (initialHeight - currentHeight > 150) {
+        setIsKeyboardOpen(true)
+      } else {
+        setIsKeyboardOpen(false)
+        if (currentHeight > initialHeight) {
+          initialHeight = currentHeight
+        }
+      }
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
   const isHome = pathname === "/dudhwala" || pathname === "/dudhwala/"
   const isMyPlans = pathname.startsWith("/dudhwala/my-plans")
   const isNotifications = pathname.startsWith("/dudhwala/notifications")
@@ -17,6 +37,8 @@ export default function BottomNavigation() {
   const activeColor = "text-sky-600 dark:text-sky-400"
   const inactiveColor = "text-gray-600 dark:text-gray-400"
   const activeBg = "bg-sky-600 dark:bg-sky-400"
+
+  if (isKeyboardOpen) return null
 
   return (
     <div className="md:hidden fixed bottom-0 left-0 right-0 z-50">

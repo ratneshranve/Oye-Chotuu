@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react"
 import { Link, useLocation } from "react-router-dom"
 import { Tag, User, Truck, Cake } from "lucide-react"
 import { useAuth } from "@core/context/AuthContext"
@@ -9,6 +10,26 @@ export default function BottomNavigation() {
   const pathname = location.pathname
   const profileSource = new URLSearchParams(location.search).get("from")
   const redirectTo = `${location.pathname || "/food/user"}${location.search || ""}${location.hash || ""}`
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
+
+  useEffect(() => {
+    let initialHeight = window.innerHeight
+
+    const handleResize = () => {
+      const currentHeight = window.innerHeight
+      if (initialHeight - currentHeight > 150) {
+        setIsKeyboardOpen(true)
+      } else {
+        setIsKeyboardOpen(false)
+        if (currentHeight > initialHeight) {
+          initialHeight = currentHeight
+        }
+      }
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   // Check active routes - support both /user/* and /* paths
   const isBakery = pathname.startsWith("/food/user/bakery")
@@ -31,6 +52,8 @@ export default function BottomNavigation() {
         !pathname.includes("/bakery") &&
         !pathname.includes("/under-250") &&
         !pathname.includes("/profile")))
+
+  if (isKeyboardOpen) return null
 
   return (
     <div
