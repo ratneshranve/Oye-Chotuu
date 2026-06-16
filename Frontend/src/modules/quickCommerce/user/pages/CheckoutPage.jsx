@@ -1853,10 +1853,10 @@ const CheckoutPage = () => {
 
   if (loading && cart.length === 0 && !showSuccess) {
     return (
-      <div className="min-h-screen bg-white dark:bg-background flex flex-col items-center justify-center p-6 text-center transition-colors">
-        <div className="h-12 w-12 animate-spin rounded-full border-4 border-slate-200 border-t-[#0c831f]" />
-        <h2 className="mt-5 text-2xl font-black text-slate-800">Loading checkout</h2>
-        <p className="mt-2 text-sm font-medium text-slate-500">
+      <div className="min-h-screen bg-white dark:bg-neutral-950 flex flex-col items-center justify-center p-6 text-center transition-colors">
+        <div className="h-12 w-12 animate-spin rounded-full border-4 border-slate-200 dark:border-neutral-700 border-t-[#0c831f] dark:border-t-[#0ea5e9]" />
+        <h2 className="mt-5 text-2xl font-black text-slate-800 dark:text-white">Loading checkout</h2>
+        <p className="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">
           Restoring your cart before checkout...
         </p>
       </div>
@@ -1865,7 +1865,7 @@ const CheckoutPage = () => {
 
   if (cart.length === 0 && !showSuccess) {
     return (
-      <div className="min-h-screen bg-white dark:bg-background flex flex-col items-center justify-center p-6 relative overflow-hidden font-sans transition-colors duration-500">
+      <div className="min-h-screen bg-white dark:bg-neutral-950 flex flex-col items-center justify-center p-6 relative overflow-hidden font-sans transition-colors duration-500">
         {/* Artistic Background Elements */}
         <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-green-50/50 via-transparent to-transparent pointer-events-none" />
         <motion.div
@@ -1893,7 +1893,7 @@ const CheckoutPage = () => {
             <motion.div
               animate={{ y: [-8, 8, -8] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="relative z-10 rounded-[2rem] bg-white/90 dark:bg-card/90 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-emerald-100 dark:border-white/5 transition-colors">
+              className="relative z-10 rounded-[2rem] bg-white/90 dark:bg-neutral-900/90 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-emerald-100 dark:border-neutral-800 transition-colors">
               <Lottie
                 animationData={emptyBoxAnimation}
                 loop
@@ -1904,14 +1904,14 @@ const CheckoutPage = () => {
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-              className="absolute inset-0 border-2 border-dashed border-slate-200 rounded-full"
+              className="absolute inset-0 border-2 border-dashed border-slate-200 dark:border-neutral-800 rounded-full"
             />
           </div>
 
-          <h2 className="text-3xl font-black text-slate-800 mb-3 tracking-tight">
+          <h2 className="text-3xl font-black text-slate-800 dark:text-white mb-3 tracking-tight">
             Your Cart is Empty
           </h2>
-          <p className="text-slate-500 mb-8 leading-relaxed font-medium">
+          <p className="text-slate-500 dark:text-slate-400 mb-8 leading-relaxed font-medium">
             It feels lighter than air! <br />
             Explore our aisles and fill it with goodies.
           </p>
@@ -1957,7 +1957,7 @@ const CheckoutPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#f5f1e8] pb-32 font-sans">
+    <div className="min-h-screen bg-[#f5f1e8] dark:bg-neutral-950 pb-32 font-sans">
       {/* Premium Header - Curved on mobile, integrated on desktop */}
       <div className="bg-gradient-to-br from-[#0a5f17] via-[#0b721b] to-[#084a12] pt-6 pb-12 md:pb-24 relative z-10 shadow-lg md:rounded-b-[4rem] rounded-b-[2rem] overflow-hidden">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/5 rounded-full blur-[100px] -mr-32 -mt-64 pointer-events-none" />
@@ -2001,16 +2001,16 @@ const CheckoutPage = () => {
           {/* Left Column: Delivery & Items */}
           <div className="lg:col-span-7 xl:col-span-8 space-y-6 pb-8">
             {/* Delivery Time Banner */}
-            <motion.div className="bg-white dark:bg-card rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-white/5 mt-3 transition-colors">
+            <motion.div className="bg-white dark:bg-neutral-900 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-neutral-800 mt-3 transition-colors">
               <div className="flex items-center gap-3">
-                <div className="h-12 w-12 rounded-full bg-green-50 dark:bg-emerald-500/10 flex items-center justify-center flex-shrink-0">
-                  <Clock size={24} className="text-[#0c831f]" />
+                <div className="h-12 w-12 rounded-full bg-green-50 dark:bg-emerald-900/20 flex items-center justify-center flex-shrink-0">
+                  <Clock size={24} className="text-[#0c831f] dark:text-emerald-400" />
                 </div>
                 <div>
-                  <h3 className="font-black text-slate-800 text-lg">
+                  <h3 className="font-black text-slate-800 dark:text-white text-lg">
                     Delivery in 12-15 mins
                   </h3>
-                  <p className="text-sm text-slate-500">
+                  <p className="text-sm text-slate-500 dark:text-slate-400">
                     Shipment of {cartCount} items
                   </p>
                 </div>
@@ -2018,7 +2018,7 @@ const CheckoutPage = () => {
             </motion.div>
 
             {/* Delivery Address Section - New UI */}
-            <motion.div className="bg-white dark:bg-card rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-white/5 transition-colors">
+            <motion.div className="bg-white dark:bg-neutral-900 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-neutral-800 transition-colors">
 
               {(() => {
                 const hasSavedAddress = mappedAddresses.length > 0;
@@ -2174,31 +2174,31 @@ const CheckoutPage = () => {
             </motion.div>
 
             {/* Cart Items */}
-            <motion.div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 space-y-4">
+            <motion.div className="bg-white dark:bg-neutral-900 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-neutral-800 space-y-4">
               {displayCartItems.map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-start gap-3 pb-4 border-b border-slate-100 last:border-0 last:pb-0">
-                  <div className="h-20 w-20 rounded-xl overflow-hidden bg-slate-50 flex-shrink-0">
+                  className="flex items-start gap-3 pb-4 border-b border-slate-100 dark:border-neutral-800 last:border-0 last:pb-0">
+                  <div className="h-20 w-20 rounded-xl overflow-hidden bg-slate-50 dark:bg-neutral-800 flex-shrink-0">
                     <img
                       src={item.image}
                       alt={item.name}
-                      className="h-full w-full object-cover"
+                      className="h-full w-full object-cover dark:mix-blend-normal"
                     />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h4 className="font-bold text-slate-800 mb-1">
+                    <h4 className="font-bold text-slate-800 dark:text-white mb-1">
                       {item.name}
                     </h4>
-                    <p className="text-xs text-slate-500 mb-2">75 g</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mb-2">75 g</p>
                     <button
                       onClick={() => handleMoveToWishlist(item)}
-                      className="text-xs text-slate-500 underline hover:text-[#0c831f] transition-colors">
+                      className="text-xs text-slate-500 dark:text-slate-400 underline hover:text-[#0c831f] dark:hover:text-emerald-400 transition-colors">
                       Move to wishlist
                     </button>
                   </div>
                   <div className="flex flex-col items-end gap-2">
-                    <div className="flex items-center gap-2 bg-[#0c831f] rounded-lg px-2 py-1">
+                    <div className="flex items-center gap-2 bg-[#0c831f] dark:bg-emerald-600 rounded-lg px-2 py-1">
                       <button
                         onClick={() =>
                           item.quantity > 1
@@ -2217,7 +2217,7 @@ const CheckoutPage = () => {
                         <Plus size={14} strokeWidth={3} />
                       </button>
                     </div>
-                    <p className="text-base font-black text-slate-800">
+                    <p className="text-base font-black text-slate-800 dark:text-white">
                       ₹{item.price * item.quantity}
                     </p>
                   </div>
@@ -2227,8 +2227,8 @@ const CheckoutPage = () => {
 
             {/* Your Wishlist */}
             {wishlist.filter((item) => item.name).length > 0 && (
-              <motion.div className="bg-white dark:bg-card rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-white/5 transition-colors">
-                <h3 className="font-black text-slate-800 text-lg mb-4">
+              <motion.div className="bg-white dark:bg-neutral-900 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-neutral-800 transition-colors">
+                <h3 className="font-black text-slate-800 dark:text-white text-lg mb-4">
                   Your wishlist
                 </h3>
                 <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar -mx-4 px-4 snap-x">
@@ -2246,8 +2246,8 @@ const CheckoutPage = () => {
             )}
 
             {/* You might also like */}
-            <motion.div className="bg-white dark:bg-card rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-white/5 transition-colors">
-              <h3 className="font-black text-slate-800 text-lg mb-4">
+            <motion.div className="bg-white dark:bg-neutral-900 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-neutral-800 transition-colors">
+              <h3 className="font-black text-slate-800 dark:text-white text-lg mb-4">
                 You might also like
               </h3>
               <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar -mx-4 px-4 snap-x">
@@ -2265,12 +2265,12 @@ const CheckoutPage = () => {
           {/* Right Column: Order Summary & Payment - Sticky on Desktop */}
           <div className="lg:col-span-5 xl:col-span-4 space-y-6 lg:sticky lg:top-8 pb-32 lg:pb-8">
             {/* Summary Backdrop for desktop */}
-            <div className="hidden lg:block absolute inset-0 -m-4 bg-[#fcf9f2] rounded-[2.5rem] -z-10 shadow-inner group-hover:shadow-2xl transition-all duration-500" />
-            <motion.div className="bg-white dark:bg-card rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-white/5 transition-colors">
+            <div className="hidden lg:block absolute inset-0 -m-4 bg-[#fcf9f2] dark:bg-neutral-900/50 rounded-[2.5rem] -z-10 shadow-inner group-hover:shadow-2xl transition-all duration-500" />
+            <motion.div className="bg-white dark:bg-neutral-900 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-neutral-800 transition-colors">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <Tag size={20} className="text-orange-500" />
-                  <h3 className="font-black text-slate-800">
+                  <h3 className="font-black text-slate-800 dark:text-white">
                     Available Coupons
                   </h3>
                 </div>
@@ -2284,12 +2284,12 @@ const CheckoutPage = () => {
                 {coupons.map((coupon) => (
                   <div
                     key={coupon.code}
-                    className="flex items-center gap-3 p-3 bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-slate-800 dark:to-slate-900 rounded-xl border border-orange-100 dark:border-white/5">
+                    className="flex items-center gap-3 p-3 bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-neutral-800 dark:to-neutral-900 rounded-xl border border-orange-100 dark:border-neutral-800">
                     <div className="flex-1">
-                      <p className="font-black text-slate-800 text-sm">
+                      <p className="font-black text-slate-800 dark:text-white text-sm">
                         {coupon.code}
                       </p>
-                      <p className="text-xs text-slate-600">
+                      <p className="text-xs text-slate-600 dark:text-slate-400">
                         {coupon.description}
                       </p>
                     </div>
@@ -2311,14 +2311,14 @@ const CheckoutPage = () => {
             </motion.div>
 
             {/* Tip for Partner */}
-            <motion.div className="bg-gradient-to-r from-pink-50 to-purple-50 dark:from-slate-800 dark:to-slate-900 rounded-2xl p-4 border border-pink-100 dark:border-white/5">
+            <motion.div className="bg-gradient-to-r from-pink-50 to-purple-50 dark:from-neutral-800 dark:to-neutral-900 rounded-2xl p-4 border border-pink-100 dark:border-neutral-800">
               <div className="flex items-center gap-2 mb-3">
                 <Heart size={18} className="text-pink-500 fill-pink-500" />
-                <h3 className="font-black text-slate-800">
+                <h3 className="font-black text-slate-800 dark:text-white">
                   Tip your delivery partner
                 </h3>
               </div>
-              <p className="text-xs text-slate-600 mb-3">
+              <p className="text-xs text-slate-600 dark:text-slate-400 mb-3">
                 100% of the tip goes to them
               </p>
               <div className="grid grid-cols-4 gap-2 mb-3">
@@ -2331,8 +2331,8 @@ const CheckoutPage = () => {
                     }}
                     className={`py-2 rounded-xl border-2 transition-all font-bold text-sm ${
                       selectedTip === tip.value && !customTip
-                        ? "border-pink-500 bg-pink-100 text-pink-700"
-                        : "border-pink-200 bg-white text-slate-700 hover:border-pink-300"
+                        ? "border-pink-500 bg-pink-100 text-pink-700 dark:bg-pink-900/40 dark:text-pink-400"
+                        : "border-pink-200 bg-white text-slate-700 hover:border-pink-300 dark:border-neutral-700 dark:bg-neutral-800 dark:text-slate-300 dark:hover:border-neutral-600"
                     }`}>
                     {tip.label}
                   </button>
@@ -2349,7 +2349,7 @@ const CheckoutPage = () => {
                     setCustomTip(val);
                     setSelectedTip(val ? Number(val) : 0);
                   }}
-                  className="w-full h-10 rounded-xl border-2 border-pink-200 bg-white px-3 text-sm font-bold text-slate-700 placeholder:text-slate-400 focus:outline-none focus:border-pink-400 transition-colors"
+                  className="w-full h-10 rounded-xl border-2 border-pink-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-3 text-sm font-bold text-slate-700 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-pink-400 dark:focus:border-pink-500 transition-colors"
                 />
                 {customTip && (
                   <button
@@ -2363,8 +2363,8 @@ const CheckoutPage = () => {
             </motion.div>
 
             {/* Payment Method */}
-            <motion.div className="bg-white dark:bg-card rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-white/5 transition-colors">
-              <h3 className="font-black text-slate-800 mb-4">Payment Method</h3>
+            <motion.div className="bg-white dark:bg-neutral-900 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-neutral-800 transition-colors">
+              <h3 className="font-black text-slate-800 dark:text-white mb-4">Payment Method</h3>
               <div className="space-y-2">
                 {paymentMethods.map((method) => {
                   const Icon = method.icon;
@@ -2374,41 +2374,41 @@ const CheckoutPage = () => {
                       onClick={() => setSelectedPayment(method.id)}
                       className={`w-full p-3 rounded-xl border-2 transition-all flex items-center gap-3 ${
                         selectedPayment === method.id
-                          ? "border-[#0c831f] bg-green-50"
-                          : "border-slate-200 bg-white hover:border-slate-300"
+                          ? "border-[#0c831f] bg-green-50 dark:bg-emerald-900/20"
+                          : "border-slate-200 bg-white hover:border-slate-300 dark:border-neutral-700 dark:bg-neutral-800 dark:hover:border-neutral-600"
                       }`}>
                       <div
                         className={`h-10 w-10 rounded-full flex items-center justify-center ${
                           selectedPayment === method.id
-                            ? "bg-green-100"
-                            : "bg-slate-100"
+                            ? "bg-green-100 dark:bg-emerald-800/40"
+                            : "bg-slate-100 dark:bg-neutral-700"
                         }`}>
                         <Icon
                           size={18}
                           className={
                             selectedPayment === method.id
-                              ? "text-[#0c831f]"
-                              : "text-slate-600"
+                              ? "text-[#0c831f] dark:text-emerald-400"
+                              : "text-slate-600 dark:text-slate-400"
                           }
                         />
                       </div>
                       <div className="flex-1 text-left">
                         <p
-                          className={`font-bold text-sm ${selectedPayment === method.id ? "text-[#0c831f]" : "text-slate-800"}`}>
+                          className={`font-bold text-sm ${selectedPayment === method.id ? "text-[#0c831f] dark:text-emerald-400" : "text-slate-800 dark:text-white"}`}>
                           {method.label}
                         </p>
-                        <p className="text-xs text-slate-500">
+                        <p className="text-xs text-slate-500 dark:text-slate-400">
                           {method.sublabel}
                         </p>
                       </div>
                       <div
                         className={`h-5 w-5 rounded-full border-2 flex items-center justify-center ${
                           selectedPayment === method.id
-                            ? "border-[#0c831f]"
-                            : "border-slate-300"
+                            ? "border-[#0c831f] dark:border-emerald-500"
+                            : "border-slate-300 dark:border-neutral-600"
                         }`}>
                         {selectedPayment === method.id && (
-                          <div className="h-3 w-3 rounded-full bg-[#0c831f]" />
+                          <div className="h-3 w-3 rounded-full bg-[#0c831f] dark:bg-emerald-500" />
                         )}
                       </div>
                     </button>
@@ -2418,19 +2418,19 @@ const CheckoutPage = () => {
             </motion.div>
 
             {/* Bill Details */}
-            <motion.div className="bg-white dark:bg-card rounded-[2rem] p-6 shadow-xl shadow-gray-200/50 dark:shadow-none border border-slate-100 dark:border-white/5 transition-colors">
+            <motion.div className="bg-white dark:bg-neutral-900 rounded-[2rem] p-6 shadow-xl shadow-gray-200/50 dark:shadow-none border border-slate-100 dark:border-neutral-800 transition-colors">
               <div className="flex items-center gap-2 mb-6">
-                <div className="h-10 w-10 rounded-2xl bg-green-50 dark:bg-emerald-500/10 flex items-center justify-center">
-                  <Clipboard size={20} className="text-[#0c831f]" />
+                <div className="h-10 w-10 rounded-2xl bg-green-50 dark:bg-emerald-900/20 flex items-center justify-center">
+                  <Clipboard size={20} className="text-[#0c831f] dark:text-emerald-400" />
                 </div>
-                <h3 className="font-[1000] text-slate-800 text-xl tracking-tight uppercase">
+                <h3 className="font-[1000] text-slate-800 dark:text-white text-xl tracking-tight uppercase">
                   Order Summary
                 </h3>
               </div>
 
               <div className="space-y-4">
                 <div className="flex justify-between items-center px-2">
-                  <span className="text-slate-500 font-bold text-[13px] uppercase tracking-wider">
+                  <span className="text-slate-500 dark:text-slate-400 font-bold text-[13px] uppercase tracking-wider">
                     Item Total
                   </span>
                   <div className="flex items-baseline gap-2">
@@ -2439,16 +2439,16 @@ const CheckoutPage = () => {
                         ₹{originalItemsTotal}
                       </span>
                     ) : null}
-                    <span className="font-black text-slate-800">
+                    <span className="font-black text-slate-800 dark:text-white">
                     ₹{discountedItemsTotal}
                   </span>
                   </div>
                 </div>
                 <div className="flex justify-between items-center px-2">
-                  <span className="text-slate-500 font-bold text-[13px] uppercase tracking-wider">
+                  <span className="text-slate-500 dark:text-slate-400 font-bold text-[13px] uppercase tracking-wider">
                     Delivery Fee
                   </span>
-                  <span className="font-black text-slate-800">₹{deliveryFee}</span>
+                  <span className="font-black text-slate-800 dark:text-white">₹{deliveryFee}</span>
                 </div>                {pricingPreview &&
                   typeof pricingPreview.distanceKmActual === "number" &&
                   typeof pricingPreview.distanceKmRounded === "number" && (
@@ -2467,24 +2467,24 @@ const CheckoutPage = () => {
                     </div>
                   )}
                 <div className="flex justify-between items-center px-2">
-                  <span className="text-slate-500 font-bold text-[13px] uppercase tracking-wider">
+                  <span className="text-slate-500 dark:text-slate-400 font-bold text-[13px] uppercase tracking-wider">
                     Handling Fee
                   </span>
-                  <span className="font-black text-slate-800">
+                  <span className="font-black text-slate-800 dark:text-white">
                     ₹{handlingFee}
                   </span>
                 </div>
                 <div className="flex justify-between items-center px-2">
-                  <span className="text-slate-500 font-bold text-[13px] uppercase tracking-wider">
+                  <span className="text-slate-500 dark:text-slate-400 font-bold text-[13px] uppercase tracking-wider">
                     Platform fee
                   </span>
-                  <span className="font-black text-slate-800">₹{platformFee}</span>
+                  <span className="font-black text-slate-800 dark:text-white">₹{platformFee}</span>
                 </div>
                 <div className="flex justify-between items-center px-2">
-                  <span className="text-slate-500 font-bold text-[13px] uppercase tracking-wider">
+                  <span className="text-slate-500 dark:text-slate-400 font-bold text-[13px] uppercase tracking-wider">
                     GST
                   </span>
-                  <span className="font-black text-slate-800">₹{gstAmount}</span>
+                  <span className="font-black text-slate-800 dark:text-white">₹{gstAmount}</span>
                 </div>
 
                 {selectedCoupon && (
@@ -2517,17 +2517,17 @@ const CheckoutPage = () => {
                   </motion.div>
                 )}
 
-                <div className="mt-4 pt-6 border-t-2 border-dashed border-slate-100">
+                <div className="mt-4 pt-6 border-t-2 border-dashed border-slate-100 dark:border-neutral-800">
                   <div className="flex justify-between items-center mb-6">
                     <div className="flex flex-col">
-                      <span className="font-[1000] text-slate-800 text-lg uppercase tracking-tight">
+                      <span className="font-[1000] text-slate-800 dark:text-white text-lg uppercase tracking-tight">
                         To Pay
                       </span>
                       <span className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em]">
                         Safe & Secure Payment
                       </span>
                     </div>
-                    <span className="font-[1000] text-[#0c831f] text-3xl tracking-tighter italic">
+                    <span className="font-[1000] text-[#0c831f] dark:text-emerald-400 text-3xl tracking-tighter italic">
                       {isPreviewLoading ? "Calculating..." : `₹${totalAmount}`}
                     </span>
                   </div>
@@ -2561,7 +2561,7 @@ const CheckoutPage = () => {
       </div>
 
       {/* Sticky Footer - Mobile Only */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-card border-t border-slate-200 dark:border-white/10 px-4 py-4 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] z-50 rounded-t-3xl transition-colors">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-neutral-900 border-t border-slate-200 dark:border-neutral-800 px-4 py-4 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] z-50 rounded-t-3xl transition-colors">
         <div className="max-w-4xl mx-auto">
           {selectedPayment === "cash" ? (
             <button
@@ -2602,17 +2602,17 @@ const CheckoutPage = () => {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 80, opacity: 0 }}
               transition={{ type: "spring", stiffness: 400, damping: 30 }}
-              className="relative z-10 w-full max-w-md bg-white rounded-t-[28px] sm:rounded-[28px] shadow-2xl max-h-[85vh] flex flex-col"
+              className="relative z-10 w-full max-w-md bg-white dark:bg-neutral-900 rounded-t-[28px] sm:rounded-[28px] shadow-2xl max-h-[85vh] flex flex-col"
             >
               {/* Header */}
-              <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-slate-100 flex-shrink-0">
+              <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-slate-100 dark:border-neutral-800 flex-shrink-0">
                 <div>
-                  <h2 className="text-lg font-bold text-slate-900">Select Delivery Address</h2>
-                  <p className="text-xs text-slate-500 mt-0.5">Choose where you want your order delivered</p>
+                  <h2 className="text-lg font-bold text-slate-900 dark:text-white">Select Delivery Address</h2>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Choose where you want your order delivered</p>
                 </div>
                 <button
                   onClick={() => { setIsAddressModalOpen(false); setShowAddNewAddressForm(false); setNewAddressErrors({}); }}
-                  className="h-8 w-8 flex items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 transition-colors flex-shrink-0"
+                  className="h-8 w-8 flex items-center justify-center rounded-full bg-slate-100 dark:bg-neutral-800 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-neutral-700 transition-colors flex-shrink-0"
                 >
                   <X size={16} />
                 </button>
@@ -2630,22 +2630,22 @@ const CheckoutPage = () => {
                     disabled={isResolvingAddressCoords}
                     className={`w-full p-4 rounded-2xl border-2 text-left transition-all ${
                       currentAddress.id === addr.id
-                        ? "border-[#0c831f] bg-green-50 shadow-sm"
-                        : "border-slate-100 bg-white hover:border-slate-200"
+                        ? "border-[#0c831f] bg-green-50 dark:bg-emerald-900/20 shadow-sm"
+                        : "border-slate-100 bg-white hover:border-slate-200 dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-neutral-700"
                     }`}
                   >
                     <div className="flex items-center gap-3 mb-2">
-                      <div className={`p-2 rounded-full ${currentAddress.id === addr.id ? "bg-[#0c831f] text-white" : "bg-slate-100 text-slate-500"}`}>
+                      <div className={`p-2 rounded-full ${currentAddress.id === addr.id ? "bg-[#0c831f] text-white" : "bg-slate-100 dark:bg-neutral-800 text-slate-500 dark:text-slate-400"}`}>
                         <MapPin size={16} />
                       </div>
-                      <span className="font-black text-slate-800 uppercase tracking-widest text-[10px]">
+                      <span className="font-black text-slate-800 dark:text-white uppercase tracking-widest text-[10px]">
                         {addr.label}
                       </span>
                     </div>
-                    <p className="text-sm font-bold text-slate-800">
+                    <p className="text-sm font-bold text-slate-800 dark:text-white">
                       {addr.name || user?.name || currentAddress.name || "Customer"}
                     </p>
-                    <p className="text-xs text-slate-500 leading-relaxed mb-1">{addr.address}</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-1">{addr.address}</p>
                     {addr.phone && (
                       <p className="text-[11px] text-slate-400 font-medium">Phone: {addr.phone}</p>
                     )}
@@ -2654,11 +2654,11 @@ const CheckoutPage = () => {
               </div>
 
               {/* Footer */}
-              <div className="px-4 pb-5 pt-3 border-t border-slate-100 flex-shrink-0">
+              <div className="px-4 pb-5 pt-3 border-t border-slate-100 dark:border-neutral-800 flex-shrink-0">
                 {!showAddNewAddressForm ? (
                   <Button
                     variant="outline"
-                    className="w-full h-12 border-2 border-[#0c831f] text-[#0c831f] hover:bg-green-50 rounded-2xl font-bold"
+                    className="w-full h-12 border-2 border-[#0c831f] dark:border-emerald-500 text-[#0c831f] dark:text-emerald-400 hover:bg-green-50 dark:hover:bg-emerald-900/20 rounded-2xl font-bold bg-transparent"
                     onClick={() => setShowAddNewAddressForm(true)}
                   >
                     <Plus size={16} className="mr-2" /> Add New Address
@@ -2666,10 +2666,10 @@ const CheckoutPage = () => {
                 ) : (
                   <div className="space-y-3">
                     <div className="flex items-center justify-between mb-1">
-                      <h3 className="text-sm font-bold text-slate-800">New Address</h3>
+                      <h3 className="text-sm font-bold text-slate-800 dark:text-white">New Address</h3>
                       <button
                         onClick={() => { setShowAddNewAddressForm(false); setNewAddressErrors({}); }}
-                        className="text-xs text-slate-400 hover:text-slate-600"
+                        className="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
                       >Cancel</button>
                     </div>
 
@@ -2680,7 +2680,7 @@ const CheckoutPage = () => {
                           key={lbl}
                           type="button"
                           onClick={() => setNewAddressForm((p) => ({ ...p, label: lbl }))}
-                          className={`flex-1 py-1.5 rounded-xl text-xs font-bold border-2 transition-all ${newAddressForm.label === lbl ? "border-[#0c831f] bg-green-50 text-[#0c831f]" : "border-slate-200 text-slate-500"}`}
+                          className={`flex-1 py-1.5 rounded-xl text-xs font-bold border-2 transition-all ${newAddressForm.label === lbl ? "border-[#0c831f] bg-green-50 text-[#0c831f] dark:bg-emerald-900/20 dark:text-emerald-400" : "border-slate-200 text-slate-500 dark:border-neutral-700 dark:text-slate-400"}`}
                         >{lbl}</button>
                       ))}
                     </div>
@@ -2695,7 +2695,7 @@ const CheckoutPage = () => {
                           setNewAddressForm((p) => ({ ...p, name: val }));
                           if (newAddressErrors.name) setNewAddressErrors((p) => ({ ...p, name: "" }));
                         }}
-                        className={`h-10 rounded-xl text-sm ${newAddressErrors.name ? "border-rose-400" : "border-slate-200 focus:ring-[#0c831f] focus:border-[#0c831f]"}`}
+                        className={`h-10 rounded-xl text-sm bg-transparent dark:text-white ${newAddressErrors.name ? "border-rose-400" : "border-slate-200 dark:border-neutral-700 focus:ring-[#0c831f] focus:border-[#0c831f] dark:focus:border-emerald-500"}`}
                       />
                       {newAddressErrors.name && <p className="text-xs text-rose-500 mt-0.5 ml-1">{newAddressErrors.name}</p>}
                     </div>
@@ -2713,7 +2713,7 @@ const CheckoutPage = () => {
                           setNewAddressForm((p) => ({ ...p, phone: val }));
                           if (newAddressErrors.phone) setNewAddressErrors((p) => ({ ...p, phone: "" }));
                         }}
-                        className={`h-10 rounded-xl text-sm ${newAddressErrors.phone ? "border-rose-400" : "border-slate-200 focus:ring-[#0c831f] focus:border-[#0c831f]"}`}
+                        className={`h-10 rounded-xl text-sm bg-transparent dark:text-white ${newAddressErrors.phone ? "border-rose-400" : "border-slate-200 dark:border-neutral-700 focus:ring-[#0c831f] focus:border-[#0c831f] dark:focus:border-emerald-500"}`}
                       />
                       {newAddressErrors.phone && <p className="text-xs text-rose-500 mt-0.5 ml-1">{newAddressErrors.phone}</p>}
                     </div>
@@ -2727,7 +2727,7 @@ const CheckoutPage = () => {
                           setNewAddressForm((p) => ({ ...p, address: e.target.value }));
                           if (newAddressErrors.address) setNewAddressErrors((p) => ({ ...p, address: "" }));
                         }}
-                        className={`h-10 rounded-xl text-sm ${newAddressErrors.address ? "border-rose-400" : "border-slate-200 focus:ring-[#0c831f] focus:border-[#0c831f]"}`}
+                        className={`h-10 rounded-xl text-sm bg-transparent dark:text-white ${newAddressErrors.address ? "border-rose-400" : "border-slate-200 dark:border-neutral-700 focus:ring-[#0c831f] focus:border-[#0c831f] dark:focus:border-emerald-500"}`}
                       />
                       {newAddressErrors.address && <p className="text-xs text-rose-500 mt-0.5 ml-1">{newAddressErrors.address}</p>}
                     </div>
@@ -2737,7 +2737,7 @@ const CheckoutPage = () => {
                       placeholder="Landmark (optional)"
                       value={newAddressForm.landmark}
                       onChange={(e) => setNewAddressForm((p) => ({ ...p, landmark: e.target.value }))}
-                      className="h-10 rounded-xl border-slate-200 focus:ring-[#0c831f] focus:border-[#0c831f] text-sm"
+                      className="h-10 rounded-xl bg-transparent dark:text-white border-slate-200 dark:border-neutral-700 focus:ring-[#0c831f] focus:border-[#0c831f] dark:focus:border-emerald-500 text-sm"
                     />
 
                     {/* City + Pincode */}
@@ -2750,7 +2750,7 @@ const CheckoutPage = () => {
                             setNewAddressForm((p) => ({ ...p, city: e.target.value }));
                             if (newAddressErrors.city) setNewAddressErrors((p) => ({ ...p, city: "" }));
                           }}
-                          className={`h-10 rounded-xl text-sm ${newAddressErrors.city ? "border-rose-400" : "border-slate-200 focus:ring-[#0c831f] focus:border-[#0c831f]"}`}
+                          className={`h-10 rounded-xl text-sm bg-transparent dark:text-white ${newAddressErrors.city ? "border-rose-400" : "border-slate-200 dark:border-neutral-700 focus:ring-[#0c831f] focus:border-[#0c831f] dark:focus:border-emerald-500"}`}
                         />
                         {newAddressErrors.city && <p className="text-xs text-rose-500 mt-0.5 ml-1">{newAddressErrors.city}</p>}
                       </div>
@@ -2766,7 +2766,7 @@ const CheckoutPage = () => {
                             setNewAddressForm((p) => ({ ...p, zipCode: val }));
                             if (newAddressErrors.zipCode) setNewAddressErrors((p) => ({ ...p, zipCode: "" }));
                           }}
-                          className={`h-10 rounded-xl text-sm ${newAddressErrors.zipCode ? "border-rose-400" : "border-slate-200 focus:ring-[#0c831f] focus:border-[#0c831f]"}`}
+                          className={`h-10 rounded-xl text-sm bg-transparent dark:text-white ${newAddressErrors.zipCode ? "border-rose-400" : "border-slate-200 dark:border-neutral-700 focus:ring-[#0c831f] focus:border-[#0c831f] dark:focus:border-emerald-500"}`}
                         />
                         {newAddressErrors.zipCode && <p className="text-xs text-rose-500 mt-0.5 ml-1">{newAddressErrors.zipCode}</p>}
                       </div>
@@ -2805,17 +2805,17 @@ const CheckoutPage = () => {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 80, opacity: 0 }}
               transition={{ type: "spring", stiffness: 400, damping: 30 }}
-              className="relative z-10 w-full max-w-md bg-white rounded-t-[28px] sm:rounded-[28px] shadow-2xl"
+              className="relative z-10 w-full max-w-md bg-white dark:bg-neutral-900 rounded-t-[28px] sm:rounded-[28px] shadow-2xl"
             >
               {/* Header */}
-              <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-slate-100">
+              <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-slate-100 dark:border-neutral-800">
                 <div>
-                  <h2 className="text-lg font-bold text-slate-900">Edit Delivery Address</h2>
-                  <p className="text-xs text-slate-500 mt-0.5">Update your current delivery address</p>
+                  <h2 className="text-lg font-bold text-slate-900 dark:text-white">Edit Delivery Address</h2>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Update your current delivery address</p>
                 </div>
                 <button
                   onClick={() => setIsEditAddressOpen(false)}
-                  className="h-8 w-8 flex items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 transition-colors"
+                  className="h-8 w-8 flex items-center justify-center rounded-full bg-slate-100 dark:bg-neutral-800 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-neutral-700 transition-colors"
                 >
                   <X size={16} />
                 </button>
@@ -2824,38 +2824,38 @@ const CheckoutPage = () => {
               {/* Form */}
               <div className="px-5 py-4 space-y-4">
                 <div className="space-y-1.5">
-                  <Label htmlFor="edit-address" className="text-xs font-semibold text-slate-700">Address</Label>
+                  <Label htmlFor="edit-address" className="text-xs font-semibold text-slate-700 dark:text-slate-300">Address</Label>
                   <Input
                     id="edit-address"
                     value={editAddressForm.address}
                     onChange={(e) => setEditAddressForm((prev) => ({ ...prev, address: e.target.value }))}
-                    className="h-11 rounded-xl border-slate-200 focus:ring-[#0c831f] focus:border-[#0c831f]"
+                    className="h-11 rounded-xl bg-transparent dark:text-white border-slate-200 dark:border-neutral-700 focus:ring-[#0c831f] focus:border-[#0c831f] dark:focus:border-emerald-500"
                     placeholder="House, street, area"
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <Label htmlFor="edit-landmark" className="text-xs font-semibold text-slate-700">Nearest Landmark (optional)</Label>
+                  <Label htmlFor="edit-landmark" className="text-xs font-semibold text-slate-700 dark:text-slate-300">Nearest Landmark (optional)</Label>
                   <Input
                     id="edit-landmark"
                     value={editAddressForm.landmark || ""}
                     onChange={(e) => setEditAddressForm((prev) => ({ ...prev, landmark: e.target.value }))}
-                    className="h-11 rounded-xl border-slate-200 focus:ring-[#0c831f] focus:border-[#0c831f]"
+                    className="h-11 rounded-xl bg-transparent dark:text-white border-slate-200 dark:border-neutral-700 focus:ring-[#0c831f] focus:border-[#0c831f] dark:focus:border-emerald-500"
                     placeholder="e.g. Near City Mall, Opp. Temple"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1.5">
-                    <Label htmlFor="edit-city" className="text-xs font-semibold text-slate-700">City</Label>
+                    <Label htmlFor="edit-city" className="text-xs font-semibold text-slate-700 dark:text-slate-300">City</Label>
                     <Input
                       id="edit-city"
                       value={editAddressForm.city || ""}
                       onChange={(e) => setEditAddressForm((prev) => ({ ...prev, city: e.target.value }))}
-                      className="h-11 rounded-xl border-slate-200 focus:ring-[#0c831f] focus:border-[#0c831f]"
+                      className="h-11 rounded-xl bg-transparent dark:text-white border-slate-200 dark:border-neutral-700 focus:ring-[#0c831f] focus:border-[#0c831f] dark:focus:border-emerald-500"
                       placeholder="City"
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <Label htmlFor="edit-pincode" className="text-xs font-semibold text-slate-700">Pincode</Label>
+                    <Label htmlFor="edit-pincode" className="text-xs font-semibold text-slate-700 dark:text-slate-300">Pincode</Label>
                     <Input
                       id="edit-pincode"
                       value={editAddressForm.zipCode || ""}
@@ -2866,10 +2866,10 @@ const CheckoutPage = () => {
                         const val = e.target.value.replace(/\D/g, "").slice(0, 6);
                         setEditAddressForm((prev) => ({ ...prev, zipCode: val }));
                       }}
-                      className={`h-11 rounded-xl focus:ring-[#0c831f] focus:border-[#0c831f] ${
+                      className={`h-11 rounded-xl bg-transparent dark:text-white focus:ring-[#0c831f] focus:border-[#0c831f] dark:focus:border-emerald-500 ${
                         editAddressForm.zipCode && editAddressForm.zipCode.length > 0 && editAddressForm.zipCode.length !== 6
                           ? "border-rose-400"
-                          : "border-slate-200"
+                          : "border-slate-200 dark:border-neutral-700"
                       }`}
                       placeholder="6-digit code"
                     />
@@ -2885,7 +2885,7 @@ const CheckoutPage = () => {
                 <Button
                   variant="outline"
                   onClick={() => setIsEditAddressOpen(false)}
-                  className="flex-1 h-11 rounded-2xl border-slate-200 text-slate-600 hover:bg-slate-50"
+                  className="flex-1 h-11 rounded-2xl bg-transparent border-slate-200 dark:border-neutral-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-neutral-800"
                 >
                   Cancel
                 </Button>
@@ -2919,17 +2919,17 @@ const CheckoutPage = () => {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 60, opacity: 0 }}
               transition={{ type: "spring", stiffness: 400, damping: 30 }}
-              className="relative z-10 w-full max-w-md bg-white rounded-[28px] shadow-2xl flex flex-col max-h-[85vh]"
+              className="relative z-10 w-full max-w-md bg-white dark:bg-neutral-900 rounded-[28px] shadow-2xl flex flex-col max-h-[85vh]"
             >
               {/* Header */}
-              <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-slate-100 flex-shrink-0">
+              <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-slate-100 dark:border-neutral-800 flex-shrink-0">
                 <div>
-                  <h2 className="text-lg font-bold text-slate-900">Apply Coupon</h2>
-                  <p className="text-xs text-slate-500 mt-0.5">Browse available offers and save more.</p>
+                  <h2 className="text-lg font-bold text-slate-900 dark:text-white">Apply Coupon</h2>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Browse available offers and save more.</p>
                 </div>
                 <button
                   onClick={() => setIsCouponModalOpen(false)}
-                  className="h-8 w-8 flex items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 transition-colors flex-shrink-0"
+                  className="h-8 w-8 flex items-center justify-center rounded-full bg-slate-100 dark:bg-neutral-800 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-neutral-700 transition-colors flex-shrink-0"
                 >
                   <X size={16} />
                 </button>
@@ -2945,8 +2945,8 @@ const CheckoutPage = () => {
                     key={coupon.code}
                     className={`p-4 rounded-2xl border-2 transition-all relative overflow-hidden ${
                       selectedCoupon?.code === coupon.code
-                        ? "border-[#0c831f] bg-green-50 shadow-sm"
-                        : "border-slate-100 bg-white hover:border-slate-200"
+                        ? "border-[#0c831f] bg-green-50 dark:bg-emerald-900/20 shadow-sm"
+                        : "border-slate-100 bg-white hover:border-slate-200 dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-neutral-700"
                     }`}>
                     {selectedCoupon?.code === coupon.code && (
                       <div className="absolute top-0 right-0 p-1.5 bg-[#0c831f] text-white rounded-bl-xl">
@@ -2954,12 +2954,12 @@ const CheckoutPage = () => {
                       </div>
                     )}
                     <div className="flex items-start gap-3">
-                      <div className={`p-3 rounded-2xl flex-shrink-0 ${selectedCoupon?.code === coupon.code ? "bg-[#0c831f]/10 text-[#0c831f]" : "bg-red-50 text-red-500"}`}>
+                      <div className={`p-3 rounded-2xl flex-shrink-0 ${selectedCoupon?.code === coupon.code ? "bg-[#0c831f]/10 text-[#0c831f] dark:text-emerald-400" : "bg-red-50 text-red-500 dark:bg-red-900/20 dark:text-red-400"}`}>
                         <Tag size={20} />
                       </div>
                       <div className="flex-1">
-                        <p className="font-black text-slate-800 tracking-wider mb-1">{coupon.code}</p>
-                        <p className="text-xs text-slate-500 leading-relaxed">{coupon.description}</p>
+                        <p className="font-black text-slate-800 dark:text-white tracking-wider mb-1">{coupon.code}</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">{coupon.description}</p>
                       </div>
                     </div>
                     <button
@@ -2977,14 +2977,14 @@ const CheckoutPage = () => {
               </div>
 
               {/* Manual code input */}
-              <div className="px-4 pb-5 pt-3 border-t border-slate-100 flex-shrink-0">
+              <div className="px-4 pb-5 pt-3 border-t border-slate-100 dark:border-neutral-800 flex-shrink-0">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
                   <Input
                     placeholder="Enter coupon code manually"
                     value={manualCode}
                     onChange={(e) => setManualCode(e.target.value.toUpperCase())}
-                    className="pl-10 h-12 rounded-xl focus-visible:ring-[#0c831f]"
+                    className="pl-10 h-12 rounded-xl bg-transparent dark:text-white border-slate-200 dark:border-neutral-700 focus-visible:ring-[#0c831f] dark:focus-visible:ring-emerald-500"
                   />
                   <button
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-[#0c831f] font-bold text-xs"
@@ -3031,26 +3031,26 @@ const CheckoutPage = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-white flex flex-col items-center justify-center p-6 text-center">
+            className="fixed inset-0 z-[100] bg-white dark:bg-neutral-950 flex flex-col items-center justify-center p-6 text-center">
             <motion.div
               initial={{ scale: 0.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ type: "spring", damping: 12 }}
-              className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center text-[#0c831f] mb-6">
+              className="w-24 h-24 bg-green-100 dark:bg-emerald-900/20 rounded-full flex items-center justify-center text-[#0c831f] dark:text-emerald-400 mb-6">
               <Check size={48} strokeWidth={4} />
             </motion.div>
             <motion.h2
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className="text-3xl font-black text-slate-800 mb-2">
+              className="text-3xl font-black text-slate-800 dark:text-white mb-2">
               Order placed
             </motion.h2>
             <motion.p
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3 }}
-              className="text-slate-500 font-medium mb-8">
+              className="text-slate-500 dark:text-slate-400 font-medium mb-8">
               #{orderId?.slice(-6)} — waiting for the seller to accept (60s). If
               they don&apos;t, the order will cancel automatically.
               <br />
@@ -3060,8 +3060,8 @@ const CheckoutPage = () => {
               initial={{ width: 0 }}
               animate={{ width: "100%" }}
               transition={{ duration: 2.5, ease: "linear" }}
-              className="w-48 h-1.5 bg-green-100 rounded-full overflow-hidden">
-              <div className="h-full bg-[#0c831f]" />
+              className="w-48 h-1.5 bg-green-100 dark:bg-emerald-900/40 rounded-full overflow-hidden">
+              <div className="h-full bg-[#0c831f] dark:bg-emerald-500" />
             </motion.div>
           </motion.div>
         )}
@@ -3099,10 +3099,10 @@ const CheckoutPage = () => {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 60, opacity: 0 }}
               transition={{ type: "spring", stiffness: 400, damping: 30 }}
-              className="relative z-10 w-full max-w-sm rounded-[28px] bg-white p-6 shadow-2xl"
+              className="relative z-10 w-full max-w-sm rounded-[28px] bg-white dark:bg-neutral-900 p-6 shadow-2xl"
             >
-              <h3 className="text-lg font-bold text-slate-900 mb-1">Share {appName}</h3>
-              <p className="text-sm text-slate-500 mb-5">Choose how you'd like to share</p>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">Share {appName}</h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mb-5">Choose how you'd like to share</p>
 
               <div className="space-y-3">
                 {/* WhatsApp */}
@@ -3111,12 +3111,12 @@ const CheckoutPage = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setShowShareModal(false)}
-                  className="flex items-center gap-3 w-full rounded-2xl border-2 border-slate-100 p-3 hover:border-green-200 hover:bg-green-50 transition-all"
+                  className="flex items-center gap-3 w-full rounded-2xl border-2 border-slate-100 dark:border-neutral-800 p-3 hover:border-green-200 dark:hover:border-emerald-800 hover:bg-green-50 dark:hover:bg-emerald-900/20 transition-all"
                 >
                   <div className="h-10 w-10 rounded-full bg-[#25D366] flex items-center justify-center text-white font-black text-lg flex-shrink-0">W</div>
                   <div>
-                    <p className="text-sm font-bold text-slate-800">WhatsApp</p>
-                    <p className="text-xs text-slate-500">Share via WhatsApp</p>
+                    <p className="text-sm font-bold text-slate-800 dark:text-white">WhatsApp</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">Share via WhatsApp</p>
                   </div>
                   <ChevronRight size={16} className="ml-auto text-slate-400" />
                 </a>
@@ -3124,14 +3124,14 @@ const CheckoutPage = () => {
                 {/* Copy Link */}
                 <button
                   onClick={handleCopyLink}
-                  className="flex items-center gap-3 w-full rounded-2xl border-2 border-slate-100 p-3 hover:border-slate-200 hover:bg-slate-50 transition-all text-left"
+                  className="flex items-center gap-3 w-full rounded-2xl border-2 border-slate-100 dark:border-neutral-800 p-3 hover:border-slate-200 hover:bg-slate-50 dark:hover:border-neutral-700 dark:hover:bg-neutral-800 transition-all text-left"
                 >
-                  <div className="h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0">
-                    <Clipboard size={18} className="text-slate-600" />
+                  <div className="h-10 w-10 rounded-full bg-slate-100 dark:bg-neutral-800 flex items-center justify-center flex-shrink-0">
+                    <Clipboard size={18} className="text-slate-600 dark:text-slate-400" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-bold text-slate-800">Copy Link</p>
-                    <p className="text-xs text-slate-500 truncate">{window.location.origin}</p>
+                    <p className="text-sm font-bold text-slate-800 dark:text-white">Copy Link</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{window.location.origin}</p>
                   </div>
                   <ChevronRight size={16} className="ml-auto text-slate-400 flex-shrink-0" />
                 </button>
@@ -3139,7 +3139,7 @@ const CheckoutPage = () => {
 
               <button
                 onClick={() => setShowShareModal(false)}
-                className="mt-4 w-full rounded-2xl border-2 border-slate-200 py-3 text-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors"
+                className="mt-4 w-full rounded-2xl border-2 border-slate-200 dark:border-neutral-700 py-3 text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-neutral-800 transition-colors"
               >
                 Cancel
               </button>

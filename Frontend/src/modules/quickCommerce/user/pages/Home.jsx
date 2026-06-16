@@ -714,29 +714,29 @@ const Home = ({ embedded = false, onThemeChange, embeddedHeaderColor = null }) =
                         onClick={() => navigate(getQuickCategoriesPath())}
                         whileTap={{ scale: 0.96 }}
                         className="min-w-full">
-                        <div className="w-full h-[190px] bg-[#E6F5EC] p-6 relative overflow-hidden flex items-center border-y border-[#0c831f]/10 shadow-[0_4px_15px_rgba(0,0,0,0.05)]">
+                        <div className="w-full h-[190px] bg-[#E6F5EC] dark:bg-emerald-900/20 p-6 relative overflow-hidden flex items-center border-y border-[#0c831f]/10 dark:border-emerald-500/20 shadow-[0_4px_15px_rgba(0,0,0,0.05)]">
                           <div className="relative z-10 w-3/5 flex flex-col items-start gap-2">
                             <div className="flex flex-col gap-0.5">
-                              <h4 className="text-2xl font-[1000] text-[#1A1A1A] tracking-tighter leading-none">
-                                Get <span className="text-[#0c831f]">Products</span>
+                              <h4 className="text-2xl font-[1000] text-[#1A1A1A] dark:text-white tracking-tighter leading-none">
+                                Get <span className="text-[#0c831f] dark:text-emerald-400">Products</span>
                               </h4>
                               <div className="flex items-center gap-1.5 mt-1">
-                                <span className="text-sm font-black text-gray-700">
+                                <span className="text-sm font-black text-gray-700 dark:text-gray-300">
                                   at
                                 </span>
                                 <div className="bg-[#0c831f] text-white px-2 py-0.5 rounded-lg flex items-center gap-1 shadow-sm">
                                   <VerifiedIcon sx={{ fontSize: 16 }} />
                                   <span className="text-xl font-[1000]">₹0</span>
                                 </div>
-                                <span className="text-sm font-[1000] text-gray-700">
+                                <span className="text-sm font-[1000] text-gray-700 dark:text-gray-300">
                                   Fee
                                 </span>
                               </div>
                             </div>
-                            <p className="text-[11px] font-bold text-gray-500 max-w-[150px] leading-tight">
+                            <p className="text-[11px] font-bold text-gray-500 dark:text-gray-400 max-w-[150px] leading-tight">
                               Get groceries delivered in minutes
                             </p>
-                            <button className="bg-[#FF1E56] text-white px-6 py-2.5 rounded-2xl font-black text-xs tracking-wide shadow-lg shadow-rose-200 mt-2">
+                            <button className="bg-[#FF1E56] text-white px-6 py-2.5 rounded-2xl font-black text-xs tracking-wide shadow-lg shadow-rose-200 dark:shadow-none mt-2">
                               Order now
                             </button>
                           </div>
@@ -767,29 +767,29 @@ const Home = ({ embedded = false, onThemeChange, embeddedHeaderColor = null }) =
                         onClick={() => navigate(getQuickCategoriesPath())}
                         whileTap={{ scale: 0.96 }}
                         className="min-w-full">
-                        <div className="w-full h-[190px] bg-[#E6F5EC] p-6 relative overflow-hidden flex items-center border-y border-[#0c831f]/10 shadow-[0_4px_15px_rgba(0,0,0,0.05)]">
+                        <div className="w-full h-[190px] bg-[#E6F5EC] dark:bg-emerald-900/20 p-6 relative overflow-hidden flex items-center border-y border-[#0c831f]/10 dark:border-emerald-500/20 shadow-[0_4px_15px_rgba(0,0,0,0.05)]">
                           <div className="relative z-10 w-3/5 flex flex-col items-start gap-2">
                             <div className="flex flex-col gap-0.5">
-                              <h4 className="text-2xl font-[1000] text-[#1A1A1A] tracking-tighter leading-none">
-                                Get <span className="text-[#0c831f]">Products</span>
+                              <h4 className="text-2xl font-[1000] text-[#1A1A1A] dark:text-white tracking-tighter leading-none">
+                                Get <span className="text-[#0c831f] dark:text-emerald-400">Products</span>
                               </h4>
                               <div className="flex items-center gap-1.5 mt-1">
-                                <span className="text-sm font-black text-gray-700">
+                                <span className="text-sm font-black text-gray-700 dark:text-gray-300">
                                   at
                                 </span>
                                 <div className="bg-[#0c831f] text-white px-2 py-0.5 rounded-lg flex items-center gap-1 shadow-sm">
                                   <VerifiedIcon sx={{ fontSize: 16 }} />
                                   <span className="text-xl font-[1000]">₹0</span>
                                 </div>
-                                <span className="text-sm font-[1000] text-gray-700">
+                                <span className="text-sm font-[1000] text-gray-700 dark:text-gray-300">
                                   Fee
                                 </span>
                               </div>
                             </div>
-                            <p className="text-[11px] font-bold text-gray-500 max-w-[150px] leading-tight">
+                            <p className="text-[11px] font-bold text-gray-500 dark:text-gray-400 max-w-[150px] leading-tight">
                               Get groceries delivered in minutes
                             </p>
-                            <button className="bg-[#FF1E56] text-white px-6 py-2.5 rounded-2xl font-black text-xs tracking-wide shadow-lg shadow-rose-200 mt-2">
+                            <button className="bg-[#FF1E56] text-white px-6 py-2.5 rounded-2xl font-black text-xs tracking-wide shadow-lg shadow-rose-200 dark:shadow-none mt-2">
                               Order now
                             </button>
                           </div>
@@ -817,32 +817,32 @@ const Home = ({ embedded = false, onThemeChange, embeddedHeaderColor = null }) =
                 "relative overflow-hidden",
                 embedded
                   ? "border-y-0 shadow-none"
-                  : "border-y border-[#e6ddc4] bg-[#f7f0df] shadow-[0_10px_30px_rgba(15,23,42,0.08)]",
+                  : "border-y border-[#e6ddc4] dark:border-[#3a352a] bg-[#f7f0df] dark:bg-[#2a261f] shadow-[0_10px_30px_rgba(15,23,42,0.08)]",
               )}
               style={embedded ? { backgroundColor: activeCategory?.headerColor || ALL_CATEGORY.headerColor } : undefined}>
               <div
                 className={cn(
                   "absolute inset-y-0 left-0 w-10 pointer-events-none",
-                  embedded ? "bg-none" : "bg-gradient-to-r from-[#f7f0df] via-[#f7f0df]/90 to-transparent",
+                  embedded ? "bg-none" : "bg-gradient-to-r from-[#f7f0df] dark:from-[#2a261f] via-[#f7f0df]/90 dark:via-[#2a261f]/90 to-transparent",
                 )}
                 style={embedded ? { backgroundImage: `linear-gradient(to right, ${activeCategory?.headerColor || ALL_CATEGORY.headerColor}, ${activeCategory?.headerColor || ALL_CATEGORY.headerColor}E6, transparent)` } : undefined}
               />
               <div
                 className={cn(
                   "absolute inset-y-0 right-0 w-10 pointer-events-none",
-                  embedded ? "bg-none" : "bg-gradient-to-l from-[#f7f0df] via-[#f7f0df]/90 to-transparent",
+                  embedded ? "bg-none" : "bg-gradient-to-l from-[#f7f0df] dark:from-[#2a261f] via-[#f7f0df]/90 dark:via-[#2a261f]/90 to-transparent",
                 )}
                 style={embedded ? { backgroundImage: `linear-gradient(to left, ${activeCategory?.headerColor || ALL_CATEGORY.headerColor}, ${activeCategory?.headerColor || ALL_CATEGORY.headerColor}E6, transparent)` } : undefined}
               />
               <div
                 className={cn(
                   "classic-marquee-track flex w-max items-center gap-4 px-3 md:px-6 py-4 text-sm md:text-base font-semibold -translate-y-[4px]",
-                  embedded ? "text-white/90" : "text-[#4b463f]",
+                  embedded ? "text-white/90" : "text-[#4b463f] dark:text-[#d3ccc2]",
                 )}>
                 {[...MARQUEE_MESSAGES, ...MARQUEE_MESSAGES].map((message, idx) => (
                   <React.Fragment key={`${message}-${idx}`}>
                     <span className="whitespace-nowrap">{message}</span>
-                    <span className="text-[#8a7f66]">•</span>
+                    <span className="text-[#8a7f66] dark:text-[#a3977c]">•</span>
                   </React.Fragment>
                 ))}
                 <span className="whitespace-nowrap">❤️</span>
@@ -865,7 +865,7 @@ const Home = ({ embedded = false, onThemeChange, embeddedHeaderColor = null }) =
                 )}>
 
                 <div className="relative z-10 px-4 pt-3 pb-1 md:px-8 md:pt-4">
-                  <h2 className="text-center text-[18px] md:text-[20px] font-bold tracking-tight text-[#132018] leading-none">
+                  <h2 className="text-center text-[18px] md:text-[20px] font-bold tracking-tight text-[#132018] dark:text-white leading-none">
                     Quick categories
                   </h2>
                 </div>
@@ -876,7 +876,7 @@ const Home = ({ embedded = false, onThemeChange, embeddedHeaderColor = null }) =
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     onClick={() => scrollQuickCats("left")}
-                    className="h-10 w-10 bg-white/90 backdrop-blur-md shadow-xl rounded-full flex items-center justify-center border border-gray-100 cursor-pointer hover:bg-white text-[#0c831f] transition-all">
+                    className="h-10 w-10 bg-white/90 dark:bg-neutral-800/90 backdrop-blur-md shadow-xl rounded-full flex items-center justify-center border border-gray-100 dark:border-neutral-700 cursor-pointer hover:bg-white dark:hover:bg-neutral-800 text-[#0c831f] dark:text-emerald-400 transition-all">
                     <ChevronLeft size={22} strokeWidth={3} />
                   </motion.button>
                 </div>
@@ -935,7 +935,7 @@ const Home = ({ embedded = false, onThemeChange, embeddedHeaderColor = null }) =
                             </div>
                           )}
                           <div className="absolute inset-x-2 bottom-1.5 z-20 text-center">
-                            <span className="block text-[10px] md:text-[11px] lg:text-[12px] font-semibold text-[#1f2b20] leading-tight whitespace-nowrap overflow-hidden text-ellipsis drop-shadow-[0_1px_0_rgba(255,255,255,0.65)] group-hover/item:text-[#0c831f] transition-colors">
+                            <span className="block text-[10px] md:text-[11px] lg:text-[12px] font-semibold text-[#1f2b20] dark:text-gray-900 leading-tight whitespace-nowrap overflow-hidden text-ellipsis drop-shadow-[0_1px_0_rgba(255,255,255,0.65)] group-hover/item:text-[#0c831f] dark:group-hover/item:text-emerald-700 transition-colors">
                               {cat.name}
                             </span>
                           </div>
@@ -951,7 +951,7 @@ const Home = ({ embedded = false, onThemeChange, embeddedHeaderColor = null }) =
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     onClick={() => scrollQuickCats("right")}
-                    className="h-10 w-10 bg-white/90 backdrop-blur-md shadow-xl rounded-full flex items-center justify-center border border-gray-100 cursor-pointer hover:bg-white text-[#0c831f] transition-all">
+                    className="h-10 w-10 bg-white/90 dark:bg-neutral-800/90 backdrop-blur-md shadow-xl rounded-full flex items-center justify-center border border-gray-100 dark:border-neutral-700 cursor-pointer hover:bg-white dark:hover:bg-neutral-800 text-[#0c831f] dark:text-emerald-400 transition-all">
                     <ChevronRight size={22} strokeWidth={3} />
                   </motion.button>
                 </div>
@@ -965,16 +965,16 @@ const Home = ({ embedded = false, onThemeChange, embeddedHeaderColor = null }) =
               "mb-4 md:mb-6",
               embedded ? "mt-4 md:mt-5" : "mt-6 md:mt-10",
             )}>
-            <div className="relative overflow-hidden bg-[#e7f3ff] pt-6 md:pt-8 pb-0 rounded-none md:rounded-[32px] mx-0 md:mx-8 lg:mx-[50px] shadow-sm">
+            <div className="relative overflow-hidden bg-[#e7f3ff] dark:bg-[#1a2c41] pt-6 md:pt-8 pb-0 rounded-none md:rounded-[32px] mx-0 md:mx-8 lg:mx-[50px] shadow-sm">
               <div className="relative z-10 px-4 md:px-8">
                 <div className="flex justify-between items-center mb-3 md:mb-5 px-1">
                   <div className="flex flex-col">
-                    <h3 className="text-lg md:text-3xl font-[1000] text-[#004b91] tracking-tighter uppercase leading-none">
-                      Lowest Price <span className="text-[#004b91]">ever</span>
+                    <h3 className="text-lg md:text-3xl font-[1000] text-[#004b91] dark:text-[#60a5fa] tracking-tighter uppercase leading-none">
+                      Lowest Price <span className="text-[#004b91] dark:text-[#60a5fa]">ever</span>
                     </h3>
                     <div className="flex items-center gap-1.5 md:gap-2 mt-1 md:mt-2">
-                      <div className="h-1 w-1 md:h-1.5 md:w-1.5 bg-[#004b91] rounded-full animate-pulse" />
-                      <span className="text-[9px] md:text-[10px] font-black text-[#004b91] uppercase tracking-wider opacity-80">
+                      <div className="h-1 w-1 md:h-1.5 md:w-1.5 bg-[#004b91] dark:bg-[#60a5fa] rounded-full animate-pulse" />
+                      <span className="text-[9px] md:text-[10px] font-black text-[#004b91] dark:text-[#93c5fd] uppercase tracking-wider opacity-80">
                         Unbeatable Savings • Updated hourly
                       </span>
                     </div>
@@ -983,7 +983,7 @@ const Home = ({ embedded = false, onThemeChange, embeddedHeaderColor = null }) =
                     onClick={() => navigate(getQuickCategoriesPath())}
                     whileHover={{ x: 5, scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="flex items-center gap-1 md:gap-1.5 bg-white px-3 py-1.5 md:px-5 md:py-2.5 rounded-full text-[#004b91] font-bold text-[9px] md:text-xs cursor-pointer shadow-sm border border-[#004b91]/5 transition-all shrink-0 whitespace-nowrap">
+                    className="flex items-center gap-1 md:gap-1.5 bg-white dark:bg-slate-800 px-3 py-1.5 md:px-5 md:py-2.5 rounded-full text-[#004b91] dark:text-[#93c5fd] font-bold text-[9px] md:text-xs cursor-pointer shadow-sm border border-[#004b91]/5 transition-all shrink-0 whitespace-nowrap">
                     See all{" "}
                     <ArrowRightIcon
                       sx={{ fontSize: 10, ml: 0.5 }}
@@ -1070,8 +1070,8 @@ const Home = ({ embedded = false, onThemeChange, embeddedHeaderColor = null }) =
                       viewport={{ once: true, amount: 0.25 }}
                       transition={{ duration: 0.4 }}
                       className={cn(
-                        "mb-4 rounded-none overflow-hidden shadow-[0_10px_25px_rgba(15,23,42,0.1)] border-y border-slate-100/70 border-x-0 md:border-x",
-                        section.title?.toLowerCase().includes('masala') ? "bg-[#FFF9E7]" : "bg-white"
+                        "mb-4 rounded-none overflow-hidden shadow-[0_10px_25px_rgba(15,23,42,0.1)] border-y border-slate-100/70 dark:border-neutral-800 border-x-0 md:border-x",
+                        section.title?.toLowerCase().includes('masala') ? "bg-[#FFF9E7] dark:bg-[#2a261a]" : "bg-white dark:bg-neutral-900"
                       )}>
                       <div
                         className="relative flex items-center justify-between px-5 md:px-8 py-5 md:py-6 text-black dark:text-white"
@@ -1182,7 +1182,7 @@ const Home = ({ embedded = false, onThemeChange, embeddedHeaderColor = null }) =
           {sectionsForRenderer.length > 0 && (
             <div
               className={cn(
-                "container mx-auto px-4 md:px-8 lg:px-[50px] bg-[#F0F9FF] rounded-none pt-4 pb-10 mt-[-28px] mb-10 relative z-[1] border-x-2 border-b-2 border-sky-200/50 shadow-sm overflow-hidden",
+                "container mx-auto px-4 md:px-8 lg:px-[50px] bg-[#F0F9FF] dark:bg-slate-900 rounded-none pt-4 pb-10 mt-[-28px] mb-10 relative z-[1] border-x-2 border-b-2 border-sky-200/50 dark:border-sky-900/50 shadow-sm overflow-hidden",
               )}>
               {/* Animated Top Border Glow */}
               <motion.div

@@ -185,12 +185,12 @@ export default function CustomCakeRequests() {
 
   if (requestsList.length === 0) {
     return (
-      <div className="bg-white rounded-2xl border border-gray-200 p-10 text-center max-w-lg mx-auto mt-6">
-        <div className="h-16 w-16 bg-pink-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-pink-100">
+      <div className="bg-white dark:bg-[#111111] rounded-2xl border border-gray-200 dark:border-gray-800 p-10 text-center max-w-lg mx-auto mt-6">
+        <div className="h-16 w-16 bg-pink-50 dark:bg-pink-900/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-pink-100 dark:border-pink-900/30">
           <Sparkles className="h-8 w-8 text-pink-500" />
         </div>
-        <h3 className="text-lg font-bold text-gray-900 mb-2">No Custom Requests Yet</h3>
-        <p className="text-gray-500 text-sm mb-6 leading-relaxed">
+        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">No Custom Requests Yet</h3>
+        <p className="text-gray-500 dark:text-gray-400 text-sm mb-6 leading-relaxed">
           Order unique custom-designed cakes from our Home Bakeries! Send specifications, choose flavours, shapes, and upload reference designs.
         </p>
       </div>
@@ -208,15 +208,15 @@ export default function CustomCakeRequests() {
         return (
           <div
             key={request._id}
-            className="bg-white border border-gray-200 hover:border-gray-300 rounded-2xl p-5 transition-all shadow-sm"
+            className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 rounded-2xl p-5 transition-all shadow-sm"
           >
             {/* Header info */}
-            <div className="flex items-start justify-between gap-4 border-b border-gray-100 pb-4 mb-4">
+            <div className="flex items-start justify-between gap-4 border-b border-gray-100 dark:border-gray-800 pb-4 mb-4">
               <div>
-                <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">
+                <span className="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-widest font-bold">
                   Request ID: {request.requestId || request._id?.slice(-8)}
                 </span>
-                <h3 className="text-lg font-bold text-gray-900 mt-0.5">{restaurantName}</h3>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white mt-0.5">{restaurantName}</h3>
                 <div className="flex items-center gap-2 mt-2">
                   {getStatusBadge(request.status)}
                 </div>
@@ -224,11 +224,11 @@ export default function CustomCakeRequests() {
 
               {/* Specs Badge summary */}
               <div className="text-right">
-                <span className="inline-block px-3 py-1 bg-gray-100 text-gray-700 rounded-lg text-xs font-bold">
+                <span className="inline-block px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg text-xs font-bold">
                   {request.weight} kg • {request.shape}
                 </span>
                 {request.eggless && (
-                  <span className="block mt-1 text-[10px] text-emerald-600 font-bold uppercase tracking-wider">
+                  <span className="block mt-1 text-[10px] text-emerald-600 dark:text-emerald-500 font-bold uppercase tracking-wider">
                     🍀 Eggless
                   </span>
                 )}
@@ -239,17 +239,17 @@ export default function CustomCakeRequests() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div className="space-y-2">
                 <div>
-                  <span className="text-xs text-gray-500 block">Occasion / Cake Type</span>
-                  <span className="text-gray-900 font-medium">{request.cakeType}</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400 block">Occasion / Cake Type</span>
+                  <span className="text-gray-900 dark:text-white font-medium">{request.cakeType}</span>
                 </div>
                 <div>
-                  <span className="text-xs text-gray-500 block">Flavour</span>
-                  <span className="text-gray-900 font-medium">{request.flavour}</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400 block">Flavour</span>
+                  <span className="text-gray-900 dark:text-white font-medium">{request.flavour}</span>
                 </div>
                 {request.cakeMessage && (
                   <div>
-                    <span className="text-xs text-gray-500 block">Message on Cake</span>
-                    <span className="text-pink-600 italic font-medium">"{request.cakeMessage}"</span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400 block">Message on Cake</span>
+                    <span className="text-pink-600 dark:text-pink-400 italic font-medium">"{request.cakeMessage}"</span>
                   </div>
                 )}
               </div>
@@ -258,14 +258,14 @@ export default function CustomCakeRequests() {
                 <div className="flex items-center gap-2">
                   <Calendar className="h-4 w-4 text-pink-500" />
                   <div>
-                    <span className="text-xs text-gray-500 block">Delivery Requested</span>
-                    <span className="text-gray-900 font-medium">{formatDate(request.deliveryDate)}</span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400 block">Delivery Requested</span>
+                    <span className="text-gray-900 dark:text-white font-medium">{formatDate(request.deliveryDate)}</span>
                   </div>
                 </div>
                 {request.notes && (
                   <div>
-                    <span className="text-xs text-gray-500 block">Instructions / Notes</span>
-                    <p className="text-gray-600 text-xs mt-0.5 leading-relaxed">{request.notes}</p>
+                    <span className="text-xs text-gray-500 dark:text-gray-400 block">Instructions / Notes</span>
+                    <p className="text-gray-600 dark:text-gray-300 text-xs mt-0.5 leading-relaxed">{request.notes}</p>
                   </div>
                 )}
               </div>
@@ -273,14 +273,14 @@ export default function CustomCakeRequests() {
 
             {/* Reference Images if any */}
             {request.images && request.images.length > 0 && (
-              <div className="mt-4 pt-3 border-t border-gray-100">
-                <span className="text-xs text-gray-500 block mb-2">Reference Designs</span>
+              <div className="mt-4 pt-3 border-t border-gray-100 dark:border-gray-800">
+                <span className="text-xs text-gray-500 dark:text-gray-400 block mb-2">Reference Designs</span>
                 <div className="flex flex-wrap gap-2">
                   {request.images.map((img, idx) => (
                     <div
                       key={idx}
                       onClick={() => setSelectedImage(img)}
-                      className="h-14 w-14 rounded-lg overflow-hidden border border-gray-200 hover:border-pink-400 transition-all cursor-pointer relative group bg-gray-50"
+                      className="h-14 w-14 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 hover:border-pink-400 transition-all cursor-pointer relative group bg-gray-50 dark:bg-gray-800"
                     >
                       <img src={img} alt="reference" className="h-full w-full object-cover" />
                       <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
@@ -294,15 +294,15 @@ export default function CustomCakeRequests() {
 
             {/* Quotation pricing section */}
             {(request.quotePrice > 0 || isQuoted || isOrdered) && (
-              <div className="mt-4 p-3 bg-pink-50 rounded-xl border border-pink-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="mt-4 p-3 bg-pink-50 dark:bg-pink-900/10 rounded-xl border border-pink-100 dark:border-pink-900/20 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                   <span className="text-xs text-pink-600 font-bold block uppercase tracking-wider">
                     Bakery Quote
                   </span>
                   <div className="flex items-baseline gap-2 mt-1">
-                    <span className="text-2xl font-black text-gray-900">₹{request.quotePrice}</span>
+                    <span className="text-2xl font-black text-gray-900 dark:text-white">₹{request.quotePrice}</span>
                     {request.preparationTimeMinutes > 0 && (
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
                         • {request.preparationTimeMinutes} mins prep time
                       </span>
                     )}
@@ -314,7 +314,7 @@ export default function CustomCakeRequests() {
                     <button
                       onClick={() => handleRejectQuotation(request)}
                       disabled={actionLoading !== null}
-                      className="w-full sm:w-auto px-5 py-2.5 bg-white hover:bg-red-50 text-gray-600 hover:text-red-600 font-semibold rounded-xl border border-gray-300 hover:border-red-300 transition-all text-sm flex items-center justify-center gap-2"
+                      className="w-full sm:w-auto px-5 py-2.5 bg-white dark:bg-neutral-800 hover:bg-red-50 dark:hover:bg-red-900/20 text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 font-semibold rounded-xl border border-gray-300 dark:border-gray-600 hover:border-red-300 dark:hover:border-red-500/50 transition-all text-sm flex items-center justify-center gap-2"
                     >
                       {actionLoading === request._id ? (
                         <Loader2 className="h-4 w-4 animate-spin" />
@@ -346,7 +346,7 @@ export default function CustomCakeRequests() {
                 {isOrdered && request.orderId && (
                   <button
                     onClick={() => navigate(`/food/user/orders/${request.orderId}`)}
-                    className="w-full md:w-auto px-5 py-2 bg-gray-900 hover:bg-gray-800 text-white font-bold rounded-xl text-sm flex items-center justify-center gap-2 transition-all"
+                    className="w-full md:w-auto px-5 py-2 bg-gray-900 dark:bg-white hover:bg-gray-800 dark:hover:bg-gray-200 text-white dark:text-gray-900 font-bold rounded-xl text-sm flex items-center justify-center gap-2 transition-all"
                   >
                     Track Order
                     <ArrowRight className="h-4 w-4" />
@@ -357,13 +357,13 @@ export default function CustomCakeRequests() {
 
             {/* Rejection notice */}
             {isRejected && request.rejectionReason && (
-              <div className="mt-4 p-3 bg-red-50 rounded-xl border border-red-100 flex items-start gap-2">
+              <div className="mt-4 p-3 bg-red-50 dark:bg-red-900/10 rounded-xl border border-red-100 dark:border-red-900/20 flex items-start gap-2">
                 <AlertTriangle className="h-4 w-4 text-red-500 shrink-0 mt-0.5" />
                 <div>
                   <span className="text-xs text-red-600 font-bold block uppercase tracking-wider">
                     Rejection Reason
                   </span>
-                  <p className="text-gray-700 text-xs mt-1 leading-relaxed">{request.rejectionReason}</p>
+                  <p className="text-gray-700 dark:text-gray-300 text-xs mt-1 leading-relaxed">{request.rejectionReason}</p>
                 </div>
               </div>
             )}

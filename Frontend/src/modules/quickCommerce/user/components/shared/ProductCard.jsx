@@ -179,11 +179,11 @@ const ProductCard = React.memo(
         <div
           className={cn(
             "flex flex-col h-full w-full rounded-xl overflow-hidden transition-all duration-500 product-card-container premium-wave-shimmer",
-            "bg-[#FFF5F5] border border-red-100/50 shadow-sm",
+            "bg-[#FFF5F5] dark:bg-neutral-900 border border-red-100/50 dark:border-neutral-800 shadow-sm",
             "hover:shadow-md",
           )}>
           {/* Top Image Section */}
-          <div className="relative overflow-hidden w-full h-[90px] md:h-[110px] p-1 md:p-2">
+          <div className="relative overflow-hidden w-full h-[90px] md:h-[110px] p-1 md:p-2 bg-white dark:bg-neutral-800">
             {/* Badge (Professional Tag) */}
             {(badge || product.discount || discountPercent > 0) && (
               <div className="absolute top-0.5 left-0.5 z-10">
@@ -195,7 +195,7 @@ const ProductCard = React.memo(
 
             <button
               onClick={toggleWishlist}
-              className="absolute top-1 right-1 z-10 w-6 h-6 md:w-8 md:h-8 bg-white/90 backdrop-blur-md rounded-full shadow-sm flex items-center justify-center cursor-pointer hover:bg-white transition-all active:scale-90 border border-slate-100/50">
+              className="absolute top-1 right-1 z-10 w-6 h-6 md:w-8 md:h-8 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-md rounded-full shadow-sm flex items-center justify-center cursor-pointer hover:bg-white dark:hover:bg-neutral-800 transition-all active:scale-90 border border-slate-100/50 dark:border-neutral-700">
               <motion.div
                 whileTap={{ scale: 0.8 }}
                 animate={isWishlisted ? { scale: [1, 1.3, 1] } : {}}>
@@ -221,14 +221,14 @@ const ProductCard = React.memo(
               )}
             </AnimatePresence>
 
-            <div className="w-full h-full rounded-md overflow-hidden bg-white flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
+            <div className="w-full h-full rounded-md overflow-hidden bg-white dark:bg-neutral-800 flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
               <img
                 ref={imageRef}
                 src={resolveQuickImageUrl(product.image || product.mainImage) || product.image || product.mainImage}
                 srcSet={getCloudinarySrcSet(product.image || product.mainImage)}
                 sizes="(max-width: 768px) 150px, (max-width: 1024px) 200px, 250px"
                 alt={product.name}
-                className="w-full h-full object-contain mix-blend-multiply p-0.5 md:p-1"
+                className="w-full h-full object-contain mix-blend-multiply dark:mix-blend-normal p-0.5 md:p-1"
                 loading="lazy"
               />
             </div>
@@ -236,14 +236,14 @@ const ProductCard = React.memo(
 
           {/* Content Section */}
           <div className={cn(
-            "flex flex-col flex-1 px-1.5 py-1 space-y-0.5 bg-[#FFF5F5] border-t border-red-100/30 relative product-content-area transition-all duration-300",
+            "flex flex-col flex-1 px-1.5 py-1 space-y-0.5 bg-[#FFF5F5] dark:bg-neutral-900 border-t border-red-100/30 dark:border-neutral-800 relative product-content-area transition-all duration-300",
           )}>
             <div className="space-y-0">
-              <div className="flex items-center gap-1 text-[7.5px] md:text-[8px] text-slate-500 font-bold uppercase tracking-wider">
-                <Clock size={7} className="text-emerald-600" />
+              <div className="flex items-center gap-1 text-[7.5px] md:text-[8px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider">
+                <Clock size={7} className="text-emerald-600 dark:text-emerald-400" />
                 <span>{product.deliveryTime || "10 MINS"}</span>
               </div>
-              <h3 className="text-[11px] md:text-[12.5px] font-bold text-slate-900 line-clamp-1 leading-tight">
+              <h3 className="text-[11px] md:text-[12.5px] font-bold text-slate-900 dark:text-white line-clamp-1 leading-tight">
                 {product.name}
               </h3>
               <p className="text-[8px] md:text-[10px] text-slate-400 font-semibold italic">
@@ -251,13 +251,13 @@ const ProductCard = React.memo(
               </p>
             </div>
 
-            <div className="mt-auto flex items-center justify-between gap-1 pt-0.5 border-t border-slate-200/20">
+            <div className="mt-auto flex items-center justify-between gap-1 pt-0.5 border-t border-slate-200/20 dark:border-neutral-800">
               <div className="flex flex-col justify-center">
-                <span className="text-[12.5px] md:text-[14px] font-black text-slate-900 leading-none">
+                <span className="text-[12.5px] md:text-[14px] font-black text-slate-900 dark:text-white leading-none">
                   ₹{Number(displayPrice || 0).toLocaleString()}
                 </span>
                 {strikethroughPrice && (
-                  <span className="text-[8.5px] md:text-[9.5px] text-slate-400 line-through font-bold leading-none mt-0.5">
+                  <span className="text-[8.5px] md:text-[9.5px] text-slate-400 dark:text-slate-500 line-through font-bold leading-none mt-0.5">
                     ₹{Number(strikethroughPrice || 0).toLocaleString()}
                   </span>
                 )}
@@ -283,8 +283,8 @@ const ProductCard = React.memo(
                 <button
                   onClick={handleAddToCart}
                   className={cn(
-                    "w-6 h-6 md:w-7.5 md:h-7.5 flex items-center justify-center bg-white border-[1px] border-[#cc2532] text-[#cc2532] rounded-lg md:rounded-xl shadow-sm transition-all duration-300 active:scale-95 font-bold",
-                    "hover:bg-[#cc2532] hover:text-white"
+                    "w-6 h-6 md:w-7.5 md:h-7.5 flex items-center justify-center bg-white dark:bg-neutral-800 border-[1px] border-[#cc2532] text-[#cc2532] rounded-lg md:rounded-xl shadow-sm transition-all duration-300 active:scale-95 font-bold",
+                    "hover:bg-[#cc2532] hover:text-white dark:hover:text-white"
                   )}>
                   <Plus size={14} strokeWidth={3} />
                 </button>

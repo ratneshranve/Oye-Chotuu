@@ -197,10 +197,10 @@ const DeliveryMap = React.memo(({ orderId, order, isVisible, fallbackCustomerCoo
 const SectionItem = ({ icon: Icon, iconNode, title, subtitle, onClick, showArrow = true, rightContent }) => (
   <motion.button
     onClick={onClick}
-    className="w-full flex items-center gap-3 p-4 hover:bg-gray-50 transition-colors text-left border-b border-dashed border-gray-200 last:border-0"
+    className="w-full flex items-center gap-3 p-4 hover:bg-gray-50 dark:hover:bg-neutral-700/50 transition-colors text-left border-b border-dashed border-gray-200 dark:border-neutral-700 last:border-0"
     whileTap={{ scale: 0.99 }}
   >
-    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
+    <div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-neutral-700 flex items-center justify-center flex-shrink-0 overflow-hidden">
       {iconNode ? (
         <div
           className="w-6 h-6 flex-shrink-0 flex items-center justify-center [&_svg]:w-full [&_svg]:h-full [&_svg]:block"
@@ -208,14 +208,14 @@ const SectionItem = ({ icon: Icon, iconNode, title, subtitle, onClick, showArrow
           {iconNode}
         </div>
       ) : (
-        <Icon className="w-5 h-5 text-gray-600 flex-shrink-0" />
+        <Icon className="w-5 h-5 text-gray-600 dark:text-gray-300 flex-shrink-0" />
       )}
     </div>
     <div className="flex-1 min-w-0">
-      <p className="font-medium text-gray-900 truncate">{title}</p>
-      {subtitle && <p className="text-sm text-gray-500 truncate">{subtitle}</p>}
+      <p className="font-medium text-gray-900 dark:text-white truncate">{title}</p>
+      {subtitle && <p className="text-sm text-gray-500 dark:text-gray-400 truncate">{subtitle}</p>}
     </div>
-    {rightContent || (showArrow && <ChevronRight className="w-5 h-5 text-gray-400 flex-shrink-0" />)}
+    {rightContent || (showArrow && <ChevronRight className="w-5 h-5 text-gray-400 dark:text-gray-500 flex-shrink-0" />)}
   </motion.button>
 )
 
@@ -1973,10 +1973,10 @@ export default function OrderTracking() {
   // Loading state (moved after hooks)
   if (loading) {
     return (
-      <AnimatedPage className="min-h-screen bg-gray-50 p-4">
+      <AnimatedPage className="min-h-screen bg-gray-50 dark:bg-neutral-900 p-4">
         <div className="max-w-lg mx-auto text-center py-20">
-          <Loader2 className="w-8 h-8 animate-spin text-gray-600 mx-auto mb-4" />
-          <p className="text-gray-600">Loading order details...</p>
+          <Loader2 className="w-8 h-8 animate-spin text-gray-600 dark:text-gray-400 mx-auto mb-4" />
+          <p className="text-gray-600 dark:text-gray-400">Loading order details...</p>
         </div>
       </AnimatedPage>
     )
@@ -1985,10 +1985,10 @@ export default function OrderTracking() {
   // Error state (moved after hooks)
   if (error || !order) {
     return (
-      <AnimatedPage className="min-h-screen bg-gray-50 p-4">
+      <AnimatedPage className="min-h-screen bg-gray-50 dark:bg-neutral-900 p-4">
         <div className="max-w-lg mx-auto text-center py-20">
-          <h1 className="text-lg sm:text-xl md:text-2xl font-bold mb-4">Order Not Found</h1>
-          <p className="text-gray-600 mb-6">{error || 'The order you\'re looking for doesn\'t exist.'}</p>
+          <h1 className="text-lg sm:text-xl md:text-2xl font-bold mb-4 text-gray-900 dark:text-white">Order Not Found</h1>
+          <p className="text-gray-600 dark:text-gray-400 mb-6">{error || 'The order you\'re looking for doesn\'t exist.'}</p>
           <Link to={backPath}>
             <Button>Back to Orders</Button>
           </Link>
@@ -2232,60 +2232,60 @@ export default function OrderTracking() {
           />
           {!hasActiveDeliveryTracking && (
             <motion.div
-              className="mx-4 mt-4 rounded-3xl border border-emerald-100 bg-gradient-to-br from-emerald-50 via-white to-lime-50 p-5 shadow-sm"
+              className="mx-4 mt-4 rounded-3xl border border-emerald-100 dark:border-emerald-900/50 bg-gradient-to-br from-emerald-50 via-white to-lime-50 dark:from-emerald-900/20 dark:via-neutral-900 dark:to-lime-900/20 p-5 shadow-sm"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
             >
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-600">
+                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-500">
                     Live tracking
                   </p>
-                  <h3 className="mt-2 text-lg font-bold text-gray-900">
+                  <h3 className="mt-2 text-lg font-bold text-gray-900 dark:text-white">
                     {orderStatus === 'scheduled' ? 'Order Scheduled' : 'Waiting for delivery partner assignment'}
                   </h3>
-                  <p className="mt-1 text-sm text-gray-600">
+                  <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
                     {orderStatus === 'scheduled' 
                       ? `The ${isQuickOrder ? 'store' : 'restaurant'} will receive your order 15 minutes before the scheduled time.` 
                       : 'The route map is ready. Live rider movement will appear here as soon as a rider accepts the trip.'}
                   </p>
                 </div>
-                <div className="rounded-2xl bg-emerald-100 px-3 py-2 text-xs font-semibold text-emerald-700">
+                <div className="rounded-2xl bg-emerald-100 dark:bg-emerald-900/40 px-3 py-2 text-xs font-semibold text-emerald-700 dark:text-emerald-300">
                   {currentStatus.title}
                 </div>
               </div>
 
-              <div className="mt-5 rounded-2xl border border-white/70 bg-white/90 p-4">
+              <div className="mt-5 rounded-2xl border border-white/70 dark:border-neutral-700/50 bg-white/90 dark:bg-neutral-800/90 p-4">
                 <div className="flex items-start gap-3">
                   <div className="flex flex-col items-center pt-1">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 text-[#cc2532]">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 text-[#cc2532] dark:text-red-400">
                       <MapPin className="h-5 w-5" />
                     </div>
-                    <div className="my-2 h-10 w-px border-l-2 border-dashed border-emerald-200" />
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+                    <div className="my-2 h-10 w-px border-l-2 border-dashed border-emerald-200 dark:border-emerald-800" />
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400">
                       <HomeIcon className="h-5 w-5" />
                     </div>
                   </div>
                   <div className="min-w-0 flex-1 space-y-5">
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400">
+                      <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500">
                         {previewPickupLabel}
                       </p>
-                      <p className="mt-1 font-semibold text-gray-900">
+                      <p className="mt-1 font-semibold text-gray-900 dark:text-white">
                         {previewPickupSource?.name || order?.restaurant || 'Pickup location'}
                       </p>
-                      <p className="mt-1 text-sm text-gray-500">
+                      <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
                         {previewPickupAddress}
                       </p>
                     </div>
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400">
+                      <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500">
                         Delivery address
                       </p>
-                      <p className="mt-1 font-semibold text-gray-900">
+                      <p className="mt-1 font-semibold text-gray-900 dark:text-white">
                         Customer location
                       </p>
-                      <p className="mt-1 text-sm text-gray-500">
+                      <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
                         {previewDropAddress}
                       </p>
                     </div>
@@ -2341,17 +2341,17 @@ export default function OrderTracking() {
 
         {/* Dynamic Status Card */}
         <motion.div
-          className="bg-white rounded-xl p-4 shadow-sm"
+          className="bg-white dark:bg-neutral-800 rounded-xl p-4 shadow-sm"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
           <div className="flex items-center gap-4">
-            <div className={`w-14 h-14 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0 shadow-sm border border-gray-100 ${
-              currentStatus.iconType === 'rider' ? 'bg-blue-50' : 
-              currentStatus.iconType === 'cancelled' ? 'bg-red-50' : 
-              currentStatus.iconType === 'delivered' ? 'bg-green-50' : 
-              'bg-red-50'
+            <div className={`w-14 h-14 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0 shadow-sm border border-gray-100 dark:border-neutral-700 ${
+              currentStatus.iconType === 'rider' ? 'bg-blue-50 dark:bg-blue-900/30' : 
+              currentStatus.iconType === 'cancelled' ? 'bg-red-50 dark:bg-red-900/30' : 
+              currentStatus.iconType === 'delivered' ? 'bg-green-50 dark:bg-green-900/30' : 
+              'bg-red-50 dark:bg-red-900/30'
             }`}>
               {currentStatus.iconType === 'rider' ? (
                 <div 
@@ -2359,11 +2359,11 @@ export default function OrderTracking() {
                   className="w-full h-full" 
                 />
               ) : currentStatus.iconType === 'cancelled' ? (
-                <div className="w-full h-full flex items-center justify-center p-2 text-red-500">
+                <div className="w-full h-full flex items-center justify-center p-2 text-red-500 dark:text-red-400">
                   <X className="w-full h-full" />
                 </div>
               ) : currentStatus.iconType === 'delivered' ? (
-                <div className="w-full h-full flex items-center justify-center p-2 text-green-500">
+                <div className="w-full h-full flex items-center justify-center p-2 text-green-500 dark:text-green-400">
                   <Check className="w-full h-full" />
                 </div>
               ) : (
@@ -2375,8 +2375,8 @@ export default function OrderTracking() {
               )}
             </div>
             <div className="flex-1">
-              <p className="font-semibold text-gray-900 leading-tight">{currentStatus.title}</p>
-              <p className="text-sm text-gray-500 mt-1 leading-snug">{currentStatus.subtitle}</p>
+              <p className="font-semibold text-gray-900 dark:text-white leading-tight">{currentStatus.title}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 leading-snug">{currentStatus.subtitle}</p>
             </div>
           </div>
         </motion.div>
@@ -2384,16 +2384,16 @@ export default function OrderTracking() {
         {/* Delivery Partner Info */}
         {visibleDeliveryPartners.length > 0 && (
           <motion.div
-            className="bg-white rounded-xl shadow-sm overflow-hidden"
+            className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm overflow-hidden"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.55 }}
           >
-            <div className="px-4 pt-4 pb-2 border-b border-dashed border-gray-200">
-              <p className="font-semibold text-gray-900">
+            <div className="px-4 pt-4 pb-2 border-b border-dashed border-gray-200 dark:border-neutral-700">
+              <p className="font-semibold text-gray-900 dark:text-white">
                 {hasMultipleDeliveryPartners ? 'Express delivery partners' : 'Delivery partner'}
               </p>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                 {hasMultipleDeliveryPartners
                   ? 'Each pickup in your express order can have its own rider.'
                   : 'Your delivery partner is handling this order.'}
@@ -2403,10 +2403,10 @@ export default function OrderTracking() {
               <div
                 key={partner?.legId || partner?.id || index}
                 className={`flex items-center gap-3 p-4 ${
-                  index !== visibleDeliveryPartners.length - 1 ? 'border-b border-dashed border-gray-200' : ''
+                  index !== visibleDeliveryPartners.length - 1 ? 'border-b border-dashed border-gray-200 dark:border-neutral-700' : ''
                 }`}
               >
-                <div className="w-12 h-12 rounded-full bg-blue-50 overflow-hidden flex items-center justify-center flex-shrink-0 border border-blue-100 p-1">
+                <div className="w-12 h-12 rounded-full bg-blue-50 dark:bg-blue-900/30 overflow-hidden flex items-center justify-center flex-shrink-0 border border-blue-100 dark:border-blue-800/50 p-1">
                   <img
                     src={getPartnerDisplayAvatar(partner?.avatar, partner?.name)}
                     alt={partner?.name || 'Rider'}
@@ -2419,48 +2419,48 @@ export default function OrderTracking() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <p className="font-semibold text-gray-900 truncate">
+                    <p className="font-semibold text-gray-900 dark:text-white truncate">
                       {partner?.name || 'Delivery Partner'}
                     </p>
                     {hasMultipleDeliveryPartners && (
-                      <span className="inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-[11px] font-semibold text-blue-700">
+                      <span className="inline-flex items-center rounded-full bg-blue-50 dark:bg-blue-900/40 px-2 py-0.5 text-[11px] font-semibold text-blue-700 dark:text-blue-300">
                         {partner?.label || 'Pickup rider'}
                       </span>
                     )}
                   </div>
-                  <p className="text-sm text-gray-500 truncate">
+                  <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
                     {partner?.sourceName
                       ? `${partner.label} for ${partner.sourceName}`
                       : partner?.statusText || 'Your delivery partner is arriving'}
                   </p>
                   {formatPartnerRating(partner?.rating) ? (
-                    <div className="mt-1 flex items-center gap-1.5 text-xs text-amber-600">
+                    <div className="mt-1 flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-500">
                       <span className="font-semibold">★ {formatPartnerRating(partner?.rating)}</span>
-                      <span className="text-gray-400">
+                      <span className="text-gray-400 dark:text-gray-500">
                         {Number(partner?.totalRatings || 0) > 0
                           ? `(${Number(partner?.totalRatings)} ratings)`
                           : '(New rider)'}
                       </span>
                     </div>
                   ) : (
-                    <div className="mt-1 text-xs text-gray-400">Rating not available yet</div>
+                    <div className="mt-1 text-xs text-gray-400 dark:text-gray-500">Rating not available yet</div>
                   )}
                 </div>
                 <motion.button
-                  className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center"
+                  className="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center"
                   onClick={(e) => handleCallRider(partner?.phone, e)}
                   whileTap={{ scale: 0.9 }}
                 >
-                  <Phone className="w-5 h-5 text-blue-600" />
+                  <Phone className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                 </motion.button>
               </div>
             ))}
             {order?.note && !isDeliveredOrder && (
-              <div className="bg-blue-50/50 p-3 mx-4 mb-4 rounded-lg flex items-start gap-2 border border-blue-100">
-                <MessageSquare className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
+              <div className="bg-blue-50/50 dark:bg-blue-900/20 p-3 mx-4 mb-4 rounded-lg flex items-start gap-2 border border-blue-100 dark:border-blue-800/50">
+                <MessageSquare className="w-4 h-4 text-blue-500 dark:text-blue-400 mt-0.5 flex-shrink-0" />
                 <div className="flex-1">
-                  <p className="text-[10px] font-bold text-blue-600 uppercase tracking-wider mb-0.5">Instruction for Rider</p>
-                  <p className="text-xs text-gray-700 leading-relaxed font-medium">"{order.note}"</p>
+                  <p className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-0.5">Instruction for Rider</p>
+                  <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed font-medium">"{order.note}"</p>
                 </div>
               </div>
             )}
@@ -2470,29 +2470,29 @@ export default function OrderTracking() {
         {/* Delivery Partner Safety */}
         {!isDeliveredOrder && (
           <motion.button
-            className="w-full bg-white rounded-xl p-4 shadow-sm flex items-center gap-3"
+            className="w-full bg-white dark:bg-neutral-800 rounded-xl p-4 shadow-sm flex items-center gap-3"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
             whileTap={{ scale: 0.99 }}
           >
-            <Shield className="w-6 h-6 text-gray-600" />
-            <span className="flex-1 text-left font-medium text-gray-900">
+            <Shield className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+            <span className="flex-1 text-left font-medium text-gray-900 dark:text-white">
               Learn about delivery partner safety
             </span>
-            <ChevronRight className="w-5 h-5 text-gray-400" />
+            <ChevronRight className="w-5 h-5 text-gray-400 dark:text-gray-500" />
           </motion.button>
         )}
 
         {/* Delivery Details Banner */}
         {!isDeliveredOrder && (
           <motion.div
-            className="bg-yellow-50 rounded-xl p-4 text-center"
+            className="bg-yellow-50 dark:bg-yellow-900/20 rounded-xl p-4 text-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.65 }}
           >
-            <p className="text-yellow-800 font-medium">
+            <p className="text-yellow-800 dark:text-yellow-500 font-medium">
               All your delivery details in one place 🚀
             </p>
           </motion.div>
@@ -2500,7 +2500,7 @@ export default function OrderTracking() {
 
         {/* Contact & Address Section */}
         <motion.div
-          className="bg-white rounded-xl shadow-sm overflow-hidden"
+          className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm overflow-hidden"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7 }}
@@ -2588,18 +2588,18 @@ export default function OrderTracking() {
 
         {/* Pickup Sources Section */}
         <motion.div
-          className="bg-white rounded-xl shadow-sm overflow-hidden"
+          className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm overflow-hidden"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.75 }}
         >
-          <div className="p-4 border-b border-dashed border-gray-200">
+          <div className="p-4 border-b border-dashed border-gray-200 dark:border-neutral-700">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500">
                   {order?.orderType === 'mixed' ? 'Pickup Points' : (isQuickOrder ? 'Store' : 'Restaurant')}
                 </p>
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
                   {order?.orderType === 'mixed'
                     ? 'Restaurant and store details for this mixed order'
                     : 'Pickup details for your order'}
@@ -2607,11 +2607,11 @@ export default function OrderTracking() {
               </div>
               {pickupSources.length === 1 && (
                 <motion.button
-                  className="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center"
+                  className="w-10 h-10 rounded-full bg-red-50 dark:bg-red-900/30 flex items-center justify-center"
                   onClick={handleCallRestaurant}
                   whileTap={{ scale: 0.9 }}
                 >
-                  <Phone className="w-5 h-5 text-[#cc2532]" />
+                  <Phone className="w-5 h-5 text-[#cc2532] dark:text-red-400" />
                 </motion.button>
               )}
             </div>
@@ -2620,16 +2620,16 @@ export default function OrderTracking() {
               {pickupSources.map((source, index) => {
                 const isQuick = source.pickupType === 'quick'
                 const badgeClasses = isQuick
-                  ? 'bg-sky-50 text-sky-700 border-sky-200'
-                  : 'bg-red-50 text-orange-700 border-orange-200'
+                  ? 'bg-sky-50 text-sky-700 border-sky-200 dark:bg-sky-900/30 dark:text-sky-400 dark:border-sky-800'
+                  : 'bg-red-50 text-orange-700 border-orange-200 dark:bg-red-900/30 dark:text-orange-400 dark:border-orange-800'
 
                 return (
                   <div
                     key={source.id || `${source.pickupType}-${index}`}
-                    className="rounded-2xl border border-gray-100 bg-gray-50/80 p-4"
+                    className="rounded-2xl border border-gray-100 dark:border-neutral-700 bg-gray-50/80 dark:bg-neutral-900/50 p-4"
                   >
                     <div className="flex items-start gap-3">
-                      <div className={`inline-flex h-12 w-12 items-center justify-center rounded-full ${isQuick ? 'bg-sky-100' : 'bg-red-100'} flex-shrink-0`}>
+                      <div className={`inline-flex h-12 w-12 items-center justify-center rounded-full ${isQuick ? 'bg-sky-100 dark:bg-sky-900/40' : 'bg-red-100 dark:bg-red-900/40'} flex-shrink-0`}>
                         <div
                           dangerouslySetInnerHTML={{ __html: SAFE_RESTAURANT_PIN }}
                           className="w-7 h-7 [&_svg]:w-full [&_svg]:h-full [&_svg]:block"
@@ -2639,16 +2639,16 @@ export default function OrderTracking() {
                         <span className={`inline-flex rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${badgeClasses}`}>
                           {pickupSources.length > 1 ? `${source.label} ${index + 1}` : source.label}
                         </span>
-                        <p className="mt-2 font-semibold text-gray-900">{source.name}</p>
-                        <p className="mt-1 text-sm text-gray-500">{source.address || 'Address not available'}</p>
+                        <p className="mt-2 font-semibold text-gray-900 dark:text-white">{source.name}</p>
+                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{source.address || 'Address not available'}</p>
                       </div>
                       {source.phone ? (
                         <motion.button
-                          className={`w-10 h-10 rounded-full flex items-center justify-center ${isQuick ? 'bg-sky-50' : 'bg-red-50'}`}
+                          className={`w-10 h-10 rounded-full flex items-center justify-center ${isQuick ? 'bg-sky-50 dark:bg-sky-900/30' : 'bg-red-50 dark:bg-red-900/30'}`}
                           onClick={(e) => handleCallPickupSource(source.phone, e)}
                           whileTap={{ scale: 0.9 }}
                         >
-                          <Phone className={`w-5 h-5 ${isQuick ? 'text-sky-600' : 'text-[#cc2532]'}`} />
+                          <Phone className={`w-5 h-5 ${isQuick ? 'text-sky-600 dark:text-sky-400' : 'text-[#cc2532] dark:text-red-400'}`} />
                         </motion.button>
                       ) : null}
                     </div>
@@ -2660,31 +2660,31 @@ export default function OrderTracking() {
 
           {/* Order Items */}
           <div
-            className="p-4 border-b border-dashed border-gray-200 cursor-pointer hover:bg-gray-50 transition-colors"
+            className="p-4 border-b border-dashed border-gray-200 dark:border-neutral-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-neutral-700/50 transition-colors"
             onClick={() => setShowOrderDetails(true)}
           >
             <div className="flex items-start gap-3">
-              <Receipt className="w-5 h-5 text-gray-500 mt-0.5" />
+              <Receipt className="w-5 h-5 text-gray-500 dark:text-gray-400 mt-0.5" />
               <div className="flex-1">
                 <div className="mt-2 space-y-1">
                   {order?.items?.map((item, index) => (
-                    <div key={index} className="flex items-center gap-2 text-sm text-gray-600">
-                      <span className="w-4 h-4 rounded border border-green-600 flex items-center justify-center">
-                        <span className="w-2 h-2 rounded-full bg-green-600" />
+                    <div key={index} className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+                      <span className="w-4 h-4 rounded border border-green-600 dark:border-green-500 flex items-center justify-center">
+                        <span className="w-2 h-2 rounded-full bg-green-600 dark:bg-green-500" />
                       </span>
                       <span>{item.quantity} x {item.name}{item.variantName ? ` (${item.variantName})` : ""}</span>
                     </div>
                   ))}
                 </div>
               </div>
-              <ChevronRight className="w-5 h-5 text-gray-400" />
+              <ChevronRight className="w-5 h-5 text-gray-400 dark:text-gray-500" />
             </div>
           </div>
         </motion.div>
 
         {!isAdminAccepted && !isDeliveredOrder && orderStatus !== 'cancelled' && (
           <motion.div
-            className="bg-white rounded-xl shadow-sm overflow-hidden"
+            className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm overflow-hidden"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8 }}
@@ -2699,7 +2699,7 @@ export default function OrderTracking() {
         )}
 
         <motion.div
-          className="bg-white rounded-xl shadow-sm overflow-hidden"
+          className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm overflow-hidden"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.82 }}
@@ -2716,9 +2716,9 @@ export default function OrderTracking() {
 
       {/* Cancel Order Dialog */}
       <Dialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
-        <DialogContent className="sm:max-w-xl w-[95%] max-w-[600px]">
+        <DialogContent className="sm:max-w-xl w-[95%] max-w-[600px] bg-white dark:bg-neutral-900 border-none">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-gray-900">
+            <DialogTitle className="text-xl font-bold text-gray-900 dark:text-white">
               Cancel Order
             </DialogTitle>
           </DialogHeader>
@@ -2728,15 +2728,15 @@ export default function OrderTracking() {
                 value={cancellationReason}
                 onChange={(e) => setCancellationReason(e.target.value)}
                 placeholder="e.g., Changed my mind, Wrong address, etc."
-                className="w-full min-h-[100px] resize-none border-2 border-gray-300 rounded-lg px-4 py-3 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-200 focus:outline-none transition-colors disabled:bg-gray-100 disabled:cursor-not-allowed disabled:border-gray-200"
+                className="w-full min-h-[100px] resize-none border-2 border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white rounded-lg px-4 py-3 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900 focus:outline-none transition-colors disabled:bg-gray-100 dark:disabled:bg-neutral-800 disabled:cursor-not-allowed disabled:border-gray-200 dark:disabled:border-neutral-700"
                 disabled={isCancelling}
               />
             </div>
             {isOnlinePaidForRefundChoice ? (
-              <div className="space-y-3 rounded-2xl border border-gray-200 bg-gray-50 p-4">
+              <div className="space-y-3 rounded-2xl border border-gray-200 dark:border-neutral-700 bg-gray-50 dark:bg-neutral-800/50 p-4">
                 <div>
-                  <p className="text-sm font-semibold text-gray-900">Refund destination</p>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white">Refund destination</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
                     Choose where your refund should go if admin approves the cancellation.
                   </p>
                 </div>
@@ -2747,12 +2747,12 @@ export default function OrderTracking() {
                     disabled={isCancelling}
                     className={`rounded-xl border px-4 py-3 text-left transition ${
                       refundDestination === "gateway"
-                        ? "border-orange-500 bg-red-50 text-orange-900"
-                        : "border-gray-200 bg-white text-gray-700 hover:border-gray-300"
+                        ? "border-orange-500 bg-red-50 dark:bg-red-900/20 text-orange-900 dark:text-orange-400"
+                        : "border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:hover:border-neutral-600"
                     } ${isCancelling ? "cursor-not-allowed opacity-60" : ""}`}
                   >
                     <p className="text-sm font-semibold">Original payment method</p>
-                    <p className="mt-1 text-xs text-gray-500">Refund back through Razorpay.</p>
+                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Refund back through Razorpay.</p>
                   </button>
                   <button
                     type="button"
@@ -2760,12 +2760,12 @@ export default function OrderTracking() {
                     disabled={isCancelling}
                     className={`rounded-xl border px-4 py-3 text-left transition ${
                       refundDestination === "wallet"
-                        ? "border-orange-500 bg-red-50 text-orange-900"
-                        : "border-gray-200 bg-white text-gray-700 hover:border-gray-300"
+                        ? "border-orange-500 bg-red-50 dark:bg-red-900/20 text-orange-900 dark:text-orange-400"
+                        : "border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:hover:border-neutral-600"
                     } ${isCancelling ? "cursor-not-allowed opacity-60" : ""}`}
                   >
                     <p className="text-sm font-semibold">Wallet</p>
-                    <p className="mt-1 text-xs text-gray-500">Refund as wallet balance for faster reuse.</p>
+                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Refund as wallet balance for faster reuse.</p>
                   </button>
                 </div>
               </div>
@@ -2779,7 +2779,7 @@ export default function OrderTracking() {
                   setRefundDestination("gateway");
                 }}
                 disabled={isCancelling}
-                className="flex-1"
+                className="flex-1 dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700"
               >
                 Cancel
               </Button>
@@ -2804,10 +2804,10 @@ export default function OrderTracking() {
 
       {/* Order Details Dialog */}
       <Dialog open={showOrderDetails} onOpenChange={setShowOrderDetails}>
-        <DialogContent className="max-w-[calc(100vw-32px)] sm:max-w-md bg-white rounded-2xl p-0 overflow-hidden border-none outline-none">
-          <DialogHeader className="p-6 pb-4 border-b border-gray-100 pr-12">
+        <DialogContent className="max-w-[calc(100vw-32px)] sm:max-w-md bg-white dark:bg-neutral-900 rounded-2xl p-0 overflow-hidden border-none outline-none">
+          <DialogHeader className="p-6 pb-4 border-b border-gray-100 dark:border-neutral-800 pr-12">
             <div className="flex items-center justify-between">
-              <DialogTitle className="text-xl font-bold text-gray-900">Order Details</DialogTitle>
+              <DialogTitle className="text-xl font-bold text-gray-900 dark:text-white">Order Details</DialogTitle>
             </div>
           </DialogHeader>
 
@@ -2816,8 +2816,8 @@ export default function OrderTracking() {
             <div className="flex flex-col gap-1 b">
               <div className="flex items-center gap-4 mt-2">
                 <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-wider">Date & Time</p>
-                  <p className="text-sm font-medium text-gray-900">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">Date & Time</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">
                     {order?.createdAt ? new Date(order.createdAt).toLocaleString('en-IN', {
                       day: '2-digit',
                       month: 'short',
@@ -2828,10 +2828,10 @@ export default function OrderTracking() {
                     }) : 'N/A'}
                   </p>
                 </div>
-                <div className="h-8 w-px bg-gray-100" />
+                <div className="h-8 w-px bg-gray-100 dark:bg-neutral-800" />
                 <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-wider">Status</p>
-                  <span className="text-sm font-bold text-green-600 uppercase">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</p>
+                  <span className="text-sm font-bold text-green-600 dark:text-green-500 uppercase">
                     {order?.status?.replace('_', ' ')}
                   </span>
                 </div>
@@ -2840,11 +2840,11 @@ export default function OrderTracking() {
 
             {/* Delivery Instructions Section */}
             {order?.note && (
-              <div className="bg-red-50/50 rounded-xl p-4 border border-orange-100 flex gap-3">
-                <MessageSquare className="w-5 h-5 text-orange-500 shrink-0 mt-0.5" />
+              <div className="bg-red-50/50 dark:bg-red-900/20 rounded-xl p-4 border border-orange-100 dark:border-orange-900/50 flex gap-3">
+                <MessageSquare className="w-5 h-5 text-orange-500 dark:text-orange-400 shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-xs text-orange-600 font-bold uppercase tracking-wider mb-1">Delivery Instructions</p>
-                  <p className="text-sm text-gray-800 leading-relaxed font-medium capitalize">
+                  <p className="text-xs text-orange-600 dark:text-orange-400 font-bold uppercase tracking-wider mb-1">Delivery Instructions</p>
+                  <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed font-medium capitalize">
                     {order.note}
                   </p>
                 </div>
@@ -2853,99 +2853,99 @@ export default function OrderTracking() {
 
             {/* Items Section */}
             <div>
-              <p className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-3">Order Items</p>
+              <p className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">Order Items</p>
               <div className="space-y-4">
                 {order?.items?.map((item, index) => (
                   <div key={index} className="flex items-start justify-between gap-4">
                     <div className="flex items-start gap-3 flex-1">
-                      <div className="w-5 h-5 rounded border border-green-600 flex items-center justify-center mt-0.5 shrink-0">
-                        <div className="w-2.5 h-2.5 rounded-full bg-green-600" />
+                      <div className="w-5 h-5 rounded border border-green-600 dark:border-green-500 flex items-center justify-center mt-0.5 shrink-0">
+                        <div className="w-2.5 h-2.5 rounded-full bg-green-600 dark:bg-green-500" />
                       </div>
                       <div className="flex-1">
-                        <p className="font-semibold text-gray-900 leading-tight">{item.name}</p>
+                        <p className="font-semibold text-gray-900 dark:text-white leading-tight">{item.name}</p>
                         {item.variantName ? (
-                          <p className="text-sm text-gray-500 mt-0.5">{item.variantName}</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{item.variantName}</p>
                         ) : null}
-                        <p className="text-sm text-gray-500 mt-0.5">Quantity: {item.quantity}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">Quantity: {item.quantity}</p>
                       </div>
                     </div>
-                    <p className="font-semibold text-gray-900">₹{((item?.price || 0) * (item?.quantity || 0)).toFixed(2)}</p>
+                    <p className="font-semibold text-gray-900 dark:text-white">₹{((item?.price || 0) * (item?.quantity || 0)).toFixed(2)}</p>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Bill Summary */}
-            <div className="bg-gray-50 rounded-xl p-4 space-y-3">
-              <p className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-1">Bill Summary</p>
+            <div className="bg-gray-50 dark:bg-neutral-800 rounded-xl p-4 space-y-3">
+              <p className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-1">Bill Summary</p>
               
               <div className="flex justify-between items-center text-sm">
-                <span className="text-gray-600">Item Total</span>
-                <span className="text-gray-900 font-medium">₹{Number(order?.subtotal || 0).toFixed(2)}</span>
+                <span className="text-gray-600 dark:text-gray-400">Item Total</span>
+                <span className="text-gray-900 dark:text-white font-medium">₹{Number(order?.subtotal || 0).toFixed(2)}</span>
               </div>
 
               {Number(order?.packagingFee) > 0 && (
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-gray-600">Packaging Charges</span>
-                  <span className="text-gray-900 font-medium">₹{Number(order.packagingFee).toFixed(2)}</span>
+                  <span className="text-gray-600 dark:text-gray-400">Packaging Charges</span>
+                  <span className="text-gray-900 dark:text-white font-medium">₹{Number(order.packagingFee).toFixed(2)}</span>
                 </div>
               )}
 
               {Number(order?.platformFee) > 0 && (
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-gray-600">Platform Fee</span>
-                  <span className="text-gray-900 font-medium">₹{Number(order.platformFee).toFixed(2)}</span>
+                  <span className="text-gray-600 dark:text-gray-400">Platform Fee</span>
+                  <span className="text-gray-900 dark:text-white font-medium">₹{Number(order.platformFee).toFixed(2)}</span>
                 </div>
               )}
 
               {Number(order?.handlingFee) > 0 && (
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-gray-600">Handling Fee</span>
-                  <span className="text-gray-900 font-medium">₹{Number(order.handlingFee).toFixed(2)}</span>
+                  <span className="text-gray-600 dark:text-gray-400">Handling Fee</span>
+                  <span className="text-gray-900 dark:text-white font-medium">₹{Number(order.handlingFee).toFixed(2)}</span>
                 </div>
               )}
 
               <div className="flex justify-between items-center text-sm">
-                <span className="text-gray-600">Delivery Fee</span>
-                <span className="text-gray-900 font-medium">₹{Number(order?.deliveryFee || 0).toFixed(2)}</span>
+                <span className="text-gray-600 dark:text-gray-400">Delivery Fee</span>
+                <span className="text-gray-900 dark:text-white font-medium">₹{Number(order?.deliveryFee || 0).toFixed(2)}</span>
               </div>
 
               <div className="flex justify-between items-center text-sm">
-                <span className="text-gray-600">Taxes & Charges (GST)</span>
-                <span className="text-gray-900 font-medium">₹{Number(order?.gst || 0).toFixed(2)}</span>
+                <span className="text-gray-600 dark:text-gray-400">Taxes & Charges (GST)</span>
+                <span className="text-gray-900 dark:text-white font-medium">₹{Number(order?.gst || 0).toFixed(2)}</span>
               </div>
 
               {Number(order?.discount) > 0 && (
-                <div className="flex justify-between items-center text-sm text-green-600 font-medium">
+                <div className="flex justify-between items-center text-sm text-green-600 dark:text-green-400 font-medium">
                   <span>Discount Applied</span>
                   <span>-₹{Number(order.discount).toFixed(2)}</span>
                 </div>
               )}
 
-              <div className="pt-2 border-t border-gray-200 flex justify-between items-center">
-                <span className="text-base font-bold text-gray-900">Total Amount</span>
-                <span className="text-lg font-bold text-gray-900">₹{Number(order?.totalAmount || 0).toFixed(2)}</span>
+              <div className="pt-2 border-t border-gray-200 dark:border-neutral-700 flex justify-between items-center">
+                <span className="text-base font-bold text-gray-900 dark:text-white">Total Amount</span>
+                <span className="text-lg font-bold text-gray-900 dark:text-white">₹{Number(order?.totalAmount || 0).toFixed(2)}</span>
               </div>
             </div>
 
             {/* Payment Method */}
             {order?.paymentMethod && (
               <div className="flex items-center justify-between px-1">
-                <div className="flex items-center gap-2 text-gray-600">
+                <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
                   <Shield className="w-4 h-4" />
                   <span className="text-sm font-medium">Payment Method</span>
                 </div>
-                <span className="text-sm font-bold text-gray-900 uppercase tracking-wide">
+                <span className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wide">
                   {order.paymentMethod}
                 </span>
               </div>
             )}
           </div>
 
-          <div className="p-6 border-t border-gray-100">
+          <div className="p-6 border-t border-gray-100 dark:border-neutral-800">
             <Button
               onClick={() => setShowOrderDetails(false)}
-              className="w-full bg-gray-900 text-white font-bold h-12 rounded-xl"
+              className="w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold h-12 rounded-xl"
             >
               Okay
             </Button>
@@ -2955,21 +2955,21 @@ export default function OrderTracking() {
 
       {/* Delivery Instructions Modal */}
       <Dialog open={isInstructionsModalOpen} onOpenChange={setIsInstructionsModalOpen}>
-        <DialogContent className="sm:max-w-md w-[95vw] rounded-3xl p-6 border-0 shadow-2xl bg-white max-h-[90vh] overflow-y-auto z-[200]">
+        <DialogContent className="sm:max-w-md w-[95vw] rounded-3xl p-6 border-0 shadow-2xl bg-white dark:bg-neutral-900 max-h-[90vh] overflow-y-auto z-[200]">
           <DialogHeader className="mb-2">
-            <DialogTitle className="text-xl font-bold bg-gradient-to-r from-orange-600 to-orange-400 bg-clip-text text-transparent">
+            <DialogTitle className="text-xl font-bold bg-gradient-to-r from-orange-600 to-orange-400 dark:from-orange-500 dark:to-orange-300 bg-clip-text text-transparent">
               Delivery Instructions
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               Add instructions for the delivery partner to help them find your address or know where to leave your order.
             </p>
             <Textarea
               value={deliveryInstructions}
               onChange={(e) => setDeliveryInstructions(e.target.value)}
               placeholder="E.g. Ring the doorbell, leave at the front desk..."
-              className="min-h-[120px] resize-none border-gray-200 focus:ring-orange-500 rounded-xl bg-gray-50 text-base"
+              className="min-h-[120px] resize-none border-gray-200 dark:border-neutral-700 focus:ring-orange-500 rounded-xl bg-gray-50 dark:bg-neutral-800 text-base dark:text-white"
             />
             <Button 
               onClick={handleUpdateInstructions} 
@@ -2990,10 +2990,10 @@ export default function OrderTracking() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="w-full max-w-md rounded-3xl bg-white shadow-2xl overflow-hidden"
+              className="w-full max-w-md rounded-3xl bg-white dark:bg-neutral-900 shadow-2xl overflow-hidden"
             >
               {/* Header with gradient */}
-              <div className="bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-5">
+              <div className="bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-700 dark:to-emerald-800 px-6 py-5">
                 <div className="flex items-center justify-between mb-1">
                   <h2 className="text-xl font-bold text-white flex items-center gap-2">
                     <Star className="w-5 h-5 fill-white" />
@@ -3012,7 +3012,7 @@ export default function OrderTracking() {
 
               <div className="px-6 py-6 space-y-6">
                 <div>
-                  <p className="text-sm font-semibold text-gray-900 mb-3">
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
                     {isQuickOrder ? 'Store rating' : 'Restaurant rating'} (out of 5)
                   </p>
                   <div className="flex items-center justify-center gap-2 mb-3">
@@ -3028,7 +3028,7 @@ export default function OrderTracking() {
                           <Star
                             className={`w-10 h-10 transition-all ${isActive
                                 ? "text-yellow-400 fill-yellow-400 drop-shadow-lg"
-                                : "text-gray-200 hover:text-yellow-200"
+                                : "text-gray-200 dark:text-gray-700 hover:text-yellow-200"
                               }`}
                           />
                         </button>
@@ -3039,14 +3039,14 @@ export default function OrderTracking() {
                     rows={2}
                     value={restaurantFeedbackText}
                     onChange={(e) => setRestaurantFeedbackText(e.target.value)}
-                    className="w-full rounded-xl border-2 border-gray-100 px-4 py-2 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 resize-none transition-all"
+                    className="w-full rounded-xl border-2 border-gray-100 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-4 py-2 text-sm text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 resize-none transition-all"
                     placeholder="Tell us what you liked (optional)"
                   />
                 </div>
 
                 {!!order?.deliveryPartnerId && (
-                  <div className="pt-4 border-t border-gray-100">
-                    <p className="text-sm font-semibold text-gray-900 mb-3">
+                  <div className="pt-4 border-t border-gray-100 dark:border-neutral-800">
+                    <p className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
                       Delivery partner rating (out of 5)
                     </p>
                     <div className="flex items-center justify-center gap-2 mb-3">
@@ -3062,7 +3062,7 @@ export default function OrderTracking() {
                             <Star
                               className={`w-10 h-10 transition-all ${isActive
                                   ? "text-yellow-400 fill-yellow-400 drop-shadow-lg"
-                                  : "text-gray-200 hover:text-yellow-200"
+                                  : "text-gray-200 dark:text-gray-700 hover:text-yellow-200"
                                 }`}
                             />
                           </button>
@@ -3073,7 +3073,7 @@ export default function OrderTracking() {
                       rows={2}
                       value={deliveryFeedbackText}
                       onChange={(e) => setDeliveryFeedbackText(e.target.value)}
-                      className="w-full rounded-xl border-2 border-gray-100 px-4 py-2 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 resize-none transition-all"
+                      className="w-full rounded-xl border-2 border-gray-100 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-4 py-2 text-sm text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 resize-none transition-all"
                       placeholder="How was the delivery? (optional)"
                     />
                   </div>
@@ -3100,7 +3100,7 @@ export default function OrderTracking() {
                 </Button>
 
                 {selectedRestaurantRating === null && (
-                  <p className="text-[10px] text-center text-gray-400">Please select a rating to enable submission</p>
+                  <p className="text-[10px] text-center text-gray-400 dark:text-gray-500">Please select a rating to enable submission</p>
                 )}
               </div>
             </motion.div>

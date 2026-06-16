@@ -106,8 +106,8 @@ export const DatePicker: React.FC<DatePickerProps> = ({
         type="button"
         variant="outline"
         className={cn(
-          "w-full justify-start text-left font-bold text-xs h-11 px-3 rounded-xl border border-slate-200 bg-slate-50",
-          !value && "text-slate-400",
+          "w-full justify-start text-left font-bold text-xs h-11 px-3 rounded-xl border border-slate-200 dark:border-neutral-700 bg-slate-50 dark:bg-neutral-800 dark:text-white",
+          !value && "text-slate-400 dark:text-slate-500",
           disabled && "opacity-60 cursor-not-allowed",
           className
         )}
@@ -125,7 +125,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
           setOpen(next);
         }}
       >
-        <CalendarIcon className="mr-2 h-3.5 w-3.5 text-slate-400" />
+        <CalendarIcon className="mr-2 h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
         {value && selectedDate
           ? format(selectedDate, "dd MMM yyyy")
           : placeholder}
@@ -134,12 +134,12 @@ export const DatePicker: React.FC<DatePickerProps> = ({
         <>
           {/* Backdrop for mobile */}
           <div 
-            className="fixed inset-0 z-40 bg-black/20 backdrop-blur-[2px] md:hidden" 
+            className="fixed inset-0 z-40 bg-black/20 dark:bg-black/40 backdrop-blur-[2px] md:hidden" 
             onClick={() => setOpen(false)}
           />
           <div
             className={cn(
-              "z-50 rounded-xl border border-slate-200 bg-white shadow-2xl",
+              "z-50 rounded-xl border border-slate-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-2xl",
               // Mobile: Centered modal-like
               "fixed left-1/2 top-1/2 w-[90vw] max-w-[320px] -translate-x-1/2 -translate-y-1/2",
               // Desktop: Absolute below trigger

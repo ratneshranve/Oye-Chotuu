@@ -13,7 +13,7 @@ const CategoryRail = memo(({
 }) => {
   return (
     <section className="px-4 py-4 space-y-4">
-      <h2 className="text-xl font-bold text-gray-900 tracking-tight">
+      <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">
         What's on your mind?
       </h2>
       
@@ -30,7 +30,7 @@ const CategoryRail = memo(({
               <span className="text-[8px] font-extrabold text-[#cc2532]">Explore</span>
             </div>
           </div>
-          <span className="text-xs font-semibold text-gray-600">Offers</span>
+          <span className="text-xs font-semibold text-gray-600 dark:text-gray-300">Offers</span>
         </div>
 
         {!showCategorySkeleton && displayCategories.map((category, index) => (
@@ -47,7 +47,7 @@ const CategoryRail = memo(({
                 backendOrigin={backendOrigin}
               />
             </div>
-            <span className="text-xs font-semibold text-gray-600 truncate w-full text-center">
+            <span className="text-xs font-semibold text-gray-600 dark:text-gray-300 truncate w-full text-center">
               {category.name}
             </span>
           </Link>

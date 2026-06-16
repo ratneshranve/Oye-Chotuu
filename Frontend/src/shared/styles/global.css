@@ -278,4 +278,26 @@
   z-index: 999999 !important;
   pointer-events: auto !important;
 }
+
+/* React Day Picker Dark Mode */
+.dark .rdp {
+  --rdp-cell-size: 40px;
+  --rdp-accent-color: #00AEEF;
+  --rdp-background-color: #262626;
+  /* Dark mode text should be white */
+  color: #fff;
+}
+.dark .rdp-day_selected, 
+.dark .rdp-day_selected:focus-visible, 
+.dark .rdp-day_selected:hover {
+  color: white;
+  background-color: var(--rdp-accent-color);
+}
+.dark .rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
+  background-color: var(--rdp-background-color);
+}
+.dark .rdp-day_outside {
+  color: #525252;
+}
+
 }

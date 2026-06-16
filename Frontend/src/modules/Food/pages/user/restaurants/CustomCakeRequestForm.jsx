@@ -170,31 +170,31 @@ export default function CustomCakeRequestForm() {
 
   if (loadingBakery) {
     return (
-      <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center">
+      <div className="min-h-screen bg-[#f8fafc] dark:bg-neutral-900 flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
           <Loader className="h-10 w-10 text-pink-500 animate-spin" />
-          <span className="text-slate-500 text-sm">Loading bakery details...</span>
+          <span className="text-slate-500 dark:text-slate-400 text-sm">Loading bakery details...</span>
         </div>
       </div>
     )
   }
 
   return (
-    <AnimatedPage className="min-h-screen bg-[#f8fafc] text-slate-900 flex flex-col">
+    <AnimatedPage className="min-h-screen bg-[#f8fafc] dark:bg-neutral-900 text-slate-900 dark:text-slate-100 flex flex-col">
       {/* Header */}
-      <div className="px-4 py-4 sm:px-6 md:px-8 border-b border-slate-200 bg-white sticky top-0 z-30">
+      <div className="px-4 py-4 sm:px-6 md:px-8 border-b border-slate-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 sticky top-0 z-30">
         <div className="max-w-3xl mx-auto flex items-center gap-4">
           <Link to={`/food/user/restaurants/${bakery?.slug || restaurantId}`}>
-            <Button variant="ghost" size="icon" className="rounded-full hover:bg-slate-100 text-slate-500 hover:text-slate-900">
+            <Button variant="ghost" size="icon" className="rounded-full hover:bg-slate-100 dark:hover:bg-neutral-800 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
               <ArrowLeft className="h-5 w-5" />
             </Button>
           </Link>
           <div>
-            <h1 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+            <h1 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-pink-500" />
               Custom Cake Request
             </h1>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-slate-500 dark:text-slate-400">
               For {bakery?.name || "Home Bakery"}
             </p>
           </div>
@@ -205,14 +205,14 @@ export default function CustomCakeRequestForm() {
       <div className="flex-1 max-w-3xl w-full mx-auto px-4 py-6 sm:px-6">
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Cake Basics Section */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-5 space-y-4 shadow-sm">
-            <h2 className="text-base font-bold text-pink-600 border-b border-slate-200 pb-2">
+          <div className="bg-white dark:bg-neutral-800 rounded-2xl border border-slate-200 dark:border-neutral-700 p-5 space-y-4 shadow-sm">
+            <h2 className="text-base font-bold text-pink-600 border-b border-slate-200 dark:border-neutral-700 pb-2">
               1. Cake Specifications
             </h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-2">
+                <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-2">
                   Cake Occasion / Type *
                 </label>
                 <input
@@ -220,13 +220,13 @@ export default function CustomCakeRequestForm() {
                   placeholder="e.g. Birthday Cake, Anniversary, Wedding"
                   value={cakeType}
                   onChange={(e) => setCakeType(e.target.value)}
-                  className="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
+                  className="w-full bg-white dark:bg-neutral-900 border border-slate-300 dark:border-neutral-700 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-2">
+                <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-2">
                   Flavour *
                 </label>
                 <input
@@ -234,7 +234,7 @@ export default function CustomCakeRequestForm() {
                   placeholder="e.g. Chocolate Truffle, Butterscotch, Strawberry"
                   value={flavour}
                   onChange={(e) => setFlavour(e.target.value)}
-                  className="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
+                  className="w-full bg-white dark:bg-neutral-900 border border-slate-300 dark:border-neutral-700 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
                   required
                 />
               </div>
@@ -242,13 +242,13 @@ export default function CustomCakeRequestForm() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-2">
+                <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-2">
                   Weight (in kg) *
                 </label>
                 <select
                   value={weight}
                   onChange={(e) => setWeight(Number(e.target.value))}
-                  className="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
+                  className="w-full bg-white dark:bg-neutral-900 border border-slate-300 dark:border-neutral-700 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
                 >
                   <option value={0.5}>0.5 kg (Ideal for 4-6 people)</option>
                   <option value={1.0}>1.0 kg (Ideal for 8-12 people)</option>
@@ -261,13 +261,13 @@ export default function CustomCakeRequestForm() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-2">
+                <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-2">
                   Shape *
                 </label>
                 <select
                   value={shape}
                   onChange={(e) => setShape(e.target.value)}
-                  className="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
+                  className="w-full bg-white dark:bg-neutral-900 border border-slate-300 dark:border-neutral-700 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
                 >
                   <option value="Round">Round</option>
                   <option value="Square">Square</option>
@@ -280,13 +280,13 @@ export default function CustomCakeRequestForm() {
           </div>
 
           {/* Design & Theme Section */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-5 space-y-4 shadow-sm">
-            <h2 className="text-base font-bold text-pink-600 border-b border-slate-200 pb-2">
+          <div className="bg-white dark:bg-neutral-800 rounded-2xl border border-slate-200 dark:border-neutral-700 p-5 space-y-4 shadow-sm">
+            <h2 className="text-base font-bold text-pink-600 border-b border-slate-200 dark:border-neutral-700 pb-2">
               2. Design & Customization
             </h2>
 
             <div>
-              <label className="block text-xs font-bold text-slate-500 uppercase mb-2">
+              <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-2">
                 Theme Description (Optional)
               </label>
               <input
@@ -294,14 +294,14 @@ export default function CustomCakeRequestForm() {
                 placeholder="e.g. Spiderman Theme, Pastel Floral, Gold accents"
                 value={theme}
                 onChange={(e) => setTheme(e.target.value)}
-                className="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
+                className="w-full bg-white dark:bg-neutral-900 border border-slate-300 dark:border-neutral-700 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
               />
             </div>
 
-            <div className="flex items-center justify-between bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <div className="flex items-center justify-between bg-slate-50 dark:bg-neutral-900 p-4 rounded-xl border border-slate-200 dark:border-neutral-700">
               <div>
-                <span className="block text-sm font-bold text-slate-900">Eggless Option</span>
-                <span className="block text-xs text-slate-500">100% vegetarian cake base</span>
+                <span className="block text-sm font-bold text-slate-900 dark:text-white">Eggless Option</span>
+                <span className="block text-xs text-slate-500 dark:text-slate-400">100% vegetarian cake base</span>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input
@@ -315,7 +315,7 @@ export default function CustomCakeRequestForm() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-500 uppercase mb-2">
+              <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-2">
                 Message on Cake (Optional)
               </label>
               <input
@@ -323,12 +323,12 @@ export default function CustomCakeRequestForm() {
                 placeholder="e.g. Happy 10th Birthday Aarav!"
                 value={cakeMessage}
                 onChange={(e) => setCakeMessage(e.target.value)}
-                className="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
+                className="w-full bg-white dark:bg-neutral-900 border border-slate-300 dark:border-neutral-700 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-500 uppercase mb-2">
+              <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-2">
                 Special Instructions / Notes
               </label>
               <textarea
@@ -336,24 +336,24 @@ export default function CustomCakeRequestForm() {
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 rows={3}
-                className="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all resize-none"
+                className="w-full bg-white dark:bg-neutral-900 border border-slate-300 dark:border-neutral-700 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all resize-none"
               />
             </div>
           </div>
 
           {/* Reference Images */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-5 space-y-4 shadow-sm">
-            <h2 className="text-base font-bold text-pink-600 border-b border-slate-200 pb-2">
+          <div className="bg-white dark:bg-neutral-800 rounded-2xl border border-slate-200 dark:border-neutral-700 p-5 space-y-4 shadow-sm">
+            <h2 className="text-base font-bold text-pink-600 border-b border-slate-200 dark:border-neutral-700 pb-2">
               3. Reference Designs / Photos
             </h2>
             
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-slate-500 dark:text-slate-400">
               Upload up to 3 pictures showing design inspirations or sketches.
             </p>
 
             <div className="flex flex-wrap gap-4 items-center">
               {images.map((url, idx) => (
-                <div key={idx} className="relative w-24 h-24 rounded-xl overflow-hidden border border-slate-200 bg-white group">
+                <div key={idx} className="relative w-24 h-24 rounded-xl overflow-hidden border border-slate-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 group">
                   <img src={url} alt={`Reference ${idx + 1}`} className="w-full h-full object-cover" />
                   <button
                     type="button"
@@ -370,7 +370,7 @@ export default function CustomCakeRequestForm() {
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
                   disabled={uploadingImage}
-                  className="w-24 h-24 rounded-xl border-2 border-dashed border-slate-300 hover:border-pink-500/60 flex flex-col items-center justify-center gap-1.5 transition-all text-slate-500 hover:text-pink-600 disabled:opacity-50 disabled:pointer-events-none"
+                  className="w-24 h-24 rounded-xl border-2 border-dashed border-slate-300 dark:border-neutral-600 hover:border-pink-500/60 dark:hover:border-pink-500/60 flex flex-col items-center justify-center gap-1.5 transition-all text-slate-500 dark:text-slate-400 hover:text-pink-600 dark:hover:text-pink-500 disabled:opacity-50 disabled:pointer-events-none"
                 >
                   {uploadingImage ? (
                     <Loader className="h-5 w-5 animate-spin text-pink-500" />
@@ -395,14 +395,14 @@ export default function CustomCakeRequestForm() {
           </div>
 
           {/* Delivery & Time */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-5 space-y-4 shadow-sm">
-            <h2 className="text-base font-bold text-pink-600 border-b border-slate-200 pb-2">
+          <div className="bg-white dark:bg-neutral-800 rounded-2xl border border-slate-200 dark:border-neutral-700 p-5 space-y-4 shadow-sm">
+            <h2 className="text-base font-bold text-pink-600 border-b border-slate-200 dark:border-neutral-700 pb-2">
               4. Delivery Details
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-2 flex items-center gap-1">
+                <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-2 flex items-center gap-1">
                   <Calendar className="h-3.5 w-3.5" /> Delivery Date *
                 </label>
                 <input
@@ -410,26 +410,26 @@ export default function CustomCakeRequestForm() {
                   value={deliveryDate}
                   min={new Date().toISOString().split("T")[0]}
                   onChange={(e) => setDeliveryDate(e.target.value)}
-                  className="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
+                  className="w-full bg-white dark:bg-neutral-900 border border-slate-300 dark:border-neutral-700 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-2 flex items-center gap-1">
+                <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-2 flex items-center gap-1">
                   <Clock className="h-3.5 w-3.5" /> Preferred Time *
                 </label>
                 <input
                   type="time"
                   value={deliveryTime}
                   onChange={(e) => setDeliveryTime(e.target.value)}
-                  className="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
+                  className="w-full bg-white dark:bg-neutral-900 border border-slate-300 dark:border-neutral-700 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
                   required
                 />
               </div>
             </div>
             
-            <p className="text-[11px] text-slate-500 italic">
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 italic">
               Note: bakeries usually require 24-48 hours for preparation of custom theme designs.
             </p>
           </div>
