@@ -18,6 +18,7 @@ const SellerLocations = React.lazy(() => import("../pages/SellerLocations"))
 const ActiveDeliveryBoys = React.lazy(() => import("../pages/ActiveDeliveryBoys"))
 const PendingDeliveryBoys = React.lazy(() => import("../pages/PendingDeliveryBoys"))
 const DeliveryFunds = React.lazy(() => import("../pages/DeliveryFunds"))
+const TransactionReport = React.lazy(() => import("../pages/TransactionReport"))
 const AdminWallet = React.lazy(() => import("../pages/AdminWallet"))
 const WithdrawalRequests = React.lazy(() => import("../pages/WithdrawalRequests"))
 const SellerTransactions = React.lazy(() => import("../pages/SellerTransactions"))
@@ -81,6 +82,7 @@ function QuickCommerceAdminRoutesInner() {
       <Route path="/tracking" element={<FleetTracking />} />
       <Route path="/delivery-funds" element={<DeliveryFunds />} />
       <Route path="/wallet" element={<AdminWallet />} />
+      <Route path="/transactions" element={<TransactionReport />} />
       <Route path="/withdrawals" element={<WithdrawalRequests />} />
       <Route path="/seller-transactions" element={<SellerTransactions />} />
       <Route path="/cash-collection" element={<CashCollection />} />

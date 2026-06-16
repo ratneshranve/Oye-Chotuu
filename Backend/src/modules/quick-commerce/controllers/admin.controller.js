@@ -1597,3 +1597,78 @@ export const deleteAdminCoupon = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
+
+export const getAdminFinanceTransactions = async (req, res) => {
+  try {
+    const page = Math.max(1, Number(req.query?.page || 1) || 1);
+    const limit = Math.max(1, Math.min(100, Number(req.query?.limit || 25) || 25));
+    const skip = (page - 1) * limit;
+
+    const query = { orderType: { $in: ['quick', 'mixed'] } };
+
+    const [orders, total] = await Promise.all([
+      QuickOrder.find(query)
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .populate('userId', 'name email phone')
+        .populate('dispatch.deliveryPartnerId', 'name phone')
+        .lean(),
+      QuickOrder.countDocuments(query),
+    ]);
+
+    // Fetch SellerOrders to get sellerName and exact sellerEarning
+    const orderStringIds = orders.map(o => o.orderId);
+    const sellerOrders = await mongoose.model('SellerOrder').find({
+      orderId: { $in: orderStringIds }
+    }).populate('sellerId', 'shopName name').lean();
+
+    const sellerOrderMap = {};
+    sellerOrders.forEach(so => {
+      sellerOrderMap[so.orderId] = so;
+    });
+
+    const result = orders.map(order => {
+      const so = sellerOrderMap[order.orderId];
+      const sellerName = so?.sellerId?.shopName || so?.sellerId?.name || order.pickupPoints?.[0]?.sourceName || 'N/A';
+      const sellerEarning = so?.pricing?.receivable || (order.pricing?.total - (order.pricing?.deliveryFee || 0) - (order.pricing?.platformFee || 0));
+      
+      const customerName = order.userId?.name || order.customerName || order.deliveryAddress?.fullName || 'N/A';
+      const deliveryBoyName = order.dispatch?.deliveryPartnerId?.name || 'Unassigned';
+
+      return {
+        _id: order._id,
+        orderId: order.orderId,
+        createdAt: order.createdAt,
+        status: order.orderStatus,
+        customerName,
+        sellerName,
+        deliveryBoyName,
+        userPaid: order.pricing?.payableTotal || order.pricing?.total || 0,
+        paymentBreakdown: {
+          subtotal: order.pricing?.itemTotal || order.pricing?.subtotal || 0,
+          deliveryFee: order.pricing?.deliveryFee || 0,
+          platformFee: order.pricing?.platformFee || 0,
+          tax: order.pricing?.tax || 0,
+          gst: order.pricing?.gstAmount || order.pricing?.gst || 0,
+          discount: order.pricing?.discount || 0
+        },
+        sellerEarning,
+        deliveryEarning: order.riderEarning || 0,
+        items: order.items?.map(i => `${i.name} (x${i.quantity})`).join(', ') || ''
+      };
+    });
+
+    return res.json({
+      success: true,
+      result: {
+        transactions: result,
+        total,
+        page,
+        pages: Math.ceil(total / limit)
+      }
+    });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};

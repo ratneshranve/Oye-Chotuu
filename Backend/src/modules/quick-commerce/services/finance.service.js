@@ -141,7 +141,6 @@ export async function getQuickCommerceFinanceSummary() {
     walletFloatAgg,
     sellerReceivableAgg,
     sellerSettledWithdrawalAgg,
-    deliveryPendingAgg,
     adminProfitAgg,
   ] = await Promise.all([
     getBalance("admin", "platform"),
@@ -172,7 +171,7 @@ export async function getQuickCommerceFinanceSummary() {
       },
     ]),
     FoodDeliveryWallet.aggregate([
-      { $group: { _id: null, float: { $sum: { $ifNull: ["$cashInHand", 0] } } } },
+      { $group: { _id: null, float: { $sum: { $ifNull: ["$cashInHand", 0] } }, balance: { $sum: { $ifNull: ["$balance", 0] } }, lockedAmount: { $sum: { $ifNull: ["$lockedAmount", 0] } } } },
     ]),
     SellerOrder.aggregate([
       {
@@ -196,12 +195,6 @@ export async function getQuickCommerceFinanceSummary() {
         $group: { _id: null, total: { $sum: { $abs: { $ifNull: ["$amount", 0] } } } },
       },
     ]),
-    FoodDeliveryWithdrawal.aggregate([
-      { $match: { status: { $in: ["pending", "processing"] } } },
-      {
-        $group: { _id: null, total: { $sum: { $abs: { $ifNull: ["$amount", 0] } } } },
-      },
-    ]),
     QuickOrder.aggregate([
       { $match: { ...ACTIVE_ORDER_FILTER, ...DELIVERED_ORDER_FILTER } },
       {
@@ -213,6 +206,7 @@ export async function getQuickCommerceFinanceSummary() {
   const totalOnline = num(onlineAgg?.[0]?.total);
   const totalCodCollected = num(codAgg?.[0]?.total);
   const walletFloat = num(walletFloatAgg?.[0]?.float);
+  const deliveryPendingBalance = num(walletFloatAgg?.[0]?.balance) + num(walletFloatAgg?.[0]?.lockedAmount);
   const sellerReceivable = num(sellerReceivableAgg?.[0]?.total);
   const sellerSettledWithdrawals = num(sellerSettledWithdrawalAgg?.[0]?.total);
 
@@ -225,7 +219,7 @@ export async function getQuickCommerceFinanceSummary() {
     systemFloatCOD: Math.max(walletFloat, totalCodCollected),
     // Owed to sellers = delivered net receivable (subtotal - commission) minus settled withdrawals.
     sellerPendingPayouts: Math.max(0, sellerReceivable - sellerSettledWithdrawals),
-    deliveryPendingPayouts: num(deliveryPendingAgg?.[0]?.total),
+    deliveryPendingPayouts: deliveryPendingBalance,
   };
 }
 

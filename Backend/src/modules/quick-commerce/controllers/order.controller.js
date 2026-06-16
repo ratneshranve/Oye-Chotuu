@@ -14,6 +14,7 @@ import {
   calculateQuickPricing,
   getRiderEarning as getQuickRiderEarning,
 } from '../admin/services/billing.service.js';
+import { haversineKm } from '../../food/orders/services/order.helpers.js';
 import * as foodTransactionService from '../../food/orders/services/foodTransaction.service.js';
 import { emitQuickCommerceStatusUpdate } from '../services/quickStatusRealtime.service.js';
 import { notifyOwnerSafely } from '../../../core/notifications/firebase.service.js';
@@ -371,8 +372,20 @@ export const placeOrder = async (req, res) => {
       };
     });
 
-    // Calculate rider earning (using base payout if distance is unknown/short)
-    const riderEarning = await getQuickRiderEarning(0.1);
+    // Calculate actual distance between seller (first pickup) and customer
+    let actualDistanceKm = 0.1;
+    if (pickupPoints.length > 0 && customerCoords && customerCoords.length === 2) {
+      const sellerCoords = pickupPoints[0].location?.coordinates; // [lng, lat]
+      if (sellerCoords && sellerCoords.length === 2) {
+        actualDistanceKm = haversineKm(
+          sellerCoords[1], sellerCoords[0],
+          customerCoords[1], customerCoords[0]
+        );
+      }
+    }
+
+    // Calculate rider earning
+    const riderEarning = await getQuickRiderEarning(Math.max(0.1, actualDistanceKm));
 
     const order = await QuickOrder.create({
       orderType: 'quick',

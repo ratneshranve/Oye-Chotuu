@@ -93,8 +93,10 @@ export default function OrderDetails() {
 
           const taxes =
             firstNumber(
-              pricing.tax,
-              pricing.gst,
+              pricing.tax ||
+              pricing.gst ||
+              pricing.gstAmount ||
+              0,
               order.tax,
               order.gst
             ) ?? 0

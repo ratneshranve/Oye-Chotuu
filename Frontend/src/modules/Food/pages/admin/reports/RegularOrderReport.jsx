@@ -160,7 +160,7 @@ export default function RegularOrderReport() {
 
             const deliveryCharge = Number(pricing.deliveryFee || 0)
             const platformFee = Number(pricing.platformFee || 0)
-            const vatTax = Number(pricing.tax || 0)
+            const vatTax = Number(pricing.tax || pricing.gst || pricing.gstAmount || 0)
             const couponDiscount = Number(pricing.discount || 0)
             const computedTotal =
               subtotal + deliveryCharge + platformFee + vatTax - couponDiscount

@@ -326,6 +326,7 @@ export const adminApi = {
   getUserById: () => emptyResponse({}),
   approveSeller: (sellerId, data = {}) => axiosInstance.put(`/quick-commerce/admin/seller-requests/${sellerId}/approve`, data),
   getAdminWalletData: () => emptyResponse({}),
+  getFinanceTransactions: (params) => axiosInstance.get('/quick-commerce/admin/finance/transactions', { params }),
   getReports: () => emptyResponse([]),
   getFeeSettings: () => axiosInstance.get('/quick-commerce/admin/fee-settings'),
   createOrUpdateFeeSettings: (body) =>

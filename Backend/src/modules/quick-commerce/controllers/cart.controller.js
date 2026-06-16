@@ -109,10 +109,12 @@ const mapCart = async (idQuery) => {
     items,
     subtotal,
     deliveryFee: Number(pricing?.deliveryFee || 0),
-    handlingFee: Number(pricing?.platformFee || 0),
+    handlingFee: Number(pricing?.handlingFee || 0),
+    platformFee: Number(pricing?.platformFee || 0),
     tax: Number(pricing?.tax || 0),
     gst: Number(pricing?.gst || 0),
     total: Number(pricing?.total || subtotal),
+    pricing,
   };
 };
 
@@ -253,6 +255,7 @@ export const clearCart = async (req, res) => {
       subtotal: 0,
       deliveryFee: 0,
       handlingFee: 0,
+      platformFee: 0,
       tax: 0,
       gst: 0,
       total: 0,

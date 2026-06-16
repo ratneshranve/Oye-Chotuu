@@ -74,6 +74,7 @@ import {
   deleteAdminOfferSection,
   reorderAdminOfferSections,
   getAdminFinanceSummary,
+  getAdminFinanceTransactions,
   getAdminFinanceLedger,
   getAdminFinancePayouts,
   getAdminSellerWithdrawals,
@@ -218,6 +219,7 @@ router.get("/admin/orders/:orderId", ...adminOnly, getAdminOrderById);
 router.delete("/admin/orders/:orderId", ...adminOnly, deleteAdminOrder);
 
 // Finance (quick-commerce admin wallet & ledger)
+router.get("/admin/finance/transactions", ...adminOnly, getAdminFinanceTransactions);
 router.get("/admin/finance/summary", ...adminOnly, getAdminFinanceSummary);
 router.get("/admin/finance/ledger", ...adminOnly, getAdminFinanceLedger);
 router.get("/admin/finance/payouts", ...adminOnly, getAdminFinancePayouts);

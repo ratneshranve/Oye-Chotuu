@@ -75,26 +75,49 @@ export const getDeliveryPartnerWalletEnhanced = async (deliveryPartnerId) => {
                   total: { $ifNull: ["$total", 0] },
                   pricingTotal: { $ifNull: ["$pricing.total", 0] },
                   platformFee: { $ifNull: ["$pricing.platformFee", 0] },
+                  platformFeeIncluded: { $ifNull: ["$pricing.platformFeeIncluded", false] },
                 },
                 in: {
-                  $max: [
-                    0,
+                  $cond: [
+                    { $gt: ["$$amountDue", 0] },
                     "$$amountDue",
-                    "$$payableAmount",
-                    "$$totalAmount",
-                    "$$amount",
-                    "$$total",
                     {
-                      $add: [
-                        "$$pricingTotal",
-                        {
+                      $let: {
+                        vars: {
+                          explicitAmount: {
+                            $max: [0, "$$payableAmount", "$$totalAmount", "$$amount", "$$total"],
+                          },
+                        },
+                        in: {
                           $cond: [
-                            { $gt: ["$$platformFee", 0] },
-                            "$$platformFee",
-                            0,
+                            { $gt: ["$$explicitAmount", 0] },
+                            "$$explicitAmount",
+                            {
+                              $max: [
+                                0,
+                                {
+                                  $cond: [
+                                    "$$platformFeeIncluded",
+                                    "$$pricingTotal",
+                                    {
+                                      $add: [
+                                        "$$pricingTotal",
+                                        {
+                                          $cond: [
+                                            { $gt: ["$$platformFee", 0] },
+                                            "$$platformFee",
+                                            0,
+                                          ],
+                                        },
+                                      ],
+                                    },
+                                  ],
+                                },
+                              ],
+                            },
                           ],
                         },
-                      ],
+                      },
                     },
                   ],
                 },

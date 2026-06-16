@@ -47,6 +47,20 @@ const formatCurrency = (value) =>
         maximumFractionDigits: 2,
     })}`;
 
+const getQuickOrderPayableTotal = (order = {}) => {
+    const provided = Number(order?.amount || order?.totalAmount || order?.payableAmount || order?.total || 0);
+    if (Number.isFinite(provided) && provided > 0) return provided;
+
+    const pricingTotal = Number(order?.pricing?.total || 0);
+    const platformFee = Number(order?.pricing?.platformFee || 0);
+    const computed =
+        order?.pricing?.platformFeeIncluded === true
+            ? pricingTotal
+            : pricingTotal + (Number.isFinite(platformFee) && platformFee > 0 ? platformFee : 0);
+
+    return Number.isFinite(computed) ? Math.max(0, computed) : 0;
+};
+
 const getStatusStyles = (status) => {
     const normalizedStatus = String(status || 'pending').trim().toLowerCase();
     switch (normalizedStatus) {
@@ -174,10 +188,7 @@ export default function OrderDetail() {
             return;
         }
 
-        const payableTotal = Math.max(
-            0,
-            Number(order?.pricing?.total || 0) + Number(order?.pricing?.platformFee || 0),
-        );
+        const payableTotal = getQuickOrderPayableTotal(order);
 
         const itemsHtml = orderItems.map((item) => {
             const quantity = Number(item.quantity || 0);
@@ -360,7 +371,7 @@ export default function OrderDetail() {
                             <div className="h-px w-full max-w-[240px] bg-slate-200 my-2" />
                             <div className="flex items-center justify-between w-full max-w-[240px]">
                                 <span className="text-xs font-black text-slate-900 uppercase tracking-tight">Total Payable</span>
-                                <span className="text-2xl font-black text-fuchsia-600">{formatCurrency(Number(order.pricing?.total || 0) + Number(order.pricing?.platformFee || 0))}</span>
+                                <span className="text-2xl font-black text-fuchsia-600">{formatCurrency(getQuickOrderPayableTotal(order))}</span>
                             </div>
                         </div>
                     </Card>

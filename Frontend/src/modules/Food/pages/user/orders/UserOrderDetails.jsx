@@ -609,7 +609,7 @@ export default function UserOrderDetails() {
             <div className="flex justify-between">
               <span className="text-gray-500">GST (govt. taxes)</span>
               <span className="text-gray-800">
-                ₹{Number(pricing.tax || 0).toFixed(2)}
+                ₹{Number(pricing.tax || pricing.gst || pricing.gstAmount || 0).toFixed(2)}
               </span>
             </div>
             <div className="flex justify-between">

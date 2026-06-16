@@ -3,6 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, ArrowUpRight, ArrowDownLeft, ReceiptIndianRupee } from 'lucide-react';
 import { customerApi } from '../services/customerApi';
 
+const getQuickOrderPayableTotal = (order = {}) => {
+    const provided = Number(order.totalAmount || order.payableAmount || order.amount || order.total || 0);
+    if (Number.isFinite(provided) && provided > 0) return provided;
+
+    const pricingTotal = Number(order?.pricing?.total ?? 0);
+    const platformFee = Number(order?.pricing?.platformFee ?? 0);
+    const computed =
+        order?.pricing?.platformFeeIncluded === true
+            ? pricingTotal
+            : pricingTotal + (Number.isFinite(platformFee) && platformFee > 0 ? platformFee : 0);
+
+    return Number.isFinite(computed) ? Math.max(0, computed) : 0;
+};
+
 const OrderTransactionsPage = () => {
     const navigate = useNavigate();
     const [orders, setOrders] = useState([]);
@@ -64,13 +78,7 @@ const OrderTransactionsPage = () => {
                         <div className="divide-y divide-slate-100">
                             {orders.map((order) => {
                                 const isRefund = order.paymentStatus === 'refunded';
-                                const pricingTotal = Number(order?.pricing?.total ?? order?.total ?? 0);
-                                const platformFee = Number(order?.pricing?.platformFee ?? 0);
-                                const computedPayable =
-                                    Number.isFinite(platformFee) && platformFee > 0
-                                        ? Math.max(0, pricingTotal + platformFee)
-                                        : Math.max(0, pricingTotal);
-                                const amount = Number(order.totalAmount || order.payableAmount || computedPayable || 0);
+                                const amount = getQuickOrderPayableTotal(order);
                                 const createdAt = order.createdAt ? new Date(order.createdAt) : null;
 
                                 return (

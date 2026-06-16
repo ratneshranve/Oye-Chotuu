@@ -286,13 +286,17 @@ export async function calculateQuickPricing({ subtotal = 0, discount = 0, produc
     Number.isFinite(gstRate) && gstRate > 0
       ? Math.round(safeSubtotal * (gstRate / 100))
       : 0;
-  const total = Math.max(0, safeSubtotal + deliveryFee + handlingFee + tax + gst - safeDiscount);
+  const total = Math.max(
+    0,
+    safeSubtotal + deliveryFee + handlingFee + platformFee + tax + gst - safeDiscount,
+  );
 
   return {
     pricing: {
       subtotal: safeSubtotal,
       tax,
       gst,
+      gstAmount: gst,
       packagingFee: 0,
       deliveryFee,
       platformFee,
@@ -300,6 +304,8 @@ export async function calculateQuickPricing({ subtotal = 0, discount = 0, produc
       restaurantCommission: 0,
       discount: safeDiscount,
       total,
+      payableTotal: total,
+      platformFeeIncluded: true,
       currency: 'INR',
     },
     snapshots: {

@@ -29,8 +29,43 @@ export const NewOrderModal = ({ order, onAccept, onReject, onMinimize }) => {
   const { distanceKm, etaMins } = useMemo(() => {
     if (!order) return { distanceKm: null, etaMins: null };
 
-    // A. Use provided data if available (Direct distance from socket)
-    const rawDist = order.pickupDistanceKm || order.distanceKm;
+    // Get pickup (restaurant/store) location
+    const rest = primaryPickup?.location || order.restaurantLocation || order.restaurantId?.location || {};
+    const resLat = parseFloat(order.restaurant_lat || order.restaurantLat || rest.latitude || rest.lat);
+    const resLng = parseFloat(order.restaurant_lng || order.restaurantLng || rest.longitude || rest.lng);
+
+    // Get customer (delivery) location
+    const deliveryAddress = order?.deliveryAddress || {};
+    const geoCoords =
+      Array.isArray(deliveryAddress?.location?.coordinates) &&
+      deliveryAddress.location.coordinates.length >= 2
+        ? {
+            lng: deliveryAddress.location.coordinates[0],
+            lat: deliveryAddress.location.coordinates[1],
+          }
+        : null;
+    const customerLoc = order.customerLocation || order.deliveryLocation || geoCoords || null;
+    const custLat = parseFloat(customerLoc?.lat);
+    const custLng = parseFloat(customerLoc?.lng);
+
+    // Calculate Restaurant to Customer distance
+    if (!isNaN(resLat) && !isNaN(resLng) && !isNaN(custLat) && !isNaN(custLng)) {
+      const distM = getHaversineDistance(
+        resLat, resLng,
+        custLat, custLng
+      );
+      const km = distM / 1000;
+      // Assume 25km/h avg for estimate (roughly 416m/min)
+      const mins = Math.ceil(distM / 416) + (order.prepTime || 5);
+      
+      return { 
+        distanceKm: km.toFixed(1), 
+        etaMins: mins 
+      };
+    }
+
+    // Fallback to order provided total distance if locations are missing
+    const rawDist = order.deliveryDistanceKm || order.distanceKm;
     const rawEta = order.estimatedTime || order.duration || order.eta;
     
     if (rawDist != null) {
@@ -40,28 +75,8 @@ export const NewOrderModal = ({ order, onAccept, onReject, onMinimize }) => {
       };
     }
 
-    // B. Calculate from locations (Local calculation fallback)
-    const rest = primaryPickup?.location || order.restaurantLocation || order.restaurantId?.location || {};
-    const resLat = parseFloat(order.restaurant_lat || order.restaurantLat || rest.latitude || rest.lat);
-    const resLng = parseFloat(order.restaurant_lng || order.restaurantLng || rest.longitude || rest.lng);
-
-    if (riderLocation && !isNaN(resLat) && !isNaN(resLng)) {
-      const distM = getHaversineDistance(
-        riderLocation.lat, riderLocation.lng,
-        resLat, resLng
-      );
-      const km = distM / 1000;
-      // Assume 25km/h avg for initial estimate (roughly 416m/min)
-      const mins = Math.ceil(distM / 416) + (order.prepTime || 5);
-      
-      return { 
-        distanceKm: km.toFixed(1), 
-        etaMins: mins 
-      };
-    }
-
     return { distanceKm: '??', etaMins: order.prepTime || 15 };
-  }, [order, primaryPickup, riderLocation]);
+  }, [order, primaryPickup]);
 
   if (!order) return null;
 
