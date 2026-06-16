@@ -32,7 +32,31 @@ export default function AdminLayout() {
       }
     };
     window.addEventListener('authRefreshFailed', handleAuthRefreshFailed);
-    return () => window.removeEventListener('authRefreshFailed', handleAuthRefreshFailed);
+
+    // Force light theme by removing dark class and preventing it from being added
+    const root = document.documentElement;
+    root.classList.remove('dark');
+    root.style.colorScheme = 'light';
+
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class' && root.classList.contains('dark')) {
+          root.classList.remove('dark');
+        }
+      });
+    });
+    
+    observer.observe(root, { attributes: true, attributeFilter: ['class'] });
+
+    return () => {
+      window.removeEventListener('authRefreshFailed', handleAuthRefreshFailed);
+      observer.disconnect();
+      // Restore dark mode if it was selected in user panel
+      if (localStorage.getItem('appTheme') === 'dark') {
+        root.classList.add('dark');
+        root.style.colorScheme = 'dark';
+      }
+    };
   }, [])
 
   const handleCollapseChange = (collapsed) => {

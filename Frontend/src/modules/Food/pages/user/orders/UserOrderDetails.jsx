@@ -373,7 +373,7 @@ export default function UserOrderDetails() {
       doc.setFontSize(12)
       doc.setFont('helvetica', 'bold')
       doc.text('Total:', 135, finalY + 10, { align: 'right' })
-      const finalAmount = order.payment?.amountDue || order.payableAmount || order.totalAmount || pricing.total || 0
+      const finalAmount = pricing.total || order.payment?.amountDue || order.payableAmount || order.totalAmount || 0
       doc.text(`Rs. ${Number(finalAmount).toFixed(2)}`, 190, finalY + 10, { align: 'right' })
 
       // Save PDF instantly
@@ -647,7 +647,7 @@ export default function UserOrderDetails() {
             <div className="border-t border-gray-100 my-2 pt-2 flex justify-between items-center">
               <span className="font-bold text-gray-800">Paid</span>
               <span className="font-bold text-gray-800">
-                ₹{Number(order.payment?.amountDue || order.payableAmount || order.totalAmount || pricing.total || 0).toFixed(2)}
+                ₹{Number(pricing.total || order.payment?.amountDue || order.payableAmount || order.totalAmount || 0).toFixed(2)}
               </span>
             </div>
           </div>
