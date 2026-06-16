@@ -39,9 +39,10 @@ function ScrollToTop() {
   return null;
 }
 
+import GlobalNewOrderPopup from "@food/components/restaurant/GlobalNewOrderPopup"
+
 function RestaurantGlobalNotificationListenerInner() {
-  useRestaurantNotifications()
-  return null
+  return <GlobalNewOrderPopup />
 }
 
 function RestaurantGlobalNotificationListener() {
@@ -58,15 +59,10 @@ function RestaurantGlobalNotificationListener() {
     location.pathname === "/food/restaurant/otp" ||
     location.pathname === "/food/restaurant/welcome" ||
     location.pathname === "/food/restaurant/auth/google-callback"
-  const isOrderManagedRoute =
-    location.pathname === "/food/restaurant" ||
-    location.pathname === "/food/restaurant/orders" ||
-    location.pathname.startsWith("/food/restaurant/orders/")
 
   const shouldListen =
     isRestaurantRoute &&
     !isRestaurantAuthRoute &&
-    !isOrderManagedRoute &&
     isModuleAuthenticated("restaurant")
 
   if (!shouldListen) {
