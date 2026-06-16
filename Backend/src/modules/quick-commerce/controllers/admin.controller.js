@@ -1648,6 +1648,7 @@ export const getAdminFinanceTransactions = async (req, res) => {
         paymentBreakdown: {
           subtotal: order.pricing?.itemTotal || order.pricing?.subtotal || 0,
           deliveryFee: order.pricing?.deliveryFee || 0,
+          handlingFee: order.pricing?.handlingFee || order.pricing?.handlingFees || 0,
           platformFee: order.pricing?.platformFee || 0,
           tax: order.pricing?.tax || 0,
           gst: order.pricing?.gstAmount || order.pricing?.gst || 0,
@@ -1655,6 +1656,7 @@ export const getAdminFinanceTransactions = async (req, res) => {
         },
         sellerEarning,
         deliveryEarning: order.riderEarning || 0,
+        adminEarning: Math.max(0, (order.pricing?.payableTotal || order.pricing?.total || 0) - sellerEarning - (order.riderEarning || 0)),
         items: order.items?.map(i => `${i.name} (x${i.quantity})`).join(', ') || ''
       };
     });

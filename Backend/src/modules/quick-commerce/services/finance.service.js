@@ -198,7 +198,11 @@ export async function getQuickCommerceFinanceSummary() {
     QuickOrder.aggregate([
       { $match: { ...ACTIVE_ORDER_FILTER, ...DELIVERED_ORDER_FILTER } },
       {
-        $group: { _id: null, total: { $sum: adminEarningPerOrderExpr } },
+        $group: { 
+          _id: null, 
+          total: { $sum: adminEarningPerOrderExpr },
+          deliveryEarning: { $sum: deliveryEarningPerOrderExpr }
+        },
       },
     ]),
   ]);
@@ -213,6 +217,8 @@ export async function getQuickCommerceFinanceSummary() {
   return {
     totalPlatformEarning: totalOnline + totalCodCollected,
     totalAdminEarning: num(adminProfitAgg?.[0]?.total),
+    totalSellerEarning: sellerReceivable,
+    totalDeliveryEarning: num(adminProfitAgg?.[0]?.deliveryEarning),
     availableBalance: num(adminWallet?.availableBalance),
     // COD float should represent COD cash collected by riders.
     // Prefer tracked rider wallet cash, but never under-report compared to delivered COD collections.

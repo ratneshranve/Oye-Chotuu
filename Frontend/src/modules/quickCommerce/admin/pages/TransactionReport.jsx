@@ -12,12 +12,62 @@ const TransactionReport = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
+  const [summaryStats, setSummaryStats] = useState(null);
+
+  const handleExportCSV = () => {
+    if (!transactions || transactions.length === 0) return;
+    
+    const headers = [
+      'Order ID', 'Date', 'Customer', 'Seller', 'Delivery Boy',
+      'User Paid', 'Subtotal', 'Delivery Fee', 'Handling Fee',
+      'Platform Fee', 'Tax/GST', 'Discount', 'Seller Earned',
+      'Rider Earned', 'Admin Earned', 'Status'
+    ];
+    
+    const rows = transactions.map(txn => [
+      txn.orderId || txn._id,
+      new Date(txn.createdAt).toLocaleString(),
+      txn.customerName,
+      txn.sellerName,
+      txn.deliveryBoyName,
+      (txn.userPaid || 0).toFixed(2),
+      (txn.paymentBreakdown?.subtotal || 0).toFixed(2),
+      (txn.paymentBreakdown?.deliveryFee || 0).toFixed(2),
+      (txn.paymentBreakdown?.handlingFee || 0).toFixed(2),
+      (txn.paymentBreakdown?.platformFee || 0).toFixed(2),
+      (txn.paymentBreakdown?.gst || txn.paymentBreakdown?.tax || 0).toFixed(2),
+      (txn.paymentBreakdown?.discount || 0).toFixed(2),
+      (txn.sellerEarning || 0).toFixed(2),
+      (txn.deliveryEarning || 0).toFixed(2),
+      (txn.adminEarning || 0).toFixed(2),
+      txn.status
+    ]);
+    
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+    ].join('\n');
+    
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `transaction_report_${new Date().toISOString().slice(0,10)}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const fetchTransactions = async (currentPage = 1) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await adminApi.getFinanceTransactions({ page: currentPage, limit: 50 });
+      const [res, summaryRes] = await Promise.all([
+        adminApi.getFinanceTransactions({ page: currentPage, limit: 50 }),
+        adminApi.getFinanceSummary().catch(() => ({ data: { success: false, result: {} } }))
+      ]);
+
       if (res?.data?.success) {
         setTransactions(res.data.result.transactions || []);
         setTotalPages(res.data.result.pages || 1);
@@ -25,6 +75,10 @@ const TransactionReport = () => {
         setPage(res.data.result.page || currentPage);
       } else {
         throw new Error(res?.data?.message || 'Failed to fetch transactions');
+      }
+
+      if (summaryRes?.data?.success) {
+        setSummaryStats(summaryRes.data.result);
       }
     } catch (err) {
       console.error('Error fetching transactions:', err);
@@ -72,7 +126,10 @@ const TransactionReport = () => {
               <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
               Refresh
             </button>
-            <button className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-all shadow-md shadow-indigo-200">
+            <button 
+              onClick={handleExportCSV}
+              className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-all shadow-md shadow-indigo-200"
+            >
               <Download className="w-4 h-4" />
               Export CSV
             </button>
@@ -82,8 +139,20 @@ const TransactionReport = () => {
         {/* Stats Strip */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-center">
-            <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Total Transactions</span>
-            <span className="text-2xl font-black text-gray-900">{totalCount}</span>
+            <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Total User Paid</span>
+            <span className="text-2xl font-black text-indigo-600">₹{(summaryStats?.totalPlatformEarning || 0).toLocaleString()}</span>
+          </div>
+          <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-center">
+            <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Total Sellers Earning</span>
+            <span className="text-2xl font-black text-emerald-600">₹{(summaryStats?.totalSellerEarning || 0).toLocaleString()}</span>
+          </div>
+          <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-center">
+            <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Admin Earning</span>
+            <span className="text-2xl font-black text-purple-600">₹{(summaryStats?.totalAdminEarning || 0).toLocaleString()}</span>
+          </div>
+          <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-center">
+            <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Delivery Earning</span>
+            <span className="text-2xl font-black text-amber-600">₹{(summaryStats?.totalDeliveryEarning || 0).toLocaleString()}</span>
           </div>
         </div>
 
@@ -118,20 +187,21 @@ const TransactionReport = () => {
                   <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest text-right">User Paid</th>
                   <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest text-right">Seller Earned</th>
                   <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest text-right">Rider Earned</th>
+                  <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest text-right">Admin Earned</th>
                   <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest text-center">Status</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
                 {loading ? (
                   <tr>
-                    <td colSpan="8" className="px-6 py-12 text-center">
+                    <td colSpan="9" className="px-6 py-12 text-center">
                       <RefreshCw className="w-8 h-8 animate-spin text-indigo-400 mx-auto mb-4" />
                       <p className="text-gray-500 font-medium">Loading transactions...</p>
                     </td>
                   </tr>
                 ) : error ? (
                   <tr>
-                    <td colSpan="8" className="px-6 py-12 text-center">
+                    <td colSpan="9" className="px-6 py-12 text-center">
                       <div className="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
                         <FileText className="w-6 h-6 text-red-500" />
                       </div>
@@ -146,7 +216,7 @@ const TransactionReport = () => {
                   </tr>
                 ) : transactions.length === 0 ? (
                   <tr>
-                    <td colSpan="8" className="px-6 py-12 text-center">
+                    <td colSpan="9" className="px-6 py-12 text-center">
                       <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
                         <FileText className="w-8 h-8 text-gray-300" />
                       </div>
@@ -183,6 +253,7 @@ const TransactionReport = () => {
                             <div className="text-[10px] text-gray-500 font-medium space-y-0.5 mt-1 border-t border-gray-100 pt-1 w-full min-w-[120px]">
                               <div className="flex justify-between w-full gap-2"><span>Subtotal:</span> <span>₹{(txn.paymentBreakdown.subtotal || 0).toFixed(2)}</span></div>
                               <div className="flex justify-between w-full gap-2"><span>Delivery:</span> <span>₹{(txn.paymentBreakdown.deliveryFee || 0).toFixed(2)}</span></div>
+                              <div className="flex justify-between w-full gap-2"><span>Handling:</span> <span>₹{(txn.paymentBreakdown.handlingFee || 0).toFixed(2)}</span></div>
                               <div className="flex justify-between w-full gap-2"><span>Tax/GST:</span> <span>₹{(txn.paymentBreakdown.gst || txn.paymentBreakdown.tax || 0).toFixed(2)}</span></div>
                               <div className="flex justify-between w-full gap-2"><span>Platform:</span> <span>₹{(txn.paymentBreakdown.platformFee || 0).toFixed(2)}</span></div>
                               {txn.paymentBreakdown.discount > 0 && <div className="flex justify-between w-full gap-2 text-green-600"><span>Discount:</span> <span>-₹{txn.paymentBreakdown.discount.toFixed(2)}</span></div>}
@@ -195,6 +266,9 @@ const TransactionReport = () => {
                       </td>
                       <td className="px-6 py-4 text-right">
                         <span className="text-sm font-bold text-indigo-600">₹{(txn.deliveryEarning || 0).toFixed(2)}</span>
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <span className="text-sm font-bold text-purple-600">₹{(txn.adminEarning || 0).toFixed(2)}</span>
                       </td>
                       <td className="px-6 py-4 text-center">
                         {getStatusBadge(txn.status)}
