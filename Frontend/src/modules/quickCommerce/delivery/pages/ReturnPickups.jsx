@@ -46,7 +46,7 @@ const ReturnPickups = () => {
         setPickups(data.activePickups || []);
         
         // If there's an already accepted one, redirect to active screen
-        const activeOne = data.activePickups?.find(p => p.status === 'RETURN_PICKUP_ASSIGNED');
+        const activeOne = data.activePickups?.find(p => p.status === 'RETURN_PICKUP_ASSIGNED' || p.status === 'PICKED_UP');
         if (activeOne) {
           navigate(`/delivery/quick-commerce/returns/${activeOne._id}/active`);
         }
@@ -122,7 +122,11 @@ const ReturnPickups = () => {
               <div className="flex justify-between items-start mb-3">
                 <div>
                   <h3 className="font-bold text-gray-900">Return Pickup</h3>
-                  <p className="text-sm text-gray-500 mt-0.5">Order #{pickup.orderId?.slice(-6).toUpperCase()}</p>
+                  {(() => {
+                    const displayOrderId = typeof pickup.orderId === 'object' ? (pickup.orderId?.orderId || pickup.orderId?._id || '') : pickup.orderId;
+                    const slicedOrderId = displayOrderId ? (displayOrderId.length > 6 ? displayOrderId.slice(-6).toUpperCase() : displayOrderId.toUpperCase()) : "";
+                    return <p className="text-sm text-gray-500 mt-0.5">Order #{slicedOrderId}</p>;
+                  })()}
                 </div>
                 <div className="text-right">
                   <span className="text-lg font-bold text-emerald-600">₹{pickup.returnPickupEarning || '20.00'}</span>

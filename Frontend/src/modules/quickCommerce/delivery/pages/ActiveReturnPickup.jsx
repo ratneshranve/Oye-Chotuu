@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Loader2, Package, MapPin, CheckCircle, Upload, ArrowRight, X } from "lucide-react";
+import { Loader2, Package, MapPin, CheckCircle, Upload, ArrowRight, ArrowLeft, X } from "lucide-react";
 import { toast } from "sonner";
 import { convertToWebP } from "../../../../shared/utils/imageUploadUtils.js";
 import { ImageSourcePicker } from "@food/components/ImageSourcePicker";
@@ -34,6 +34,7 @@ const ActiveReturnPickup = () => {
   const [otp, setOtp] = useState("");
   const [pickupImage, setPickupImage] = useState("");
   const [showPicker, setShowPicker] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     fetchActivePickup();
@@ -149,9 +150,17 @@ const ActiveReturnPickup = () => {
 
   return (
     <div className="p-4 bg-gray-50 min-h-screen pb-24">
-      <div className="mb-4">
-        <h1 className="text-xl font-bold text-gray-900">Active Return</h1>
-        <p className="text-sm text-gray-500">Order #{slicedOrderId}</p>
+      <div className="mb-4 flex items-center gap-3">
+        <button 
+          onClick={() => navigate("/food/delivery")}
+          className="p-2 -ml-2 rounded-full hover:bg-gray-200 transition-colors"
+        >
+          <ArrowLeft className="w-5 h-5 text-gray-600" />
+        </button>
+        <div>
+          <h1 className="text-xl font-bold text-gray-900">Active Return</h1>
+          <p className="text-sm text-gray-500">Order #{slicedOrderId}</p>
+        </div>
       </div>
 
       <div className="space-y-4">
@@ -197,6 +206,24 @@ const ActiveReturnPickup = () => {
             </div>
           </div>
         </div>
+
+        {/* Customer Uploaded Photos Block */}
+        {returnReq.userImages && returnReq.userImages.length > 0 && (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <h3 className="font-semibold text-gray-900 mb-3 uppercase tracking-wide text-xs">Customer Uploaded Photos</h3>
+            <div className="flex flex-wrap gap-2">
+              {returnReq.userImages.map((imgUrl, idx) => (
+                <div 
+                  key={idx} 
+                  className="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden border border-gray-200 shrink-0 cursor-pointer hover:opacity-90 active:scale-95 transition-all" 
+                  onClick={() => setSelectedImage(imgUrl)}
+                >
+                  <img src={imgUrl} alt={`Customer Upload ${idx + 1}`} className="w-full h-full object-cover" />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Action Panel based on state */}
         {returnReq.status === "RETURN_PICKUP_ASSIGNED" && (
@@ -404,6 +431,23 @@ const ActiveReturnPickup = () => {
         description="Capture or choose product photo to verify pickup."
         fileNamePrefix={`return-pickup-${id}`}
       />
+
+      {selectedImage && (
+        <div className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in" onClick={() => setSelectedImage(null)}>
+          <button 
+            onClick={() => setSelectedImage(null)} 
+            className="absolute top-4 right-4 text-white hover:text-gray-300 p-2 rounded-full bg-white/10 transition-colors"
+          >
+            <X className="w-6 h-6" />
+          </button>
+          <img 
+            src={selectedImage} 
+            alt="Preview" 
+            className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
+            onClick={e => e.stopPropagation()} 
+          />
+        </div>
+      )}
     </div>
   );
 };

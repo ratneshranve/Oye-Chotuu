@@ -52,6 +52,8 @@ export const validateReturnEligibility = async (orderId, productId, returnQuanti
   return { order, orderItem };
 };
 
+import { SellerOrder } from '../seller/models/sellerOrder.model.js';
+
 /**
  * Creates a new return request.
  */
@@ -60,7 +62,10 @@ export const createReturnRequest = async (userId, data, returnWindowDays) => {
   
   const { order, orderItem } = await validateReturnEligibility(orderId, productId, quantity, returnWindowDays);
 
-  const deductions = calculateReturnDeductions(order, orderItem, quantity);
+  const sellerId = orderItem.sourceId || order.restaurantId;
+  const sellerOrder = await SellerOrder.findOne({ parentOrderId: order._id, sellerId });
+
+  const deductions = calculateReturnDeductions(order, sellerOrder, orderItem, quantity);
 
   // Generate OTP immediately
   const pickupOtp = Math.floor(1000 + Math.random() * 9000).toString();

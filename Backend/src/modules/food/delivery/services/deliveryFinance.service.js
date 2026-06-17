@@ -15,6 +15,7 @@ import {
 import { Transaction } from "../../../../core/payments/models/transaction.model.js";
 import { getTransactionsByEntity } from "../../../../core/payments/transaction.service.js";
 import { FoodDeliveryWallet } from "../models/deliveryWallet.model.js";
+import { QuickReturnRequest } from "../../../quick-commerce/models/ReturnRequest.model.js";
 
 /**
  * Enhanced wallet fetch for delivery partners.
@@ -46,6 +47,8 @@ export const getDeliveryPartnerWalletEnhanced = async (deliveryPartnerId) => {
     transactionsResult,
     totalDeliveries,
     totalEarningsAgg,
+    totalReturnDeliveriesCount,
+    totalReturnEarningsAgg,
   ] = await Promise.all([
     getDeliveryCashLimitSettings(),
     FoodDeliveryWallet.findOne({ deliveryPartnerId: partnerId }).lean(),
@@ -154,6 +157,19 @@ export const getDeliveryPartnerWalletEnhanced = async (deliveryPartnerId) => {
       },
       { $group: { _id: null, total: { $sum: { $ifNull: ["$riderEarning", 0] } } } },
     ]),
+    QuickReturnRequest.countDocuments({
+      deliveryPartnerId: partnerId,
+      status: { $in: ["RETURN_RECEIVED_BY_SELLER", "REFUND_COMPLETED"] }
+    }),
+    QuickReturnRequest.aggregate([
+      {
+        $match: {
+          deliveryPartnerId: partnerId,
+          status: { $in: ["RETURN_RECEIVED_BY_SELLER", "REFUND_COMPLETED"] }
+        }
+      },
+      { $group: { _id: null, total: { $sum: { $ifNull: ["$returnPickupEarning", 0] } } } }
+    ])
   ]);
 
   const wallet = walletDoc || {
@@ -164,7 +180,7 @@ export const getDeliveryPartnerWalletEnhanced = async (deliveryPartnerId) => {
   };
 
   // Real-time earnings from orders (handles lag in wallet document updates)
-  const aggregatedEarnings = Number(totalEarningsAgg?.[0]?.total) || 0;
+  const aggregatedEarnings = (Number(totalEarningsAgg?.[0]?.total) || 0) + (Number(totalReturnEarningsAgg?.[0]?.total) || 0);
   const effectiveTotalEarnings = Math.max(Number(wallet.totalEarnings || 0), aggregatedEarnings);
   const missingEarningsBalance = Math.max(0, aggregatedEarnings - Number(wallet.totalEarnings || 0));
 
@@ -222,7 +238,7 @@ export const getDeliveryPartnerWalletEnhanced = async (deliveryPartnerId) => {
     totalCashLimit,
     availableCashLimit: Math.max(0, totalCashLimit - cashInHand),
     deliveryWithdrawalLimit,
-    totalDeliveries: Number(totalDeliveries) || 0,
+    totalDeliveries: (Number(totalDeliveries) || 0) + (Number(totalReturnDeliveriesCount) || 0),
     transactions,
   };
 };

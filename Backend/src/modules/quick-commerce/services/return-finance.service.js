@@ -5,10 +5,11 @@ import { Transaction } from '../../../core/payments/models/transaction.model.js'
 /**
  * Calculates the exact deductions for a specific returned item.
  * @param {Object} order The original QuickOrder
+ * @param {Object} sellerOrder The SellerOrder corresponding to this seller
  * @param {Object} product The product being returned from order items
  * @param {Number} returnQuantity The quantity being returned
  */
-export const calculateReturnDeductions = (order, product, returnQuantity) => {
+export const calculateReturnDeductions = (order, sellerOrder, product, returnQuantity) => {
   const targetProductId = (product?._id || product?.itemId || product?.productId || product)?.toString();
   
   const orderItem = order.items?.find(item => 
@@ -32,23 +33,23 @@ export const calculateReturnDeductions = (order, product, returnQuantity) => {
   const productValue = unitPrice * returnQuantity;
   
   // Calculate seller earning deduction: what the seller originally earned for these specific items
-  // Assuming seller earning = (price * qty) - commission
-  // We need to approximate if commission is at order level, but if it's at item level it's easier.
-  // For safety, let's use a proportional deduction if order-level commission is used.
   let sellerDeduction = productValue;
-  if (order.pricing && order.pricing.restaurantCommission) {
-    // Proportional commission
+  let adminDeduction = 0;
+
+  if (sellerOrder && sellerOrder.pricing) {
+    const subtotal = sellerOrder.pricing.subtotal || 1;
+    const itemRatio = productValue / subtotal;
+    
+    // Quick Commerce stores seller commission in sellerOrder.pricing.commission
+    const proportionalCommission = (sellerOrder.pricing.commission || 0) * itemRatio;
+    sellerDeduction = productValue - proportionalCommission;
+    adminDeduction = proportionalCommission;
+  } else if (order.pricing && order.pricing.restaurantCommission) {
+    // Fallback if SellerOrder not provided or doesn't have pricing
     const itemRatio = productValue / (order.pricing.subtotal || 1);
     const proportionalCommission = order.pricing.restaurantCommission * itemRatio;
     sellerDeduction = productValue - proportionalCommission;
-  }
-  
-  // Admin deduction: what the admin originally earned for these specific items
-  // Assuming admin earning = commission - discounts? Just roughly the proportional commission
-  let adminDeduction = 0;
-  if (order.pricing && order.pricing.restaurantCommission) {
-    const itemRatio = productValue / (order.pricing.subtotal || 1);
-    adminDeduction = order.pricing.restaurantCommission * itemRatio;
+    adminDeduction = proportionalCommission;
   }
 
   return {
@@ -67,8 +68,8 @@ export const processReturnDeductions = async (returnRequest, adminId = 'SYSTEM')
   // 1. Deduct from Seller using SellerTransaction
   await SellerTransaction.create({
     sellerId: returnRequest.sellerId,
-    type: 'Debit',
-    category: 'Return_Deduction',
+    type: 'Adjustment',
+    reason: 'Return Deduction',
     amount: -Math.abs(returnRequest.sellerEarningDeduction),
     status: 'Settled',
     orderId: returnRequest.orderId.toString(),
@@ -115,6 +116,8 @@ export const creditReturnDeliveryPartner = async (returnRequest) => {
   }
 
   wallet.balance += amount;
+  wallet.totalEarnings = (wallet.totalEarnings || 0) + amount;
+  wallet.totalDeliveries = (wallet.totalDeliveries || 0) + 1;
   await wallet.save();
 
   await Transaction.create({

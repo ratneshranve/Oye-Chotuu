@@ -4,6 +4,10 @@ import { returnStatuses } from '../../../constants/returnStatuses.js';
 import * as returnService from '../services/return.service.js';
 import * as returnAssignmentService from '../services/return-assignment.service.js';
 import * as returnFinanceService from '../services/return-finance.service.js';
+import { refundWalletBalance } from '../../food/user/services/userWallet.service.js';
+import { getRiderEarning } from '../../food/orders/services/foodTransaction.service.js';
+import { haversineKm } from '../../food/orders/services/order.helpers.js';
+import mongoose from 'mongoose';
 
 // ---- User Controllers ----
 
@@ -116,18 +120,40 @@ export const approveReturn = async (req, res) => {
     if (refundAmount !== undefined && refundAmount !== null) {
       const parsedAmount = Number(refundAmount);
       if (!isNaN(parsedAmount)) {
-        if (returnReq.refundAmount > 0) {
-          const ratio = parsedAmount / returnReq.refundAmount;
-          returnReq.sellerEarningDeduction = returnReq.sellerEarningDeduction * ratio;
-          returnReq.adminEarningDeduction = returnReq.adminEarningDeduction * ratio;
-        } else {
-          returnReq.sellerEarningDeduction = parsedAmount;
-          returnReq.adminEarningDeduction = 0;
+        // Cap the ratio at 1.0 so we never deduct more than the seller originally earned
+        if (returnReq.productValue > 0) {
+          const ratio = Math.min(parsedAmount / returnReq.productValue, 1);
+          // If this is the first time modifying, scale the original deductions.
+          // Note: Since we don't keep track of 'original' vs 'current' easily without adding DB fields,
+          // we use productValue as the stable denominator.
+          // Wait, if we scale it here, it permanently modifies the deduction.
+          // Let's just update the refundAmount here, and let completeRefund handle the final scale!
         }
-        returnReq.productValue = parsedAmount;
         returnReq.refundAmount = parsedAmount;
         remark += ` (Approved Refund Amount: ₹${parsedAmount})`;
       }
+    }
+
+    // Calculate return pickup earning based on actual distance and commission rules
+    try {
+      const order = await mongoose.model('FoodOrder').findById(returnReq.orderId);
+      const seller = await mongoose.model('Seller').findById(returnReq.sellerId);
+      let distanceKm = 1.0; // fallback default
+      if (order && seller) {
+        const custCoords = order.deliveryAddress?.location?.coordinates;
+        const sellCoords = seller.location?.coordinates;
+        if (Array.isArray(custCoords) && custCoords.length === 2 && Array.isArray(sellCoords) && sellCoords.length === 2) {
+          distanceKm = haversineKm(
+            sellCoords[1], sellCoords[0],
+            custCoords[1], custCoords[0]
+          );
+        }
+      }
+      const earning = await getRiderEarning(Math.max(0.1, distanceKm));
+      returnReq.returnPickupEarning = earning || 20; // fallback to 20 if 0 or invalid
+    } catch (err) {
+      console.error('Failed to calculate return pickup earning:', err);
+      returnReq.returnPickupEarning = 20; // safe fallback
     }
 
     returnReq.status = returnStatuses.RETURN_APPROVED;
@@ -158,8 +184,16 @@ export const rejectReturn = async (req, res) => {
   try {
     const { id } = req.params;
     const { reason } = req.body;
-    const returnReq = await returnService.updateReturnStatus(id, returnStatuses.RETURN_REJECTED, 'Admin', req.user.userId, reason);
-    res.json({ success: true, returnRequest: returnReq });
+    await returnService.updateReturnStatus(id, returnStatuses.RETURN_REJECTED, 'Admin', req.user.userId, reason);
+    
+    const populated = await QuickReturnRequest.findById(id)
+      .populate('orderId')
+      .populate('productId', 'name image price')
+      .populate('userId', 'name email phone')
+      .populate('sellerId', 'name shopName phone location')
+      .populate('deliveryPartnerId', 'name phone');
+
+    res.json({ success: true, returnRequest: populated });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
@@ -168,8 +202,16 @@ export const rejectReturn = async (req, res) => {
 export const broadcastReturn = async (req, res) => {
   try {
     const { id } = req.params;
-    const returnReq = await returnAssignmentService.broadcastReturnPickup(id);
-    res.json({ success: true, message: 'Broadcast successful', returnRequest: returnReq });
+    await returnAssignmentService.broadcastReturnPickup(id);
+    
+    const populated = await QuickReturnRequest.findById(id)
+      .populate('orderId')
+      .populate('productId', 'name image price')
+      .populate('userId', 'name email phone')
+      .populate('sellerId', 'name shopName phone location')
+      .populate('deliveryPartnerId', 'name phone');
+
+    res.json({ success: true, message: 'Broadcast successful', returnRequest: populated });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
@@ -191,7 +233,22 @@ export const completeRefund = async (req, res) => {
       throw new Error('Refund amount, method, and transaction reference are required');
     }
 
-    returnReq.refundAmount = refundAmount;
+    const parsedAmount = Number(refundAmount);
+    if (!isNaN(parsedAmount)) {
+      if (returnReq.productValue > 0) {
+        // Calculate the ratio based on the UNMODIFIED productValue, capped at 1.0
+        // so we never deduct more than what the seller actually earned, even if the admin refunds extra (e.g. delivery fee).
+        const ratio = Math.min(parsedAmount / returnReq.productValue, 1);
+        
+        // Since we stopped mutating sellerEarningDeduction in approveReturn,
+        // it still holds the exact original calculated earning deduction.
+        // We now scale it for the final transaction.
+        returnReq.sellerEarningDeduction = returnReq.sellerEarningDeduction * ratio;
+        returnReq.adminEarningDeduction = returnReq.adminEarningDeduction * ratio;
+      }
+      returnReq.refundAmount = parsedAmount;
+    }
+
     returnReq.refundMethod = refundMethod;
     returnReq.transactionReferenceNumber = transactionReferenceNumber;
     returnReq.refundNotes = refundNotes;
@@ -207,8 +264,30 @@ export const completeRefund = async (req, res) => {
       timestamp: new Date()
     });
 
+    if (refundMethod === 'Wallet') {
+      const orderIdStr = String(returnReq.orderId || '');
+      const orderIdSuffix = orderIdStr ? ` (Order #${orderIdStr.slice(-6).toUpperCase()})` : '';
+      await refundWalletBalance(
+        returnReq.userId,
+        refundAmount,
+        `Quick Commerce Return Refund${orderIdSuffix}`,
+        { returnRequestId: returnReq._id, orderId: returnReq.orderId, reference: transactionReferenceNumber }
+      );
+    }
+
+    // Process seller deductions now that refund is finalized
+    await returnFinanceService.processReturnDeductions(returnReq);
+
     await returnReq.save();
-    res.json({ success: true, returnRequest: returnReq });
+
+    const populated = await QuickReturnRequest.findById(id)
+      .populate('orderId')
+      .populate('productId', 'name image price')
+      .populate('userId', 'name email phone')
+      .populate('sellerId', 'name shopName phone location')
+      .populate('deliveryPartnerId', 'name phone');
+
+    res.json({ success: true, returnRequest: populated });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
@@ -273,6 +352,16 @@ export const confirmPickup = async (req, res) => {
     const returnReq = await QuickReturnRequest.findOne({ _id: id, deliveryPartnerId });
     if (!returnReq) throw new Error('Return request not found or not assigned to you');
 
+    // Idempotency check: if already PICKED_UP, return success
+    if (returnReq.status === returnStatuses.PICKED_UP) {
+      const populated = await QuickReturnRequest.findById(id)
+        .populate('orderId')
+        .populate('productId', 'name image')
+        .populate('userId', 'name phone address')
+        .populate('sellerId', 'name shopName phone location');
+      return res.json({ success: true, returnRequest: populated });
+    }
+
     if (returnReq.status !== returnStatuses.RETURN_PICKUP_ASSIGNED) {
       throw new Error('Invalid status for confirmation');
     }
@@ -331,6 +420,16 @@ export const updateDeliveryReturnStatus = async (req, res) => {
 
     const currentStatus = returnReq.status;
 
+    // Idempotency check: if already in the requested status, return success
+    if (currentStatus === status) {
+      const populated = await QuickReturnRequest.findById(id)
+        .populate('orderId')
+        .populate('productId', 'name image')
+        .populate('userId', 'name phone address')
+        .populate('sellerId', 'name shopName phone location');
+      return res.json({ success: true, returnRequest: populated });
+    }
+
     if (status === returnStatuses.PICKED_UP) {
       if (currentStatus !== returnStatuses.RETURN_PICKUP_ASSIGNED) {
         throw new Error('Can only mark as Picked Up when current status is Assigned');
@@ -354,9 +453,8 @@ export const updateDeliveryReturnStatus = async (req, res) => {
 
     await returnReq.save();
 
-    // If marked as received by seller, process deductions and credit delivery partner
+    // If marked as received by seller, credit delivery partner
     if (status === returnStatuses.RETURN_RECEIVED_BY_SELLER) {
-      await returnFinanceService.processReturnDeductions(returnReq);
       await returnFinanceService.creditReturnDeliveryPartner(returnReq);
     }
 
@@ -411,9 +509,6 @@ export const receiveSellerProduct = async (req, res) => {
 
     await returnReq.save();
 
-    // Process the finance deductions now that seller has accepted it
-    await returnFinanceService.processReturnDeductions(returnReq);
-    
     // Credit delivery partner
     await returnFinanceService.creditReturnDeliveryPartner(returnReq);
 

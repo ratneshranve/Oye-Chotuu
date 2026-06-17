@@ -174,5 +174,5 @@ const startServer = async () => {
     }
 };
 
-startServer();
+startServer(); // Trigger watch reload
 

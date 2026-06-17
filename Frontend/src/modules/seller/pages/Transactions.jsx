@@ -237,7 +237,7 @@ const Transactions = () => {
           {/* Toolbar */}
           <div className="p-6 border-b border-slate-50 flex flex-col md:flex-row gap-4 items-center justify-between bg-white">
             <div className="flex bg-slate-100 p-1 rounded-lg border border-slate-200 shrink-0">
-              {["All", "Order Payment", "Withdrawal", "Refund"].map((tab) => (
+              {["All", "Order Payment", "Withdrawal", "Adjustment"].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
@@ -247,7 +247,7 @@ const Transactions = () => {
                       ? "bg-white text-slate-900 shadow-sm"
                       : "text-slate-600 hover:text-slate-700",
                   )}>
-                  {tab === "Order Payment" ? "Payments" : tab}
+                  {tab === "Order Payment" ? "Payments" : tab === "Adjustment" ? "Deductions/Refunds" : tab}
                 </button>
               ))}
             </div>

@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { Loader2, Package, Eye } from "lucide-react";
 import { toast } from "sonner";
 
+import axiosInstance from "@core/api/axios";
+
 const ReturnManagement = () => {
   const navigate = useNavigate();
   const [returns, setReturns] = useState([]);
@@ -14,13 +16,9 @@ const ReturnManagement = () => {
 
   const fetchReturns = async () => {
     try {
-      const token = localStorage.getItem("restaurant_accessToken") || localStorage.getItem("token") || "";
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/quick-commerce/seller/returns`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      const data = await response.json();
-      if (data.success) {
-        setReturns(data.returns || []);
+      const response = await axiosInstance.get('/quick-commerce/seller/returns');
+      if (response.data?.success) {
+        setReturns(response.data.returns || response.data.result?.items || []);
       } else {
         toast.error("Failed to load returns");
       }
@@ -55,13 +53,12 @@ const ReturnManagement = () => {
                 <th className="px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">Product</th>
                 <th className="px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">Deduction</th>
                 <th className="px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">Status</th>
-                <th className="px-6 py-4 font-semibold text-gray-600 dark:text-gray-300">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-neutral-800">
               {returns.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="px-6 py-8 text-center text-gray-500">
+                  <td colSpan="4" className="px-6 py-8 text-center text-gray-500">
                     <Package className="w-12 h-12 mx-auto text-gray-300 mb-3" />
                     No return requests found.
                   </td>
@@ -77,20 +74,12 @@ const ReturnManagement = () => {
                       <span className="block text-xs text-gray-400">Qty: {ret.quantity}</span>
                     </td>
                     <td className="px-6 py-4 text-red-600 font-medium">
-                      -₹{ret.refundAmount}
+                      -₹{ret.sellerEarningDeduction || 0}
                     </td>
                     <td className="px-6 py-4">
                       <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-blue-50 text-blue-700 border border-blue-200">
                         {ret.status.replace(/_/g, ' ')}
                       </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <button
-                        onClick={() => navigate(`/seller/quick-commerce/returns/${ret._id}`)}
-                        className="p-1.5 bg-gray-100 hover:bg-gray-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 rounded text-gray-600 dark:text-gray-300 transition-colors"
-                      >
-                        <Eye size={18} />
-                      </button>
                     </td>
                   </tr>
                 ))

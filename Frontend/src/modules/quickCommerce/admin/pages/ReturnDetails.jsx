@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ChevronLeft, Loader2, Package, CheckCircle, XCircle, Send, CreditCard } from "lucide-react";
+import { ChevronLeft, Loader2, Package, CheckCircle, XCircle, Send, CreditCard, X } from "lucide-react";
 import { toast } from "sonner";
 
 const ReturnDetails = () => {
@@ -18,6 +18,7 @@ const ReturnDetails = () => {
   const [refundNotes, setRefundNotes] = useState("");
   const [showRefundInput, setShowRefundInput] = useState(false);
   const [refundAmount, setRefundAmount] = useState(0);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     fetchDetails();
@@ -252,12 +253,48 @@ const ReturnDetails = () => {
                 <p className="text-sm text-gray-500 mb-2">Attached Images</p>
                 <div className="flex gap-3">
                   {returnReq.userImages.map((img, i) => (
-                    <img key={i} src={img} alt="User upload" className="w-20 h-20 object-cover rounded border border-gray-200" />
+                    <img 
+                      key={i} 
+                      src={img} 
+                      alt="User upload" 
+                      className="w-20 h-20 object-cover rounded border border-gray-200 dark:border-neutral-700 cursor-pointer hover:opacity-90 active:scale-95 transition-all" 
+                      onClick={() => setSelectedImage(img)}
+                    />
                   ))}
                 </div>
               </div>
             )}
           </div>
+
+          {/* Delivery Partner Verification */}
+          {returnReq.pickupImage && (
+            <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-gray-200 dark:border-neutral-700 p-6">
+              <h3 className="font-semibold text-lg text-gray-900 dark:text-white mb-4">Delivery Partner Verification</h3>
+              <div className="flex flex-col sm:flex-row gap-4 items-start">
+                <div 
+                  className="w-32 h-32 bg-gray-100 dark:bg-neutral-900 rounded-lg overflow-hidden shrink-0 border border-gray-200 dark:border-neutral-700 cursor-pointer hover:opacity-90 active:scale-95 transition-all"
+                  onClick={() => setSelectedImage(returnReq.pickupImage)}
+                >
+                  <img src={returnReq.pickupImage} alt="Pickup verification" className="w-full h-full object-cover" />
+                </div>
+                <div className="space-y-2">
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    This photo was uploaded by the delivery boy when verifying the return request with the customer.
+                  </p>
+                  {returnReq.deliveryPartnerId && (
+                    <div className="p-3 bg-gray-50 dark:bg-neutral-900 rounded-lg border border-gray-150 dark:border-neutral-700 inline-block">
+                      <p className="text-xs font-semibold text-gray-850 dark:text-gray-200">
+                        Rider: {returnReq.deliveryPartnerId.name || "N/A"}
+                      </p>
+                      <p className="text-xs text-gray-500 mt-0.5">
+                        Phone: {returnReq.deliveryPartnerId.phone || "N/A"}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-gray-200 dark:border-neutral-700 p-6">
             <h3 className="font-semibold text-lg text-gray-900 dark:text-white mb-4">Refund Details</h3>
@@ -426,6 +463,23 @@ const ReturnDetails = () => {
           </div>
         </div>
       </div>
+
+      {selectedImage && (
+        <div className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in" onClick={() => setSelectedImage(null)}>
+          <button 
+            onClick={() => setSelectedImage(null)} 
+            className="absolute top-4 right-4 text-white hover:text-gray-300 p-2.5 rounded-full bg-white/10 transition-colors"
+          >
+            <X className="w-6 h-6" />
+          </button>
+          <img 
+            src={selectedImage} 
+            alt="Preview" 
+            className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
+            onClick={e => e.stopPropagation()} 
+          />
+        </div>
+      )}
     </div>
   );
 };

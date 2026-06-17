@@ -55,7 +55,11 @@ const ReturnPickupHistory = () => {
             <div key={item._id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
               <div className="flex justify-between items-start mb-3">
                 <div>
-                  <h3 className="font-bold text-gray-900 text-sm">Order #{item.orderId?.slice(-6).toUpperCase()}</h3>
+                  {(() => {
+                    const displayOrderId = typeof item.orderId === 'object' ? (item.orderId?.orderId || item.orderId?._id || '') : item.orderId;
+                    const slicedOrderId = displayOrderId ? (displayOrderId.length > 6 ? displayOrderId.slice(-6).toUpperCase() : displayOrderId.toUpperCase()) : "";
+                    return <h3 className="font-bold text-gray-900 text-sm">Order #{slicedOrderId}</h3>;
+                  })()}
                   <p className="text-xs text-gray-500 mt-0.5">{new Date(item.updatedAt).toLocaleDateString()}</p>
                 </div>
                 <div className="text-right">

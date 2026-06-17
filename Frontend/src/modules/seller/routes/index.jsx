@@ -77,7 +77,7 @@ const SellerWorkspace = () => (
       <Route path="products/add" element={<AddProduct />} />
       <Route path="inventory" element={<StockManagement />} />
       <Route path="orders" element={<Orders />} />
-      <Route path="returns" element={<Returns />} />
+      <Route path="returns" element={<QuickReturns />} />
       <Route path="quick-commerce/returns" element={<QuickReturns />} />
       <Route path="quick-commerce/returns/:id" element={<QuickReturnDetails />} />
       <Route path="tracking" element={<DeliveryTracking />} />

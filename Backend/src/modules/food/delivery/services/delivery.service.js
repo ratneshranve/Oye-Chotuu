@@ -7,6 +7,7 @@ import { FoodOrder } from '../../orders/models/order.model.js';
 import { uploadImageBuffer } from '../../../../services/cloudinary.service.js';
 import { ValidationError } from '../../../../core/auth/errors.js';
 import { getDeliveryCashLimitSettings } from '../../admin/services/admin.service.js';
+import { QuickReturnRequest } from '../../../quick-commerce/models/ReturnRequest.model.js';
 
 export const registerDeliveryPartner = async (payload, files) => {
     const { 
@@ -506,7 +507,15 @@ export const getDeliveryPartnerEarnings = async (deliveryPartnerId, query = {}) 
         match['deliveryState.deliveredAt'] = { $gte: range.start, $lte: range.end };
     }
 
-    const [totalOrders, agg] = await Promise.all([
+    const returnMatch = {
+        deliveryPartnerId: partnerId,
+        status: { $in: ['RETURN_RECEIVED_BY_SELLER', 'REFUND_COMPLETED'] }
+    };
+    if (range) {
+        returnMatch.updatedAt = { $gte: range.start, $lte: range.end };
+    }
+
+    const [totalOrders, agg, totalReturnOrders, returnAgg] = await Promise.all([
         FoodOrder.countDocuments(match),
         FoodOrder.aggregate([
             { $match: match },
@@ -516,15 +525,26 @@ export const getDeliveryPartnerEarnings = async (deliveryPartnerId, query = {}) 
                     totalEarnings: { $sum: { $ifNull: ['$riderEarning', 0] } }
                 }
             }
+        ]),
+        QuickReturnRequest.countDocuments(returnMatch),
+        QuickReturnRequest.aggregate([
+            { $match: returnMatch },
+            {
+                $group: {
+                    _id: null,
+                    totalEarnings: { $sum: { $ifNull: ['$returnPickupEarning', 0] } }
+                }
+            }
         ])
     ]);
 
-    const totalEarnings = Number(agg?.[0]?.totalEarnings) || 0;
+    const totalEarnings = (Number(agg?.[0]?.totalEarnings) || 0) + (Number(returnAgg?.[0]?.totalEarnings) || 0);
+    const finalTotalOrders = totalOrders + totalReturnOrders;
 
     // Frontend only strongly relies on totalEarnings + totalOrders.
     const summary = {
         totalEarnings,
-        totalOrders,
+        totalOrders: finalTotalOrders,
         totalHours: 0,
         totalMinutes: 0,
         orderEarning: totalEarnings,
@@ -536,7 +556,7 @@ export const getDeliveryPartnerEarnings = async (deliveryPartnerId, query = {}) 
         summary,
         period,
         date: date.toISOString(),
-        pagination: { page, limit, total: totalOrders }
+        pagination: { page, limit, total: finalTotalOrders }
     };
 };
 
@@ -639,6 +659,56 @@ const toTripDto = (order) => {
     };
 };
 
+const toReturnTripDto = (ret) => {
+    const createdAt = ret?.createdAt || null;
+    const updatedAt = ret?.updatedAt || null;
+    const isCompleted = ['RETURN_RECEIVED_BY_SELLER', 'REFUND_COMPLETED'].includes(ret.status);
+    const isCancelled = ret.status === 'RETURN_REJECTED';
+    const status = isCompleted ? 'Completed' : isCancelled ? 'Cancelled' : 'Pending';
+
+    const sellerName = ret.sellerId?.shopName || ret.sellerId?.name || 'Quick Commerce Return';
+
+    const earningAmount = Number(ret.returnPickupEarning || 0);
+    const dateForUi = isCompleted ? updatedAt : (updatedAt || createdAt || new Date());
+    const time = dateForUi
+        ? new Date(dateForUi).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })
+        : '';
+
+    const displayOrderId = typeof ret.orderId === 'object' ? (ret.orderId?.orderId || ret.orderId?._id || '') : ret.orderId;
+
+    return {
+        id: ret._id,
+        _id: ret._id,
+        orderId: displayOrderId || ret._id,
+        status,
+        restaurantName: `[Return] ${sellerName}`,
+        restaurant: `[Return] ${sellerName}`,
+        items: [{
+            name: `[Return] ${ret.productId?.name || 'Product'}`,
+            quantity: ret.quantity,
+            price: ret.productValue || 0
+        }],
+        orderItems: [{
+            name: `[Return] ${ret.productId?.name || 'Product'}`,
+            quantity: ret.quantity,
+            price: ret.productValue || 0
+        }],
+        paymentMethod: 'Online',
+        totalAmount: ret.productValue || 0,
+        orderTotal: ret.productValue || 0,
+        codAmount: 0,
+        codCollectedAmount: 0,
+        deliveryEarning: earningAmount,
+        earningAmount: earningAmount,
+        amount: earningAmount,
+        createdAt: ret.createdAt,
+        deliveredAt: isCompleted ? updatedAt : null,
+        completedAt: isCompleted ? updatedAt : null,
+        date: dateForUi,
+        time
+    };
+};
+
 export const getDeliveryPartnerTripHistory = async (deliveryPartnerId, query = {}) => {
     if (!deliveryPartnerId || !mongoose.Types.ObjectId.isValid(deliveryPartnerId)) {
         throw new ValidationError('Delivery partner not found');
@@ -662,27 +732,57 @@ export const getDeliveryPartnerTripHistory = async (deliveryPartnerId, query = {
         match.createdAt = { $gte: start, $lte: end };
     } else if (sf === 'pending') {
         match.createdAt = { $gte: start, $lte: end };
-        // Pending = not delivered and not cancelled
         match.$and = [
             { orderStatus: { $ne: 'delivered' } },
             { orderStatus: { $not: { $regex: '^cancelled', $options: 'i' } } },
         ];
     } else {
-        // ALL TRIPS: show anything created in range, and compute earnings only for delivered orders.
         match.createdAt = { $gte: start, $lte: end };
     }
 
-    const orders = await FoodOrder.find(match)
-        .populate({ path: 'restaurantId', select: 'restaurantName' })
-        .sort({ 'deliveryState.deliveredAt': -1, createdAt: -1 })
-        .limit(limit)
-        .lean();
+    const returnMatch = { deliveryPartnerId: partnerId };
+    if (sf === 'completed') {
+        returnMatch.status = { $in: ['RETURN_RECEIVED_BY_SELLER', 'REFUND_COMPLETED'] };
+        returnMatch.updatedAt = { $gte: start, $lte: end };
+    } else if (sf === 'cancelled') {
+        returnMatch.status = 'RETURN_REJECTED';
+        returnMatch.createdAt = { $gte: start, $lte: end };
+    } else if (sf === 'pending') {
+        returnMatch.createdAt = { $gte: start, $lte: end };
+        returnMatch.status = { $in: ['RETURN_PICKUP_ASSIGNED', 'PICKED_UP'] };
+    } else {
+        returnMatch.createdAt = { $gte: start, $lte: end };
+    }
+
+    const [orders, returns] = await Promise.all([
+        FoodOrder.find(match)
+            .populate({ path: 'restaurantId', select: 'restaurantName' })
+            .sort({ 'deliveryState.deliveredAt': -1, createdAt: -1 })
+            .limit(limit)
+            .lean(),
+        QuickReturnRequest.find(returnMatch)
+            .populate('sellerId', 'name shopName')
+            .populate('productId', 'name')
+            .populate('orderId', 'orderId')
+            .sort({ updatedAt: -1, createdAt: -1 })
+            .limit(limit)
+            .lean()
+    ]);
+
+    const trips = [
+        ...(orders || []).map(toTripDto),
+        ...(returns || []).map(toReturnTripDto)
+    ].sort((a, b) => {
+        const ad = a.date ? new Date(a.date).getTime() : 0;
+        const bd = b.date ? new Date(b.date).getTime() : 0;
+        return bd - ad;
+    }).slice(0, limit);
 
     return {
         period,
         date: (date || new Date()).toISOString(),
         range: { start: start.toISOString(), end: end.toISOString() },
-        trips: (orders || []).map(toTripDto)
+        trips
     };
 };
 
@@ -696,31 +796,53 @@ export const getDeliveryPocketDetails = async (deliveryPartnerId, query = {}) =>
 
     const partnerId = new mongoose.Types.ObjectId(deliveryPartnerId);
 
-    const orders = await FoodOrder.find({
-        'dispatch.deliveryPartnerId': partnerId,
-        orderStatus: 'delivered',
-        $or: [
-            { 'deliveryState.deliveredAt': { $gte: start, $lte: end } },
-            { deliveredAt: { $gte: start, $lte: end } },
-            { completedAt: { $gte: start, $lte: end } },
-            { updatedAt: { $gte: start, $lte: end } },
-            { createdAt: { $gte: start, $lte: end } }
-        ]
-    })
-        .populate({ path: 'restaurantId', select: 'restaurantName' })
-        .sort({ 'deliveryState.deliveredAt': -1, deliveredAt: -1, completedAt: -1, updatedAt: -1, createdAt: -1 })
-        .limit(limit)
-        .lean();
+    const [orders, returns, bonusTxList] = await Promise.all([
+        FoodOrder.find({
+            'dispatch.deliveryPartnerId': partnerId,
+            orderStatus: 'delivered',
+            $or: [
+                { 'deliveryState.deliveredAt': { $gte: start, $lte: end } },
+                { deliveredAt: { $gte: start, $lte: end } },
+                { completedAt: { $gte: start, $lte: end } },
+                { updatedAt: { $gte: start, $lte: end } },
+                { createdAt: { $gte: start, $lte: end } }
+            ]
+        })
+            .populate({ path: 'restaurantId', select: 'restaurantName' })
+            .sort({ 'deliveryState.deliveredAt': -1, deliveredAt: -1, completedAt: -1, updatedAt: -1, createdAt: -1 })
+            .limit(limit)
+            .lean(),
+        QuickReturnRequest.find({
+            deliveryPartnerId: partnerId,
+            status: { $in: ['RETURN_RECEIVED_BY_SELLER', 'REFUND_COMPLETED'] },
+            $or: [
+                { updatedAt: { $gte: start, $lte: end } },
+                { createdAt: { $gte: start, $lte: end } }
+            ]
+        })
+            .populate('sellerId', 'name shopName')
+            .populate('productId', 'name')
+            .populate('orderId', 'orderId')
+            .sort({ updatedAt: -1, createdAt: -1 })
+            .limit(limit)
+            .lean(),
+        DeliveryBonusTransaction.find({
+            deliveryPartnerId: partnerId,
+            createdAt: { $gte: start, $lte: end }
+        })
+            .sort({ createdAt: -1 })
+            .limit(limit)
+            .lean()
+    ]);
 
-    const bonusTxList = await DeliveryBonusTransaction.find({
-        deliveryPartnerId: partnerId,
-        createdAt: { $gte: start, $lte: end }
-    })
-        .sort({ createdAt: -1 })
-        .limit(limit)
-        .lean();
-
-    const trips = (orders || []).map(toTripDto);
+    const trips = [
+        ...(orders || []).map(toTripDto),
+        ...(returns || []).map(toReturnTripDto)
+    ].sort((a, b) => {
+        const ad = a?.date ? new Date(a.date).getTime() : 0;
+        const bd = b?.date ? new Date(b.date).getTime() : 0;
+        return bd - ad;
+    });
 
     const paymentTransactions = (orders || []).map((o) => ({
         _id: o._id,
@@ -734,6 +856,28 @@ export const getDeliveryPocketDetails = async (deliveryPartnerId, query = {}) =>
         description: o?.restaurantId?.restaurantName ? `Order earning - ${o.restaurantId.restaurantName}` : 'Order earning'
     }));
 
+    const returnTransactions = (returns || []).map((r) => {
+        const shopName = r.sellerId?.shopName || r.sellerId?.name || 'Quick Commerce Seller';
+        const displayOrderId = typeof r.orderId === 'object' ? (r.orderId?.orderId || r.orderId?._id || '') : r.orderId;
+        return {
+            _id: r._id,
+            type: 'payment',
+            amount: Number(r.returnPickupEarning) || 0,
+            status: 'Completed',
+            date: r.updatedAt || r.createdAt,
+            createdAt: r.updatedAt || r.createdAt,
+            orderId: displayOrderId || String(r._id),
+            metadata: { orderId: displayOrderId || String(r._id) },
+            description: `Return Pickup - ${shopName}`
+        };
+    });
+
+    const allPaymentTransactions = [...paymentTransactions, ...returnTransactions].sort((a, b) => {
+        const ad = a?.date ? new Date(a.date).getTime() : 0;
+        const bd = b?.date ? new Date(b.date).getTime() : 0;
+        return bd - ad;
+    });
+
     const bonusTransactions = (bonusTxList || []).map((t) => ({
         _id: t._id,
         type: 'bonus',
@@ -745,7 +889,7 @@ export const getDeliveryPocketDetails = async (deliveryPartnerId, query = {}) =>
         description: t.reference ? `Bonus - ${t.reference}` : 'Bonus'
     }));
 
-    const totalEarning = paymentTransactions.reduce((sum, t) => sum + (Number(t.amount) || 0), 0);
+    const totalEarning = allPaymentTransactions.reduce((sum, t) => sum + (Number(t.amount) || 0), 0);
     const totalBonus = bonusTransactions.reduce((sum, t) => sum + (Number(t.amount) || 0), 0);
 
     return {
@@ -753,7 +897,7 @@ export const getDeliveryPocketDetails = async (deliveryPartnerId, query = {}) =>
         summary: { totalEarning, totalBonus, grandTotal: totalEarning + totalBonus },
         trips,
         transactions: {
-            payment: paymentTransactions,
+            payment: allPaymentTransactions,
             bonus: bonusTransactions
         }
     };
