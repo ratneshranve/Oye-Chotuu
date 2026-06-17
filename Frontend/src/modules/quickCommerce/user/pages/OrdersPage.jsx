@@ -152,7 +152,7 @@ const OrdersPage = () => {
                 key={String(order.id || order._id || orderCode)}
                 role="button"
                 tabIndex={0}
-                onClick={() => navigate(`/quick/orders/${encodeURIComponent(String(orderLookupId))}`, {
+                onClick={() => navigate(`/quick/orders/${encodeURIComponent(String(order._id || order.id || orderLookupId))}`, {
                   state: {
                     order,
                     prefetchedOrder: order,
@@ -162,7 +162,7 @@ const OrdersPage = () => {
                 onKeyDown={(event) => {
                   if (event.key === "Enter" || event.key === " ") {
                     event.preventDefault();
-                    navigate(`/quick/orders/${encodeURIComponent(String(orderLookupId))}`, {
+                    navigate(`/quick/orders/${encodeURIComponent(String(order._id || order.id || orderLookupId))}`, {
                       state: {
                         order,
                         prefetchedOrder: order,
