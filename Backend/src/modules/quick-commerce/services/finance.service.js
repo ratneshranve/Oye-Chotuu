@@ -94,28 +94,22 @@ export async function getQuickCommerceFinanceSummary() {
       vars: {
         amountDue: { $ifNull: ["$payment.amountDue", 0] },
         payableAmount: { $ifNull: ["$payableAmount", 0] },
+        payableTotal: { $ifNull: ["$pricing.payableTotal", 0] },
         totalAmount: { $ifNull: ["$totalAmount", 0] },
         amount: { $ifNull: ["$amount", 0] },
         total: { $ifNull: ["$total", 0] },
         pricingTotal: { $ifNull: ["$pricing.total", 0] },
-        platformFee: { $ifNull: ["$pricing.platformFee", 0] },
       },
       in: {
         $max: [
           0,
           "$$amountDue",
           "$$payableAmount",
+          "$$payableTotal",
           "$$totalAmount",
           "$$amount",
           "$$total",
-          {
-            $add: [
-              "$$pricingTotal",
-              {
-                $cond: [{ $gt: ["$$platformFee", 0] }, "$$platformFee", 0],
-              },
-            ],
-          },
+          "$$pricingTotal",
         ],
       },
     },

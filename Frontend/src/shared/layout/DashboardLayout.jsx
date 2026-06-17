@@ -62,6 +62,32 @@ const DashboardLayout = ({ children, navItems, title }) => {
     const { user, logout, role } = useAuth();
     const location = useLocation();
 
+    // Force light theme by removing dark class and preventing it from being added
+    useEffect(() => {
+        const root = document.documentElement;
+        root.classList.remove('dark');
+        root.style.colorScheme = 'light';
+
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'class' && root.classList.contains('dark')) {
+                    root.classList.remove('dark');
+                }
+            });
+        });
+
+        observer.observe(root, { attributes: true, attributeFilter: ['class'] });
+
+        return () => {
+            observer.disconnect();
+            // Restore dark mode if it was selected in user panel
+            if (localStorage.getItem('appTheme') === 'dark') {
+                root.classList.add('dark');
+                root.style.colorScheme = 'dark';
+            }
+        };
+    }, []);
+
     // Shared data for seller – single source, avoids duplicate API calls
     const [sellerOrders, setSellerOrders] = useState([]);
     const [ordersLoading, setOrdersLoading] = useState(false);
