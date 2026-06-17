@@ -13,6 +13,7 @@ import {
   MapPin,
   RotateCcw,
   FileText,
+  PackageOpen,
 } from "lucide-react"
 import { orderAPI, restaurantAPI } from "@food/api"
 import { useCart } from "@food/context/CartContext"
@@ -554,24 +555,50 @@ export default function UserOrderDetails() {
 
           {/* Items */}
           {items.map((item, idx) => (
-            <div key={idx} className="flex justify-between items-start mt-2">
-              <div className="flex items-center gap-2">
-                <div
-                  className={`w-3 h-3 border ${item.isVeg ? "border-green-600" : "border-red-600"
-                    } flex items-center justify-center p-[1px]`}
-                >
+            <div key={idx} className="flex flex-col mt-4 border-b border-gray-100 dark:border-neutral-700 pb-3 last:border-0">
+              <div className="flex justify-between items-start">
+                <div className="flex items-center gap-2">
                   <div
-                    className={`w-full h-full rounded-full ${item.isVeg ? "bg-green-600" : "bg-red-600"
-                      }`}
-                  />
+                    className={`w-3 h-3 border ${item.isVeg ? "border-green-600" : "border-red-600"
+                      } flex items-center justify-center p-[1px]`}
+                  >
+                    <div
+                      className={`w-full h-full rounded-full ${item.isVeg ? "bg-green-600" : "bg-red-600"
+                        }`}
+                    />
+                  </div>
+                  <span className="text-sm text-gray-700 dark:text-gray-200 font-medium">
+                    {item.quantity || item.qty || 1} x {item.name}{item.variantName ? ` (${item.variantName})` : ""}
+                  </span>
                 </div>
-                <span className="text-sm text-gray-700 dark:text-gray-200 font-medium">
-                  {item.quantity || item.qty || 1} x {item.name}{item.variantName ? ` (${item.variantName})` : ""}
+                <span className="text-sm text-gray-800 dark:text-white font-medium">
+                  ₹{(item.price || 0).toFixed(2)}
                 </span>
               </div>
-              <span className="text-sm text-gray-800 dark:text-white font-medium">
-                ₹{(item.price || 0).toFixed(2)}
-              </span>
+              
+              {/* Return Item Button for Delivered Quick Orders */}
+              {order?.orderType === "quick" && order?.status === "delivered" && (
+                <div className="mt-2 ml-5">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const orderMongoId = order._id || orderId;
+                      const itemId = item.itemId || item.id || item.productId || item._id;
+                      if (!itemId) {
+                        toast.error("Product ID not available for return");
+                        return;
+                      }
+                      navigate(`/quick/orders/${encodeURIComponent(String(orderMongoId))}/return/${encodeURIComponent(String(itemId))}`, {
+                        state: { item, order }
+                      });
+                    }}
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-full transition-colors"
+                  >
+                    <PackageOpen className="w-3.5 h-3.5" />
+                    Return Item
+                  </button>
+                </div>
+              )}
             </div>
           ))}
         </div>

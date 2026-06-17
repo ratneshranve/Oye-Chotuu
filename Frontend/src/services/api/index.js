@@ -1964,6 +1964,22 @@ export const deliveryAPI = {
         contextModule: "delivery",
       },
     ),
+  acceptReturnPickup: (returnId) =>
+    apiClient.put(
+      `/quick-commerce/delivery/returns/${String(returnId)}/accept`,
+      {},
+      {
+        contextModule: "delivery",
+      },
+    ),
+  rejectReturnPickup: (returnId) =>
+    apiClient.put(
+      `/quick-commerce/delivery/returns/${String(returnId)}/reject-broadcast`,
+      {},
+      {
+        contextModule: "delivery",
+      },
+    ),
   /**
    * PATCH /food/delivery/orders/:orderId/reached-pickup
    * Marks "reached pickup" (arrival at restaurant) in backend order deliveryState.

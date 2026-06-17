@@ -112,6 +112,17 @@ const supportsBrowserNotifications = () =>
 
 const buildDeliveryOrderNotification = (orderData = {}) => {
   const orderId = orderData.orderId || orderData.orderMongoId || orderData.id || 'New';
+  if (orderData.type === 'RETURN_PICKUP') {
+    return {
+      title: 'New Return Pickup Request',
+      body: `Return from ${orderData.customerName || 'Customer'} - Earn ₹${orderData.expectedEarning || 0}`,
+      tag: `delivery-return-${orderData.returnId || orderId}`,
+      data: {
+        returnId: orderData.returnId,
+        targetUrl: '/delivery',
+      },
+    };
+  }
   const itemCount = Array.isArray(orderData.items) ? orderData.items.length : 0;
   const total = Number(orderData.total || orderData.pricing?.total || orderData.orderTotal || 0);
 
@@ -129,6 +140,9 @@ const buildDeliveryOrderNotification = (orderData = {}) => {
 }
 
 const isActionableDeliveryOffer = (orderData = {}) => {
+  if (orderData?.type === 'RETURN_PICKUP') {
+    return Boolean(orderData?.returnId);
+  }
   const orderStatus = String(
     orderData?.orderStatus || orderData?.status || ''
   ).trim().toLowerCase();
@@ -158,7 +172,12 @@ const isActionableDeliveryOffer = (orderData = {}) => {
 const triggerWebViewNativeNotification = async (orderData = {}) => {
   if (typeof window === 'undefined') return false;
 
-  const bridgePayload = {
+  const bridgePayload = orderData.type === 'RETURN_PICKUP' ? {
+    title: 'New Return Pickup Request',
+    body: `Return from ${orderData.customerName || 'Customer'}`.trim(),
+    returnId: orderData.returnId || '',
+    targetUrl: '/delivery',
+  } : {
     title: 'New delivery order',
     body: `Order #${orderData?.orderId || orderData?.orderMongoId || orderData?.id || ''}`.trim(),
     orderId: orderData?.orderId || orderData?.order_id || '',
@@ -226,6 +245,7 @@ export const useDeliveryNotifications = () => {
   const getOrderAlertKey = (orderData = {}) => (
     [
       String(
+        orderData?.returnId ||
         orderData?.orderMongoId ||
         orderData?.order_mongo_id ||
         orderData?.orderId ||
@@ -893,6 +913,27 @@ export const useDeliveryNotifications = () => {
       });
       setNewOrder(orderData);
       handleIncomingOrderAlert(orderData);
+    });
+
+    socketRef.current.on('new_return_pickup_available', (returnData) => {
+      debugLog('New return pickup available received via socket', returnData);
+      const normalizedData = {
+        ...returnData,
+        type: 'RETURN_PICKUP',
+      };
+      setNewOrder(normalizedData);
+      handleIncomingOrderAlert(normalizedData);
+    });
+
+    socketRef.current.on('remove_return_pickup', (data) => {
+      debugLog('Remove return pickup received via socket', data);
+      const activeKey = activeOrderRef.current?.returnId || activeOrderRef.current?._id || activeOrderRef.current?.orderId;
+      const removeKey = data?.returnId || data?.id;
+      if (activeKey && String(activeKey) === String(removeKey)) {
+        stopAlertLoop();
+        activeOrderRef.current = null;
+        setNewOrder(null);
+      }
     });
 
     // Listen for priority-based order notifications (new_order_available)

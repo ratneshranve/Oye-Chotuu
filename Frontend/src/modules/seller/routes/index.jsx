@@ -22,6 +22,8 @@ const ProductManagement = React.lazy(
 const StockManagement = React.lazy(() => import("../pages/StockManagement"));
 const AddProduct = React.lazy(() => import("../pages/AddProduct"));
 const Returns = React.lazy(() => import("../pages/Returns"));
+const QuickReturns = React.lazy(() => import("../../quickCommerce/seller/pages/ReturnManagement"));
+const QuickReturnDetails = React.lazy(() => import("../../quickCommerce/seller/pages/ReturnDetails"));
 const Earnings = React.lazy(() => import("../pages/Earnings"));
 const Analytics = React.lazy(() => import("../pages/Analytics"));
 const Transactions = React.lazy(() => import("../pages/Transactions"));
@@ -76,6 +78,8 @@ const SellerWorkspace = () => (
       <Route path="inventory" element={<StockManagement />} />
       <Route path="orders" element={<Orders />} />
       <Route path="returns" element={<Returns />} />
+      <Route path="quick-commerce/returns" element={<QuickReturns />} />
+      <Route path="quick-commerce/returns/:id" element={<QuickReturnDetails />} />
       <Route path="tracking" element={<DeliveryTracking />} />
       <Route path="analytics" element={<Analytics />} />
       <Route path="transactions" element={<Transactions />} />

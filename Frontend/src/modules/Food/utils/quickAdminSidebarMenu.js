@@ -79,6 +79,15 @@ export const quickAdminSidebarMenu = [
       { type: "link", label: "Collect Cash", path: "/admin/quick-commerce/cash-collection", icon: "IndianRupee" },
       {
         type: "expandable",
+        label: "Returns",
+        icon: "Package",
+        subItems: [
+          { label: "Return Requests", path: "/admin/quick-commerce/returns" },
+          { label: "Return Settings", path: "/admin/quick-commerce/returns/settings" },
+        ],
+      },
+      {
+        type: "expandable",
         label: "Orders",
         icon: "FileText",
         subItems: [

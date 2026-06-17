@@ -2,17 +2,40 @@ import { useDeliveryStore } from '@/modules/DeliveryV2/store/useDeliveryStore';
 import { deliveryAPI } from '@food/api';
 import { toast } from 'sonner';
 import { getPrimaryPickupLocation, normalizeLocationPoint, normalizePickupPoints } from '@/modules/DeliveryV2/utils/orderRouting';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * useOrderManager - Professional hook for real-world trip lifecycle actions.
  * Connects directly to the backend API services.
  */
 export const useOrderManager = () => {
+  const navigate = useNavigate();
   const { 
     activeOrder, tripStatus, updateTripStatus, clearActiveOrder, setActiveOrder, riderLocation 
   } = useDeliveryStore();
 
   const acceptOrder = async (order) => {
+    if (order?.type === 'RETURN_PICKUP') {
+      const returnId = order?.returnId || order?._id || order?.id;
+      if (!returnId) {
+        toast.error('Invalid return request data');
+        return;
+      }
+      try {
+        const response = await deliveryAPI.acceptReturnPickup(returnId);
+        if (response?.data?.success) {
+          toast.success('Return pickup accepted');
+          navigate(`/delivery/quick-commerce/returns/${returnId}/active`);
+        } else {
+          toast.error(response?.data?.message || 'Failed to accept return pickup');
+        }
+      } catch (error) {
+        console.error('Accept Return Pickup Error:', error);
+        toast.error(error?.response?.data?.message || 'Error accepting return pickup');
+      }
+      return;
+    }
+
     const orderId = order?.orderId || order?._id || order?.id;
     if (!orderId) {
       toast.error('Invalid order data');

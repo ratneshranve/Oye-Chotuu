@@ -22,6 +22,9 @@ const Transactions = lazy(() => import("./user/pages/OrderTransactionsPage"))
 const Privacy = lazy(() => import("./user/pages/PrivacyPage"))
 const About = lazy(() => import("./user/pages/AboutPage"))
 const Terms = lazy(() => import("./user/pages/TermsPage"))
+const ReturnProduct = lazy(() => import("./user/pages/ReturnProductPage"))
+const ReturnsList = lazy(() => import("./user/pages/ReturnsListPage"))
+const ReturnDetails = lazy(() => import("./user/pages/ReturnDetailsPage"))
 
 import { CartProvider } from "./user/context/CartContext"
 import { LocationProvider } from "./user/context/LocationContext"
@@ -41,6 +44,9 @@ function QuickCommerceInnerRoutes() {
           <Route path="cart" element={<Cart />} />
           <Route path="orders" element={<Orders />} />
           <Route path="orders/:orderId" element={<OrderDetail />} />
+          <Route path="orders/:orderId/return/:productId" element={<ReturnProduct />} />
+          <Route path="returns" element={<ReturnsList />} />
+          <Route path="returns/:id" element={<ReturnDetails />} />
           <Route path="products" element={<Products />} />
           <Route path="categories" element={<Categories />} />
           <Route path="categories/:categoryId" element={<CategoryProducts />} />

@@ -33,6 +33,9 @@ import PrivacyPolicyV2 from './pages/PrivacyPolicyV2';
 import NotificationsV2 from './pages/NotificationsV2';
 
 
+const ReturnPickups = lazy(() => import('../quickCommerce/delivery/pages/ReturnPickups'));
+const ActiveReturnPickup = lazy(() => import('../quickCommerce/delivery/pages/ActiveReturnPickup'));
+const ReturnPickupHistory = lazy(() => import('../quickCommerce/delivery/pages/ReturnPickupHistory'));
 
 const DeliveryV2Router = () => {
   const location = useLocation();
@@ -79,6 +82,11 @@ const DeliveryV2Router = () => {
         <Route path="/pocket/balance" element={<ProtectedRoute><PocketBalanceV2 /></ProtectedRoute>} />
         <Route path="/pocket/cash-limit" element={<ProtectedRoute><CashLimitInfoV2 /></ProtectedRoute>} />
         <Route path="/pocket/details" element={<ProtectedRoute><PocketDetailsV2 /></ProtectedRoute>} />
+
+        {/* Quick Commerce Returns */}
+        <Route path="/quick-commerce/returns" element={<ProtectedRoute><ReturnPickups /></ProtectedRoute>} />
+        <Route path="/quick-commerce/returns/:id/active" element={<ProtectedRoute><ActiveReturnPickup /></ProtectedRoute>} />
+        <Route path="/quick-commerce/returns/history" element={<ProtectedRoute><ReturnPickupHistory /></ProtectedRoute>} />
 
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/food/delivery" replace />} />

@@ -64,6 +64,14 @@ const ProfilePage = () => {
                                 bg="rgba(16,185,129,0.10)"
                             />
                             <MenuItem
+                                icon={Package}
+                                label="Your Returns"
+                                sub="Track and view returned items"
+                                path="/quick/returns"
+                                color="#3b82f6"
+                                bg="rgba(59,130,246,0.10)"
+                            />
+                            <MenuItem
                                 icon={CreditCard}
                                 label="Order Transactions"
                                 sub="View all payments & refunds"
