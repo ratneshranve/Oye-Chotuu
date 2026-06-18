@@ -139,18 +139,97 @@ export const getRestaurantAvailabilityStatus = (restaurant, now = new Date(), op
     }
   }
 
-  // TEMPORARY APP STORE REVIEW FIX:
-  // Force all restaurants to be considered open and online 24/7.
-  // This prevents reviewers in different timezones from seeing closed states.
+  const ignoreOperationalStatus = options?.ignoreOperationalStatus === true
+  const isActive = restaurant.isActive !== false
+  const isAcceptingOrders = restaurant.isAcceptingOrders !== false
+
+  if (!ignoreOperationalStatus && !isActive) {
+    return {
+      isOpen: false,
+      isActive,
+      isAcceptingOrders,
+      isWithinTimings: false,
+      reason: "inactive",
+    }
+  }
+
+  if (!ignoreOperationalStatus && !isAcceptingOrders) {
+    return {
+      isOpen: false,
+      isActive,
+      isAcceptingOrders,
+      isWithinTimings: false,
+      reason: "not-accepting-orders",
+    }
+  }
+
+  const dayName = DAY_NAMES[now.getDay()]
+  const todayTiming = getTodayTiming(restaurant, dayName)
+
+  // Legacy openDays can get stale; enforce only when no explicit outlet timing exists for today.
+  const openDays = Array.isArray(restaurant.openDays) ? restaurant.openDays : []
+  if (!todayTiming && openDays.length > 0) {
+    const normalizedOpenDays = new Set(openDays.map((day) => normalizeDay(day)).filter(Boolean))
+    if (normalizedOpenDays.size > 0 && !normalizedOpenDays.has(dayName)) {
+      return {
+        isOpen: false,
+        isActive,
+        isAcceptingOrders,
+        isWithinTimings: false,
+        reason: "closed-day",
+      }
+    }
+  }
+
+  if (todayTiming?.isOpen === false) {
+    return {
+      isOpen: false,
+      isActive,
+      isAcceptingOrders,
+      isWithinTimings: false,
+      reason: "day-closed",
+    }
+  }
+
+  const openingTime =
+    todayTiming?.openingTime ||
+    restaurant?.deliveryTimings?.openingTime ||
+    restaurant?.openingTime ||
+    null
+  const closingTime =
+    todayTiming?.closingTime ||
+    restaurant?.deliveryTimings?.closingTime ||
+    restaurant?.closingTime ||
+    null
+
+  const openingMinutes = parseTimeToMinutes(openingTime)
+  const closingMinutes = parseTimeToMinutes(closingTime)
+  const nowMinutes = now.getHours() * 60 + now.getMinutes()
+  const hasExplicitWindow = Boolean(openingTime || closingTime)
+  // If a restaurant provides only one side of the window, treat timings as not enforced
+  // (prevents accidental "offline" due to partial data).
+  const isWithinTimings = hasExplicitWindow
+    ? (openingMinutes !== null && closingMinutes !== null
+      ? isWithinTimeWindow(nowMinutes, openingMinutes, closingMinutes)
+      : true)
+    : true
+  const minutesUntilClose = isWithinTimings
+    ? getMinutesUntilClosing(nowMinutes, openingMinutes, closingMinutes)
+    : null
+
   return {
-    isOpen: true,
-    isActive: true,
-    isAcceptingOrders: true,
-    isWithinTimings: true,
-    openingTime: restaurant?.openingTime || null,
-    closingTime: restaurant?.closingTime || null,
-    minutesUntilClose: null,
-    closingCountdownLabel: null,
-    reason: "open",
+    isOpen: isWithinTimings,
+    isActive,
+    isAcceptingOrders,
+    isWithinTimings,
+    openingTime,
+    closingTime,
+    minutesUntilClose,
+    closingCountdownLabel: isWithinTimings
+      ? formatClosingCountdown(minutesUntilClose, closingTime)
+      : null,
+    reason: isWithinTimings
+      ? (isAcceptingOrders ? "open" : "open-by-timings")
+      : (hasExplicitWindow ? "outside-hours" : "no-timings"),
   }
 }
