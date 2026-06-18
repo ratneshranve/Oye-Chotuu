@@ -298,10 +298,20 @@ const useStandaloneQuickCart = (isBridged = false, navigate, location) => {
       } else {
         window.location.href = "/user/auth/login";
       }
-      return;
+      return { ok: false };
     }
     const id = getProductId(product);
-    if (!id) return;
+    if (!id) return { ok: false };
+
+    const quickStoreId = getQuickStoreId(product);
+    if (cart.length > 0) {
+      const firstItemStoreId = cart[0]?.quickStoreId || cart[0]?.sourceId;
+      const firstItemStoreName = cart[0]?.quickStoreName || cart[0]?.sourceName;
+      if (firstItemStoreId && quickStoreId && String(firstItemStoreId) !== String(quickStoreId)) {
+        return { ok: false, error: `Cart already contains items from "${firstItemStoreName || 'another store'}". Please clear your cart first.`, code: 'STORE_MISMATCH' };
+      }
+    }
+
     setCart((prev) => {
       const existingItem = prev.find((item) => getProductId(item) === id);
       if (existingItem) {
@@ -348,6 +358,7 @@ const useStandaloneQuickCart = (isBridged = false, navigate, location) => {
         if (pendingRequestsRef.current === 0) await fetchCart();
       }
     }
+    return { ok: true };
   };
 
   const removeFromCart = async (productId) => {

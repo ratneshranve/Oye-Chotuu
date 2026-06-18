@@ -245,6 +245,19 @@ export function CartProvider({ children }) {
             return { ok: false, error: message, code: 'RESTAURANT_MISMATCH' }
           }
         }
+      } else if (nextOrderType === "quick") {
+        const existingQuickItems = safeCart.filter(i => getItemOrderType(i) === "quick");
+        if (existingQuickItems.length > 0) {
+          const firstItemStoreId = existingQuickItems[0]?.sourceId;
+          const firstItemStoreName = existingQuickItems[0]?.sourceName;
+          const newItemStoreId = getItemSourceId(item, "quick");
+          const newItemStoreName = item?.quickStoreName || item?.storeName || item?.sellerName || item?.sourceName || "another store";
+
+          if (firstItemStoreId && newItemStoreId && String(firstItemStoreId) !== String(newItemStoreId)) {
+            const message = `Cart already contains items from "${firstItemStoreName || 'another store'}". Please clear your cart first.`;
+            return { ok: false, error: message, code: 'STORE_MISMATCH' };
+          }
+        }
       }
     }
 
