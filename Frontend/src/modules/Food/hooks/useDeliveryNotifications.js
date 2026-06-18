@@ -1147,6 +1147,12 @@ export const useDeliveryNotifications = () => {
     };
 
     window.addEventListener('fcm-delivery-popup', handleFcmPopup);
+
+    if (typeof window !== 'undefined' && window.__fcmPendingDeliveryPopup) {
+      handleFcmPopup({ detail: window.__fcmPendingDeliveryPopup });
+      window.__fcmPendingDeliveryPopup = null;
+    }
+
     return () => window.removeEventListener('fcm-delivery-popup', handleFcmPopup);
   }, [handleIncomingOrderAlert]);
 

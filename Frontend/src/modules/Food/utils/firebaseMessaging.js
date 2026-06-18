@@ -516,6 +516,19 @@ function showForegroundNotification(payload = {}) {
     payload?.data?.imageUrl ||
     undefined;
 
+  const isNewOrder = 
+    title.toLowerCase().includes("order") || 
+    body.toLowerCase().includes("order") || 
+    payload?.data?.orderId ||
+    payload?.data?.type === 'RETURN_PICKUP';
+
+  if (isNewOrder && payload?.data) {
+    if (typeof window !== 'undefined') {
+      window.__fcmPendingDeliveryPopup = payload.data;
+    }
+    window.dispatchEvent(new CustomEvent('fcm-delivery-popup', { detail: payload.data }));
+  }
+
   playPushSound(payload);
 
   // Force system notification even when the tab is in focus
