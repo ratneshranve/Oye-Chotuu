@@ -72,18 +72,21 @@ const getQuickStoreName = (product) =>
   product?.sellerId?.name ||
   "Quick Commerce";
 
-const getQuickStoreId = (product) =>
-  product?.restaurantId ||
-  product?.restaurant?._id ||
-  product?.storeId?._id ||
-  product?.storeId?.id ||
-  product?.store?._id ||
-  product?.store?.id ||
-  product?.sellerId?._id ||
-  product?.sellerId?.id ||
-  product?.seller?._id ||
-  product?.seller?.id ||
-  "quick-commerce";
+const getQuickStoreId = (product) => {
+  if (product?.restaurantId) return product.restaurantId;
+  if (product?.restaurant?._id) return product.restaurant._id;
+  if (product?.storeId?._id) return product.storeId._id;
+  if (product?.storeId?.id) return product.storeId.id;
+  if (typeof product?.storeId === 'string') return product.storeId;
+  if (product?.store?._id) return product.store._id;
+  if (product?.store?.id) return product.store.id;
+  if (product?.sellerId?._id) return product.sellerId._id;
+  if (product?.sellerId?.id) return product.sellerId.id;
+  if (typeof product?.sellerId === 'string') return product.sellerId;
+  if (product?.seller?._id) return product.seller._id;
+  if (product?.seller?.id) return product.seller.id;
+  return "quick-commerce";
+};
 
 const normalizeQuickProductForSharedCart = (product) => {
   const id = getProductId(product);
@@ -179,17 +182,23 @@ const persistQuickCartSnapshot = (items) => {
   // This prevents items from reappearing when navigating back to Food-bridged pages
   try {
     const legacyCart = localStorage.getItem("cart");
+    let nextLegacyCart = [];
     if (legacyCart) {
       const parsed = JSON.parse(legacyCart);
       if (Array.isArray(parsed)) {
         const otherItems = parsed.filter((item) => !isQuickCartItem(item));
-        const nextLegacyCart = [...otherItems, ...items];
-        if (nextLegacyCart.length > 0) {
-          localStorage.setItem("cart", JSON.stringify(nextLegacyCart));
-        } else {
-          localStorage.removeItem("cart");
-        }
+        nextLegacyCart = [...otherItems, ...items];
+      } else {
+        nextLegacyCart = [...items];
       }
+    } else {
+      nextLegacyCart = [...items];
+    }
+    
+    if (nextLegacyCart.length > 0) {
+      localStorage.setItem("cart", JSON.stringify(nextLegacyCart));
+    } else {
+      localStorage.removeItem("cart");
     }
   } catch (e) {
     // ignore legacy sync errors

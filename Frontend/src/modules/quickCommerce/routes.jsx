@@ -32,6 +32,7 @@ import { ProductDetailProvider } from "./user/context/ProductDetailContext"
 import { WishlistProvider } from "./user/context/WishlistContext"
 import { CartAnimationProvider } from "./user/context/CartAnimationContext"
 import { ProfileProvider } from "@food/context/ProfileContext"
+import { CartProvider as FoodCartProvider } from "@food/context/CartContext"
 
 // Inner routes component — kept separate so Suspense doesn't remount providers
 function QuickCommerceInnerRoutes() {

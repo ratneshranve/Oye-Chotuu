@@ -359,7 +359,11 @@ const ProductDetailPage = () => {
       showToast("This product is out of stock", "error");
       return;
     }
-    await addToCart(variantProduct);
+    const result = await addToCart(variantProduct);
+    if (result?.ok === false) {
+      showToast(result.error || "Cannot add item to cart", "error");
+      return;
+    }
     showToast(`${variantProduct.name} added to cart`, "success");
   };
 

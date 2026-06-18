@@ -3,6 +3,7 @@ import { QuickCart } from '../models/cart.model.js';
 import { QuickProduct } from '../models/product.model.js';
 import { ensureQuickCommerceSeedData } from '../services/seed.service.js';
 import { calculateQuickPricing } from '../admin/services/billing.service.js';
+import { Seller } from '../seller/models/seller.model.js';
 
 const approvedProductFilter = {
   $or: [
@@ -57,6 +58,13 @@ const mapCart = async (idQuery) => {
     return acc;
   }, {});
 
+  const sellerIds = [...new Set(products.map(p => p.sellerId).filter(id => mongoose.isValidObjectId(id)))];
+  const sellers = await Seller.find({ _id: { $in: sellerIds } }).lean();
+  const sellerMap = sellers.reduce((acc, s) => {
+    acc[String(s._id)] = s;
+    return acc;
+  }, {});
+
   const items = cart.items
     .map((item) => {
       const product = productMap[String(item.productId)];
@@ -77,13 +85,17 @@ const mapCart = async (idQuery) => {
       const name = variant ? `${product.name} (${variant.name})` : product.name;
       const weight = variant ? variant.name : (product.weight || product.unit || "1 unit");
 
-      return {
-        id: variant ? `${product._id}::${variant.sku}` : String(product._id),
-        productId: variant ? `${product._id}::${variant.sku}` : String(product._id),
-        categoryId: product.categoryId ? String(product.categoryId) : null,
-        subcategoryId: product.subcategoryId ? String(product.subcategoryId) : null,
-        headerId: product.headerId ? String(product.headerId) : null,
-        name,
+        const seller = product.sellerId ? sellerMap[String(product.sellerId)] : null;
+        
+        return {
+          id: variant ? `${product._id}::${variant.sku}` : String(product._id),
+          productId: variant ? `${product._id}::${variant.sku}` : String(product._id),
+          categoryId: product.categoryId ? String(product.categoryId) : null,
+          subcategoryId: product.subcategoryId ? String(product.subcategoryId) : null,
+          headerId: product.headerId ? String(product.headerId) : null,
+          sellerId: product.sellerId ? String(product.sellerId) : null,
+          storeName: seller?.shopName || seller?.name || '',
+          name,
         image: product.mainImage || product.image || '',
         mainImage: product.mainImage || product.image || '',
         price: unitPrice,

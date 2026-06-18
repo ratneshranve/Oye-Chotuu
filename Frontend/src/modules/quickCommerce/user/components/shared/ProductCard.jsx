@@ -61,7 +61,15 @@ const ProductCard = React.memo(
         ),
       [cart, getComparableProductId, product.id, product._id],
     );
-    const quantity = cartItem ? cartItem.quantity : 0;
+    const quantity = React.useMemo(() => {
+      return cart
+        .filter(
+          (item) =>
+            getComparableProductId(item.productId || item.itemId || item.id || item._id) ===
+            getComparableProductId(product.id || product._id),
+        )
+        .reduce((sum, item) => sum + item.quantity, 0);
+    }, [cart, getComparableProductId, product.id, product._id]);
     const isWishlisted = isInWishlist(product.id || product._id);
 
     const handleProductClick = React.useCallback(
@@ -98,6 +106,12 @@ const ProductCard = React.memo(
       async (e) => {
         e.preventDefault();
         e.stopPropagation();
+
+        if (product.variants && product.variants.length > 0) {
+          navigate(getQuickProductPath(product.id || product._id), { state: { product } });
+          return;
+        }
+
         const stock = Number(product.stock ?? Infinity);
         if (stock <= 0) {
           showToast("This product is out of stock", "error");
@@ -118,13 +132,19 @@ const ProductCard = React.memo(
           );
         }
       },
-      [animateAddToCart, product, addToCart, showToast],
+      [animateAddToCart, product, addToCart, showToast, navigate],
     );
 
     const handleIncrement = React.useCallback(
       (e) => {
         e.preventDefault();
         e.stopPropagation();
+
+        if (product.variants && product.variants.length > 0) {
+          navigate(getQuickProductPath(product.id || product._id), { state: { product } });
+          return;
+        }
+
         const stock = Number(product.stock ?? Infinity);
         if (quantity >= stock) {
           showToast(`Only ${stock} in stock`, "error");
@@ -132,13 +152,18 @@ const ProductCard = React.memo(
         }
         updateQuantity(product.id || product._id, 1);
       },
-      [updateQuantity, product.id, product._id],
+      [updateQuantity, product, quantity, navigate, showToast],
     );
 
     const handleDecrement = React.useCallback(
       (e) => {
         e.preventDefault();
         e.stopPropagation();
+
+        if (product.variants && product.variants.length > 0) {
+          navigate(getQuickProductPath(product.id || product._id), { state: { product } });
+          return;
+        }
 
         if (quantity === 1) {
           animateRemoveFromCart(product.image);
@@ -150,11 +175,10 @@ const ProductCard = React.memo(
       [
         quantity,
         animateRemoveFromCart,
-        product.image,
+        product,
         removeFromCart,
-        product.id,
-        product._id,
         updateQuantity,
+        navigate,
       ],
     );
 

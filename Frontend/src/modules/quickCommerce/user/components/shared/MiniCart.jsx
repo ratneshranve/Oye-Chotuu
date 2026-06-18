@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronRight, ShoppingBag } from 'lucide-react';
 import Lottie from 'lottie-react';
@@ -41,7 +42,7 @@ const MiniCart = ({
     const isAboutPage = isEmbedded ? false : normalizedQuickPath.startsWith('/about');
     const isBottomRight = position === "bottom-right";
 
-    return (
+    const miniCartContent = (
         <AnimatePresence>
             {cartCount > 0 && !isCheckoutPage && !isOrderDetailsPage && !isProfilePage && !isWalletPage && !isTransactionsPage && !isWishlistPage && !isAddressesPage && !isSupportPage && !isPrivacyPage && !isAboutPage && (
                 <div
@@ -153,6 +154,12 @@ const MiniCart = ({
             </style>
         </AnimatePresence>
     );
+
+    if (typeof window !== "undefined" && document.body) {
+        return createPortal(miniCartContent, document.body);
+    }
+    
+    return miniCartContent;
 };
 
 export default MiniCart;
