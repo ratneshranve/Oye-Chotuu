@@ -570,31 +570,6 @@ const CheckoutPage = () => {
     };
   }, [resolveUniversalAddress, profileAddresses, deliveryAddressMode, selectedAddressId]);
 
-  // Mock data for recommendations
-  const recommendedProducts = [
-    {
-      id: 101,
-      name: "Uncle Chips",
-      price: 20,
-      image:
-        "https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=200",
-    },
-    {
-      id: 102,
-      name: "Lay's Chips",
-      price: 20,
-      image:
-        "https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=200",
-    },
-    {
-      id: 103,
-      name: "Bread",
-      price: 35,
-      image:
-        "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=200",
-    },
-  ];
-
   const [coupons, setCoupons] = useState([]);
   const [manualCode, setManualCode] = useState(
     storedCheckoutState.manualCode || "",
@@ -2244,22 +2219,6 @@ const CheckoutPage = () => {
                 </div>
               </motion.div>
             )}
-
-            {/* You might also like */}
-            <motion.div className="bg-white dark:bg-neutral-900 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-neutral-800 transition-colors">
-              <h3 className="font-black text-slate-800 dark:text-white text-lg mb-4">
-                You might also like
-              </h3>
-              <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar -mx-4 px-4 snap-x">
-                {recommendedProducts.map((product) => (
-                  <div
-                    key={product.id}
-                    className="flex-shrink-0 w-[140px] snap-start">
-                    <ProductCard product={product} compact={true} />
-                  </div>
-                ))}
-              </div>
-            </motion.div>
           </div>
 
           {/* Right Column: Order Summary & Payment - Sticky on Desktop */}
