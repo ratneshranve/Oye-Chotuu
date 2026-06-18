@@ -560,6 +560,25 @@ export default function DeliveryHomeV2({ tab = 'feed' }) {
             pickupPoints: normalizePickupPoints(currentPayload),
             restaurantLocation: getPrimaryPickupLocation(currentPayload) || currentPayload.restaurantLocation,
           });
+
+          // Fix: Ensure tripStatus is synchronized so the UI renders the ActiveTripDelivery panel
+          const backendStatus = currentPayload.deliveryStatus || currentPayload.orderState?.status || currentPayload.orderStatus || currentPayload.status;
+          const currentPhase = currentPayload.deliveryState?.currentPhase;
+
+          if (['delivered', 'completed', 'DELIVERED'].includes(backendStatus)) {
+            updateTripStatus('COMPLETED');
+          } else if (currentPhase === 'at_drop' || ['reached_drop', 'REACHED_DROP'].includes(backendStatus)) {
+            updateTripStatus('REACHED_DROP');
+          } else if (['picked_up', 'PICKED_UP', 'delivering'].includes(backendStatus)) {
+            updateTripStatus('PICKED_UP');
+          } else if (currentPhase === 'at_pickup' || ['reached_pickup', 'REACHED_PICKUP'].includes(backendStatus)) {
+            updateTripStatus('REACHED_PICKUP');
+          } else if (['created', 'confirmed', 'preparing', 'ready_for_pickup'].includes(backendStatus)) {
+            updateTripStatus('PICKING_UP');
+          } else if (currentPayload.dispatch?.status === 'accepted') {
+            updateTripStatus('PICKING_UP');
+          }
+          
           return;
         }
 

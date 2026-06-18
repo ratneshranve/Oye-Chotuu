@@ -49,15 +49,15 @@ const ActiveReturnPickup = () => {
         const found = data.activePickups?.find(p => p._id === id);
         if (found) {
           setReturnReq(found);
+          setLoading(false);
         } else {
           toast.error("Active return pickup not found");
           navigate("/delivery/quick-commerce/returns");
         }
       }
     } catch (error) {
-      toast.error("Error loading active pickup");
-    } finally {
-      setLoading(false);
+      console.warn("Network error fetching active pickup, retrying in 2 seconds...");
+      setTimeout(fetchActivePickup, 2000);
     }
   };
 
