@@ -5,7 +5,7 @@ import * as returnService from '../services/return.service.js';
 import * as returnAssignmentService from '../services/return-assignment.service.js';
 import * as returnFinanceService from '../services/return-finance.service.js';
 import { refundWalletBalance } from '../../food/user/services/userWallet.service.js';
-import { getRiderEarning } from '../../food/orders/services/foodTransaction.service.js';
+import { getRiderEarning as getQuickRiderEarning } from '../admin/services/billing.service.js';
 import { haversineKm } from '../../food/orders/services/order.helpers.js';
 import mongoose from 'mongoose';
 
@@ -149,7 +149,7 @@ export const approveReturn = async (req, res) => {
           );
         }
       }
-      const earning = await getRiderEarning(Math.max(0.1, distanceKm));
+      const earning = await getQuickRiderEarning(Math.max(0.1, distanceKm));
       returnReq.returnPickupEarning = earning || 20; // fallback to 20 if 0 or invalid
     } catch (err) {
       console.error('Failed to calculate return pickup earning:', err);

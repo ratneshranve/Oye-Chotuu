@@ -83,7 +83,7 @@ const ReturnProductPage = () => {
       const data = await response.json();
       if (data.success) {
         toast.success("Return request submitted successfully");
-        navigate("/quick/user/returns");
+        navigate("/quick/returns");
       } else {
         toast.error(data.message || "Failed to submit return request");
       }

@@ -4,6 +4,7 @@ import { QuickReturnRequest } from '../models/ReturnRequest.model.js';
 import { returnStatuses } from '../../../constants/returnStatuses.js';
 import { QuickOrder } from '../models/order.model.js';
 import { Seller } from '../seller/models/seller.model.js';
+import { haversineKm } from '../../food/orders/services/order.helpers.js';
 import { notifyOwnersSafely } from '../../../core/notifications/firebase.service.js';
 
 /**
@@ -22,6 +23,21 @@ const buildReturnBroadcastPayload = async (returnRequest) => {
     }
   }
 
+  let distanceKm = 0;
+  if (order && order.deliveryAddress?.location?.coordinates && returnRequest.sellerId) {
+    const custCoords = order.deliveryAddress.location.coordinates;
+    const seller = await Seller.findById(returnRequest.sellerId).lean();
+    if (seller && seller.location?.coordinates) {
+      const sellCoords = seller.location.coordinates;
+      if (Array.isArray(custCoords) && custCoords.length === 2 && Array.isArray(sellCoords) && sellCoords.length === 2) {
+        distanceKm = haversineKm(
+          sellCoords[1], sellCoords[0],
+          custCoords[1], custCoords[0]
+        );
+      }
+    }
+  }
+
   return {
     type: 'RETURN_PICKUP',
     returnId: returnRequest._id,
@@ -32,7 +48,7 @@ const buildReturnBroadcastPayload = async (returnRequest) => {
     customerAddress: order?.deliveryAddress?.street || order?.deliveryAddress?.address || '',
     sellerName,
     sellerAddress,
-    pickupDistance: 0, // Mock distance or calculate using existing utility if needed
+    pickupDistance: distanceKm,
     expectedEarning: returnRequest.returnPickupEarning || 0
   };
 };

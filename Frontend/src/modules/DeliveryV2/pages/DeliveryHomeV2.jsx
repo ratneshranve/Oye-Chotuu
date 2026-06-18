@@ -96,6 +96,42 @@ export default function DeliveryHomeV2({ tab = 'feed' }) {
     
     const [isModalMinimized, setIsModalMinimized] = useState(false);
     const [eta, setEta] = useState(null);
+    const [activeReturn, setActiveReturn] = useState(null);
+
+    useEffect(() => {
+      if (!isOnline) return;
+      const fetchActiveReturn = async () => {
+        try {
+          const token = localStorage.getItem("delivery_accessToken") || localStorage.getItem("token") || "";
+          const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/quick-commerce/delivery/returns/active`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          const data = await response.json();
+          if (data.success && data.activePickups && data.activePickups.length > 0) {
+            const ret = data.activePickups[0];
+            setActiveReturn(ret);
+            
+            if (!sessionStorage.getItem("hasAutoRedirectedReturn")) {
+              sessionStorage.setItem("hasAutoRedirectedReturn", "true");
+              navigate(`/food/delivery/quick-commerce/returns/${ret._id}/active`);
+            }
+          } else {
+            setActiveReturn(null);
+          }
+        } catch (e) {
+          console.error("Failed to fetch active return", e);
+        }
+      };
+      // Poll active return every 10s if we are on the feed tab
+      fetchActiveReturn();
+      const interval = setInterval(() => {
+        if (!document.hidden && currentTab === 'feed') {
+          fetchActiveReturn();
+        }
+      }, 10000);
+      return () => clearInterval(interval);
+    }, [isOnline, navigate, currentTab]);
+
     const scrollContainerRef = useRef(null);
     const lastLocationSentAt = useRef(0);
     const lastCoordRef = useRef(null);
@@ -958,6 +994,28 @@ export default function DeliveryHomeV2({ tab = 'feed' }) {
               </div>
               <div className="bg-orange-500 p-2 rounded-xl text-white">
                  <Plus className="w-5 h-5" />
+              </div>
+           </button>
+        </motion.div>
+      )}
+
+      {/* Floating Return Tracker - Above navbar */}
+      {activeReturn && !activeOrder && !incomingOrder && (
+        <motion.div 
+           initial={{ y: 100, opacity: 0 }}
+           animate={{ y: 0, opacity: 1 }}
+           className="fixed bottom-[100px] inset-x-0 z-[300] px-6"
+        >
+           <button 
+             onClick={() => navigate(`/food/delivery/quick-commerce/returns/${activeReturn._id}/active`)}
+             className="w-full bg-blue-600/95 text-white rounded-2xl py-4 flex items-center justify-between px-6 shadow-2xl backdrop-blur-md border border-white/10"
+           >
+              <div className="flex flex-col items-start gap-0.5">
+                 <span className="text-[10px] font-bold uppercase tracking-widest text-blue-200">Active Return Pending</span>
+                 <span className="text-xs font-bold uppercase tracking-wider">Tap to open return flow</span>
+              </div>
+              <div className="bg-white/20 p-2 rounded-xl text-white">
+                 <Package className="w-5 h-5" />
               </div>
            </button>
         </motion.div>
