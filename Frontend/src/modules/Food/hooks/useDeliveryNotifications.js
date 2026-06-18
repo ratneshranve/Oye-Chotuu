@@ -459,10 +459,12 @@ export const useDeliveryNotifications = () => {
             : [];
 
       const recoverableOrder = availableOrders.find((order) => {
-        const dispatchStatus = order?.dispatch?.status;
+        if (order?.type === 'RETURN_PICKUP') return true;
+        const dispatchStatus = String(order?.dispatch?.status || '').toLowerCase();
+        const orderStatus = String(order?.orderStatus || order?.status || '').toLowerCase();
         return (
           ['unassigned', 'assigned'].includes(dispatchStatus) &&
-          ['created', 'confirmed', 'preparing', 'ready_for_pickup'].includes(order?.orderStatus)
+          ['created', 'confirmed', 'preparing', 'ready_for_pickup'].includes(orderStatus)
         );
       });
 

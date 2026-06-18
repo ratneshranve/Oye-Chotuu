@@ -577,6 +577,7 @@ export default function DeliveryHomeV2({ tab = 'feed' }) {
               : [];
 
         const nextIncomingOrder = availableOrders.find((order) => {
+          if (order?.type === 'RETURN_PICKUP') return true;
           const dispatchStatus = String(order?.dispatch?.status || '').toLowerCase();
           const orderStatus = String(order?.orderStatus || order?.status || '').toLowerCase();
           return (
