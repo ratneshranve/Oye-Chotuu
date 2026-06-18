@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loader2, Package, Check, X, MapPin } from "lucide-react";
 import { toast } from "sonner";
+import axiosInstance from "@core/api/axios";
 
 const formatAddress = (addr) => {
   if (!addr) return '';
@@ -37,11 +38,8 @@ const ReturnPickups = () => {
 
   const fetchActivePickups = async () => {
     try {
-      const token = localStorage.getItem("delivery_accessToken") || localStorage.getItem("token") || "";
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/quick-commerce/delivery/returns/active`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      const data = await response.json();
+      const response = await axiosInstance.get('/quick-commerce/delivery/returns/active');
+      const data = response.data || {};
       if (data.success) {
         setPickups(data.activePickups || []);
         
@@ -61,12 +59,8 @@ const ReturnPickups = () => {
   const handleAccept = async (id) => {
     setActionLoading(true);
     try {
-      const token = localStorage.getItem("delivery_accessToken") || localStorage.getItem("token") || "";
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/quick-commerce/delivery/returns/${id}/accept`, {
-        method: "PUT",
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      const data = await response.json();
+      const response = await axiosInstance.put(`/quick-commerce/delivery/returns/${id}/accept`);
+      const data = response.data || {};
       if (data.success) {
         toast.success("Return pickup accepted");
         navigate(`/delivery/quick-commerce/returns/${id}/active`);
@@ -86,11 +80,7 @@ const ReturnPickups = () => {
     // Optimistic UI update
     setPickups(prev => prev.filter(p => p._id !== id));
     try {
-      const token = localStorage.getItem("delivery_accessToken") || localStorage.getItem("token") || "";
-      await fetch(`${import.meta.env.VITE_API_URL}/api/v1/quick-commerce/delivery/returns/${id}/reject-broadcast`, {
-        method: "PUT",
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
+      await axiosInstance.put(`/quick-commerce/delivery/returns/${id}/reject-broadcast`);
     } catch (error) {
       console.error("Failed to register reject");
     }

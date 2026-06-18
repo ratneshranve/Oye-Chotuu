@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Save, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { adminApi } from "../services/adminApi";
 
 const ReturnSettings = () => {
   const [returnWindowDays, setReturnWindowDays] = useState(3);
@@ -13,11 +14,8 @@ const ReturnSettings = () => {
 
   const fetchSettings = async () => {
     try {
-      const token = localStorage.getItem("admin_accessToken") || localStorage.getItem("adminToken") || localStorage.getItem("accessToken") || localStorage.getItem("token") || "";
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/quick-commerce/admin/returns/settings`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      const data = await response.json();
+      const response = await adminApi.getReturnSettings();
+      const data = response.data || {};
       if (data.success && data.settings) {
         setReturnWindowDays(data.settings.returnWindowDays);
       }
@@ -32,16 +30,8 @@ const ReturnSettings = () => {
   const handleSave = async () => {
     setSaving(true);
     try {
-      const token = localStorage.getItem("admin_accessToken") || localStorage.getItem("adminToken") || localStorage.getItem("accessToken") || localStorage.getItem("token") || "";
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/quick-commerce/admin/returns/settings`, {
-        method: "PUT",
-        headers: { 
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ returnWindowDays })
-      });
-      const data = await response.json();
+      const response = await adminApi.updateReturnSettings({ returnWindowDays });
+      const data = response.data || {};
       if (data.success) {
         toast.success("Return settings updated successfully");
       } else {

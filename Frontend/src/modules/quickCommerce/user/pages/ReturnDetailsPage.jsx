@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ChevronLeft, Package, Loader2, Info } from "lucide-react";
 import { toast } from "sonner";
+import { customerApi } from "../services/customerApi";
 
 const ReturnDetailsPage = () => {
   const navigate = useNavigate();
@@ -12,11 +13,8 @@ const ReturnDetailsPage = () => {
   useEffect(() => {
     const fetchDetails = async () => {
       try {
-        const token = localStorage.getItem("auth_customer") || localStorage.getItem("token") || "";
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/quick-commerce/user/returns/${id}`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        const data = await response.json();
+        const response = await customerApi.getReturnDetails(id);
+        const data = response.data || {};
         if (data.success) {
           setReturnReq(data.returnRequest);
         } else {

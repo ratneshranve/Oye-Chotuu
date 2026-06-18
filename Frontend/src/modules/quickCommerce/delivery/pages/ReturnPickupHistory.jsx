@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Loader2, Package, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
+import axiosInstance from "@core/api/axios";
 
 const ReturnPickupHistory = () => {
   const [history, setHistory] = useState([]);
@@ -12,11 +13,8 @@ const ReturnPickupHistory = () => {
 
   const fetchHistory = async () => {
     try {
-      const token = localStorage.getItem("delivery_accessToken") || localStorage.getItem("token") || "";
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/quick-commerce/delivery/returns/history`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      const data = await response.json();
+      const response = await axiosInstance.get('/quick-commerce/delivery/returns/history');
+      const data = response.data || {};
       if (data.success) {
         setHistory(data.history || []);
       } else {

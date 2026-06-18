@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ChevronLeft, Loader2, Package, CheckCircle, XCircle, Send, CreditCard, X } from "lucide-react";
 import { toast } from "sonner";
+import { adminApi } from "../services/adminApi";
 
 const ReturnDetails = () => {
   const navigate = useNavigate();
@@ -32,14 +33,11 @@ const ReturnDetails = () => {
 
   const fetchDetails = async () => {
     try {
-      const token = localStorage.getItem("admin_accessToken") || localStorage.getItem("adminToken") || localStorage.getItem("accessToken") || localStorage.getItem("token") || "";
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/quick-commerce/admin/returns`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      const data = await response.json();
+      // In a real app we'd have a GET /admin/returns/:id
+      // For now we fetch all and filter
+      const response = await adminApi.getReturns();
+      const data = response.data || {};
       if (data.success) {
-        // Find specific since the endpoint currently returns all
-        // In a real app we'd have a GET /admin/returns/:id
         const found = data.returns?.find(r => r._id === id);
         if (found) {
           setReturnReq(found);
@@ -57,18 +55,8 @@ const ReturnDetails = () => {
   const handleAction = async (endpoint, payload = {}, actionName) => {
     setActionLoading(actionName);
     try {
-      const token = localStorage.getItem("admin_accessToken") || localStorage.getItem("adminToken") || localStorage.getItem("accessToken") || localStorage.getItem("token") || "";
-      const url = `${import.meta.env.VITE_API_URL}/api/v1/quick-commerce/admin/returns/${id}/${endpoint}`;
-      
-      const response = await fetch(url, {
-        method: endpoint === "broadcast" ? "POST" : "PUT",
-        headers: { 
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      });
-      const data = await response.json();
+      const response = await adminApi.updateReturnAction(id, endpoint, payload);
+      const data = response.data || {};
       if (data.success) {
         toast.success(`Action '${actionName}' successful`);
         setReturnReq(data.returnRequest);
@@ -78,7 +66,8 @@ const ReturnDetails = () => {
         toast.error(data.message || `Failed to ${actionName.toLowerCase()}`);
       }
     } catch (error) {
-      toast.error(`An error occurred during ${actionName.toLowerCase()}`);
+      const errorMsg = error.response?.data?.message || `An error occurred during ${actionName.toLowerCase()}`;
+      toast.error(errorMsg);
     } finally {
       setActionLoading("");
     }

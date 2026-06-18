@@ -4,6 +4,7 @@ import { Loader2, Package, MapPin, CheckCircle, Upload, ArrowRight, ArrowLeft, X
 import { toast } from "sonner";
 import { convertToWebP } from "../../../../shared/utils/imageUploadUtils.js";
 import { ImageSourcePicker } from "@food/components/ImageSourcePicker";
+import axiosInstance from "@core/api/axios";
 
 const formatAddress = (addr) => {
   if (!addr) return '';
@@ -42,11 +43,8 @@ const ActiveReturnPickup = () => {
 
   const fetchActivePickup = async () => {
     try {
-      const token = localStorage.getItem("delivery_accessToken") || localStorage.getItem("token") || "";
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/quick-commerce/delivery/returns/active`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      const data = await response.json();
+      const response = await axiosInstance.get('/quick-commerce/delivery/returns/active');
+      const data = response.data || {};
       if (data.success) {
         const found = data.activePickups?.find(p => p._id === id);
         if (found) {
@@ -94,16 +92,8 @@ const ActiveReturnPickup = () => {
 
     setActionLoading(true);
     try {
-      const token = localStorage.getItem("delivery_accessToken") || localStorage.getItem("token") || "";
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/quick-commerce/delivery/returns/${id}/confirm-pickup`, {
-        method: "POST",
-        headers: { 
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ otp, pickupImage })
-      });
-      const data = await response.json();
+      const response = await axiosInstance.post(`/quick-commerce/delivery/returns/${id}/confirm-pickup`, { otp, pickupImage });
+      const data = response.data || {};
       if (data.success) {
         toast.success("Pickup confirmed!");
         if (data.returnRequest) {
@@ -285,16 +275,8 @@ const ActiveReturnPickup = () => {
               onClick={async () => {
                 setActionLoading(true);
                 try {
-                  const token = localStorage.getItem("delivery_accessToken") || localStorage.getItem("token") || "";
-                  const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/quick-commerce/delivery/returns/${id}/status`, {
-                    method: "PUT",
-                    headers: { 
-                      'Authorization': `Bearer ${token}`,
-                      'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ status: "PICKED_UP" })
-                  });
-                  const data = await response.json();
+                  const response = await axiosInstance.put(`/quick-commerce/delivery/returns/${id}/status`, { status: "PICKED_UP" });
+                  const data = response.data || {};
                   if (data.success) {
                     toast.success("Status manually updated to PICKED_UP");
                     if (data.returnRequest) {
@@ -370,16 +352,8 @@ const ActiveReturnPickup = () => {
               onClick={async () => {
                 setActionLoading(true);
                 try {
-                  const token = localStorage.getItem("delivery_accessToken") || localStorage.getItem("token") || "";
-                  const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/quick-commerce/delivery/returns/${id}/status`, {
-                    method: "PUT",
-                    headers: { 
-                      'Authorization': `Bearer ${token}`,
-                      'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ status: "RETURN_RECEIVED_BY_SELLER" })
-                  });
-                  const data = await response.json();
+                  const response = await axiosInstance.put(`/quick-commerce/delivery/returns/${id}/status`, { status: "RETURN_RECEIVED_BY_SELLER" });
+                  const data = response.data || {};
                   if (data.success) {
                     toast.success("Status manually updated to RETURN_RECEIVED_BY_SELLER");
                     if (data.returnRequest) {

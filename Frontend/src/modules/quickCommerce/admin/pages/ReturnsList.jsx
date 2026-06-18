@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loader2, Package, Eye } from "lucide-react";
 import { toast } from "sonner";
+import { adminApi } from "../services/adminApi";
 
 const ReturnsList = () => {
   const navigate = useNavigate();
@@ -14,13 +15,10 @@ const ReturnsList = () => {
 
   const fetchReturns = async () => {
     try {
-      const token = localStorage.getItem("admin_accessToken") || localStorage.getItem("adminToken") || localStorage.getItem("accessToken") || localStorage.getItem("token") || "";
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/quick-commerce/admin/returns`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      const data = await response.json();
+      const response = await adminApi.getReturns();
+      const data = response.data || {};
       if (data.success) {
-        setReturns(data.returns || []);
+        setReturns(data.returns || data.result || []);
       } else {
         toast.error("Failed to load returns");
       }

@@ -129,6 +129,7 @@ export const customerApi = {
   },
 
   getUserReturns: (params) => quickGetWithDedupe("/quick-commerce/user/returns", params),
+  getReturnDetails: (id) => quickGetWithDedupe(`/quick-commerce/user/returns/${id}`, {}),
   createReturnRequest: (data) => axiosInstance.post("/quick-commerce/user/returns", data, withQuickSession()),
 };
 

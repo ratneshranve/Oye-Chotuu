@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ChevronLeft, Loader2, Package, CheckCircle, Upload } from "lucide-react";
 import { toast } from "sonner";
+import axiosInstance from "@core/api/axios";
 
 const ReturnDetails = () => {
   const navigate = useNavigate();
@@ -18,13 +19,9 @@ const ReturnDetails = () => {
 
   const fetchDetails = async () => {
     try {
-      const token = localStorage.getItem("restaurant_accessToken") || localStorage.getItem("token") || "";
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/quick-commerce/seller/returns`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      const data = await response.json();
-      if (data.success) {
-        const found = data.returns?.find(r => r._id === id);
+      const response = await axiosInstance.get('/quick-commerce/seller/returns');
+      if (response.data?.success) {
+        const found = (response.data.returns || response.data.result?.items || []).find(r => r._id === id);
         if (found) {
           setReturnReq(found);
         } else {
@@ -53,24 +50,16 @@ const ReturnDetails = () => {
 
     setActionLoading(true);
     try {
-      const token = localStorage.getItem("restaurant_accessToken") || localStorage.getItem("token") || "";
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/quick-commerce/seller/returns/${id}/receive`, {
-        method: "PUT",
-        headers: { 
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ sellerImage })
-      });
-      const data = await response.json();
-      if (data.success) {
+      const response = await axiosInstance.put(`/quick-commerce/seller/returns/${id}/receive`, { sellerImage });
+      if (response.data?.success) {
         toast.success("Return marked as received");
-        setReturnReq(data.returnRequest);
+        setReturnReq(response.data.returnRequest);
       } else {
-        toast.error(data.message || "Failed to mark return as received");
+        toast.error(response.data?.message || "Failed to mark return as received");
       }
     } catch (error) {
-      toast.error("An error occurred");
+      const errorMsg = error.response?.data?.message || "An error occurred";
+      toast.error(errorMsg);
     } finally {
       setActionLoading(false);
     }
