@@ -127,6 +127,9 @@ export const customerApi = {
     invalidateCache("/quick-commerce/wishlist");
     return axiosInstance.post("/quick-commerce/wishlist/toggle", data, withQuickSession());
   },
+
+  getUserReturns: (params) => quickGetWithDedupe("/quick-commerce/user/returns", params),
+  createReturnRequest: (data) => axiosInstance.post("/quick-commerce/user/returns", data, withQuickSession()),
 };
 
 export const prefetchQuickHomeBootstrap = async (location = null) => {

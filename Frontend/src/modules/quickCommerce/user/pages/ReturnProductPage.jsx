@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { ChevronLeft, Upload, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { customerApi } from "../services/customerApi";
 
 const ReturnProductPage = () => {
   const navigate = useNavigate();
@@ -53,8 +54,6 @@ const ReturnProductPage = () => {
 
     setLoading(true);
     try {
-      const token = localStorage.getItem("auth_customer") || localStorage.getItem("token") || "";
-      
       const payload = {
         orderId,
         productId,
@@ -71,16 +70,8 @@ const ReturnProductPage = () => {
         upiId: refundMethod === "UPI" ? upiId : undefined
       };
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/quick-commerce/user/returns`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(payload)
-      });
-
-      const data = await response.json();
+      const response = await customerApi.createReturnRequest(payload);
+      const data = response.data || {};
       if (data.success) {
         toast.success("Return request submitted successfully");
         navigate("/quick/returns");
