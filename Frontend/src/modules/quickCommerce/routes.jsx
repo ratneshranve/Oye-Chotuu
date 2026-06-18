@@ -15,6 +15,8 @@ const ProductDetail = lazy(() => import("./user/pages/ProductDetailPage"))
 const Checkout = lazy(() => import("./user/pages/CheckoutPage"))
 const Wallet = lazy(() => import("../Food/pages/user/Wallet"))
 const Addresses = lazy(() => import("./user/pages/AddressesPage"))
+const StoresPage = lazy(() => import("./user/pages/StoresPage"))
+const StoreProductsPage = lazy(() => import("./user/pages/StoreProductsPage"))
 const Support = lazy(() => import("./user/pages/SupportPage"))
 const Search = lazy(() => import("./user/pages/SearchPage"))
 const Wishlist = lazy(() => import("./user/pages/WishlistPage"))
@@ -50,6 +52,8 @@ function QuickCommerceInnerRoutes() {
           <Route path="returns/:id" element={<ReturnDetails />} />
           <Route path="products" element={<Products />} />
           <Route path="categories" element={<Categories />} />
+          <Route path="stores" element={<StoresPage />} />
+          <Route path="stores/:storeId" element={<StoreProductsPage />} />
           <Route path="categories/:categoryId" element={<CategoryProducts />} />
           <Route path="product/:productId" element={<ProductDetail />} />
           <Route path="checkout" element={<Checkout />} />

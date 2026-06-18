@@ -4,6 +4,7 @@ import { QuickReview } from '../models/review.model.js';
 import { FoodUser } from '../../../core/users/user.model.js';
 import { Seller } from '../seller/models/seller.model.js';
 import { ensureQuickCommerceSeedData } from '../services/seed.service.js';
+import mongoose from 'mongoose';
 import {
   getQuickCategories,
   getQuickCoupons,
@@ -347,12 +348,28 @@ export const getProducts = async (req, res) => {
   const { categoryId, search, limit } = req.query;
   const query = { ...publicProductFilter };
 
+  const andConditions = [];
+
   if (categoryId) {
-    query.$or = [
-      { categoryId: categoryId },
-      { subcategoryId: categoryId },
-      { headerId: categoryId }
-    ];
+    andConditions.push({
+      $or: [
+        { categoryId: categoryId },
+        { subcategoryId: categoryId },
+        { headerId: categoryId }
+      ]
+    });
+  }
+  if (req.query.storeId) {
+    andConditions.push({
+      $or: [
+        { sellerId: req.query.storeId },
+        { sellerId: new mongoose.Types.ObjectId(req.query.storeId) }
+      ]
+    });
+  }
+  
+  if (andConditions.length > 0) {
+    query.$and = (query.$and || []).concat(andConditions);
   }
   if (search) query.name = { $regex: String(search).trim(), $options: 'i' };
 
@@ -398,10 +415,8 @@ export const getProductReviews = async (req, res) => {
       results: reviews,
     });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: 'Failed to fetch reviews',
-    });
+    console.error('Error fetching product reviews:', error);
+    return res.status(500).json({ success: false, message: 'Failed to fetch reviews' });
   }
 };
 
@@ -457,6 +472,60 @@ export const submitProductReview = async (req, res) => {
       success: false,
       message: 'Failed to submit review',
     });
+  }
+};
+
+export const getStores = async (req, res) => {
+  setPublicCache(res, 300); // 5 minutes cache
+  
+  try {
+    // Find distinct sellers who have products in Quick Commerce
+    const sellerIds = await QuickProduct.distinct('sellerId', publicProductFilter);
+    const stores = await Seller.find({ _id: { $in: sellerIds } }).lean();
+
+    // Attach sample product images
+    const mappedStores = await Promise.all(stores.map(async (store) => {
+       const sampleProduct = await QuickProduct.findOne({ sellerId: store._id, ...publicProductFilter }).select('mainImage image').lean();
+       return {
+          _id: store._id,
+          id: store._id,
+          name: store.shopName || store.name || 'Store',
+          image: store.logo || sampleProduct?.mainImage || sampleProduct?.image || '',
+          description: store.description || '',
+       };
+    }));
+
+    return res.json({ success: true, results: mappedStores });
+  } catch (error) {
+    console.error('Error fetching stores:', error);
+    return res.status(500).json({ success: false, message: 'Failed to fetch stores' });
+  }
+};
+
+export const getStoreDetails = async (req, res) => {
+  setPublicCache(res, 300);
+  
+  try {
+    const store = await Seller.findById(req.params.storeId).lean();
+    if (!store) {
+      return res.status(404).json({ success: false, message: 'Store not found' });
+    }
+    
+    const sampleProduct = await QuickProduct.findOne({ sellerId: store._id, ...publicProductFilter }).select('mainImage image').lean();
+    
+    return res.json({ 
+      success: true, 
+      result: {
+        _id: store._id,
+        id: store._id,
+        name: store.shopName || store.name || 'Store',
+        image: store.logo || sampleProduct?.mainImage || sampleProduct?.image || '',
+        description: store.description || '',
+      } 
+    });
+  } catch (error) {
+    console.error('Error fetching store details:', error);
+    return res.status(500).json({ success: false, message: 'Failed to fetch store details' });
   }
 };
 

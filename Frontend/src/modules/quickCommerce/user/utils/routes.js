@@ -15,6 +15,8 @@ export const getQuickProductPath = (productId) =>
 export const getQuickCategoriesPath = () => `${STANDALONE_BASE}/categories`;
 export const getQuickCategoryPath = (categoryId) =>
   `${STANDALONE_BASE}/categories/${categoryId}`;
+export const getQuickStoresPath = () => `${STANDALONE_BASE}/stores`;
+export const getQuickStoreProductsPath = (storeId) => `${STANDALONE_BASE}/stores/${storeId}`;
 export const getQuickProfilePath = () => `/quick/profile`;
 export const getQuickWishlistPath = () => `${STANDALONE_BASE}/wishlist`;
 export const getQuickOffersPath = () => `${STANDALONE_BASE}/offers`;

@@ -10,6 +10,8 @@ import {
   getProductReviews,
   submitProductReview,
   getProducts,
+  getStores,
+  getStoreDetails,
 } from "../controllers/catalog.controller.js";
 import {
   addToCart,
@@ -149,6 +151,8 @@ router.get("/coupons", getCoupons);
 router.post("/coupons/apply", applyCoupon);
 router.get("/categories", getCategories);
 router.get("/products", getProducts);
+router.get("/stores", getStores);
+router.get("/stores/:storeId", getStoreDetails);
 router.get("/products/:productId/reviews", getProductReviews);
 router.post("/products/reviews", optionalAuth, submitProductReview);
 router.get("/products/:productId", getProductById);
