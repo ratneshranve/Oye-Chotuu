@@ -1129,6 +1129,25 @@ export const useDeliveryNotifications = () => {
     void recoverDeliveryState();
   }, [deliveryPartnerId, joinDeliveryRoomIfPossible, recoverDeliveryState]);
 
+  useEffect(() => {
+    const handleFcmPopup = (event) => {
+      const payload = event.detail;
+      if (!payload) return;
+      const orderData = payload;
+      
+      // Normalize data for return orders vs normal orders
+      const isReturn = orderData.type === 'RETURN_PICKUP';
+      const normalizedData = isReturn ? { ...orderData, type: 'RETURN_PICKUP' } : orderData;
+      
+      debugLog('Received FCM popup trigger event', normalizedData);
+      setNewOrder(normalizedData);
+      handleIncomingOrderAlert(normalizedData);
+    };
+
+    window.addEventListener('fcm-delivery-popup', handleFcmPopup);
+    return () => window.removeEventListener('fcm-delivery-popup', handleFcmPopup);
+  }, [handleIncomingOrderAlert]);
+
   // Helper functions
   const clearNewOrder = () => {
     stopAlertLoop();
