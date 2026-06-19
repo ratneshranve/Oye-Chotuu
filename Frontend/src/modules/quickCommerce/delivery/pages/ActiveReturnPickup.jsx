@@ -4,7 +4,7 @@ import { Loader2, Package, MapPin, CheckCircle, Upload, ArrowRight, ArrowLeft, X
 import { toast } from "sonner";
 import { convertToWebP } from "../../../../shared/utils/imageUploadUtils.js";
 import { ImageSourcePicker } from "@food/components/ImageSourcePicker";
-import axiosInstance from "@core/api/axios";
+import apiClient from "../../../../services/api/axios";
 
 const formatAddress = (addr) => {
   if (!addr) return '';
@@ -43,7 +43,7 @@ const ActiveReturnPickup = () => {
 
   const fetchActivePickup = async () => {
     try {
-      const response = await axiosInstance.get('/quick-commerce/delivery/returns/active');
+      const response = await apiClient.get('/quick-commerce/delivery/returns/active', { contextModule: 'delivery' });
       const data = response.data || {};
       if (data.success) {
         const found = data.activePickups?.find(p => p._id === id);
@@ -92,7 +92,7 @@ const ActiveReturnPickup = () => {
 
     setActionLoading(true);
     try {
-      const response = await axiosInstance.post(`/quick-commerce/delivery/returns/${id}/confirm-pickup`, { otp, pickupImage });
+      const response = await apiClient.post(`/quick-commerce/delivery/returns/${id}/confirm-pickup`, { otp, pickupImage }, { contextModule: 'delivery' });
       const data = response.data || {};
       if (data.success) {
         toast.success("Pickup confirmed!");
@@ -352,7 +352,7 @@ const ActiveReturnPickup = () => {
               onClick={async () => {
                 setActionLoading(true);
                 try {
-                  const response = await axiosInstance.put(`/quick-commerce/delivery/returns/${id}/status`, { status: "RETURN_RECEIVED_BY_SELLER" });
+                  const response = await apiClient.put(`/quick-commerce/delivery/returns/${id}/status`, { status: "RETURN_RECEIVED_BY_SELLER" }, { contextModule: 'delivery' });
                   const data = response.data || {};
                   if (data.success) {
                     toast.success("Status manually updated to RETURN_RECEIVED_BY_SELLER");

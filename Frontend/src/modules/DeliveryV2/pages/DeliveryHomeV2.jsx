@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import apiClient from '../../../services/api/axios';
 import { useDeliveryStore } from '@/modules/DeliveryV2/store/useDeliveryStore';
 import { useProximityCheck } from '@/modules/DeliveryV2/hooks/useProximityCheck';
 import { useOrderManager } from '@/modules/DeliveryV2/hooks/useOrderManager';
@@ -102,11 +103,8 @@ export default function DeliveryHomeV2({ tab = 'feed' }) {
       if (!isOnline) return;
       const fetchActiveReturn = async () => {
         try {
-          const token = localStorage.getItem("delivery_accessToken") || localStorage.getItem("token") || "";
-          const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/quick-commerce/delivery/returns/active`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-          });
-          const data = await response.json();
+          const response = await apiClient.get('/quick-commerce/delivery/returns/active', { contextModule: 'delivery' });
+          const data = response.data || {};
           if (data.success && data.activePickups && data.activePickups.length > 0) {
             const ret = data.activePickups[0];
             setActiveReturn(ret);

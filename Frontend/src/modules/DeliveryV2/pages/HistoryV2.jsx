@@ -6,6 +6,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { deliveryAPI } from '@food/api';
 import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 import useDeliveryBackNavigation from '../hooks/useDeliveryBackNavigation';
 
 /**
@@ -15,6 +16,7 @@ import useDeliveryBackNavigation from '../hooks/useDeliveryBackNavigation';
  * Font: Poppins
  */
 export const HistoryV2 = () => {
+  const navigate = useNavigate();
   const goBack = useDeliveryBackNavigation();
   const [activeTab, setActiveTab] = useState("daily");
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -112,6 +114,22 @@ export const HistoryV2 = () => {
     const name = first.name || first.itemName || 'Item';
     return `${qty}x ${name}${items.length > 1 ? ` +${items.length - 1} more` : ''}`;
   }
+
+  const handleTripClick = (trip, isPending) => {
+    if (!isPending) return;
+
+    const isReturn = 
+        String(trip.type || trip.orderType || '').toUpperCase() === 'RETURN_PICKUP' || 
+        String(trip.orderId || '').includes('RET') || 
+        String(trip.restaurantName || trip.restaurant || '').includes('[Return]');
+
+    if (isReturn) {
+        navigate(`/food/delivery/quick-commerce/returns/${trip._id || trip.orderMongoId || trip.id}/active`);
+    } else {
+        // Redirect to feed for normal active orders
+        navigate('/food/delivery/feed');
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white font-poppins pb-32">
@@ -229,7 +247,11 @@ export const HistoryV2 = () => {
                    const isCOD = (trip.paymentMethod || '').toLowerCase() === 'cash' || (trip.paymentMethod || '').toLowerCase() === 'cod';
 
                    return (
-                      <div key={trip.orderId || idx} className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm active:scale-[0.99] transition-all">
+                      <div 
+                         key={trip.orderId || idx} 
+                         onClick={() => handleTripClick(trip, isPending)}
+                         className={`bg-white rounded-2xl p-5 border border-gray-100 shadow-sm active:scale-[0.99] transition-all ${isPending ? 'cursor-pointer hover:border-[#10B981]/30 hover:shadow-md' : ''}`}
+                      >
                          <div className="flex justify-between items-start mb-2">
                              <div>
                                 <h4 className="text-base font-bold text-gray-950">{trip.orderId || 'ORDER-ID'}</h4>
