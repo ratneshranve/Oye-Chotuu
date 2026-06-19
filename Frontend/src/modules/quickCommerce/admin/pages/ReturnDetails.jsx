@@ -23,13 +23,6 @@ const ReturnDetails = () => {
 
   useEffect(() => {
     fetchDetails();
-    
-    // Auto-refresh every 5 seconds to detect delivery partner acceptance
-    const interval = setInterval(() => {
-      fetchDetails(true);
-    }, 5000);
-    
-    return () => clearInterval(interval);
   }, [id]);
 
   useEffect(() => {
@@ -38,7 +31,7 @@ const ReturnDetails = () => {
     }
   }, [returnReq]);
 
-  const fetchDetails = async (silent = false) => {
+  const fetchDetails = async () => {
     try {
       // In a real app we'd have a GET /admin/returns/:id
       // For now we fetch all and filter
@@ -48,14 +41,14 @@ const ReturnDetails = () => {
         const found = data.returns?.find(r => r._id === id);
         if (found) {
           setReturnReq(found);
-        } else if (!silent) {
+        } else {
           toast.error("Return request not found");
         }
       }
     } catch (error) {
-      if (!silent) toast.error("Error loading return details");
+      toast.error("Error loading return details");
     } finally {
-      if (!silent) setLoading(false);
+      setLoading(false);
     }
   };
 
