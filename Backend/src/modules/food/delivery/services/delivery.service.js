@@ -626,6 +626,13 @@ const toTripDto = (order) => {
         order?.restaurantId?.restaurantName ||
         order?.restaurantName ||
         order?.restaurant?.restaurantName ||
+        order?.sellerId?.shopName ||
+        order?.sellerId?.name ||
+        order?.seller?.shopName ||
+        order?.seller?.name ||
+        order?.storeName ||
+        order?.pickupPoints?.[0]?.sourceName ||
+        order?.items?.[0]?.sourceName ||
         '';
 
     const paymentMethod = order?.payment?.method || order?.paymentMethod || '';

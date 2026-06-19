@@ -23,6 +23,13 @@ const ReturnDetails = () => {
 
   useEffect(() => {
     fetchDetails();
+    
+    // Auto-refresh every 5 seconds to detect delivery partner acceptance
+    const interval = setInterval(() => {
+      fetchDetails(true);
+    }, 5000);
+    
+    return () => clearInterval(interval);
   }, [id]);
 
   useEffect(() => {
@@ -31,7 +38,7 @@ const ReturnDetails = () => {
     }
   }, [returnReq]);
 
-  const fetchDetails = async () => {
+  const fetchDetails = async (silent = false) => {
     try {
       // In a real app we'd have a GET /admin/returns/:id
       // For now we fetch all and filter
@@ -41,14 +48,14 @@ const ReturnDetails = () => {
         const found = data.returns?.find(r => r._id === id);
         if (found) {
           setReturnReq(found);
-        } else {
+        } else if (!silent) {
           toast.error("Return request not found");
         }
       }
     } catch (error) {
-      toast.error("Error loading return details");
+      if (!silent) toast.error("Error loading return details");
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   };
 
@@ -171,17 +178,16 @@ const ReturnDetails = () => {
 
               {/* Order Items */}
               <div className="mt-4">
-                <span className="text-gray-500 text-xs font-semibold block mb-2">Items in this Order:</span>
+                <span className="text-gray-500 text-xs font-semibold block mb-2">Returned Item from Original Order:</span>
                 <div className="border border-gray-100 dark:border-neutral-700 rounded-lg divide-y divide-gray-100 dark:divide-neutral-700">
-                  {returnReq.orderId.items?.map((item, idx) => {
-                    const isReturnedItem = item.itemId?.toString() === returnReq.productId?._id?.toString() || item.productId?.toString() === returnReq.productId?._id?.toString();
+                  {returnReq.orderId.items?.filter(item => item.itemId?.toString() === returnReq.productId?._id?.toString() || item.productId?.toString() === returnReq.productId?._id?.toString()).map((item, idx) => {
                     return (
-                      <div key={idx} className={`p-3 flex justify-between items-center text-xs ${isReturnedItem ? 'bg-amber-50/50 dark:bg-amber-900/10' : ''}`}>
+                      <div key={idx} className="p-3 flex justify-between items-center text-xs bg-amber-50/50 dark:bg-amber-900/10">
                         <div>
                           <span className="font-medium text-gray-800 dark:text-gray-200">{item.name}</span>
-                          {isReturnedItem && <span className="ml-2 px-1.5 py-0.5 text-[9px] bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 rounded font-semibold">Returning Item</span>}
+                          <span className="ml-2 px-1.5 py-0.5 text-[9px] bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 rounded font-semibold">Returning Item</span>
                         </div>
-                        <span className="text-gray-600 dark:text-gray-400">{item.quantity} x ₹{item.price}</span>
+                        <span className="text-gray-600 dark:text-gray-400">Order Qty: {item.quantity} x ₹{item.price}</span>
                       </div>
                     );
                   })}

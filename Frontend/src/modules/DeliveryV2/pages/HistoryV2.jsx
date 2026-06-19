@@ -255,7 +255,7 @@ export const HistoryV2 = () => {
                          <div className="flex justify-between items-start mb-2">
                              <div>
                                 <h4 className="text-base font-bold text-gray-950">{trip.orderId || 'ORDER-ID'}</h4>
-                                <p className="text-sm font-medium text-gray-500 mt-0.5">{trip.restaurant || trip.restaurantName || 'Sayaji'}</p>
+                                <p className="text-sm font-medium text-gray-500 mt-0.5">{trip.restaurant || trip.restaurantName || 'Store/Restaurant'}</p>
                                 <p className="text-xs text-gray-400 font-medium mt-0.5 line-clamp-1">{extractItems(trip)}</p>
                              </div>
                              <span className={`text-sm font-bold ${isCompleted ? 'text-[#10B981]' : isCancelled ? 'text-red-500' : 'text-orange-500'}`}>
