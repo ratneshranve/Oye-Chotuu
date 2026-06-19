@@ -10,18 +10,22 @@ import { notifyOwnersSafely } from '../../../../core/notifications/firebase.serv
 import { FoodAdmin } from '../../../../core/admin/admin.model.js';
 import { getIO, rooms } from '../../../../config/socket.js';
 
+import { Seller } from '../../../quick-commerce/seller/models/seller.model.js';
+
 const TARGET_TYPE_MAP = {
     ALL: 'ALL',
     USER: 'USER',
     RESTAURANT: 'RESTAURANT',
     DELIVERY: 'DELIVERY',
+    SELLER: 'SELLER',
     CUSTOM: 'CUSTOM'
 };
 
 const OWNER_LABEL_MAP = {
     USER: 'Users',
     RESTAURANT: 'Restaurants',
-    DELIVERY_PARTNER: 'Delivery Partners'
+    DELIVERY_PARTNER: 'Delivery Partners',
+    SELLER: 'Vendors'
 };
 
 const toObjectId = (value, fieldName) => {
@@ -51,7 +55,8 @@ const normalizeTargetType = (value) => {
 const ownerModelMap = {
     USER: FoodUser,
     RESTAURANT: FoodRestaurant,
-    DELIVERY_PARTNER: FoodDeliveryPartner
+    DELIVERY_PARTNER: FoodDeliveryPartner,
+    SELLER: Seller
 };
 
 const buildUserLabel = (doc) => ({
@@ -66,6 +71,11 @@ const buildRestaurantLabel = (doc) => ({
 
 const buildDeliveryLabel = (doc) => ({
     label: String(doc?.name || doc?.phone || 'Delivery Partner').trim(),
+    subLabel: [doc?.phone, doc?.email].filter(Boolean).join(' • ')
+});
+
+const buildSellerLabel = (doc) => ({
+    label: String(doc?.shopName || doc?.name || 'Vendor').trim(),
     subLabel: [doc?.phone, doc?.email].filter(Boolean).join(' • ')
 });
 
@@ -87,6 +97,12 @@ const modelConfigMap = {
         query: { status: 'approved' },
         select: '_id name phone email',
         buildLabel: buildDeliveryLabel
+    },
+    SELLER: {
+        model: Seller,
+        query: { approvalStatus: 'approved' },
+        select: '_id shopName name phone email',
+        buildLabel: buildSellerLabel
     }
 };
 
@@ -137,17 +153,19 @@ const resolveCustomTargets = async ({ targets = [], targetIds = [] } = {}) => {
 
 const resolveTargets = async ({ targetType, targetIds = [], targets = [] } = {}) => {
     if (targetType === 'ALL') {
-        const [users, restaurants, deliveryPartners] = await Promise.all([
+        const [users, restaurants, deliveryPartners, sellers] = await Promise.all([
             loadTargetsByOwnerType('USER'),
             loadTargetsByOwnerType('RESTAURANT'),
-            loadTargetsByOwnerType('DELIVERY_PARTNER')
+            loadTargetsByOwnerType('DELIVERY_PARTNER'),
+            loadTargetsByOwnerType('SELLER')
         ]);
-        return [...users, ...restaurants, ...deliveryPartners];
+        return [...users, ...restaurants, ...deliveryPartners, ...sellers];
     }
 
     if (targetType === 'USER') return loadTargetsByOwnerType('USER');
     if (targetType === 'RESTAURANT') return loadTargetsByOwnerType('RESTAURANT');
     if (targetType === 'DELIVERY') return loadTargetsByOwnerType('DELIVERY_PARTNER');
+    if (targetType === 'SELLER') return loadTargetsByOwnerType('SELLER');
     if (targetType === 'CUSTOM') return resolveCustomTargets({ targets, targetIds });
 
     throw new ValidationError('Unsupported targetType');
@@ -193,6 +211,9 @@ const emitRealtimeNotifications = (targets = [], broadcast) => {
         }
         if (target.ownerType === 'DELIVERY_PARTNER') {
             io.to(rooms.delivery(ownerId)).emit('admin_notification', payload);
+        }
+        if (target.ownerType === 'SELLER') {
+            io.to(rooms.seller(ownerId)).emit('admin_notification', payload);
         }
     }
 };

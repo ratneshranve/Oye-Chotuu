@@ -598,6 +598,11 @@ export const adminAPI = {
   /** Customers (admin) */
   getCustomers: (params = {}) =>
     apiClient.get("/food/admin/customers", { params, contextModule: "admin" }),
+  getSellers: (params = {}) =>
+    apiClient.get("/quick-commerce/admin/seller-requests", {
+      params: { status: "approved", ...params },
+      contextModule: "admin",
+    }),
   getCustomerById: (id) =>
     apiClient.get(`/food/admin/customers/${String(id)}`, {
       contextModule: "admin",

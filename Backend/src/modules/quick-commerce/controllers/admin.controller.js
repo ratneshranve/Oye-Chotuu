@@ -1185,6 +1185,24 @@ export const approveAdminSellerRequest = async (req, res) => {
   seller.approvalNotes = String(req.body?.approvalNotes || '').trim();
   await seller.save();
 
+  try {
+      const { notifyOwnerSafely } = await import('../../../core/notifications/firebase.service.js');
+      await notifyOwnerSafely(
+          { ownerType: 'SELLER', ownerId: seller._id },
+          {
+              title: 'Congratulations! 🎉',
+              body: `Your vendor account "${seller.shopName || seller.name}" has been verified. You can now start receiving orders!`,
+              image: 'https://i.ibb.co/3m2Yh7r/Appzeto-Brand-Image.png',
+              data: {
+                  type: 'seller_approved',
+                  sellerId: String(seller._id)
+              }
+          }
+      );
+  } catch (e) {
+      console.error('Failed to send vendor verification notification:', e);
+  }
+
   return res.json({
     success: true,
     message: 'Seller approved successfully',

@@ -6,6 +6,7 @@ const TARGET_OPTIONS = [
   { value: "ALL", label: "All" },
   { value: "USER", label: "Users" },
   { value: "RESTAURANT", label: "Restaurants" },
+  { value: "SELLER", label: "Vendors" },
   { value: "DELIVERY", label: "Delivery Partners" },
   { value: "CUSTOM", label: "Particular Persons" },
 ];
@@ -72,10 +73,11 @@ export default function NotificationBroadcast() {
   const loadRecipients = async () => {
     try {
       setRecipientLoading(true);
-      const [customersRes, restaurantsRes, deliveryRes] = await Promise.all([
+      const [customersRes, restaurantsRes, deliveryRes, sellersRes] = await Promise.all([
         adminAPI.getCustomers({ page: 1, limit: 500 }),
         adminAPI.getRestaurants({ page: 1, limit: 500 }),
         adminAPI.getDeliveryPartners({ page: 1, limit: 500 }),
+        adminAPI.getSellers({ page: 1, limit: 500 }),
       ]);
 
       const customers = normalizeRecipients(customersRes, "USER", (item, ownerType) => ({
@@ -99,7 +101,14 @@ export default function NotificationBroadcast() {
         subLabel: [item?.phone, item?.email].filter(Boolean).join(" • "),
       }));
 
-      setAllRecipients([...customers, ...restaurants, ...deliveryPartners]);
+      const sellers = normalizeRecipients(sellersRes, "SELLER", (item, ownerType) => ({
+        ownerType,
+        ownerId: String(item?._id || item?.id || ""),
+        label: String(item?.shopName || item?.name || "Vendor").trim(),
+        subLabel: [item?.phone, item?.email].filter(Boolean).join(" • "),
+      }));
+
+      setAllRecipients([...customers, ...restaurants, ...deliveryPartners, ...sellers]);
     } catch {
       setAllRecipients([]);
     } finally {

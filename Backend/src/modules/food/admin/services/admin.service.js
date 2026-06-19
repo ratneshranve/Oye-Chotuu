@@ -3440,7 +3440,7 @@ export async function approveRestaurant(id) {
                 [{ ownerType: 'RESTAURANT', ownerId: updated._id }],
                 {
                     title: 'Congratulations! 🎉',
-                    body: `Your restaurant "${updated.restaurantName}" has been approved. You can now start receiving orders!`,
+                    body: `Your restaurant account "${updated.restaurantName}" has been verified. You can now start receiving orders!`,
                     image: updated.profileImage || 'https://i.ibb.co/3m2Yh7r/Appzeto-Brand-Image.png',
                     data: {
                         type: 'restaurant_approved',
