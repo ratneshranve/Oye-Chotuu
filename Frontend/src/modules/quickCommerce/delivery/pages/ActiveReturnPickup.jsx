@@ -189,10 +189,12 @@ const ActiveReturnPickup = () => {
                 <p className="text-sm text-gray-500 mt-1">Phone: {returnReq.userId?.phone || "N/A"}</p>
               </div>
             </div>
-            <a 
-              href={getCustomerMapUrl()}
-              target="_blank" 
-              rel="noopener noreferrer"
+            <button 
+              onClick={() => {
+                const url = getCustomerMapUrl();
+                if (url) window.open(url, "_blank");
+                else toast.error("Customer location not available");
+              }}
               className="p-2.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors shrink-0 flex items-center justify-center border border-blue-100 active:scale-95"
               title="Open Customer Location in Google Maps"
             >
@@ -200,7 +202,7 @@ const ActiveReturnPickup = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-            </a>
+            </button>
           </div>
         </div>
 
@@ -298,7 +300,7 @@ const ActiveReturnPickup = () => {
               onClick={async () => {
                 setActionLoading(true);
                 try {
-                  const response = await axiosInstance.put(`/quick-commerce/delivery/returns/${id}/status`, { status: "PICKED_UP" });
+                  const response = await apiClient.put(`/quick-commerce/delivery/returns/${id}/status`, { status: "PICKED_UP" }, { contextModule: 'delivery' });
                   const data = response.data || {};
                   if (data.success) {
                     toast.success("Status manually updated to PICKED_UP");
@@ -344,10 +346,8 @@ const ActiveReturnPickup = () => {
                   <p className="text-sm text-gray-500 mt-1">Phone: {returnReq.sellerId?.phone || "N/A"}</p>
                 </div>
               </div>
-              <a 
-                href={getSellerMapUrl()}
-                target="_blank" 
-                rel="noopener noreferrer"
+              <button 
+                onClick={handleNavigateToDrop}
                 className="p-2.5 bg-emerald-50 text-emerald-600 rounded-lg hover:bg-emerald-100 transition-colors shrink-0 flex items-center justify-center border border-emerald-100 active:scale-95"
                 title="Open Seller Location in Google Maps"
               >
@@ -355,7 +355,7 @@ const ActiveReturnPickup = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-              </a>
+              </button>
             </div>
 
             <button

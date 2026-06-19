@@ -111,6 +111,20 @@ export const registerDeliveryPartner = async (payload, files) => {
                 id: String(partner._id)
             }
         });
+
+        const { getIO, rooms } = await import('../../../../config/socket.js');
+        const { FoodAdmin } = await import('../../../../core/admin/admin.model.js');
+        const io = getIO();
+        if (io) {
+            const admins = await FoodAdmin.find({ isActive: true }).select('_id').lean();
+            admins.forEach((admin) => {
+                io.to(rooms.admin(admin._id)).emit('admin_notification', {
+                    type: 'delivery_partner_registration',
+                    id: String(partner._id),
+                    name: partner.name
+                });
+            });
+        }
     } catch (e) {
         // eslint-disable-next-line no-console
         console.error('Failed to notify admins of new delivery partner registration:', e);

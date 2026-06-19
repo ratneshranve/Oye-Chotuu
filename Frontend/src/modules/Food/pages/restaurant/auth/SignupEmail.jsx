@@ -42,6 +42,11 @@ export default function RestaurantSignupEmail() {
       return
     }
 
+    if (!/^(?!.*\.comm+$)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/i.test(formData.email.trim())) {
+      setError("Please enter a valid email address (e.g., name@gmail.com)")
+      return
+    }
+
     if (!formData.password) {
       setError("Password is required")
       return

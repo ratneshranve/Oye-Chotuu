@@ -413,12 +413,12 @@ export default function SellerOnboarding() {
       return;
     }
 
-    if (form.email && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(form.email)) {
+    if (form.email && !/^(?!.*\.comm+$)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/i.test(form.email)) {
       toast.error("Enter a valid email address (e.g. name@gmail.com)");
       return;
     }
 
-    if (form.supportEmail && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(form.supportEmail)) {
+    if (form.supportEmail && !/^(?!.*\.comm+$)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/i.test(form.supportEmail)) {
       toast.error("Enter a valid support email address (e.g. support@example.com)");
       return;
     }
@@ -630,13 +630,13 @@ export default function SellerOnboarding() {
                   <label className="text-xs font-bold text-slate-500">Email <span className="text-red-500">*</span></label>
                   <input
                     required
-                    className={`w-full rounded-2xl border px-4 py-3 font-semibold outline-none focus:border-slate-900 ${form.email && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(form.email) ? "border-red-400 bg-red-50" : "border-slate-200"}`}
+                    className={`w-full rounded-2xl border px-4 py-3 font-semibold outline-none focus:border-slate-900 ${form.email && !/^(?!.*\.comm+$)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/i.test(form.email) ? "border-red-400 bg-red-50" : "border-slate-200"}`}
                     placeholder="Email (e.g. name@domain.com)"
                     type="email"
                     value={form.email}
                     onChange={(e) => updateField("email", e.target.value)}
                   />
-                  {form.email && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(form.email) && (
+                  {form.email && !/^(?!.*\.comm+$)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/i.test(form.email) && (
                     <p className="text-xs font-semibold text-red-500 px-1">Enter a valid email address (e.g. name@domain.com)</p>
                   )}
                 </div>
@@ -673,13 +673,13 @@ export default function SellerOnboarding() {
                   <label className="text-xs font-bold text-slate-500">Support email <span className="text-red-500">*</span></label>
                   <input
                     required
-                    className={`w-full rounded-2xl border px-4 py-3 font-semibold outline-none focus:border-slate-900 ${form.supportEmail && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(form.supportEmail) ? "border-red-400 bg-red-50" : "border-slate-200"}`}
+                    className={`w-full rounded-2xl border px-4 py-3 font-semibold outline-none focus:border-slate-900 ${form.supportEmail && !/^(?!.*\.comm+$)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/i.test(form.supportEmail) ? "border-red-400 bg-red-50" : "border-slate-200"}`}
                     placeholder="Support email (e.g. support@example.com)"
                     type="email"
                     value={form.supportEmail}
                     onChange={(e) => updateField("supportEmail", e.target.value)}
                   />
-                  {form.supportEmail && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(form.supportEmail) && (
+                  {form.supportEmail && !/^(?!.*\.comm+$)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/i.test(form.supportEmail) && (
                     <p className="text-xs font-semibold text-red-500 px-1">Enter a valid email address (e.g. support@example.com)</p>
                   )}
                 </div>
