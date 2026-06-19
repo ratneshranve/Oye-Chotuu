@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { convertToWebP } from "../../../../shared/utils/imageUploadUtils.js";
 import { ImageSourcePicker } from "@food/components/ImageSourcePicker";
 import apiClient from "../../../../services/api/axios";
+import { OrderSummaryModal } from "@/modules/DeliveryV2/components/modals/OrderSummaryModal";
 
 const formatAddress = (addr) => {
   if (!addr) return '';
@@ -36,6 +37,7 @@ const ActiveReturnPickup = () => {
   const [pickupImage, setPickupImage] = useState("");
   const [showPicker, setShowPicker] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [showSummary, setShowSummary] = useState(false);
 
   useEffect(() => {
     fetchActivePickup();
@@ -111,10 +113,31 @@ const ActiveReturnPickup = () => {
     }
   };
 
-  const handleNavigateToDrop = () => {
+  const getCustomerMapUrl = () => {
+    const custCoords = returnReq?.orderId?.deliveryAddress?.location?.coordinates || returnReq?.orderId?.deliveryAddress?.coordinates;
+    if (custCoords && custCoords.length === 2) {
+      // Assuming GeoJSON [lng, lat]
+      return `https://www.google.com/maps/dir/?api=1&destination=${custCoords[1]},${custCoords[0]}`;
+    }
+    const customerAddressResolved = formatAddress(returnReq?.orderId?.deliveryAddress || returnReq?.userId?.address) || "Customer Address";
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(customerAddressResolved)}`;
+  };
+
+  const getSellerMapUrl = () => {
+    const sellCoords = returnReq?.sellerId?.location?.coordinates;
+    if (sellCoords && sellCoords.length === 2) {
+      return `https://www.google.com/maps/dir/?api=1&destination=${sellCoords[1]},${sellCoords[0]}`;
+    }
     const sellerAddress = returnReq?.sellerId?.location?.address || returnReq?.sellerId?.location?.formattedAddress || returnReq?.sellerId?.address;
     if (sellerAddress) {
-      const mapsUrl = `https://www.google.com/maps?q=${encodeURIComponent(formatAddress(sellerAddress))}`;
+      return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(formatAddress(sellerAddress))}`;
+    }
+    return '';
+  };
+
+  const handleNavigateToDrop = () => {
+    const mapsUrl = getSellerMapUrl();
+    if (mapsUrl) {
       window.open(mapsUrl, "_blank");
       toast.success("Opening Google Maps for seller location...");
     } else {
@@ -167,7 +190,7 @@ const ActiveReturnPickup = () => {
               </div>
             </div>
             <a 
-              href={`https://www.google.com/maps?q=${encodeURIComponent(customerAddressResolved)}`}
+              href={getCustomerMapUrl()}
               target="_blank" 
               rel="noopener noreferrer"
               className="p-2.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors shrink-0 flex items-center justify-center border border-blue-100 active:scale-95"
@@ -322,7 +345,7 @@ const ActiveReturnPickup = () => {
                 </div>
               </div>
               <a 
-                href={`https://www.google.com/maps?q=${encodeURIComponent(sellerAddressResolved)}`}
+                href={getSellerMapUrl()}
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="p-2.5 bg-emerald-50 text-emerald-600 rounded-lg hover:bg-emerald-100 transition-colors shrink-0 flex items-center justify-center border border-emerald-100 active:scale-95"
@@ -361,6 +384,7 @@ const ActiveReturnPickup = () => {
                     } else {
                       setReturnReq({ ...returnReq, status: "RETURN_RECEIVED_BY_SELLER" });
                     }
+                    setShowSummary(true);
                   } else {
                     toast.error(data.message || "Failed to update status");
                   }
@@ -421,6 +445,16 @@ const ActiveReturnPickup = () => {
             onClick={e => e.stopPropagation()} 
           />
         </div>
+      )}
+
+      {showSummary && (
+        <OrderSummaryModal
+          order={{
+            orderId: displayOrderId || returnReq._id,
+            earnings: returnReq.returnPickupEarning || 0
+          }}
+          onDone={() => navigate('/food/delivery/feed')}
+        />
       )}
     </div>
   );
