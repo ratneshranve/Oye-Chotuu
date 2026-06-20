@@ -47,6 +47,12 @@ export default function Checkout() {
       return
     }
 
+    const hasLocation = selectedAddress.latitude != null || selectedAddress.lat != null || selectedAddress.location != null;
+    if (!hasLocation) {
+      alert("Please provide an accurate location (map pin) for the delivery address to proceed.")
+      return
+    }
+
     if (cart.length === 0) {
       alert("Your cart is empty")
       return

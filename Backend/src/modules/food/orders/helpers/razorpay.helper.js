@@ -84,15 +84,29 @@ export async function initiateRazorpayRefund(paymentId, amount) {
     if (!isRazorpayConfigured()) {
         throw new Error('Razorpay is not configured on this server');
     }
-    const instance = getRazorpayInstance();
+    
     try {
-        const refund = await instance.payments.refund(paymentId, {
-            amount: Math.round(Number(amount) * 100), // convert to paise
-            notes: {
-                reason: 'Order cancelled by system flow',
-                at: new Date().toISOString()
-            }
+        const auth = Buffer.from(`${KEY_ID}:${KEY_SECRET}`).toString('base64');
+        const response = await fetch(`https://api.razorpay.com/v1/payments/${paymentId}/refund`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Basic ${auth}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                amount: Math.round(Number(amount) * 100), // convert to paise
+                notes: {
+                    reason: 'Order cancelled by system flow'
+                }
+            })
         });
+
+        const refund = await response.json();
+
+        if (!response.ok) {
+            throw new Error(refund.error?.description || 'Razorpay refund failed');
+        }
+
         return {
             success: true,
             refundId: refund.id,
@@ -100,7 +114,6 @@ export async function initiateRazorpayRefund(paymentId, amount) {
             raw: refund
         };
     } catch (err) {
-        // Log locally but pass the error to the service to handle status update
         console.error(`Razorpay Refund API Failure [PaymentId: ${paymentId}]:`, err?.message || err);
         return {
             success: false,

@@ -212,8 +212,8 @@ const SectionItem = ({ icon: Icon, iconNode, title, subtitle, onClick, showArrow
       )}
     </div>
     <div className="flex-1 min-w-0">
-      <p className="font-medium text-gray-900 dark:text-white truncate">{title}</p>
-      {subtitle && <p className="text-sm text-gray-500 dark:text-gray-400 truncate">{subtitle}</p>}
+      <p className="font-medium text-gray-900 dark:text-white whitespace-normal break-words">{title}</p>
+      {subtitle && <p className="text-sm text-gray-500 dark:text-gray-400 whitespace-normal break-words">{subtitle}</p>}
     </div>
     {rightContent || (showArrow && <ChevronRight className="w-5 h-5 text-gray-400 dark:text-gray-500 flex-shrink-0" />)}
   </motion.button>
@@ -1177,6 +1177,11 @@ export default function OrderTracking() {
       order?.restaurant?.phone ||
       order?.restaurant?.ownerPhone ||
       order?.restaurantId?.location?.phone ||
+      order?.storeId?.phone ||
+      order?.pickupSources?.[0]?.phone ||
+      order?.items?.[0]?.restaurant?.phone ||
+      order?.items?.[0]?.restaurant?.ownerPhone ||
+      order?.items?.[0]?.restaurantId?.phone ||
       '';
 
     const cleanPhone = String(rawPhone).replace(/[^\d+]/g, '');
@@ -2170,13 +2175,7 @@ export default function OrderTracking() {
             </motion.button>
           </Link>
           <h2 className="font-semibold text-lg">{order.restaurant}</h2>
-          <motion.button
-            className="w-10 h-10 flex items-center justify-center cursor-pointer"
-            whileTap={{ scale: 0.9 }}
-            onClick={handleShare}
-          >
-            <Share2 className="w-5 h-5" />
-          </motion.button>
+          <div className="w-10 h-10"></div>
         </div>
 
         {/* Status section - hidden for success milestones as requested */}
@@ -2419,7 +2418,7 @@ export default function OrderTracking() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <p className="font-semibold text-gray-900 dark:text-white truncate">
+                    <p className="font-semibold text-gray-900 dark:text-white whitespace-normal break-words">
                       {partner?.name || 'Delivery Partner'}
                     </p>
                     {hasMultipleDeliveryPartners && (
@@ -2428,7 +2427,7 @@ export default function OrderTracking() {
                       </span>
                     )}
                   </div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                  <p className="text-sm text-gray-500 dark:text-gray-400 whitespace-normal break-words">
                     {partner?.sourceName
                       ? `${partner.label} for ${partner.sourceName}`
                       : partner?.statusText || 'Your delivery partner is arriving'}
@@ -2629,11 +2628,15 @@ export default function OrderTracking() {
                     className="rounded-2xl border border-gray-100 dark:border-neutral-700 bg-gray-50/80 dark:bg-neutral-900/50 p-4"
                   >
                     <div className="flex items-start gap-3">
-                      <div className={`inline-flex h-12 w-12 items-center justify-center rounded-full ${isQuick ? 'bg-sky-100 dark:bg-sky-900/40' : 'bg-red-100 dark:bg-red-900/40'} flex-shrink-0`}>
-                        <div
-                          dangerouslySetInnerHTML={{ __html: SAFE_RESTAURANT_PIN }}
-                          className="w-7 h-7 [&_svg]:w-full [&_svg]:h-full [&_svg]:block"
-                        />
+                      <div className={`inline-flex h-12 w-12 overflow-hidden items-center justify-center rounded-full ${isQuick ? 'bg-sky-100 dark:bg-sky-900/40' : 'bg-red-100 dark:bg-red-900/40'} flex-shrink-0 border border-gray-100 dark:border-neutral-700`}>
+                        {order?.restaurantImage || source?.avatar ? (
+                          <img src={source?.avatar || order?.restaurantImage} alt={source.name || "Restaurant"} className="w-full h-full object-cover" />
+                        ) : (
+                          <div
+                            dangerouslySetInnerHTML={{ __html: SAFE_RESTAURANT_PIN }}
+                            className="w-7 h-7 [&_svg]:w-full [&_svg]:h-full [&_svg]:block"
+                          />
+                        )}
                       </div>
                       <div className="min-w-0 flex-1">
                         <span className={`inline-flex rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${badgeClasses}`}>
@@ -2664,7 +2667,6 @@ export default function OrderTracking() {
             onClick={() => setShowOrderDetails(true)}
           >
             <div className="flex items-start gap-3">
-              <Receipt className="w-5 h-5 text-gray-500 dark:text-gray-400 mt-0.5" />
               <div className="flex-1">
                 <div className="mt-2 space-y-1">
                   {order?.items?.map((item, index) => (

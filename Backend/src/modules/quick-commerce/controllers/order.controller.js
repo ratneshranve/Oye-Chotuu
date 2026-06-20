@@ -904,7 +904,7 @@ export const verifyPayment = async (req, res) => {
     if (!order.payment) order.payment = {};
     if (!order.payment.razorpay) order.payment.razorpay = {};
     
-    order.payment.status = isAuthorized ? 'completed' : 'failed';
+    order.payment.status = isAuthorized ? 'paid' : 'failed';
     order.payment.razorpay.paymentId = razorpayPaymentId;
     order.payment.razorpay.signature = razorpaySignature;
     order.payment.razorpay.status = isAuthorized ? 'captured' : 'failed';
@@ -916,7 +916,7 @@ export const verifyPayment = async (req, res) => {
             { orderId: order.orderId },
             { 
               $set: { 
-                'payment.status': 'completed',
+                'payment.status': 'paid',
                 'status': 'pending',
                 'workflowStatus': 'SELLER_PENDING'
               } 

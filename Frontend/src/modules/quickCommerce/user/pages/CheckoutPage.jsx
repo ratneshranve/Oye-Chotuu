@@ -1632,6 +1632,20 @@ const CheckoutPage = () => {
         return;
       }
 
+      const addrLoc = currentAddress?.location;
+      const hasAddrLoc =
+        addrLoc &&
+        typeof addrLoc.lat === "number" &&
+        typeof addrLoc.lng === "number" &&
+        Number.isFinite(addrLoc.lat) &&
+        Number.isFinite(addrLoc.lng);
+
+      if (!hasAddrLoc) {
+        showToast("Please provide an accurate location (map pin) for the delivery address to proceed.", "error");
+        setIsPlacingOrder(false);
+        return;
+      }
+
       const orderData = {
         items: getCheckoutCartItemsForSync(),
         address: buildAddressForOrder(),
