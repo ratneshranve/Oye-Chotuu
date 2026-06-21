@@ -472,9 +472,7 @@ export default function RestaurantStatus() {
       <Dialog open={showOutletClosedDialog} onOpenChange={setShowOutletClosedDialog}>
         <DialogContent className="sm:max-w-md p-4 w-[90%] gap-2 flex flex-col">
           <DialogHeader className="text-center">
-            <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-orange-100">
-              <span className="text-3xl">??</span>
-            </div>
+
             <DialogTitle className="text-lg font-semibold text-gray-900 text-center">
               Outlet Timings Closed
             </DialogTitle>
@@ -501,9 +499,7 @@ export default function RestaurantStatus() {
       <Dialog open={showOutsideTimingsDialog} onOpenChange={setShowOutsideTimingsDialog}>
         <DialogContent className="sm:max-w-md p-4 w-[90%] gap-2 flex flex-col">
           <DialogHeader className="text-center">
-            <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-orange-100">
-              <span className="text-3xl">??</span>
-            </div>
+
             <DialogTitle className="text-lg font-semibold text-gray-900 text-center">
               Outside Delivery Timings
             </DialogTitle>

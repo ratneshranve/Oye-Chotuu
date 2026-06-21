@@ -2201,6 +2201,7 @@ export async function createOrder(userId, dto) {
       },
     ],
     note: dto.note || "",
+    restaurantNote: dto.restaurantNote || "",
     sendCutlery: dto.sendCutlery !== false,
     deliveryFleet:
       orderType === "mixed"

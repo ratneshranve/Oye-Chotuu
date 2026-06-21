@@ -84,6 +84,7 @@ const formatFullAddress = (address) => {
 const RUPEE_SYMBOL = "\u20B9"
 const CART_RECIPIENT_DETAILS_STORAGE_KEY = "food-cart-recipient-details-v1"
 const CART_ORDER_NOTE_STORAGE_KEY = "food-cart-order-note-v1"
+const CART_RESTAURANT_NOTE_STORAGE_KEY = "food-cart-restaurant-note-v1"
 const mapOrderItem = (item) => ({
   itemId: item.itemId || item.id,
   name: item.name,
@@ -148,6 +149,7 @@ export default function Cart() {
   const orderSuccessAudioRef = useRef(null)
   const hasRestoredRecipientRef = useRef(false)
   const hasRestoredNoteRef = useRef(false)
+  const hasRestoredRestaurantNoteRef = useRef(false)
 
   // Defensive check: Ensure CartProvider is available
   let cartContext;
@@ -220,6 +222,29 @@ export default function Cart() {
     try {
       if (typeof window === "undefined") return false
       const raw = window.localStorage.getItem(CART_ORDER_NOTE_STORAGE_KEY)
+      if (!raw) return false
+      const stored = JSON.parse(raw)
+      const storedNote = String(stored?.note || "")
+      return Boolean(stored?.showNoteInput) || storedNote.trim().length > 0
+    } catch {
+      return false
+    }
+  })
+  const [restaurantNote, setRestaurantNote] = useState(() => {
+    try {
+      if (typeof window === "undefined") return ""
+      const raw = window.localStorage.getItem(CART_RESTAURANT_NOTE_STORAGE_KEY)
+      if (!raw) return ""
+      const stored = JSON.parse(raw)
+      return String(stored?.note || "")
+    } catch {
+      return ""
+    }
+  })
+  const [showRestaurantNoteInput, setShowRestaurantNoteInput] = useState(() => {
+    try {
+      if (typeof window === "undefined") return false
+      const raw = window.localStorage.getItem(CART_RESTAURANT_NOTE_STORAGE_KEY)
       if (!raw) return false
       const stored = JSON.parse(raw)
       const storedNote = String(stored?.note || "")
@@ -530,6 +555,7 @@ export default function Cart() {
 
   useEffect(() => {
     hasRestoredNoteRef.current = true
+    hasRestoredRestaurantNoteRef.current = true
   }, [])
 
   useEffect(() => {
@@ -548,6 +574,23 @@ export default function Cart() {
       // Ignore storage errors and keep note flow working.
     }
   }, [note, showNoteInput])
+
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    if (!hasRestoredRestaurantNoteRef.current) return
+
+    try {
+      window.localStorage.setItem(
+        CART_RESTAURANT_NOTE_STORAGE_KEY,
+        JSON.stringify({
+          note: restaurantNote,
+          showNoteInput: showRestaurantNoteInput,
+        })
+      )
+    } catch {
+      // Ignore storage errors and keep note flow working.
+    }
+  }, [restaurantNote, showRestaurantNoteInput])
 
   useEffect(() => {
     if (deliveryAddressMode === "current") {
@@ -1702,6 +1745,7 @@ export default function Cart() {
         restaurantName: finalRestaurantName || undefined,
         pricing: orderPricing,
         note: note || "",
+        restaurantNote: restaurantNote || "",
         sendCutlery: sendCutlery !== false,
         paymentMethod: selectedPaymentMethod,
         // `useZone()` can return `null`. Zod expects string/undefined, not null.
@@ -1742,8 +1786,11 @@ export default function Cart() {
         clearCart()
         setNote("")
         setShowNoteInput(false)
+        setRestaurantNote("")
+        setShowRestaurantNoteInput(false)
         try {
           window.localStorage.removeItem(CART_ORDER_NOTE_STORAGE_KEY)
+          window.localStorage.removeItem(CART_RESTAURANT_NOTE_STORAGE_KEY)
         } catch {
           // ignore
         }
@@ -1761,8 +1808,11 @@ export default function Cart() {
         clearCart()
         setNote("")
         setShowNoteInput(false)
+        setRestaurantNote("")
+        setShowRestaurantNoteInput(false)
         try {
           window.localStorage.removeItem(CART_ORDER_NOTE_STORAGE_KEY)
+          window.localStorage.removeItem(CART_RESTAURANT_NOTE_STORAGE_KEY)
         } catch {
           // ignore
         }
@@ -2250,6 +2300,15 @@ export default function Cart() {
                   </span>
                 </button>
               </div>
+              <div className="bg-white dark:bg-[#1a1a1a] px-4 md:px-6 py-4 rounded-2xl shadow-sm border border-slate-100 dark:border-gray-800 flex flex-col sm:flex-row gap-3">
+                <button
+                  onClick={() => setShowRestaurantNoteInput(!showRestaurantNoteInput)}
+                  className="flex-1 flex items-center gap-2 px-3 md:px-4 py-2 md:py-3 border border-gray-200 dark:border-gray-700 rounded-lg md:rounded-xl text-sm md:text-base text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+                >
+                  <Utensils className="h-4 w-4 md:h-5 md:w-5" />
+                  <span className="truncate">{restaurantNote || "Add cooking instructions for restaurant"}</span>
+                </button>
+              </div>
 
               {/* Note Input */}
               {showNoteInput && (
@@ -2270,6 +2329,30 @@ export default function Cart() {
                     </p>
                     <span className="text-[11px] text-gray-400 dark:text-gray-500 whitespace-nowrap">
                       {note.length}/240
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {/* Restaurant Note Input */}
+              {showRestaurantNoteInput && (
+                <div className="bg-white dark:bg-[#1a1a1a] px-4 md:px-6 py-3 md:py-4 rounded-lg md:rounded-xl border border-slate-100 dark:border-gray-800">
+                  <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">
+                    Restaurant instructions
+                  </p>
+                  <textarea
+                    value={restaurantNote}
+                    onChange={(e) => setRestaurantNote(e.target.value)}
+                    placeholder="Eg. Make it spicy, less oil, etc."
+                    className="w-full border border-gray-200 dark:border-gray-700 rounded-lg md:rounded-xl p-3 md:p-4 text-sm md:text-base resize-none h-20 md:h-24 focus:outline-none focus:border-[#cc2532] dark:focus:border-[#cc2532] bg-white dark:bg-[#0a0a0a] text-gray-900 dark:text-gray-100"
+                    maxLength={240}
+                  />
+                  <div className="mt-2 flex items-center justify-between gap-3">
+                    <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                      This note will be sent directly to the restaurant.
+                    </p>
+                    <span className="text-[11px] text-gray-400 dark:text-gray-500 whitespace-nowrap">
+                      {restaurantNote.length}/240
                     </span>
                   </div>
                 </div>

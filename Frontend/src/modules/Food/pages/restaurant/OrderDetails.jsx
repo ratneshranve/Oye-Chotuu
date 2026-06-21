@@ -229,6 +229,7 @@ export default function OrderDetails() {
             deliveryPartnerId: order.deliveryPartnerId || order.dispatch?.deliveryPartnerId || null,
             dispatchStatus: order.dispatch?.status || null,
             reason: order.cancellationReason || '',
+            restaurantNote: order.restaurantNote || '',
             timeline: [
               { event: 'Order placed', timestamp: new Date(order.createdAt).toLocaleString('en-GB'), status: 'completed' },
               ...(reached.confirmed ? [{ event: 'Order confirmed', timestamp: order.tracking?.confirmed?.timestamp ? new Date(order.tracking.confirmed.timestamp).toLocaleString('en-GB') : '', status: 'completed' }] : []),
@@ -797,6 +798,30 @@ export default function OrderDetails() {
             </div>
           ))}
         </div>
+
+        {/* Restaurant Note Section */}
+        {orderData.restaurantNote && (
+          <div>
+            <h2 className="text-base font-bold text-gray-900 mb-3">Restaurant Note</h2>
+            <div className="bg-orange-50 border border-orange-100 rounded-lg p-4">
+              <div className="flex items-start gap-3">
+                <div className="mt-0.5">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-orange-600">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-sm text-orange-900 font-medium">{orderData.restaurantNote}</p>
+                  <p className="text-xs text-orange-700 mt-1">Special cooking instructions from customer</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Bill Details Section */}
         <div>

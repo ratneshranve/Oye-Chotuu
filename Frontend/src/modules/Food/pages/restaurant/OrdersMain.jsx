@@ -107,6 +107,7 @@ const transformOrderForList = (order) => ({
   ),
   eta: null,
   itemsSummary: buildOrderItemsSummary(order.items),
+  restaurantNote: order.restaurantNote || order.note || null,
   photoUrl: getOrderPreviewItem(order.items)?.image || null,
   photoAlt: getOrderPreviewItem(order.items)?.name || "Order",
   paymentMethod: order.paymentMethod || order.payment?.method || null,
@@ -153,6 +154,7 @@ function CompletedOrders({ onSelectOrder, refreshToken = 0 , searchTerm = "" }) 
             deliveredAt:
               order.deliveredAt || order.updatedAt || order.createdAt,
             itemsSummary: buildOrderItemsSummary(order.items),
+  restaurantNote: order.restaurantNote || order.note || null,
             photoUrl: getOrderPreviewItem(order.items)?.image || null,
             photoAlt: getOrderPreviewItem(order.items)?.name || "Order",
             amount: order.pricing?.total || order.total || 0,
@@ -364,6 +366,7 @@ function CancelledOrders({ onSelectOrder, refreshToken = 0 , searchTerm = "" }) 
             cancellationReason:
               order.cancellationReason || "No reason provided",
             itemsSummary: buildOrderItemsSummary(order.items),
+  restaurantNote: order.restaurantNote || order.note || null,
             photoUrl: getOrderPreviewItem(order.items)?.image || null,
             photoAlt: getOrderPreviewItem(order.items)?.name || "Order",
             amount: order.pricing?.total || order.total || 0,
@@ -2061,6 +2064,15 @@ export default function OrdersMain() {
                 </p>
               </div>
 
+              {selectedOrder.restaurantNote && (
+                <div className="mb-3 bg-orange-50 p-2 rounded-lg border border-orange-100">
+                  <p className="text-[11px] font-medium text-orange-800 mb-0.5">Note from Customer</p>
+                  <p className="text-xs text-orange-900">
+                    {selectedOrder.restaurantNote}
+                  </p>
+                </div>
+              )}
+
               <div className="flex items-center justify-between text-[11px] text-gray-500 mb-4">
                 {/* Hide ETA for ready orders */}
                 {selectedOrder.status !== "ready" && selectedOrder.eta && (
@@ -2116,6 +2128,7 @@ function OrderCard({
   timePlaced,
   eta,
   itemsSummary,
+  restaurantNote,
   paymentMethod,
   photoUrl,
   photoAlt,
@@ -2159,6 +2172,7 @@ function OrderCard({
             timePlaced,
             eta,
             itemsSummary,
+            restaurantNote,
             paymentMethod,
           })
         }
@@ -2331,6 +2345,7 @@ function PreparingOrders({
               initialETA, // Store initial ETA in minutes
               preparingTimestamp, // Store when order started preparing
               itemsSummary: buildOrderItemsSummary(order.items),
+  restaurantNote: order.restaurantNote || order.note || null,
               photoUrl: getOrderPreviewItem(order.items)?.image || null,
               photoAlt: getOrderPreviewItem(order.items)?.name || "Order",
               deliveryPartnerId: order.deliveryPartnerId || null,
@@ -2583,6 +2598,7 @@ function PreparingOrders({
                 timePlaced={order.timePlaced}
                 eta={etaDisplay}
                 itemsSummary={order.itemsSummary}
+                restaurantNote={order.restaurantNote}
                 photoUrl={order.photoUrl}
                 photoAlt={order.photoAlt}
                 paymentMethod={order.paymentMethod}
@@ -2640,6 +2656,7 @@ function ReadyOrders({ onSelectOrder, refreshToken = 0, searchTerm = "" }) {
             }),
             eta: null, // Don't show ETA for ready orders
             itemsSummary: buildOrderItemsSummary(order.items),
+  restaurantNote: order.restaurantNote || order.note || null,
             photoUrl: getOrderPreviewItem(order.items)?.image || null,
             photoAlt: getOrderPreviewItem(order.items)?.name || "Order",
             paymentMethod: order.paymentMethod || order.payment?.method || null,
@@ -2760,6 +2777,7 @@ const OutForDeliveryOrders = ({ onSelectOrder, refreshToken = 0 , searchTerm = "
             }),
             eta: null,
             itemsSummary: buildOrderItemsSummary(order.items),
+  restaurantNote: order.restaurantNote || order.note || null,
             photoUrl: getOrderPreviewItem(order.items)?.image || null,
             photoAlt: getOrderPreviewItem(order.items)?.name || "Order",
             paymentMethod: order.paymentMethod || order.payment?.method || null,
@@ -2874,6 +2892,7 @@ function ScheduledOrders({ onSelectOrder, refreshToken = 0 , searchTerm = "" }) 
             }),
             scheduledAt: order.scheduledAt,
             itemsSummary: buildOrderItemsSummary(order.items),
+  restaurantNote: order.restaurantNote || order.note || null,
             photoUrl: getOrderPreviewItem(order.items)?.image || null,
             photoAlt: getOrderPreviewItem(order.items)?.name || "Order",
             paymentMethod: order.paymentMethod || order.payment?.method || null,

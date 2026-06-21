@@ -108,7 +108,8 @@ export async function getRestaurantFinance(restaurantId, query = {}) {
             commission: tx.amounts?.restaurantCommission || 0,
             paymentMethod: tx.paymentMethod || order?.payment?.method,
             orderStatus: order?.orderStatus || order?.deliveryState?.currentPhase || order?.deliveryState?.status,
-            status: tx.status
+            status: tx.status,
+            itemTotal: Number(order?.pricing?.subtotal || 0)
         };
     });
 
@@ -199,7 +200,8 @@ export async function getRestaurantFinance(restaurantId, query = {}) {
                 commission: tx.amounts?.restaurantCommission || 0,
                 paymentMethod: tx.paymentMethod || order?.payment?.method,
                 orderStatus: order?.orderStatus || order?.deliveryState?.currentPhase || order?.deliveryState?.status,
-                status: tx.status
+                status: tx.status,
+                itemTotal: Number(order?.pricing?.subtotal || 0)
             };
         });
 

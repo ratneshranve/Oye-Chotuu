@@ -107,7 +107,15 @@ export default function BakeryList() {
             distance: distanceStr,
             priceRange: bakery?.priceRange || "$$",
             image: pickRestaurantImage(bakery),
+            isOffline: bakery?.isAcceptingOrders === false,
           }
+        })
+
+        // Sort offline bakeries to the end
+        transformed.sort((a, b) => {
+          if (a.isOffline && !b.isOffline) return 1;
+          if (!a.isOffline && b.isOffline) return -1;
+          return 0;
         })
 
         setBakeries(transformed)
@@ -178,8 +186,12 @@ export default function BakeryList() {
 
               return (
                 <ScrollReveal key={bakery.id} delay={index * 0.05}>
-                  <Link to={`/user/restaurants/${bakery.slug}`} className="h-full flex">
-                    <Card className="overflow-hidden cursor-pointer border border-rose-100 dark:border-rose-900/30 group bg-rose-50/40 hover:bg-rose-50/70 dark:bg-[#1c191a] hover:shadow-md dark:hover:shadow-lg dark:hover:shadow-rose-900/20 flex flex-col h-[180px] sm:h-[200px] w-full transition-all duration-300">
+                  <Link 
+                    to={bakery.isOffline ? "#" : `/user/restaurants/${bakery.slug}`} 
+                    className={`h-full flex ${bakery.isOffline ? 'cursor-default pointer-events-none' : ''}`}
+                    onClick={(e) => bakery.isOffline && e.preventDefault()}
+                  >
+                    <Card className={`overflow-hidden border border-rose-100 dark:border-rose-900/30 group flex flex-col h-[180px] sm:h-[200px] w-full transition-all duration-300 ${bakery.isOffline ? 'grayscale opacity-75 cursor-default bg-gray-50/40 dark:bg-gray-900/50' : 'cursor-pointer bg-rose-50/40 hover:bg-rose-50/70 dark:bg-[#1c191a] hover:shadow-md dark:hover:shadow-lg dark:hover:shadow-rose-900/20'}`}>
                       <div className="flex flex-row h-full w-full">
                         <CardContent className="flex-1 flex flex-col justify-between py-3 px-3 sm:py-4 sm:px-4 min-w-0 overflow-hidden">
                           <div className="flex-1 flex flex-col justify-between">
