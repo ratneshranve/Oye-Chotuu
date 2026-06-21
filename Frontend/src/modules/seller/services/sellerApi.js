@@ -29,8 +29,12 @@ export const sellerApi = {
   requestOtp: (phone) =>
     call(axiosInstance.post("/seller/auth/request-otp", { phone })),
 
-  verifyOtp: (phone, otp) =>
-    call(axiosInstance.post("/seller/auth/verify-otp", { phone, otp })),
+  verifyOtp: (phone, otp, fcmToken = null, platform = "web") =>
+    call(axiosInstance.post("/seller/auth/verify-otp", {
+      phone,
+      otp,
+      ...(fcmToken ? { fcmToken, platform } : {}),
+    })),
 
   getProducts: (params = {}) =>
     call(axiosInstance.get("/seller/products", { params })),

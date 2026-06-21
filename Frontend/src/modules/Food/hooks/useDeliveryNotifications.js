@@ -1187,10 +1187,18 @@ export const useDeliveryNotifications = () => {
       });
       socketRef.current.emit('resync');
     }
-    void readPendingDeliveryOffer().then(() => {
+    void readPendingDeliveryOffer().then((stored) => {
+      const cachedOffer = stored?.payload?.data || stored?.payload || null;
+      if (cachedOffer && isActionableDeliveryOffer(cachedOffer) && !activeOrderRef.current) {
+        debugLog('Restored delivery popup from cold-start FCM payload', {
+          orderId: cachedOffer?.orderId || cachedOffer?.orderMongoId || cachedOffer?._id,
+        });
+        setNewOrder(cachedOffer);
+        handleIncomingOrderAlert(cachedOffer);
+      }
       scheduleRecoveryBurst();
     });
-  }, [deliveryPartnerId, joinDeliveryRoomIfPossible, scheduleRecoveryBurst]);
+  }, [deliveryPartnerId, handleIncomingOrderAlert, joinDeliveryRoomIfPossible, scheduleRecoveryBurst]);
 
   useEffect(() => {
     const handleFcmPopup = (event) => {

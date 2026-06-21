@@ -4738,7 +4738,7 @@ export async function resyncState(userId, role) {
           $elemMatch: {
             partnerId: new mongoose.Types.ObjectId(userId),
             action: "offered",
-            offeredAt: { $gte: cutoff }
+            at: { $gte: cutoff }
           }
         }
       }).lean();

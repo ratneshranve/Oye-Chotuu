@@ -5,6 +5,37 @@ import { isTokenExpired } from '@core/utils/token';
 
 const AuthContext = createContext(undefined);
 
+const getCurrentDeviceFcm = async (moduleName) => {
+    let platform = localStorage.getItem(`fcm_registered_platform_${moduleName}`) === 'mobile'
+        ? 'mobile'
+        : 'web';
+    let fcmToken = null;
+
+    try {
+        if (window.flutter_inappwebview?.callHandler) {
+            platform = 'mobile';
+            for (const handler of ['getFcmToken', 'getFCMToken', 'getPushToken', 'getFirebaseToken']) {
+                const token = await window.flutter_inappwebview.callHandler(handler, { module: moduleName });
+                if (typeof token === 'string' && token.trim()) {
+                    fcmToken = token.trim();
+                    break;
+                }
+            }
+        } else if (window.MobileApp?.getFcmToken) {
+            platform = 'mobile';
+            fcmToken = String(await Promise.resolve(window.MobileApp.getFcmToken()) || '').trim() || null;
+        }
+    } catch (error) {
+        console.warn('Unable to read native FCM token during logout', error);
+    }
+
+    if (!fcmToken) {
+        fcmToken = localStorage.getItem(`fcm_web_registered_token_${moduleName}`) || null;
+    }
+
+    return { fcmToken, platform };
+};
+
 const ROLE_STORAGE_KEYS = {
     customer: 'auth_customer',
     seller: 'auth_seller',
@@ -120,7 +151,40 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const logout = () => {
+    const logout = async () => {
+        const path = window.location.pathname;
+        const moduleName = currentRole === 'customer' ? 'user' : currentRole;
+        const currentAccessToken = authData[currentRole] || localStorage.getItem(`${moduleName}_accessToken`);
+        const currentRefreshToken = localStorage.getItem(`${moduleName}_refreshToken`);
+
+        try {
+            const { fcmToken, platform } = await getCurrentDeviceFcm(moduleName);
+
+            // Remove this exact device token while the access token is still available.
+            if (fcmToken && currentAccessToken) {
+                await axiosInstance.delete(`/fcm-tokens/remove/${encodeURIComponent(fcmToken)}`, {
+                    data: { token: fcmToken, platform },
+                    headers: { Authorization: `Bearer ${currentAccessToken}` },
+                    contextModule: moduleName,
+                });
+            }
+
+            // Invalidate the server refresh session as well.
+            if (currentRefreshToken) {
+                await axiosInstance.post('/food/auth/logout', {
+                    refreshToken: currentRefreshToken,
+                    ...(fcmToken ? { fcmToken, platform } : {}),
+                }, {
+                    headers: currentAccessToken
+                        ? { Authorization: `Bearer ${currentAccessToken}` }
+                        : undefined,
+                    contextModule: moduleName,
+                });
+            }
+        } catch (error) {
+            console.warn('Backend logout/FCM cleanup failed; continuing local logout', error);
+        }
+
         // Clear all role-specific tokens from localStorage
         Object.values(ROLE_STORAGE_KEYS).forEach(key => {
             localStorage.removeItem(key);
@@ -128,8 +192,6 @@ export const AuthProvider = ({ children }) => {
         Object.values(LEGACY_ROLE_STORAGE_KEYS).flat().forEach(key => {
             localStorage.removeItem(key);
         });
-
-        const path = window.location.pathname;
 
         // Also clear common/compat keys used by older module code.
         localStorage.removeItem('token');
@@ -142,27 +204,23 @@ export const AuthProvider = ({ children }) => {
             localStorage.removeItem(`${module}_refreshToken`);
             localStorage.removeItem(`${module}_authenticated`);
             localStorage.removeItem(`${module}_user`);
+            localStorage.removeItem(`fcm_web_registered_token_${module}`);
+            localStorage.removeItem(`fcm_registered_platform_${module}`);
         });
 
-        // Reset auth state for all roles to null
         setAuthData({
             customer: null,
             seller: null,
             admin: null,
             delivery: null,
         });
-
-        // Clear the current user profile from memory
         setUser(null);
 
-        // Final fallback: redirect based on current path if needed
-        // (ProtectedRoute usually handles this, but explicit navigation is safer for some UI edge cases)
         if (path.startsWith('/admin')) window.location.href = '/admin/login';
         else if (path.startsWith('/seller')) window.location.href = '/seller/auth';
         else if (path.startsWith('/delivery')) window.location.href = '/delivery/auth';
         else window.location.href = '/user/auth/login';
     };
-
     const refreshUser = async () => {
         if (token) {
             try {

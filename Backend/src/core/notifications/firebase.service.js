@@ -274,9 +274,16 @@ export const upsertFirebaseDeviceToken = async ({ ownerType, ownerId, token, pla
     }
 
     const field = getTokenFieldForPlatform(normalizedPlatform);
+    const otherField = normalizedPlatform === 'mobile'
+        ? OWNER_TOKEN_FIELDS.web
+        : OWNER_TOKEN_FIELDS.mobile;
     const existingTokens = Array.isArray(doc[field]) ? doc[field] : [];
     console.log(`[FCM-DEBUG] upsert - Current tokens in DB count: ${existingTokens.length}`);
-    
+
+    // A device token belongs to one platform bucket at a time.
+    doc[otherField] = normalizeTokenList(
+        (Array.isArray(doc[otherField]) ? doc[otherField] : []).filter((item) => item !== normalizedToken)
+    );
     const tokens = normalizeTokenList([...existingTokens, normalizedToken]);
     doc[field] = tokens;
     
@@ -299,15 +306,14 @@ export const removeFirebaseDeviceToken = async ({ ownerType, ownerId, token, pla
         return { success: false };
     }
 
-    if (platform) {
-        const field = getTokenFieldForPlatform(platform);
-        doc[field] = normalizeTokenList((Array.isArray(doc[field]) ? doc[field] : []).filter((t) => t !== normalizedToken));
-    } else {
-        doc.fcmTokens = normalizeTokenList((Array.isArray(doc.fcmTokens) ? doc.fcmTokens : []).filter((t) => t !== normalizedToken));
-        doc.fcmTokenMobile = normalizeTokenList(
-            (Array.isArray(doc.fcmTokenMobile) ? doc.fcmTokenMobile : []).filter((t) => t !== normalizedToken)
-        );
-    }
+    // Remove the exact device token from both fields. This remains correct even
+    // when an older client reports the wrong platform during logout.
+    doc.fcmTokens = normalizeTokenList(
+        (Array.isArray(doc.fcmTokens) ? doc.fcmTokens : []).filter((t) => t !== normalizedToken)
+    );
+    doc.fcmTokenMobile = normalizeTokenList(
+        (Array.isArray(doc.fcmTokenMobile) ? doc.fcmTokenMobile : []).filter((t) => t !== normalizedToken)
+    );
 
     await doc.save();
     return { success: true };

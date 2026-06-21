@@ -181,6 +181,7 @@ export function clearModuleAuth(module) {
   }
   // Clear cached FCM web token for this module
   localStorage.removeItem(`fcm_web_registered_token_${module}`);
+  localStorage.removeItem(`fcm_registered_platform_${module}`);
   if (module === "restaurant") {
     localStorage.removeItem("accessToken");
     clearRestaurantSessionCache();

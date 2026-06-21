@@ -9,6 +9,7 @@ import { useCompanyName } from "@food/hooks/useCompanyName";
 import { setAuthData } from "@food/utils/auth";
 import { useAuth } from "@core/context/AuthContext";
 import { sellerApi } from "../services/sellerApi";
+import { registerWebPushForCurrentModule } from "@food/utils/firebaseMessaging";
 import zozomenLogo from "@/assets/zozomenLogo.png"
 import { loadBusinessSettings, getCachedSettings } from "@common/utils/businessSettings"
 
@@ -114,7 +115,28 @@ export default function SellerAuth() {
     try {
       setIsLoading(true);
       const verifyPhone = String(otpPhone || `${DEFAULT_COUNTRY_CODE} ${phone}`.trim()).trim();
-      const response = await sellerApi.verifyOtp(verifyPhone, code);
+      let fcmToken = null;
+      let platform = "web";
+      try {
+        if (window.flutter_inappwebview?.callHandler) {
+          platform = "mobile";
+          for (const handler of ["getFcmToken", "getFCMToken", "getPushToken", "getFirebaseToken"]) {
+            const token = await window.flutter_inappwebview.callHandler(handler, { module: "seller" });
+            if (typeof token === "string" && token.trim()) {
+              fcmToken = token.trim();
+              break;
+            }
+          }
+        } else if (window.MobileApp?.getFcmToken) {
+          platform = "mobile";
+          fcmToken = String(await Promise.resolve(window.MobileApp.getFcmToken()) || "").trim() || null;
+        } else {
+          fcmToken = localStorage.getItem("fcm_web_registered_token_seller") || null;
+        }
+      } catch (error) {
+        console.warn("Unable to read seller FCM token during login", error);
+      }
+      const response = await sellerApi.verifyOtp(verifyPhone, code, fcmToken, platform);
       const data = response?.data?.result || response?.data?.data || response?.data || {};
       const accessToken = data?.accessToken || data?.token;
       const refreshToken = data?.refreshToken || null;
@@ -142,6 +164,11 @@ export default function SellerAuth() {
         token: accessToken,
         role: "seller",
       });
+      // Access token is now stored, so web/native FCM registration can persist this device.
+      await registerWebPushForCurrentModule("/seller").catch((error) => {
+        console.warn("Seller FCM registration after login failed", error);
+      });
+
       toast.success(
         sellerUser?.approved === false
           ? "OTP verified. Continue your seller setup."

@@ -1410,7 +1410,7 @@ export const restaurantAPI = {
           }
         } else if (window.MobileApp && typeof window.MobileApp.getFcmToken === "function") {
           platform = "mobile";
-          fcmToken = window.MobileApp.getFcmToken();
+          fcmToken = String(await Promise.resolve(window.MobileApp.getFcmToken()) || "").trim() || null;
         } else {
           fcmToken = localStorage.getItem("fcm_web_registered_token_restaurant") || null;
         }
@@ -1437,7 +1437,7 @@ export const restaurantAPI = {
           }
         } else if (window.MobileApp && typeof window.MobileApp.getFcmToken === "function") {
           platform = "mobile";
-          fcmToken = window.MobileApp.getFcmToken();
+          fcmToken = String(await Promise.resolve(window.MobileApp.getFcmToken()) || "").trim() || null;
         } else {
           fcmToken = localStorage.getItem("fcm_web_registered_token_restaurant") || null;
         }
@@ -1753,7 +1753,7 @@ export const deliveryAPI = {
           }
         } else if (window.MobileApp && typeof window.MobileApp.getFcmToken === "function") {
           platform = "mobile";
-          fcmToken = window.MobileApp.getFcmToken();
+          fcmToken = String(await Promise.resolve(window.MobileApp.getFcmToken()) || "").trim() || null;
         } else {
           fcmToken = localStorage.getItem("fcm_web_registered_token_delivery") || null;
         }

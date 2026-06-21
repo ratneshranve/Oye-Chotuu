@@ -852,6 +852,8 @@ export const verifySellerOtpController = async (req, res) => {
   try {
     const phone = str(req.body?.phone);
     const otp = str(req.body?.otp);
+    const fcmToken = str(req.body?.fcmToken);
+    const platform = req.body?.platform === "mobile" ? "mobile" : "web";
 
     if (!phone || !otp) {
       return sendError(res, 400, "Phone and OTP are required");
@@ -895,8 +897,16 @@ export const verifySellerOtpController = async (req, res) => {
     } else {
       seller.isVerified = true;
       seller.lastLogin = new Date();
-      await seller.save();
     }
+
+    if (fcmToken) {
+      const field = platform === "mobile" ? "fcmTokenMobile" : "fcmTokens";
+      const otherField = platform === "mobile" ? "fcmTokens" : "fcmTokenMobile";
+      seller[otherField] = (seller[otherField] || []).filter((token) => token !== fcmToken);
+      if (!Array.isArray(seller[field])) seller[field] = [];
+      if (!seller[field].includes(fcmToken)) seller[field].push(fcmToken);
+    }
+    await seller.save();
 
     await ensureSellerCategoriesSeeded();
     const { accessToken, refreshToken } = await createAuthTokens(seller._id);

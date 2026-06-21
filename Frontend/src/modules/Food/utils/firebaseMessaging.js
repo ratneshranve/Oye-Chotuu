@@ -439,8 +439,9 @@ function getSavedToken(moduleName) {
   return localStorage.getItem(`${tokenCachePrefix}${moduleName}`) || "";
 }
 
-function setSavedToken(moduleName, token) {
+function setSavedToken(moduleName, token, platform = "web") {
   localStorage.setItem(`${tokenCachePrefix}${moduleName}`, token);
+  localStorage.setItem(`fcm_registered_platform_${moduleName}`, platform);
 }
 
 async function saveTokenByModule(moduleName, token, platform = "web") {
@@ -475,7 +476,7 @@ async function registerNativeWebViewFcmToken(moduleName) {
       const lastSavedToken = getSavedToken(moduleName);
       if (lastSavedToken !== normalizedToken) {
         await saveTokenByModule(moduleName, normalizedToken, "mobile");
-        setSavedToken(moduleName, normalizedToken);
+        setSavedToken(moduleName, normalizedToken, "mobile");
       }
 
       pushDebugLog(PUSH_DEBUG_PREFIX, "Registered native WebView FCM token", {
@@ -754,9 +755,8 @@ export async function registerWebPushForCurrentModule(pathname = window.location
         moduleName,
         tokenPreview: `${token.slice(0, 12)}...`,
       });
-
-      // Removed localStorage caching (getSavedToken/setSavedToken) as per user requirements.
-      // The backend 'upsert' already handles duplicates efficiently.
+      // Keep the exact current-device token so logout can remove it from the DB.
+      setSavedToken(moduleName, token, "web");
       try {
         pushDebugLog(PUSH_DEBUG_PREFIX, "Synchronizing FCM token with backend database", { moduleName, tokenPreview: `${token?.slice(0, 10)}...` });
         await saveTokenByModule(moduleName, token);

@@ -334,6 +334,9 @@ export default function Profile() {
                   }
                 } catch (e) { }
               }
+            } else if (window.MobileApp?.getFcmToken) {
+              platform = "mobile";
+              fcmToken = String(await Promise.resolve(window.MobileApp.getFcmToken()) || "").trim() || null;
             } else {
               fcmToken =
                 localStorage.getItem("fcm_web_registered_token_user") || null;
