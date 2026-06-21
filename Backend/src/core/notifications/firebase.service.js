@@ -149,6 +149,13 @@ const buildMessagePayload = (payload = {}, token) => {
         body: sanitizeString(payload.body || payload.notification?.body || '')
     };
     const data = normalizeDataMap(payload.data || {});
+    if (
+        (data.type === 'new_order' || data.type === 'new_order_available') &&
+        !data.targetUrl &&
+        !data.link
+    ) {
+        data.targetUrl = '/food/delivery/feed';
+    }
     const image =
         sanitizeString(payload.icon || payload.notification?.image || payload.notification?.icon || data.image || data.imageUrl);
 
@@ -188,6 +195,9 @@ const buildMessagePayload = (payload = {}, token) => {
             title: notification.title,
             body: notification.body,
             icon: image || payload.icon || '/favicon.ico'
+        },
+        fcm_options: {
+            link: data.targetUrl || data.link || '/'
         }
     };
 

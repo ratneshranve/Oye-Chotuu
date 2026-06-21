@@ -110,6 +110,38 @@ const resolveDeliveryPartnerIdFromClient = () => {
 const supportsBrowserNotifications = () =>
   typeof window !== 'undefined' && typeof Notification !== 'undefined';
 
+const PENDING_DELIVERY_OFFER_CACHE = 'delivery-push-state-v1';
+const PENDING_DELIVERY_OFFER_KEY = '/__pending-delivery-offer__';
+const PENDING_DELIVERY_OFFER_MAX_AGE_MS = 90 * 1000;
+
+const readPendingDeliveryOffer = async () => {
+  if (typeof window === 'undefined' || !('caches' in window)) return null;
+  try {
+    const cache = await caches.open(PENDING_DELIVERY_OFFER_CACHE);
+    const response = await cache.match(PENDING_DELIVERY_OFFER_KEY);
+    if (!response) return null;
+    const stored = await response.json();
+    const receivedAt = Number(stored?.receivedAt || 0);
+    if (!receivedAt || Date.now() - receivedAt > PENDING_DELIVERY_OFFER_MAX_AGE_MS) {
+      await cache.delete(PENDING_DELIVERY_OFFER_KEY);
+      return null;
+    }
+    return stored;
+  } catch {
+    return null;
+  }
+};
+
+const clearPendingDeliveryOffer = async () => {
+  if (typeof window === 'undefined' || !('caches' in window)) return;
+  try {
+    const cache = await caches.open(PENDING_DELIVERY_OFFER_CACHE);
+    await cache.delete(PENDING_DELIVERY_OFFER_KEY);
+  } catch {
+    // Best-effort cleanup only.
+  }
+};
+
 const buildDeliveryOrderNotification = (orderData = {}) => {
   const orderId = orderData.orderId || orderData.orderMongoId || orderData.id || 'New';
   if (orderData.type === 'RETURN_PICKUP') {
@@ -227,6 +259,7 @@ export const useDeliveryNotifications = () => {
   const userInteractedRef = useRef(false);
   const lastAlertAtByOrderRef = useRef(new Map());
   const lastBrowserNotificationAtByOrderRef = useRef(new Map());
+  const recoveryRetryTimersRef = useRef([]);
   
   // Step 2: All state hooks (unconditional)
   const [newOrder, setNewOrder] = useState(null);
@@ -428,12 +461,14 @@ export const useDeliveryNotifications = () => {
         deliveryAPI.getCurrentDelivery(),
       ]);
 
-      const currentTrip =
+      const currentTripPayload =
         currentTripResult.status === 'fulfilled'
-          ? currentTripResult.value?.data?.data ??
-            currentTripResult.value?.data ??
-            null
+          ? currentTripResult.value?.data
           : null;
+      const currentTrip =
+        currentTripPayload && Object.prototype.hasOwnProperty.call(currentTripPayload, 'data')
+          ? currentTripPayload.data
+          : currentTripPayload;
 
       if (currentTrip) {
         debugLog('Recovered current delivery trip after reconnect/focus:', currentTrip);
@@ -472,11 +507,21 @@ export const useDeliveryNotifications = () => {
         debugLog('Recovered available delivery order after reconnect/focus:', recoverableOrder);
         setNewOrder(recoverableOrder);
         handleIncomingOrderAlert(recoverableOrder);
+        void clearPendingDeliveryOffer();
       }
     } catch (error) {
       debugWarn('Delivery recovery sync failed:', error?.message || error);
     }
   }, [deliveryPartnerId, handleIncomingOrderAlert]);
+
+  const scheduleRecoveryBurst = useCallback(() => {
+    recoveryRetryTimersRef.current.forEach(clearTimeout);
+    recoveryRetryTimersRef.current = [0, 1200, 3000, 6000].map((delay) =>
+      setTimeout(() => {
+        void recoverDeliveryState();
+      }, delay)
+    );
+  }, [recoverDeliveryState]);
 
   const joinDeliveryRoomIfPossible = useCallback(() => {
     if (!socketRef.current?.connected || !deliveryPartnerId) {
@@ -954,6 +999,18 @@ export const useDeliveryNotifications = () => {
       handleIncomingOrderAlert(orderData);
     });
 
+    socketRef.current.on('pending_offers', (offers) => {
+      if (!Array.isArray(offers) || offers.length === 0) return;
+      const offer = offers.find(isActionableDeliveryOffer);
+      if (!offer) return;
+      debugLog('Recovered pending delivery offer via socket resync', {
+        orderId: offer?.orderId || offer?.orderMongoId || offer?._id,
+      });
+      setNewOrder(offer);
+      handleIncomingOrderAlert(offer);
+      void clearPendingDeliveryOffer();
+    });
+
     socketRef.current.on('play_notification_sound', (data) => {
       const normalizedData = {
         orderId: data?.orderId || data?.order_id,
@@ -1105,6 +1162,8 @@ export const useDeliveryNotifications = () => {
       window.removeEventListener('authRefreshed', handleAuthRefreshed);
       window.removeEventListener('focus', handleWindowFocus);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+      recoveryRetryTimersRef.current.forEach(clearTimeout);
+      recoveryRetryTimersRef.current = [];
       if (socketRef.current) {
         socketRef.current.removeAllListeners();
         socketRef.current.disconnect();
@@ -1128,8 +1187,10 @@ export const useDeliveryNotifications = () => {
       });
       socketRef.current.emit('resync');
     }
-    void recoverDeliveryState();
-  }, [deliveryPartnerId, joinDeliveryRoomIfPossible, recoverDeliveryState]);
+    void readPendingDeliveryOffer().then(() => {
+      scheduleRecoveryBurst();
+    });
+  }, [deliveryPartnerId, joinDeliveryRoomIfPossible, scheduleRecoveryBurst]);
 
   useEffect(() => {
     const handleFcmPopup = (event) => {
@@ -1148,13 +1209,22 @@ export const useDeliveryNotifications = () => {
 
     window.addEventListener('fcm-delivery-popup', handleFcmPopup);
 
+    const handleNotificationClick = (event) => {
+      if (event?.data?.type !== 'delivery-notification-clicked') return;
+      scheduleRecoveryBurst();
+    };
+    navigator.serviceWorker?.addEventListener('message', handleNotificationClick);
+
     if (typeof window !== 'undefined' && window.__fcmPendingDeliveryPopup) {
       handleFcmPopup({ detail: window.__fcmPendingDeliveryPopup });
       window.__fcmPendingDeliveryPopup = null;
     }
 
-    return () => window.removeEventListener('fcm-delivery-popup', handleFcmPopup);
-  }, [handleIncomingOrderAlert]);
+    return () => {
+      window.removeEventListener('fcm-delivery-popup', handleFcmPopup);
+      navigator.serviceWorker?.removeEventListener('message', handleNotificationClick);
+    };
+  }, [handleIncomingOrderAlert, scheduleRecoveryBurst]);
 
   // Helper functions
   const clearNewOrder = () => {

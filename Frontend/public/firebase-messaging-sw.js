@@ -5,6 +5,8 @@ importScripts("https://www.gstatic.com/firebasejs/10.13.2/firebase-messaging-com
 const sanitize = (value) => String(value || "").trim().replace(/^['"]|['"]$/g, "");
 const PUSH_DEBUG_PREFIX = "[push-sw]";
 const pushDebugLog = () => {};
+const PENDING_DELIVERY_OFFER_CACHE = "delivery-push-state-v1";
+const PENDING_DELIVERY_OFFER_KEY = "/__pending-delivery-offer__";
 const getNotificationKey = (payload) =>
   payload?.data?.notificationId ||
   payload?.data?.messageId ||
@@ -15,6 +17,34 @@ const getNotificationKey = (payload) =>
     payload?.data?.orderId || "",
     payload?.data?.targetUrl || payload?.data?.link || "",
   ].join("::");
+
+function isDeliveryOfferPayload(payload = {}) {
+  const type = String(payload?.data?.type || "").trim().toLowerCase();
+  return (
+    type === "new_order" ||
+    type === "new_order_available" ||
+    type === "return_pickup" ||
+    Boolean(payload?.data?.orderId || payload?.data?.orderMongoId || payload?.data?.returnId)
+  );
+}
+
+async function persistPendingDeliveryOffer(payload = {}) {
+  if (!isDeliveryOfferPayload(payload) || !self.caches) return;
+
+  try {
+    const cache = await caches.open(PENDING_DELIVERY_OFFER_CACHE);
+    const requestUrl = new URL(PENDING_DELIVERY_OFFER_KEY, self.location.origin).toString();
+    await cache.put(
+      requestUrl,
+      new Response(
+        JSON.stringify({ receivedAt: Date.now(), payload }),
+        { headers: { "Content-Type": "application/json" } },
+      ),
+    );
+  } catch {
+    // Recovery still falls back to the delivery orders API/socket resync.
+  }
+}
 
 async function notifyOpenClients(payload) {
   pushDebugLog(PUSH_DEBUG_PREFIX, "Broadcasting push to open clients", { payload });
@@ -119,6 +149,7 @@ async function loadFirebaseWebConfig() {
 
   messaging.onBackgroundMessage(async (payload) => {
     pushDebugLog(PUSH_DEBUG_PREFIX, "Received Firebase background message", { payload });
+    await persistPendingDeliveryOffer(payload);
     
     const visibleClient = await hasVisibleClientForTarget(payload);
     
@@ -180,12 +211,18 @@ self.addEventListener("notificationclick", (event) => {
     event?.notification?.data?.link ||
     event?.notification?.data?.click_action ||
     event?.notification?.data?.targetUrl ||
-    "/";
+    (isDeliveryOfferPayload({ data: event?.notification?.data || {} })
+      ? "/food/delivery/feed"
+      : "/");
   const targetUrl = String(rawLink || "/").startsWith("/") ? String(rawLink || "/") : "/";
   event.waitUntil(
     clients.matchAll({ type: "window", includeUncontrolled: true }).then((windowClients) => {
       const client = windowClients.find((c) => c.url.includes(self.location.origin));
       if (client) {
+        client.postMessage({
+          type: "delivery-notification-clicked",
+          payload: event?.notification?.data || {},
+        });
         client.focus();
         return client.navigate(targetUrl);
       }
