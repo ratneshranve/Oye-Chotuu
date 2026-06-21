@@ -220,15 +220,6 @@ export default function RestaurantOTP() {
 
       const needsRegistration = data?.needsRegistration === true
       const normalizedPhone = data?.phone || phone
-
-      if (needsRegistration) {
-        setRestaurantPendingPhone(normalizedPhone)
-        sessionStorage.removeItem("restaurantAuthData")
-        sessionStorage.removeItem("restaurantLoginPhone")
-        navigate("/food/restaurant/onboarding", { replace: true })
-        return
-      }
-
       const accessToken = data?.accessToken
       const refreshToken = data?.refreshToken ?? null
       const restaurant = data?.user ?? data?.restaurant
@@ -240,7 +231,7 @@ export default function RestaurantOTP() {
         sessionStorage.removeItem("restaurantLoginPhone")
 
         setTimeout(async () => {
-          if (authData?.isSignUp) {
+          if (needsRegistration || authData?.isSignUp) {
             navigate("/food/restaurant/onboarding", { replace: true })
           } else {
             try {
@@ -258,6 +249,11 @@ export default function RestaurantOTP() {
             }
           }
         }, 500)
+      } else if (needsRegistration) {
+        setRestaurantPendingPhone(normalizedPhone)
+        sessionStorage.removeItem("restaurantAuthData")
+        sessionStorage.removeItem("restaurantLoginPhone")
+        navigate("/food/restaurant/onboarding", { replace: true })
       }
     } catch (err) {
       const message =

@@ -303,53 +303,53 @@ export const verifyRestaurantOtpAndLogin = async (phone, otp, fcmToken, platform
       ...phoneOrFields("primaryContactNumber"),
     ],
   });
-  if (!restaurant) {
-    // Phone has been successfully verified, but no restaurant exists yet.
-    // Frontend will use this to redirect into registration/onboarding.
-    return {
-      needsRegistration: true,
-      phone,
-    };
+  let targetRestaurant = restaurant;
+  if (!targetRestaurant) {
+    // Create a draft restaurant
+    targetRestaurant = await FoodRestaurant.create({
+      ownerPhone: phone,
+      status: "draft",
+    });
   }
 
   // Update FCM token if provided
   if (fcmToken) {
     let isModified = false;
     if (platform === "mobile") {
-      if (!restaurant.fcmTokenMobile) restaurant.fcmTokenMobile = [];
-      if (!restaurant.fcmTokenMobile.includes(fcmToken)) {
-        restaurant.fcmTokenMobile.push(fcmToken);
+      if (!targetRestaurant.fcmTokenMobile) targetRestaurant.fcmTokenMobile = [];
+      if (!targetRestaurant.fcmTokenMobile.includes(fcmToken)) {
+        targetRestaurant.fcmTokenMobile.push(fcmToken);
         isModified = true;
       }
     } else {
-      if (!restaurant.fcmTokens) restaurant.fcmTokens = [];
-      if (!restaurant.fcmTokens.includes(fcmToken)) {
-        restaurant.fcmTokens.push(fcmToken);
+      if (!targetRestaurant.fcmTokens) targetRestaurant.fcmTokens = [];
+      if (!targetRestaurant.fcmTokens.includes(fcmToken)) {
+        targetRestaurant.fcmTokens.push(fcmToken);
         isModified = true;
       }
     }
     if (isModified) {
-      await restaurant.save();
+      await targetRestaurant.save();
     }
   }
 
-  // If restaurant approval status is used, only allow login for approved restaurants.
-  if (restaurant.status && restaurant.status !== "approved") {
+  // If restaurant approval status is used, only allow login for approved or draft restaurants.
+  if (targetRestaurant.status && targetRestaurant.status !== "approved" && targetRestaurant.status !== "draft") {
     throw new AuthError(
-      restaurant.status === "pending"
+      targetRestaurant.status === "pending"
         ? "Your restaurant registration is pending approval."
         : "Your restaurant registration has been rejected. Please contact support.",
     );
   }
 
-  const payload = { userId: restaurant._id.toString(), role: ROLES.RESTAURANT };
+  const payload = { userId: targetRestaurant._id.toString(), role: ROLES.RESTAURANT };
   const accessToken = signAccessToken(payload);
   const refreshToken = signRefreshToken(payload);
   const ttlMs = ms(config.jwtRefreshExpiresIn || "7d");
   const expiresAt = new Date(Date.now() + ttlMs);
 
   await FoodRefreshToken.create({
-    userId: restaurant._id,
+    userId: targetRestaurant._id,
     token: refreshToken,
     expiresAt,
   });
@@ -357,8 +357,8 @@ export const verifyRestaurantOtpAndLogin = async (phone, otp, fcmToken, platform
   return {
     accessToken,
     refreshToken,
-    user: restaurant,
-    needsRegistration: false,
+    user: targetRestaurant,
+    needsRegistration: targetRestaurant.status === "draft",
   };
 };
 

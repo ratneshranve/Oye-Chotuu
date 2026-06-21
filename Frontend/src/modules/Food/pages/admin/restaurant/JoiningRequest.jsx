@@ -71,6 +71,7 @@ export default function JoiningRequest() {
   const [searchQuery, setSearchQuery] = useState("")
   const [pendingRequests, setPendingRequests] = useState([])
   const [rejectedRequests, setRejectedRequests] = useState([])
+  const [draftRequests, setDraftRequests] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [processing, setProcessing] = useState(false)
@@ -146,8 +147,10 @@ export default function JoiningRequest() {
         )
         if (activeTab === "pending") {
           setPendingRequests(list.filter((r) => r.status === "pending"))
-        } else {
+        } else if (activeTab === "rejected") {
           setRejectedRequests(list.filter((r) => r.status === "rejected"))
+        } else if (activeTab === "drafts") {
+          setDraftRequests(list.filter((r) => r.status === "draft"))
         }
       }
     } catch (err) {
@@ -160,7 +163,7 @@ export default function JoiningRequest() {
     }
   }
 
-  const currentRequests = activeTab === "rejected" ? rejectedRequests : pendingRequests
+  const currentRequests = activeTab === "rejected" ? rejectedRequests : activeTab === "drafts" ? draftRequests : pendingRequests
 
   // Get unique zones (from DB) for filter options
   const filterOptions = useMemo(() => {
@@ -428,6 +431,16 @@ export default function JoiningRequest() {
               Rejected Request
             </button>
             <button
+              onClick={() => setActiveTab("drafts")}
+              className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+                activeTab === "drafts"
+                  ? "border-blue-600 text-blue-600"
+                  : "border-transparent text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              Drafts
+            </button>
+            <button
               onClick={() => setActiveTab("custom-orders")}
               className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
                 activeTab === "custom-orders"
@@ -577,13 +590,13 @@ export default function JoiningRequest() {
                             className="text-sm font-medium text-slate-900 cursor-pointer hover:text-blue-600 transition-colors"
                             onClick={() => handleViewDetails(request)}
                           >
-                            {request.restaurantName}
+                            {request.restaurantName || "Draft Restaurant"}
                           </span>
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex flex-col">
-                          <span className="text-sm font-medium text-slate-900">{request.ownerName}</span>
+                          <span className="text-sm font-medium text-slate-900">{request.ownerName || "Unknown Owner"}</span>
                           <span className="text-xs text-slate-500">{formatPhone(request.ownerPhone)}</span>
                         </div>
                       </td>
@@ -592,7 +605,9 @@ export default function JoiningRequest() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                          request.status === "Pending" || request.status === "pending"
+                          request.status === "draft"
+                            ? "bg-slate-100 text-slate-700"
+                            : request.status === "Pending" || request.status === "pending"
                             ? (request?.reVerification?.isZoneUpdate || request?.reVerification?.reVerificationReason === 'FSSAI License Update' ? "bg-purple-100 text-purple-700" : "bg-blue-100 text-blue-700")
                             : "bg-red-100 text-red-700"
                         }`}>

@@ -12,6 +12,56 @@ const getCustomerToken = () =>
     localStorage.getItem('user_accessToken') ||
     null;
 
+const LOGIN_PATHS = {
+    seller: '/seller/auth',
+    admin: '/admin/login',
+    delivery: '/food/delivery/login',
+    customer: '/user/auth/login',
+};
+
+const MODULE_STORAGE_KEYS = {
+    seller: ['auth_seller', 'seller_accessToken', 'seller_refreshToken', 'seller_authenticated', 'seller_user', 'token'],
+    admin: ['auth_admin', 'admin_accessToken', 'admin_refreshToken', 'admin_authenticated', 'admin_user', 'adminToken', 'adminInfo', 'token'],
+    delivery: ['auth_delivery', 'delivery_accessToken', 'delivery_refreshToken', 'delivery_authenticated', 'delivery_user', 'token'],
+    customer: ['auth_customer', 'user_accessToken', 'user_refreshToken', 'user_authenticated', 'user_user', 'accessToken', 'refreshToken', 'token'],
+};
+
+const isAuthenticationRequest = (url = '') => {
+    const normalized = String(url || '').toLowerCase();
+    const isAuthRoute = normalized.includes('/auth/');
+    return (
+        (isAuthRoute && normalized.includes('/request-otp')) ||
+        (isAuthRoute && normalized.includes('/verify-otp')) ||
+        (isAuthRoute && normalized.includes('/login')) ||
+        (isAuthRoute && normalized.includes('/signup')) ||
+        (isAuthRoute && normalized.includes('/refresh-token')) ||
+        (isAuthRoute && normalized.includes('/forgot-password'))
+    );
+};
+
+const getCurrentAppPath = () => {
+    const hashPath = String(window.location.hash || '').replace(/^#/, '');
+    return hashPath.startsWith('/') ? hashPath : window.location.pathname;
+};
+
+let redirectingToLogin = false;
+
+const redirectToLogin = (module) => {
+    const normalizedModule = LOGIN_PATHS[module] ? module : 'customer';
+    const loginPath = LOGIN_PATHS[normalizedModule];
+    const currentPath = getCurrentAppPath();
+
+    (MODULE_STORAGE_KEYS[normalizedModule] || ['token']).forEach((key) => {
+        localStorage.removeItem(key);
+    });
+    window.dispatchEvent(new Event(`${normalizedModule === 'customer' ? 'user' : normalizedModule}AuthChanged`));
+
+    if (currentPath.startsWith(loginPath) || redirectingToLogin) return;
+
+    redirectingToLogin = true;
+    window.location.replace(loginPath);
+};
+
 // Request interceptor for API calls
 axiosInstance.interceptors.request.use(
     (config) => {
@@ -67,18 +117,13 @@ axiosInstance.interceptors.response.use(
     (response) => response,
     async (error) => {
         const originalRequest = error.config;
-        if (error.response?.status === 401 && !originalRequest._retry) {
-            originalRequest._retry = true;
-
-            // Only reload when we had a token that's now invalid (expired/logged out elsewhere).
-            // If no token exists, skip reload to avoid infinite loop on public pages.
-            const hasToken = ['auth_seller', 'auth_admin', 'auth_delivery', 'auth_customer', 'user_accessToken', 'accessToken', 'token'].some(
-                (key) => localStorage.getItem(key)
-            );
-            if (!hasToken) {
+        if (error.response?.status === 401 && originalRequest) {
+            if (isAuthenticationRequest(originalRequest.url)) {
                 return Promise.reject(error);
             }
-            const path = window.location.pathname;
+
+            originalRequest._retry = true;
+            const path = getCurrentAppPath();
             const requestUrl = String(originalRequest?.url || '');
             const currentModule = path.startsWith('/seller')
                 ? 'seller'
@@ -103,19 +148,7 @@ axiosInstance.interceptors.response.use(
                 return Promise.reject(error);
             }
 
-            const moduleStorageKeys = {
-                seller: ['auth_seller', 'seller_accessToken', 'token'],
-                admin: ['auth_admin', 'admin_accessToken', 'token'],
-                delivery: ['auth_delivery', 'delivery_accessToken', 'token'],
-                customer: ['auth_customer', 'user_accessToken', 'accessToken', 'token'],
-            };
-            const keysToClear = moduleStorageKeys[currentModule] || ['token'];
-            keysToClear.forEach((key) => localStorage.removeItem(key));
-
-            if (currentModule === 'seller') window.location.href = '/seller/auth';
-            else if (currentModule === 'admin') window.location.href = '/admin/login';
-            else if (currentModule === 'delivery') window.location.href = '/delivery/auth';
-            else window.location.href = '/user/auth/login';
+            redirectToLogin(currentModule);
         }
         return Promise.reject(error);
     }

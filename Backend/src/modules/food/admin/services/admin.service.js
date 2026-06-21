@@ -2350,15 +2350,17 @@ export async function updateRestaurantMenuById(id, menu) {
 }
 
 export async function getPendingRestaurants() {
-    const restaurants = await FoodRestaurant.find({ status: { $in: ['pending', 'rejected'] } })
+    const restaurants = await FoodRestaurant.find({ status: { $in: ['pending', 'rejected', 'draft'] } })
         .populate('zoneId', 'name zoneName serviceLocation')
         .sort({ createdAt: -1 })
         .lean();
-    return restaurants.map((r, i) => ({
-        ...r,
-        sl: i + 1,
-        zone: r.zoneId?.serviceLocation || r.zoneId?.zoneName || r.zoneId?.name || null,
-    }));
+    return restaurants.map((r, i) => {
+        return {
+            ...r,
+            sl: i + 1,
+            zone: r.zoneId?.serviceLocation || r.zoneId?.zoneName || r.zoneId?.name || null,
+        }
+    });
 }
 
 export async function getPendingCustomOrderRequests() {

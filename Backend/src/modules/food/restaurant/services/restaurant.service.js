@@ -382,13 +382,14 @@ export const registerRestaurant = async (payload, files) => {
             throw new ValidationError('Selected address is outside the selected zone');
         }
 
-        const restaurant = await FoodRestaurant.create({
+        const existingDraft = await FoodRestaurant.findOne({ ownerPhoneDigits, status: 'draft' });
+
+        const restaurantData = {
             restaurantName,
             restaurantNameNormalized,
             ownerName,
             ownerEmail,
             businessType: businessType || 'restaurant',
-            // Store phone in a consistent digits-only format to match OTP login flow.
             ownerPhone: ownerPhoneDigits,
             ownerPhoneDigits,
             ownerPhoneLast10,
@@ -397,7 +398,6 @@ export const registerRestaurant = async (payload, files) => {
             zoneId: zoneId && mongoose.Types.ObjectId.isValid(String(zoneId).trim())
                 ? new mongoose.Types.ObjectId(String(zoneId).trim())
                 : undefined,
-            // Store unified location object (geo + address).
             location: {
                 type: 'Point',
                 coordinates: latNum !== null && lngNum !== null ? [lngNum, latNum] : undefined,
@@ -431,12 +431,19 @@ export const registerRestaurant = async (payload, files) => {
             ifscCode,
             accountHolderName,
             accountType,
-            estimatedDeliveryTime: estimatedDeliveryTime || '',
             featuredDish: featuredDish || '',
             offer: offer || '',
             menuImages,
+            status: 'pending', // move from draft to pending
             ...images
-        });
+        };
+
+        let restaurant;
+        if (existingDraft) {
+            restaurant = await FoodRestaurant.findByIdAndUpdate(existingDraft._id, { $set: restaurantData }, { new: true });
+        } else {
+            restaurant = await FoodRestaurant.create(restaurantData);
+        }
 
         const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
         const shortDaysMap = { Mon: "Monday", Tue: "Tuesday", Wed: "Wednesday", Thu: "Thursday", Fri: "Friday", Sat: "Saturday", Sun: "Sunday" };
@@ -451,10 +458,18 @@ export const registerRestaurant = async (payload, files) => {
             };
         });
 
-        await FoodRestaurantOutletTimings.create({
-            restaurantId: restaurant._id,
-            timings: timingsArray
-        });
+        if (existingDraft) {
+            await FoodRestaurantOutletTimings.findOneAndUpdate(
+                { restaurantId: restaurant._id },
+                { timings: timingsArray },
+                { upsert: true }
+            );
+        } else {
+            await FoodRestaurantOutletTimings.create({
+                restaurantId: restaurant._id,
+                timings: timingsArray
+            });
+        }
 
         try {
             const { notifyAdminsSafely } = await import('../../../../core/notifications/firebase.service.js');
@@ -479,6 +494,168 @@ export const registerRestaurant = async (payload, files) => {
         }
         throw err;
     }
+};
+
+const safeParseImage = (imgStr) => {
+    if (!imgStr) return imgStr;
+    if (typeof imgStr === 'string' && imgStr.startsWith('{"kind":"draft-file"')) {
+        try { return JSON.parse(imgStr); } catch (e) { return imgStr; }
+    }
+    return imgStr;
+};
+
+export const getRestaurantDraft = async (restaurantId) => {
+    if (!restaurantId) return null;
+    const doc = await FoodRestaurant.findById(restaurantId).lean();
+    if (!doc) return null;
+    return {
+        step1: {
+            restaurantName: doc.restaurantName,
+            businessType: doc.businessType,
+            pureVegRestaurant: doc.pureVegRestaurant,
+            ownerName: doc.ownerName,
+            ownerEmail: doc.ownerEmail,
+            ownerPhone: doc.ownerPhone,
+            primaryContactNumber: doc.primaryContactNumber,
+            zoneId: doc.zoneId,
+            location: doc.location || {
+                formattedAddress: doc.formattedAddress || doc.addressLine1,
+                addressLine1: doc.addressLine1,
+                addressLine2: doc.addressLine2,
+                area: doc.area,
+                city: doc.city,
+                state: doc.state,
+                pincode: doc.pincode,
+                landmark: doc.landmark
+            }
+        },
+        step2: {
+            cuisines: doc.cuisines,
+            openingTime: doc.openingTime,
+            closingTime: doc.closingTime,
+            openDays: doc.openDays,
+            menuImages: (doc.menuImages || []).map(safeParseImage),
+            profileImage: safeParseImage(doc.profileImage),
+            coverImages: (doc.coverImages || []).map(safeParseImage)
+        },
+        step3: {
+            panNumber: doc.panNumber,
+            nameOnPan: doc.nameOnPan,
+            gstRegistered: doc.gstRegistered,
+            gstNumber: doc.gstNumber,
+            gstLegalName: doc.gstLegalName,
+            gstAddress: doc.gstAddress,
+            fssaiNumber: doc.fssaiNumber,
+            fssaiExpiry: doc.fssaiExpiry,
+            accountNumber: doc.accountNumber,
+            confirmAccountNumber: doc.accountNumber,
+            ifscCode: doc.ifscCode,
+            accountHolderName: doc.accountHolderName,
+            accountType: doc.accountType,
+            panImage: safeParseImage(doc.panImage),
+            gstImage: safeParseImage(doc.gstImage),
+            fssaiImage: safeParseImage(doc.fssaiImage)
+        },
+        step4: {
+            estimatedDeliveryTime: doc.estimatedDeliveryTime,
+            featuredDish: doc.featuredDish,
+            featuredPrice: doc.featuredPrice,
+            offer: doc.offer
+        },
+        currentStep: doc.onboardingStep || 1
+    };
+};
+
+const safeStringifyImage = (img) => {
+    if (!img) return img;
+    if (typeof img === 'string') return img;
+    if (typeof img === 'object' && img.kind === 'draft-file') {
+        return JSON.stringify(img);
+    }
+    if (typeof img === 'object' && typeof img.url === 'string') {
+        return safeStringifyImage(img.url);
+    }
+    return null;
+};
+
+export const updateRestaurantDraft = async (restaurantId, draftData) => {
+    if (!restaurantId) return null;
+    if (!draftData || typeof draftData !== 'object' || Array.isArray(draftData)) {
+        throw new ValidationError('Draft payload must be an object');
+    }
+    const update = {};
+    if (draftData.step1) {
+        if (draftData.step1.restaurantName !== undefined) update.restaurantName = draftData.step1.restaurantName;
+        if (draftData.step1.businessType !== undefined) update.businessType = draftData.step1.businessType;
+        if (draftData.step1.pureVegRestaurant !== undefined) update.pureVegRestaurant = draftData.step1.pureVegRestaurant;
+        if (draftData.step1.ownerName !== undefined) update.ownerName = draftData.step1.ownerName;
+        if (draftData.step1.ownerEmail !== undefined) update.ownerEmail = draftData.step1.ownerEmail;
+        if (draftData.step1.ownerPhone !== undefined) update.ownerPhone = draftData.step1.ownerPhone;
+        if (draftData.step1.primaryContactNumber !== undefined) update.primaryContactNumber = draftData.step1.primaryContactNumber;
+        if (draftData.step1.zoneId !== undefined) update.zoneId = draftData.step1.zoneId;
+        if (draftData.step1.location) {
+            update.location = { ...draftData.step1.location };
+            if (update.location.longitude && update.location.latitude) {
+                update.location.type = 'Point';
+                update.location.coordinates = [Number(update.location.longitude), Number(update.location.latitude)];
+            } else {
+                delete update.location.type;
+                delete update.location.coordinates;
+            }
+            update.addressLine1 = draftData.step1.location.addressLine1;
+            update.addressLine2 = draftData.step1.location.addressLine2;
+            update.area = draftData.step1.location.area;
+            update.city = draftData.step1.location.city;
+            update.state = draftData.step1.location.state;
+            update.pincode = draftData.step1.location.pincode;
+            update.landmark = draftData.step1.location.landmark;
+        }
+    }
+    if (draftData.step2) {
+        if (draftData.step2.cuisines !== undefined) update.cuisines = draftData.step2.cuisines;
+        if (draftData.step2.openingTime !== undefined) update.openingTime = draftData.step2.openingTime;
+        if (draftData.step2.closingTime !== undefined) update.closingTime = draftData.step2.closingTime;
+        if (draftData.step2.openDays !== undefined) update.openDays = draftData.step2.openDays;
+        if (draftData.step2.menuImages !== undefined) update.menuImages = (draftData.step2.menuImages || []).map(safeStringifyImage);
+        if (draftData.step2.profileImage !== undefined) update.profileImage = safeStringifyImage(draftData.step2.profileImage);
+        if (draftData.step2.coverImages !== undefined) update.coverImages = (draftData.step2.coverImages || []).map(safeStringifyImage);
+    }
+    if (draftData.step3) {
+        if (draftData.step3.panNumber !== undefined) update.panNumber = draftData.step3.panNumber;
+        if (draftData.step3.nameOnPan !== undefined) update.nameOnPan = draftData.step3.nameOnPan;
+        if (draftData.step3.gstRegistered !== undefined) update.gstRegistered = draftData.step3.gstRegistered;
+        if (draftData.step3.gstNumber !== undefined) update.gstNumber = draftData.step3.gstNumber;
+        if (draftData.step3.gstLegalName !== undefined) update.gstLegalName = draftData.step3.gstLegalName;
+        if (draftData.step3.gstAddress !== undefined) update.gstAddress = draftData.step3.gstAddress;
+        if (draftData.step3.fssaiNumber !== undefined) update.fssaiNumber = draftData.step3.fssaiNumber;
+        if (draftData.step3.fssaiExpiry !== undefined) update.fssaiExpiry = draftData.step3.fssaiExpiry;
+        if (draftData.step3.accountNumber !== undefined) update.accountNumber = draftData.step3.accountNumber;
+        if (draftData.step3.ifscCode !== undefined) update.ifscCode = draftData.step3.ifscCode;
+        if (draftData.step3.accountHolderName !== undefined) update.accountHolderName = draftData.step3.accountHolderName;
+        if (draftData.step3.accountType !== undefined) update.accountType = draftData.step3.accountType;
+        if (draftData.step3.panImage !== undefined) update.panImage = safeStringifyImage(draftData.step3.panImage);
+        if (draftData.step3.gstImage !== undefined) update.gstImage = safeStringifyImage(draftData.step3.gstImage);
+        if (draftData.step3.fssaiImage !== undefined) update.fssaiImage = safeStringifyImage(draftData.step3.fssaiImage);
+    }
+    if (draftData.step4) {
+        if (draftData.step4.estimatedDeliveryTime !== undefined) update.estimatedDeliveryTime = draftData.step4.estimatedDeliveryTime;
+        if (draftData.step4.featuredDish !== undefined) update.featuredDish = draftData.step4.featuredDish;
+        if (draftData.step4.featuredPrice !== undefined) update.featuredPrice = draftData.step4.featuredPrice;
+        if (draftData.step4.offer !== undefined) update.offer = draftData.step4.offer;
+    }
+    if (draftData.currentStep !== undefined) update.onboardingStep = draftData.currentStep;
+
+    if (Object.keys(update).length === 0) {
+        return getRestaurantDraft(restaurantId);
+    }
+
+    const doc = await FoodRestaurant.findByIdAndUpdate(
+        restaurantId,
+        { $set: update },
+        { new: true }
+    ).lean();
+    if (!doc) return null;
+    return getRestaurantDraft(restaurantId);
 };
 
 export const getCurrentRestaurantProfile = async (restaurantId) => {

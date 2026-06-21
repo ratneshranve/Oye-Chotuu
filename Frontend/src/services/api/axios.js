@@ -63,6 +63,56 @@ function getModuleFromConfig(config) {
   return getModuleFromUrl(config?.url);
 }
 
+const LOGIN_PATHS = {
+  admin: "/admin/login",
+  restaurant: "/food/restaurant/login",
+  delivery: "/food/delivery/login",
+  user: "/user/auth/login",
+};
+
+function isAuthenticationRequest(url = "") {
+  const normalized = String(url || "").toLowerCase();
+  const isAuthRoute = normalized.includes("/auth/");
+  return (
+    (isAuthRoute && normalized.includes("/request-otp")) ||
+    (isAuthRoute && normalized.includes("/verify-otp")) ||
+    (isAuthRoute && normalized.includes("/login")) ||
+    (isAuthRoute && normalized.includes("/signup")) ||
+    (isAuthRoute && normalized.includes("/refresh-token")) ||
+    (isAuthRoute && normalized.includes("/forgot-password")) ||
+    normalized.includes("/google/callback")
+  );
+}
+
+function getCurrentAppPath() {
+  if (typeof window === "undefined") return "";
+  const hashPath = String(window.location.hash || "").replace(/^#/, "");
+  return hashPath.startsWith("/") ? hashPath : window.location.pathname;
+}
+
+let redirectingToLogin = false;
+
+function redirectToModuleLogin(module) {
+  if (typeof window === "undefined") return;
+
+  const normalizedModule = LOGIN_PATHS[module] ? module : "user";
+  const loginPath = LOGIN_PATHS[normalizedModule];
+  const currentPath = getCurrentAppPath();
+
+  clearModuleAuth(normalizedModule);
+  window.dispatchEvent(
+    new CustomEvent("authRefreshFailed", {
+      detail: { module: normalizedModule },
+    }),
+  );
+  window.dispatchEvent(new Event(`${normalizedModule}AuthChanged`));
+
+  if (currentPath.startsWith(loginPath) || redirectingToLogin) return;
+
+  redirectingToLogin = true;
+  window.location.replace(loginPath);
+}
+
 function getAccessToken(config) {
   const module = getModuleFromConfig(config);
   const key = `${module}_accessToken`;
@@ -115,10 +165,16 @@ function clearModuleAuth(module) {
       localStorage.removeItem("adminInfo");
     } else if (module === "user") {
       localStorage.removeItem("auth_customer");
+      localStorage.removeItem("user_accessToken");
       localStorage.removeItem("accessToken");
       localStorage.removeItem("token");
     } else if (module === "restaurant") {
+      localStorage.removeItem("auth_restaurant");
       localStorage.removeItem("accessToken");
+      localStorage.removeItem("token");
+    } else if (module === "delivery") {
+      localStorage.removeItem("auth_delivery");
+      localStorage.removeItem("delivery_accessToken");
       localStorage.removeItem("token");
     }
   } catch (_) {}
@@ -141,10 +197,7 @@ function onRefreshFailed(module) {
   // Fail any queued requests that were waiting for this refresh
   refreshSubscribers.forEach((cb) => cb(null, module));
   refreshSubscribers = [];
-  
-  if (typeof window !== "undefined") {
-    window.dispatchEvent(new CustomEvent("authRefreshFailed", { detail: { module } }));
-  }
+  redirectToModuleLogin(module);
 }
 
 apiClient.interceptors.request.use(
@@ -180,13 +233,26 @@ apiClient.interceptors.response.use(
     if (err?.response?.status === 429) {
       return Promise.reject(err);
     }
-    if (err?.response?.status !== 401 || !original || original._retry) {
+    if (err?.response?.status !== 401 || !original) {
       return Promise.reject(err);
     }
+
     const module = original.contextModule || getModuleFromUrl(original.url);
+
+    // Invalid login/OTP credentials should remain visible on the auth screen.
+    if (isAuthenticationRequest(original.url)) {
+      return Promise.reject(err);
+    }
+
+    // A request that still fails after refresh has an invalid session.
+    if (original._retry) {
+      redirectToModuleLogin(module);
+      return Promise.reject(err);
+    }
+
     const refreshToken = getRefreshToken(module);
     if (!refreshToken) {
-      clearModuleAuth(module);
+      redirectToModuleLogin(module);
       return Promise.reject(err);
     }
 

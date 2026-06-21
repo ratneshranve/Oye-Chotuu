@@ -12,10 +12,12 @@ import {
     uploadRestaurantMenuImages,
     listPublicOffers,
     getRestaurantComplaints,
-    deleteRestaurantAccount
+    deleteRestaurantAccount,
+    getRestaurantDraft,
+    updateRestaurantDraft
 } from '../services/restaurant.service.js';
 import { validateRestaurantRegisterDto } from '../validators/restaurant.validator.js';
-import { sendResponse } from '../../../../utils/response.js';
+import { sendError, sendResponse } from '../../../../utils/response.js';
 
 export const registerRestaurantController = async (req, res, next) => {
     try {
@@ -50,11 +52,35 @@ export const getApprovedRestaurantController = async (req, res, next) => {
 
 export const getCurrentRestaurantController = async (req, res, next) => {
     try {
-        const restaurantId = req.user?.userId;
-        const restaurant = await getCurrentRestaurantProfile(restaurantId);
-        return sendResponse(res, 200, 'Restaurant fetched successfully', { restaurant });
-    } catch (error) {
-        next(error);
+        const restaurantId = req.user.userId;
+        const profile = await getCurrentRestaurantProfile(restaurantId);
+        sendResponse(res, 200, 'Current restaurant profile fetched successfully', { restaurant: profile });
+    } catch (err) {
+        next(err);
+    }
+};
+
+export const getRestaurantDraftController = async (req, res, next) => {
+    try {
+        const restaurantId = req.user.userId;
+        const draft = await getRestaurantDraft(restaurantId);
+        sendResponse(res, 200, 'Draft fetched successfully', { draft });
+    } catch (err) {
+        next(err);
+    }
+};
+
+export const updateRestaurantDraftController = async (req, res, next) => {
+    try {
+        const restaurantId = req.user.userId;
+        const draftData = req.body?.draft;
+        if (!draftData || typeof draftData !== 'object' || Array.isArray(draftData)) {
+            return sendError(res, 400, 'Draft payload must be an object');
+        }
+        const updatedDraft = await updateRestaurantDraft(restaurantId, draftData);
+        return sendResponse(res, 200, 'Draft updated successfully', { draft: updatedDraft });
+    } catch (err) {
+        next(err);
     }
 };
 

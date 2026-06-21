@@ -44,12 +44,10 @@ const restaurantSchema = new mongoose.Schema(
   {
     restaurantName: {
       type: String,
-      required: true,
       trim: true,
     },
     ownerName: {
       type: String,
-      required: true,
       trim: true,
     },
     ownerEmail: {
@@ -244,10 +242,14 @@ const restaurantSchema = new mongoose.Schema(
     menu: {
       sections: { type: Array, default: [] },
     },
+    onboardingStep: {
+      type: Number,
+      default: 1,
+    },
     status: {
       type: String,
-      enum: ["pending", "approved", "rejected"],
-      default: "pending",
+      enum: ["draft", "pending", "approved", "rejected"],
+      default: "draft",
     },
     customOrdersEnabled: {
       type: Boolean,

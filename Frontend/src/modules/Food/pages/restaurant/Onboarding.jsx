@@ -43,7 +43,6 @@ const ESTIMATED_DELIVERY_TIME_OPTIONS = [
   "50-60 mins",
 ]
 
-const ONBOARDING_STORAGE_KEY = "restaurant_onboarding_data"
 const PAN_NUMBER_REGEX = /^[A-Z]{5}[0-9]{4}[A-Z]$/
 const GST_NUMBER_REGEX = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/
 const FSSAI_NUMBER_REGEX = /^\d{14}$/
@@ -117,8 +116,8 @@ const serializeDraftImage = async (value, fallbackPrefix) => {
     }
   }
 
-  if (typeof value === "string" && value.startsWith("http")) return value
-  if (value?.url && typeof value.url === "string") return value
+  if (typeof value === "string") return value
+  if (value?.url && typeof value.url === "string") return value.url
 
   return null
 }
@@ -139,8 +138,19 @@ const restoreDraftImage = (value, fallbackPrefix) => {
     }
   }
 
-  if (typeof value === "string" && value.startsWith("http")) return value
-  if (value?.url && typeof value.url === "string") return value
+  if (typeof value === "string") {
+    if (value.startsWith('{"kind":"draft-file"')) {
+      try {
+        return restoreDraftImage(JSON.parse(value), fallbackPrefix)
+      } catch {
+        return null
+      }
+    }
+    return value
+  }
+  if (value?.url && typeof value.url === "string") {
+    return restoreDraftImage(value.url, fallbackPrefix)
+  }
 
   return null
 }
@@ -188,60 +198,64 @@ const normalizeZoneIdValue = (value) => {
 
 const getTodayLocalYMD = () => formatDateToLocalYMD(new Date())
 
-// Helper functions for localStorage
+// Draft persistence helpers
 const saveOnboardingToLocalStorage = async (step1, step2, step3, step4, currentStep) => {
   try {
-    const serializedMenuImages = await Promise.all(
-      (step2.menuImages || []).map((img, index) =>
-        serializeDraftImage(img, `menu-image-${index + 1}`),
-      ),
-    )
-
-    const serializableStep2 = {
-      ...step2,
-      menuImages: serializedMenuImages.filter(Boolean),
-      profileImage: await serializeDraftImage(step2.profileImage, "restaurant-profile"),
-    }
-
-    const serializableStep3 = {
-      ...step3,
-      panImage: await serializeDraftImage(step3.panImage, "pan-image"),
-      gstImage: await serializeDraftImage(step3.gstImage, "gst-image"),
-      fssaiImage: await serializeDraftImage(step3.fssaiImage, "fssai-image"),
-    }
-
     const dataToSave = {
-      step1,
-      step2: serializableStep2,
-      step3: serializableStep3,
-      step4: step4 || {},
       currentStep,
       timestamp: Date.now(),
     }
-    localStorage.setItem(ONBOARDING_STORAGE_KEY, JSON.stringify(dataToSave))
+
+    if (currentStep === 2) {
+      dataToSave.step1 = step1
+    } else if (currentStep === 3) {
+      const serializedMenuImages = await Promise.all(
+        (step2.menuImages || []).map((img, index) =>
+          serializeDraftImage(img, `menu-image-${index + 1}`),
+        ),
+      )
+      dataToSave.step2 = {
+        ...step2,
+        menuImages: serializedMenuImages.filter(Boolean),
+        profileImage: await serializeDraftImage(step2.profileImage, "restaurant-profile"),
+      }
+    } else if (currentStep === 4) {
+      dataToSave.step3 = {
+        ...step3,
+        panImage: await serializeDraftImage(step3.panImage, "pan-image"),
+        gstImage: await serializeDraftImage(step3.gstImage, "gst-image"),
+        fssaiImage: await serializeDraftImage(step3.fssaiImage, "fssai-image"),
+      }
+    } else {
+      dataToSave.step4 = step4 || {}
+    }
+
+    await restaurantAPI.updateDraft(dataToSave)
+    return dataToSave
   } catch (error) {
-    debugError("Failed to save onboarding data to localStorage:", error)
+    debugError("Failed to save onboarding data to backend:", error)
+    throw error
   }
 }
 
-const loadOnboardingFromLocalStorage = () => {
+const loadOnboardingFromLocalStorage = async () => {
   try {
-    const stored = localStorage.getItem(ONBOARDING_STORAGE_KEY)
-    if (stored) {
-      return JSON.parse(stored)
+    const res = await restaurantAPI.getDraft()
+    const draft = res?.data?.data?.draft || res?.data?.draft
+    if (draft && Object.keys(draft).length > 0) {
+      return draft
     }
   } catch (error) {
-    debugError("Failed to load onboarding data from localStorage:", error)
+    debugError("Failed to load onboarding data from backend:", error)
   }
   return null
 }
 
 const clearOnboardingFromLocalStorage = () => {
   try {
-    localStorage.removeItem(ONBOARDING_STORAGE_KEY)
     localStorage.removeItem("restaurant_pendingPhone")
   } catch (error) {
-    debugError("Failed to clear onboarding data from localStorage:", error)
+    debugError("Failed to clear onboarding cache:", error)
   }
 }
 
@@ -660,6 +674,8 @@ export default function RestaurantOnboarding() {
   }, [zones])
   const mapsScriptLoadedRef = useRef(false)
   const hasRestoredDraftStepRef = useRef(false)
+  const hasLoadedDraftRef = useRef(false)
+  const hasLoadedProfileRef = useRef(false)
   const menuImagesInputRef = useRef(null)
   const profileImageInputRef = useRef(null)
   const panImageInputRef = useRef(null)
@@ -765,6 +781,9 @@ export default function RestaurantOnboarding() {
 
   // Load from localStorage on mount and check URL parameter
   useEffect(() => {
+    if (hasLoadedDraftRef.current) return
+    hasLoadedDraftRef.current = true
+
     const currentPhone = getVerifiedPhoneFromStoredRestaurant()
     setVerifiedPhoneNumber(currentPhone)
 
@@ -779,20 +798,22 @@ export default function RestaurantOnboarding() {
       goToStep(1, { replace: true })
     }
 
-    let localData = loadOnboardingFromLocalStorage()
-    
-    // If the phone number changed, clear old onboarding data
-    if (localData && localData.step1 && localData.step1.ownerPhone && currentPhone) {
-      if (normalizePhoneDigits(localData.step1.ownerPhone) !== normalizePhoneDigits(currentPhone)) {
-        clearOnboardingFromLocalStorage()
-        clearOnboardingFileCache()
-        localData = null // act as if no local data
-      }
-    }
+    const fetchDraft = async () => {
+      try {
+        let localData = await loadOnboardingFromLocalStorage()
 
-    if (localData) {
-      if (localData.step1) {
-        setStep1({
+        // If the phone number changed, clear old onboarding data
+        if (localData && localData.step1 && localData.step1.ownerPhone && currentPhone) {
+          if (normalizePhoneDigits(localData.step1.ownerPhone) !== normalizePhoneDigits(currentPhone)) {
+            clearOnboardingFromLocalStorage()
+            clearOnboardingFileCache()
+            localData = null // act as if no local data
+          }
+        }
+
+        if (localData) {
+          if (localData.step1) {
+            setStep1({
           restaurantName: localData.step1.restaurantName || "",
           businessType: localData.step1.businessType || "restaurant",
           pureVegRestaurant:
@@ -816,9 +837,9 @@ export default function RestaurantOnboarding() {
             latitude: localData.step1.location?.latitude ?? "",
             longitude: localData.step1.location?.longitude ?? "",
           },
-        })
-      }
-      if (localData.step2) {
+            })
+          }
+          if (localData.step2) {
         const cachedMenuImages = [...(onboardingFileCache.step2.menuImages || [])]
         const restoredMenuImages = (localData.step2.menuImages || [])
           .map((img, index) => {
@@ -838,17 +859,17 @@ export default function RestaurantOnboarding() {
         )
         const cachedProfileImage = onboardingFileCache.step2.profileImage || null
 
-        setStep2({
+            setStep2({
           menuImages: finalMenuImages,
           profileImage: cachedProfileImage || restoredProfileImage,
           cuisines: localData.step2.cuisines || [],
           openingTime: normalizeTimeValue(localData.step2.openingTime),
           closingTime: normalizeTimeValue(localData.step2.closingTime),
           openDays: localData.step2.openDays || [],
-        })
-      }
-      if (localData.step3) {
-        setStep3({
+            })
+          }
+          if (localData.step3) {
+            setStep3({
           panNumber: localData.step3.panNumber || "",
           nameOnPan: localData.step3.nameOnPan || "",
           panImage:
@@ -874,25 +895,30 @@ export default function RestaurantOnboarding() {
           ifscCode: (localData.step3.ifscCode || "").toUpperCase(),
           accountHolderName: localData.step3.accountHolderName || "",
           accountType: normalizeAccountTypeValue(localData.step3.accountType || ""),
-        })
-      }
-      if (localData.step4) {
-        setStep4({
+            })
+          }
+          if (localData.step4) {
+            setStep4({
           estimatedDeliveryTime: localData.step4.estimatedDeliveryTime || "",
           featuredDish: localData.step4.featuredDish || "",
           featuredPrice: localData.step4.featuredPrice || "",
           offer: localData.step4.offer || "",
-        })
+            })
+          }
+          // Only set step from backend draft if URL doesn't have a step parameter
+          if (localData.currentStep && !stepParam) {
+            hasRestoredDraftStepRef.current = true
+            goToStep(localData.currentStep, { replace: true })
+          }
+        } else {
+          clearOnboardingFileCache()
+        }
+      } catch (error) {
+        debugError("Failed to hydrate onboarding draft:", error)
       }
-      // Only set step from localStorage if URL doesn't have a step parameter
-      if (localData.currentStep && !stepParam) {
-        hasRestoredDraftStepRef.current = true
-        goToStep(localData.currentStep, { replace: true })
-      }
-    } else {
-      // Clear file cache if no local data exists (e.g. after a fresh login)
-      clearOnboardingFileCache()
     }
+
+    fetchDraft()
   }, [searchParams])
 
   useEffect(() => {
@@ -921,20 +947,6 @@ export default function RestaurantOnboarding() {
     }
   }, [])
 
-  // Save to localStorage whenever step data changes
-  useEffect(() => {
-    let active = true
-
-    ;(async () => {
-      await saveOnboardingToLocalStorage(step1, step2, step3, step4, step)
-      if (!active) return
-    })()
-
-    return () => {
-      active = false
-    }
-  }, [step1, step2, step3, step4, step])
-
   useEffect(() => {
     syncOnboardingFileCache(step2, step3)
   }, [step2, step3])
@@ -953,6 +965,9 @@ export default function RestaurantOnboarding() {
   }, [])
 
   useEffect(() => {
+    if (hasLoadedProfileRef.current) return
+    hasLoadedProfileRef.current = true
+
     const fetchData = async () => {
       try {
         setLoading(true)
@@ -1362,12 +1377,15 @@ export default function RestaurantOnboarding() {
     setSaving(true)
     try {
       if (step === 1) {
+        await saveOnboardingToLocalStorage(step1, step2, step3, step4, 2)
         goToStep(2)
         window.scrollTo({ top: 0, behavior: "instant" })
       } else if (step === 2) {
+        await saveOnboardingToLocalStorage(step1, step2, step3, step4, 3)
         goToStep(3)
         window.scrollTo({ top: 0, behavior: "instant" })
       } else if (step === 3) {
+        await saveOnboardingToLocalStorage(step1, step2, step3, step4, 4)
         goToStep(4)
         window.scrollTo({ top: 0, behavior: "instant" })
       } else if (step === 4) {

@@ -40,9 +40,6 @@ const AddProduct = () => {
     slug: "",
     sku: "",
     description: "",
-    price: "",
-    salePrice: "",
-    stock: "",
     lowStockAlert: 5,
     category: "",
     subcategory: "",
@@ -99,12 +96,15 @@ const AddProduct = () => {
       return;
     }
 
-    const firstVariant = formData.variants[0] || {};
-    const effectivePrice = firstVariant.price || formData.price;
-    const effectiveStock = firstVariant.stock || formData.stock;
+    if (formData.variants.length === 0) {
+      toast.error("Please add at least one product variant");
+      return;
+    }
 
-    if (!effectivePrice || !effectiveStock) {
-      toast.error("Please fill in Price and Stock in the Pricing & Stock tab");
+    const firstVariant = formData.variants[0];
+
+    if (!firstVariant.price || !firstVariant.stock) {
+      toast.error("Please fill in Price and Stock for the first variant");
       return;
     }
 
@@ -141,10 +141,10 @@ const AddProduct = () => {
       data.append("weight", formData.weight);
       data.append("status", formData.status);
 
-      // Map top-level price/stock — prefer pricing tab values, fallback to first variant
-      data.append("price", formData.price || firstVariant.price);
-      data.append("salePrice", formData.salePrice || firstVariant.salePrice || 0);
-      data.append("stock", formData.stock || firstVariant.stock);
+      // Map top-level price/stock — prefer first variant
+      data.append("price", firstVariant.price);
+      data.append("salePrice", firstVariant.salePrice || 0);
+      data.append("stock", firstVariant.stock);
       data.append("lowStockAlert", formData.lowStockAlert || 5);
 
       // Category IDs
@@ -238,7 +238,6 @@ const AddProduct = () => {
         <div className="md:w-64 bg-slate-50/50 border-r border-slate-100 p-4 space-y-1 overflow-y-auto">
           {[
             { id: "general", label: "General Info", icon: HiOutlineTag },
-            { id: "pricing", label: "Pricing & Stock", icon: HiOutlineCurrencyRupee },
             { id: "variants", label: "Item Variants", icon: HiOutlineSwatch },
             { id: "category", label: "Groups", icon: HiOutlineFolderOpen },
             { id: "media", label: "Photos", icon: HiOutlinePhoto },
@@ -336,66 +335,7 @@ const AddProduct = () => {
             </div>
           )}
 
-          {modalTab === "pricing" && (
-            <div className="space-y-8 animate-in fade-in slide-in-from-right-2 duration-300">
-              <div className="p-6 bg-slate-50 rounded-3xl border border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-1.5 flex flex-col">
-                  <label className="text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-widest ml-1">
-                    Price (₹)
-                  </label>
-                  <input
-                    type="number"
-                    min="1"
-                    value={formData.price}
-                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                    placeholder="e.g. 500"
-                    className="w-full px-4 py-3 bg-white shadow-sm ring-1 ring-slate-200 border-none rounded-xl text-lg font-bold outline-none focus:ring-2 focus:ring-primary/10"
-                  />
-                </div>
-                <div className="space-y-1.5 flex flex-col">
-                  <label className="text-[9px] font-bold text-emerald-600 uppercase tracking-widest ml-1">
-                    Discounted Price (₹)
-                  </label>
-                  <input
-                    type="number"
-                    min="1"
-                    value={formData.salePrice}
-                    onChange={(e) => setFormData({ ...formData, salePrice: e.target.value })}
-                    placeholder="e.g. 450"
-                    className="w-full px-4 py-3 bg-emerald-50/50 shadow-sm ring-1 ring-emerald-100 border-none rounded-xl text-lg font-bold text-emerald-700 outline-none focus:ring-2 focus:ring-emerald-200"
-                  />
-                </div>
-              </div>
 
-              <div className="grid grid-cols-2 gap-6">
-                <div className="space-y-1.5 flex flex-col">
-                  <label className="text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-widest ml-1">
-                    How many in stock
-                  </label>
-                  <input
-                    type="number"
-                    min="1"
-                    value={formData.stock}
-                    onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
-                    placeholder="e.g. 10"
-                    className="w-full px-4 py-2.5 bg-slate-100 border-none rounded-xl text-sm font-bold outline-none ring-primary/5 focus:ring-2"
-                  />
-                </div>
-                <div className="space-y-1.5 flex flex-col">
-                  <label className="text-[9px] font-bold text-rose-500 uppercase tracking-widest ml-1">
-                    Alert me when stock is below
-                  </label>
-                  <input
-                    type="number"
-                    min="1"
-                    value={formData.lowStockAlert}
-                    onChange={(e) => setFormData({ ...formData, lowStockAlert: e.target.value })}
-                    className="w-full px-4 py-2.5 bg-rose-50/30 border-none rounded-xl text-sm font-bold text-rose-600 outline-none ring-rose-100 focus:ring-2"
-                  />
-                </div>
-              </div>
-            </div>
-          )}
 
           {modalTab === "variants" && (
             <div className="space-y-6 animate-in fade-in slide-in-from-right-2 duration-300">
@@ -526,6 +466,8 @@ const AddProduct = () => {
                               (_, i) => i !== index,
                             );
                             setFormData({ ...formData, variants: newVariants });
+                          } else {
+                            toast.error("At least one variant is mandatory");
                           }
                         }}
                         className="p-2 text-slate-300 hover:text-rose-500 transition-colors">
