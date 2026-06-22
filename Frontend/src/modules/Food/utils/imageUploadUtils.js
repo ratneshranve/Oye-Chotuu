@@ -189,6 +189,10 @@ export const openGallery = async ({ onSelectFile, fileNamePrefix = "gallery-phot
         multiple: false,
       })
 
+      if (!result) {
+        throw new Error("Bridge returned null for openGallery");
+      }
+
       const isSuccess =
         result?.success === true ||
         Boolean(result?.base64 || result?.base64String || result?.data?.base64)
@@ -232,6 +236,10 @@ export const openGallery = async ({ onSelectFile, fileNamePrefix = "gallery-phot
     })
   } catch (error) {
     console.error("Gallery pick failed:", error)
-    toast.error("Failed to open gallery")
+    // Try fallback on bridge failure
+    openTransientImageInput({
+      onSelectFile,
+      accept: "image/*",
+    })
   }
 }

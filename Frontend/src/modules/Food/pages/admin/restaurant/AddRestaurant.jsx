@@ -922,7 +922,7 @@ export default function AddRestaurant() {
             <Label className="text-xs text-gray-700">Full name*</Label>
             <Input
               value={step1.ownerName || ""}
-              onChange={(e) => setStep1({ ...step1, ownerName: normalizeName(e.target.value) })}
+              onChange={(e) => setStep1({ ...step1, ownerName: e.target.value.replace(/[^a-zA-Z\s]/g, "").replace(/\s+/g, " ").trimStart() })}
               className="mt-1 bg-white text-sm text-black placeholder-black"
               placeholder="Owner full name"
             />
@@ -1324,7 +1324,7 @@ export default function AddRestaurant() {
             <Label className="text-xs text-gray-700">Name on PAN*</Label>
             <Input
               value={step3.nameOnPan || ""}
-              onChange={(e) => setStep3({ ...step3, nameOnPan: normalizeName(e.target.value) })}
+              onChange={(e) => setStep3({ ...step3, nameOnPan: e.target.value.replace(/[^a-zA-Z\s]/g, "").replace(/\s+/g, " ").trimStart() })}
               className="mt-1 bg-white text-sm text-black placeholder-black"
             />
           </div>
@@ -1426,7 +1426,7 @@ export default function AddRestaurant() {
             <option value="Current">Current</option>
           </select>
         </div>
-        <Input value={step3.accountHolderName || ""} onChange={(e) => setStep3({ ...step3, accountHolderName: normalizeName(e.target.value) })} className="bg-white text-sm" placeholder="Account holder name*" />
+        <Input value={step3.accountHolderName || ""} onChange={(e) => setStep3({ ...step3, accountHolderName: e.target.value.replace(/[^a-zA-Z\s]/g, "").replace(/\s+/g, " ").trimStart() })} className="bg-white text-sm" placeholder="Account holder name*" />
       </section>
     </div>
   )

@@ -64,6 +64,7 @@ function getModuleFromConfig(config) {
 }
 
 const LOGIN_PATHS = {
+  seller: "/seller/auth",
   admin: "/admin/login",
   restaurant: "/food/restaurant/login",
   delivery: "/food/delivery/login",
@@ -175,6 +176,10 @@ function clearModuleAuth(module) {
     } else if (module === "delivery") {
       localStorage.removeItem("auth_delivery");
       localStorage.removeItem("delivery_accessToken");
+      localStorage.removeItem("token");
+    } else if (module === "seller") {
+      localStorage.removeItem("auth_seller");
+      localStorage.removeItem("seller_accessToken");
       localStorage.removeItem("token");
     }
   } catch (_) {}

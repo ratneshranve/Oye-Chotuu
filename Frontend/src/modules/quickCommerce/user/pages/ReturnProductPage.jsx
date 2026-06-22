@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { ChevronLeft, Upload, Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -10,19 +10,35 @@ const ReturnProductPage = () => {
   const location = useLocation();
   const item = location.state?.item || {};
   
-  const [quantity, setQuantity] = useState(1);
-  const [reason, setReason] = useState("");
-  const [description, setDescription] = useState("");
-  const [images, setImages] = useState([]);
-  const [refundMethod, setRefundMethod] = useState("Wallet");
+  const getSessionData = (key, defaultValue) => {
+    try {
+      const saved = sessionStorage.getItem(`return_form_${orderId}_${productId}_${key}`);
+      return saved ? JSON.parse(saved) : defaultValue;
+    } catch (e) {
+      return defaultValue;
+    }
+  };
+
+  const [quantity, setQuantity] = useState(() => getSessionData("quantity", 1));
+  const [reason, setReason] = useState(() => getSessionData("reason", ""));
+  const [description, setDescription] = useState(() => getSessionData("description", ""));
+  const [images, setImages] = useState(() => getSessionData("images", []));
+  const [refundMethod, setRefundMethod] = useState(() => getSessionData("refundMethod", "Wallet"));
   
   // Bank details
-  const [accountNumber, setAccountNumber] = useState("");
-  const [ifsc, setIfsc] = useState("");
-  const [accountHolder, setAccountHolder] = useState("");
-  const [upiId, setUpiId] = useState("");
+  const [accountNumber, setAccountNumber] = useState(() => getSessionData("accountNumber", ""));
+  const [ifsc, setIfsc] = useState(() => getSessionData("ifsc", ""));
+  const [accountHolder, setAccountHolder] = useState(() => getSessionData("accountHolder", ""));
+  const [upiId, setUpiId] = useState(() => getSessionData("upiId", ""));
 
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const keys = { quantity, reason, description, images, refundMethod, accountNumber, ifsc, accountHolder, upiId };
+    Object.entries(keys).forEach(([key, value]) => {
+      sessionStorage.setItem(`return_form_${orderId}_${productId}_${key}`, JSON.stringify(value));
+    });
+  }, [orderId, productId, quantity, reason, description, images, refundMethod, accountNumber, ifsc, accountHolder, upiId]);
 
   const handleImageUpload = async (e) => {
     const files = Array.from(e.target.files);
@@ -73,6 +89,9 @@ const ReturnProductPage = () => {
       const response = await customerApi.createReturnRequest(payload);
       const data = response.data || {};
       if (data.success) {
+        const keys = ["quantity", "reason", "description", "images", "refundMethod", "accountNumber", "ifsc", "accountHolder", "upiId"];
+        keys.forEach(key => sessionStorage.removeItem(`return_form_${orderId}_${productId}_${key}`));
+        
         toast.success("Return request submitted successfully");
         navigate("/quick/returns");
       } else {

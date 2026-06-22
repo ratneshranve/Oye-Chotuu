@@ -26,6 +26,7 @@ import { toast } from "sonner"
 import useAppBackNavigation from "@food/hooks/useAppBackNavigation"
 import { ImageSourcePicker } from "@food/components/ImageSourcePicker"
 import { isFlutterBridgeAvailable } from "@food/utils/imageUploadUtils"
+import { compressImage } from "@/shared/utils/imageCompression"
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
@@ -268,13 +269,25 @@ export default function EditProfile() {
     }))
   }
 
-  const processProfileImageFile = async (file) => {
-    if (!file) return
+  const processProfileImageFile = async (rawFile) => {
+    if (!rawFile) return
 
     // Validate file type
-    if (!file.type.startsWith('image/')) {
+    if (!rawFile.type.startsWith('image/')) {
       toast.error('Please select a valid image file')
       return
+    }
+
+    let file = rawFile;
+    if (file.size > 2 * 1024 * 1024) {
+      try {
+        setIsUploadingImage(true);
+        file = await compressImage(file);
+      } catch (e) {
+        console.error("Compression failed", e);
+      } finally {
+        setIsUploadingImage(false);
+      }
     }
 
     // Validate file size (max 5MB)
@@ -336,12 +349,7 @@ export default function EditProfile() {
   }
 
   const handleProfileImageAction = () => {
-    if (isFlutterBridgeAvailable()) {
-      setPhotoPickerOpen(true)
-      return
-    }
-
-    fileInputRef.current?.click()
+    setPhotoPickerOpen(true)
   }
 
   const validateForm = () => {

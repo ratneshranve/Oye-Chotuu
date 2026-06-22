@@ -63,6 +63,11 @@ const getProfileEndpoint = (role) => {
     return '/auth/me';
 };
 
+const getCurrentAppPath = () => {
+    const hashPath = String(window.location.hash || '').replace(/^#/, '');
+    return hashPath.startsWith('/') ? hashPath : window.location.pathname;
+};
+
 export const AuthProvider = ({ children }) => {
     // Current role based on URL
     const getCurrentRoleFromUrl = () => {
@@ -152,7 +157,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = async () => {
-        const path = window.location.pathname;
+        const path = getCurrentAppPath();
         const moduleName = currentRole === 'customer' ? 'user' : currentRole;
         const currentAccessToken = authData[currentRole] || localStorage.getItem(`${moduleName}_accessToken`);
         const currentRefreshToken = localStorage.getItem(`${moduleName}_refreshToken`);
