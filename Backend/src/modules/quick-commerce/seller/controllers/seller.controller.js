@@ -2063,6 +2063,17 @@ export const getSellerEarningsController = async (req, res) => {
       },
     );
 
+    const totalRefunds = Math.abs(
+      transactions
+        .filter(
+          (item) =>
+            item.type === "Adjustment" &&
+            item.status === "Settled" &&
+            num(item.amount) < 0,
+        )
+        .reduce((sum, item) => sum + num(item.amount), 0),
+    );
+
     const balances = {
       totalRevenue: totalNetEarnings, // Keeping field name for backward compatibility
       totalNetEarnings,
@@ -2072,6 +2083,7 @@ export const getSellerEarningsController = async (req, res) => {
       totalWithdrawn,
       settledBalance,
       pendingPayouts,
+      totalRefunds,
     };
 
     return res.json({

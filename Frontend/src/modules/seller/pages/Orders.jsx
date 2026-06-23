@@ -670,8 +670,8 @@ const Orders = () => {
                     type="text"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Search by Order ID or Customer Name..."
-                    className="w-full pl-10 pr-4 py-2.5 bg-slate-100/50 border-none rounded-lg text-sm font-semibold text-slate-700 placeholder:text-slate-500 focus:ring-2 focus:ring-primary/5 transition-all outline-none"
+                    placeholder="Search orders or customers..."
+                    className="w-full pl-10 pr-4 py-2.5 bg-slate-100/50 border-none rounded-lg text-sm font-semibold text-slate-700 placeholder:text-slate-500 focus:ring-2 focus:ring-primary/5 transition-all outline-none text-ellipsis"
                   />
                 </div>
                 <div className="flex gap-3 shrink-0 w-full lg:w-auto items-center justify-end flex-wrap">
