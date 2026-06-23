@@ -312,7 +312,7 @@ export default function UnifiedOTPFastLogin() {
       style={{ paddingBottom: keyboardInset ? `${keyboardInset + 24}px` : undefined }}
     >
       {/* Top Red Section */}
-      <div className="w-full flex flex-col shrink-0 z-10 drop-shadow-md">
+      <div className="w-full flex flex-col shrink-0 z-20 drop-shadow-md relative">
         <div className="w-full relative overflow-hidden bg-[#b81724] pb-4">
           {/* Abstract wavy background layers to match the image */}
           <div className="absolute inset-0 z-0">
@@ -398,7 +398,7 @@ export default function UnifiedOTPFastLogin() {
       </div>
 
 
-      <div className="flex-1 max-w-[420px] mx-auto w-full px-4 flex flex-col mt-16 md:mt-20 relative z-20 pb-4 h-full overflow-y-auto">
+      <div className="flex-1 max-w-[420px] mx-auto w-full px-4 flex flex-col -mt-16 md:-mt-20 pt-32 md:pt-40 relative z-10 pb-4 h-full overflow-y-auto">
         {/* Main Card */}
         <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-gray-100 shrink-0 mb-4">
           <div className="text-center mb-5">
@@ -595,7 +595,7 @@ export default function UnifiedOTPFastLogin() {
         </div>
         )}
 
-        <div className="text-center space-y-1 shrink-0 mt-auto pt-4 mb-2">
+        <div className={`text-center space-y-1 shrink-0 mt-auto pt-4 mb-2 ${keyboardInset > 0 ? "hidden" : "block"}`}>
           <p className="text-[10px] text-gray-500 font-medium">By continuing, you agree to our</p>
           <div className="flex items-center justify-center gap-1.5 text-[10px] font-semibold">
             <Link to="/food/user/profile/terms" className="text-[#CB202D] hover:underline">Terms & Conditions</Link>

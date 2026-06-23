@@ -338,7 +338,7 @@ export default function RestaurantOTP() {
       style={keyboardOffset > 0 ? { paddingBottom: `${Math.min(keyboardOffset, 360)}px` } : undefined}
     >
       {/* Top Green Section */}
-      <div className="w-full flex flex-col shrink-0 z-10 drop-shadow-md">
+      <div className="w-full flex flex-col shrink-0 z-20 drop-shadow-md relative">
         <div className="w-full relative overflow-hidden bg-[#49AB14] pb-4">
           {/* Back Button */}
           <button
@@ -426,7 +426,7 @@ export default function RestaurantOTP() {
         </div>
       </div>
 
-      <div className="flex-1 max-w-[420px] mx-auto w-full px-4 flex flex-col mt-16 md:mt-20 relative z-20 pb-4 h-full">
+      <div className="flex-1 max-w-[420px] mx-auto w-full px-4 flex flex-col -mt-16 md:-mt-20 pt-32 md:pt-40 relative z-10 pb-4 h-full">
         {/* Main Card */}
         <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-gray-100 shrink-0 mb-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <div className="text-center mb-5">
@@ -524,7 +524,7 @@ export default function RestaurantOTP() {
         </div>
       </div>
 
-      <div className="pb-8 text-center mt-auto">
+      <div className={`pb-8 text-center mt-auto ${keyboardOffset > 0 ? "hidden" : "block"}`}>
           <p className="text-[10px] font-black text-slate-300 tracking-[0.2em] uppercase">
             SECURE VERIFICATION SYSTEM &bull; {companyName.toUpperCase()}
           </p>
