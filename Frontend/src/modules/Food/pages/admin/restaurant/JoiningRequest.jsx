@@ -34,35 +34,7 @@ const formatTime12Hour = (timeStr) => {
 
 const formatRestaurantId = (id) => {
   if (!id) return "REST000000"
-
-  const idString = String(id)
-  const parts = idString.split(/[-.]/)
-  let lastDigits = ""
-
-  if (parts.length > 0) {
-    const lastPart = parts[parts.length - 1]
-    const digits = lastPart.match(/\d+/g)
-    if (digits && digits.length > 0) {
-      const allDigits = digits.join("")
-      lastDigits = allDigits.slice(-6).padStart(6, "0")
-    } else {
-      const allParts = parts.join("")
-      const allDigits = allParts.match(/\d+/g)
-      if (allDigits && allDigits.length > 0) {
-        const combinedDigits = allDigits.join("")
-        lastDigits = combinedDigits.slice(-6).padStart(6, "0")
-      }
-    }
-  }
-
-  if (!lastDigits) {
-    const hash = idString.split("").reduce((acc, char) => {
-      return ((acc << 5) - acc) + char.charCodeAt(0) | 0
-    }, 0)
-    lastDigits = Math.abs(hash).toString().slice(-6).padStart(6, "0")
-  }
-
-  return `REST${lastDigits}`
+  return `REST${String(id).slice(-6).padStart(6, "0")}`
 }
 
 

@@ -24,6 +24,8 @@ import { BlurFade } from "@/components/ui/blur-fade";
 import { MagicCard } from "@/components/ui/magic-card";
 import { toast } from "sonner";
 import { exportToCSV } from "@/lib/exportUtils";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 import { useSellerEarnings } from "../context/SellerEarningsContext";
 import Pagination from "@shared/components/ui/Pagination";
 
@@ -99,37 +101,45 @@ const Transactions = () => {
 
   const handleDownloadReceipt = (txn) => {
     try {
-      const record = {
-        id: txn.id ?? txn.ref ?? "",
-        type: txn.type ?? "",
-        amount: `₹${Math.abs(Number(txn.amount ?? 0)).toLocaleString()}`,
-        status: txn.status ?? "",
-        date:
-          txn.date ??
-          (txn.createdAt
-            ? new Date(txn.createdAt).toLocaleDateString()
-            : ""),
-        time:
-          txn.time ??
-          (txn.createdAt
-            ? new Date(txn.createdAt).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })
-            : ""),
-        customer: txn.customer ?? "",
-        ref: txn.ref ?? "",
-      };
-      exportToCSV([record], `Transaction_${record.id || "receipt"}`, {
-        id: "Transaction ID",
-        type: "Type",
-        amount: "Amount",
-        status: "Status",
-        date: "Date",
-        time: "Time",
-        customer: "Customer/Recipient",
-        ref: "Reference",
+      const doc = new jsPDF();
+      const id = txn.id ?? txn.ref ?? "receipt";
+      
+      doc.setFontSize(20);
+      doc.setTextColor(40, 40, 40);
+      doc.text("Transaction Receipt", 14, 22);
+
+      doc.setFontSize(10);
+      doc.setTextColor(100, 100, 100);
+      doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 30);
+
+      const amount = `Rs ${Math.abs(Number(txn.amount ?? 0)).toLocaleString()}`;
+      const date = txn.date ?? (txn.createdAt ? new Date(txn.createdAt).toLocaleDateString() : "");
+      const time = txn.time ?? (txn.createdAt ? new Date(txn.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "");
+
+      const tableData = [
+        ["Transaction ID", id],
+        ["Type", txn.type ?? ""],
+        ["Amount", amount],
+        ["Status", txn.status ?? ""],
+        ["Date", date],
+        ["Time", time],
+        ["Customer/Recipient", txn.customer ?? ""],
+        ["Reference", txn.ref ?? ""]
+      ];
+
+      autoTable(doc, {
+        startY: 40,
+        head: [],
+        body: tableData,
+        theme: 'grid',
+        styles: { fontSize: 11, cellPadding: 6 },
+        columnStyles: {
+          0: { fontStyle: 'bold', fillColor: [245, 247, 250], textColor: [60, 60, 60], cellWidth: 80 },
+          1: { textColor: [40, 40, 40] }
+        }
       });
+
+      doc.save(`Transaction_Receipt_${id}.pdf`);
       toast.success("Receipt downloaded");
     } catch (error) {
       console.error("Receipt download error:", error);
@@ -164,27 +174,35 @@ const Transactions = () => {
               onClick={() => {
                 setIsDownloading(true);
                 try {
-                  const exportData = filteredTransactions.map((txn) => ({
-                    id: txn.id ?? txn.ref ?? "",
-                    type: txn.type ?? "",
-                    amount: `₹${Number(txn.amount ?? 0).toLocaleString()}`,
-                    status: txn.status ?? "",
-                    date: txn.date ?? (txn.createdAt ? new Date(txn.createdAt).toLocaleDateString() : ""),
-                    time: txn.time ?? (txn.createdAt ? new Date(txn.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : ""),
-                    customer: txn.customer ?? "",
-                    ref: txn.ref ?? "",
-                  }));
+                  const doc = new jsPDF();
+                  doc.setFontSize(20);
+                  doc.setTextColor(40, 40, 40);
+                  doc.text("Seller Transactions Statement", 14, 22);
 
-                  exportToCSV(exportData, "Seller_Transactions", {
-                    id: "Transaction ID",
-                    type: "Type",
-                    amount: "Amount",
-                    status: "Status",
-                    date: "Date",
-                    time: "Time",
-                    customer: "Customer",
-                    ref: "Reference"
+                  doc.setFontSize(10);
+                  doc.setTextColor(100, 100, 100);
+                  doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 30);
+
+                  const exportData = filteredTransactions.map((txn) => [
+                    txn.id ?? txn.ref ?? "",
+                    txn.type ?? "",
+                    `Rs ${Number(txn.amount ?? 0).toLocaleString()}`,
+                    txn.status ?? "",
+                    `${txn.date ?? (txn.createdAt ? new Date(txn.createdAt).toLocaleDateString() : "")} ${txn.time ?? (txn.createdAt ? new Date(txn.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "")}`,
+                    txn.customer ?? "",
+                    txn.ref ?? ""
+                  ]);
+
+                  autoTable(doc, {
+                    startY: 40,
+                    head: [["ID", "Type", "Amount", "Status", "Date & Time", "Customer", "Ref"]],
+                    body: exportData,
+                    theme: 'grid',
+                    styles: { fontSize: 9, cellPadding: 4 },
+                    headStyles: { fillColor: [79, 70, 229], textColor: 255 },
                   });
+
+                  doc.save("Seller_Transactions_Statement.pdf");
                   toast.success("Statement downloaded successfully!");
                 } catch (error) {
                   console.error("Download Error:", error);
@@ -235,8 +253,9 @@ const Transactions = () => {
       <BlurFade delay={0.4}>
         <Card className="border-none shadow-xl shadow-slate-200/50 overflow-hidden rounded-lg p-0 bg-white">
           {/* Toolbar */}
-          <div className="p-6 border-b border-slate-50 flex flex-col md:flex-row gap-4 items-center justify-between bg-white">
-            <div className="flex bg-slate-100 p-1 rounded-lg border border-slate-200 shrink-0">
+          <div className="p-6 border-b border-slate-50 flex flex-col md:flex-row gap-4 items-center justify-between bg-white w-full">
+            <div className="w-full md:w-auto overflow-x-auto">
+              <div className="flex bg-slate-100 p-1 rounded-lg border border-slate-200 shrink-0 min-w-max">
               {["All", "Order Payment", "Withdrawal", "Adjustment"].map((tab) => (
                 <button
                   key={tab}
@@ -250,8 +269,9 @@ const Transactions = () => {
                   {tab === "Order Payment" ? "Payments" : tab === "Adjustment" ? "Deductions/Refunds" : tab}
                 </button>
               ))}
+              </div>
             </div>
-            <div className="relative w-full md:w-80">
+            <div className="relative w-full md:w-80 shrink-0">
               <HiOutlineMagnifyingGlass className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-600" />
               <Input
                 placeholder="Search by customer..."

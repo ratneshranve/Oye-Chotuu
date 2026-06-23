@@ -113,20 +113,7 @@ export default function HubFinance() {
   // Format restaurant ID to REST###### format (e.g., REST005678)
   const formatRestaurantId = (restaurantId) => {
     if (!restaurantId) return ''
-    
-    // Extract numeric part from the end (e.g., "REST-1768762345335-5678" -> "5678")
-    const strId = String(restaurantId)
-    const numericMatch = strId.match(/(\d+)$/)
-    
-    if (numericMatch) {
-      const numericPart = numericMatch[1]
-      // Take last 6 digits and pad with zeros if needed
-      const lastDigits = numericPart.slice(-6).padStart(6, '0')
-      return `REST${lastDigits}`
-    }
-    
-    // Fallback: if no numeric part found, use original
-    return strId
+    return `REST${String(restaurantId).slice(-6).padStart(6, "0")}`
   }
 
   // Get current cycle dates from API response or use default

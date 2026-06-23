@@ -52,6 +52,7 @@ export default function RestaurantCommission() {
     return commissions.filter(commission =>
       commission.restaurantName?.toLowerCase().includes(query) ||
       commission.restaurantId?.toLowerCase().includes(query) ||
+      commission.restaurant?.restaurantId?.toLowerCase().includes(query) ||
       commission.restaurant?.name?.toLowerCase().includes(query)
     )
   }, [commissions, searchQuery])
@@ -442,7 +443,7 @@ export default function RestaurantCommission() {
                         )}
                         {visibleColumns.restaurantId && (
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <span className="text-sm text-slate-700">{commission.restaurantId || '-'}</span>
+                            <span className="text-sm text-slate-700">{commission.restaurant?.restaurantId || commission.restaurantId || '-'}</span>
                           </td>
                         )}
                         {visibleColumns.defaultCommission && (

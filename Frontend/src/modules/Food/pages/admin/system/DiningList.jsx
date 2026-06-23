@@ -132,7 +132,7 @@ export default function DiningList() {
 
     const formatRestaurantId = (id) => {
         if (!id) return "REST000000"
-        return `REST${String(id).slice(-6).toUpperCase()}`
+        return `REST${String(id).slice(-6).padStart(6, "0")}`
     }
 
     const renderStars = (rating) => {

@@ -1612,16 +1612,19 @@ export async function getRestaurantCommissions() {
         .populate({ path: 'restaurantId', select: 'restaurantName' })
         .lean();
 
-    const commissions = list.map((c, index) => ({
-        _id: c._id,
-        sl: index + 1,
-        restaurantId: c.restaurantId?._id ? String(c.restaurantId._id) : String(c.restaurantId),
-        restaurantName: c.restaurantId?.restaurantName || '',
-        restaurant: c.restaurantId?._id ? { _id: c.restaurantId._id, name: c.restaurantId.restaurantName } : null,
+    const commissions = list.map((c, index) => {
+        const readableId = c.restaurantId?._id ? `REST${String(c.restaurantId._id).slice(-6).padStart(6, '0')}` : '';
+        return {
+            _id: c._id,
+            sl: index + 1,
+            restaurantId: c.restaurantId?._id ? String(c.restaurantId._id) : String(c.restaurantId),
+            restaurantName: c.restaurantId?.restaurantName || '',
+            restaurant: c.restaurantId?._id ? { _id: c.restaurantId._id, name: c.restaurantId.restaurantName, restaurantId: readableId } : null,
         defaultCommission: c.defaultCommission || { type: 'percentage', value: 0 },
-        notes: c.notes || '',
-        status: c.status !== false
-    }));
+            notes: c.notes || '',
+            status: c.status !== false
+        };
+    });
 
     return { commissions };
 }
@@ -1653,10 +1656,11 @@ export async function getRestaurantCommissionById(id) {
         .populate({ path: 'restaurantId', select: 'restaurantName' })
         .lean();
     if (!doc) return null;
+    const readableId = doc.restaurantId?._id ? `REST${String(doc.restaurantId._id).slice(-6).padStart(6, '0')}` : '';
     return {
         _id: doc._id,
         restaurantId: doc.restaurantId?._id ? String(doc.restaurantId._id) : String(doc.restaurantId),
-        restaurant: doc.restaurantId?._id ? { _id: doc.restaurantId._id, name: doc.restaurantId.restaurantName } : null,
+        restaurant: doc.restaurantId?._id ? { _id: doc.restaurantId._id, name: doc.restaurantId.restaurantName, restaurantId: readableId } : null,
         restaurantName: doc.restaurantId?.restaurantName || '',
         defaultCommission: doc.defaultCommission || { type: 'percentage', value: 0 },
         notes: doc.notes || '',
