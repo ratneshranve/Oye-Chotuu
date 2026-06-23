@@ -107,7 +107,6 @@ async function hasVisibleClientForTarget(payload = {}) {
 async function loadFirebaseWebConfig() {
   const candidates = [
     "/firebase-web-config.json",
-    "/api/v1/food/public/env",
   ];
   for (const url of candidates) {
     try {

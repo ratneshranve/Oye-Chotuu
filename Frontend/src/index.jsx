@@ -2,7 +2,8 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Toaster } from 'sonner'
 import App from './app/App.jsx'
-import { isModuleAuthenticated } from './modules/Food/utils/auth.js'
+import { hasModuleSession } from './modules/Food/utils/auth.js'
+import { isNativeLikeShell } from './core/navigation/appLocation.js'
 import './shared/styles/global.css'
 
 const NATIVE_LAST_ROUTE_KEY = 'native_last_route'
@@ -22,21 +23,6 @@ if (savedTheme === 'dark') {
   document.documentElement.classList.remove('dark')
 }
 
-function isNativeLikeShell() {
-  if (typeof window === 'undefined') return false
-
-  const protocol = String(window.location?.protocol || '').toLowerCase()
-  const userAgent = String(window.navigator?.userAgent || '').toLowerCase()
-
-  return (
-    Boolean(window.flutter_inappwebview) ||
-    Boolean(window.ReactNativeWebView) ||
-    protocol === 'file:' ||
-    userAgent.includes(' wv') ||
-    userAgent.includes('; wv')
-  )
-}
-
 function resolveNativeInitialRoute() {
   if (typeof window === 'undefined') return '/food/user'
 
@@ -51,14 +37,19 @@ function resolveNativeInitialRoute() {
   if (pathname.startsWith('/delivery')) return `/food${pathname}`
   if (pathname.startsWith('/user')) return `/food${pathname}`
   if (pathname.startsWith('/admin')) return pathname
-  if (storedRoute.startsWith('/food/') || storedRoute.startsWith('/admin')) {
+  if (
+    storedRoute.startsWith('/food/') ||
+    storedRoute.startsWith('/admin') ||
+    storedRoute.startsWith('/seller')
+  ) {
     return storedRoute
   }
 
-  if (isModuleAuthenticated('restaurant')) return '/food/restaurant'
-  if (isModuleAuthenticated('delivery')) return '/food/delivery'
-  if (isModuleAuthenticated('admin')) return '/admin'
-  if (isModuleAuthenticated('user')) return '/food/user'
+  if (hasModuleSession('restaurant')) return '/food/restaurant'
+  if (hasModuleSession('delivery')) return '/food/delivery'
+  if (hasModuleSession('admin')) return '/admin'
+  if (hasModuleSession('seller')) return '/seller'
+  if (hasModuleSession('user')) return '/food/user'
 
   return '/food/user'
 }

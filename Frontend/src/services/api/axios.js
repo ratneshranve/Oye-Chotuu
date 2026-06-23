@@ -7,6 +7,7 @@
  */
 
 import axios from "axios";
+import { getCurrentAppPath, replaceAppPath } from "@core/navigation/appLocation";
 
 // Prefer explicit env. If not set, use same-origin (works with a Vite proxy).
 // This avoids hardcoding ports like 5000 that may conflict with local setups.
@@ -85,11 +86,6 @@ function isAuthenticationRequest(url = "") {
   );
 }
 
-function getCurrentAppPath() {
-  if (typeof window === "undefined") return "";
-  const hashPath = String(window.location.hash || "").replace(/^#/, "");
-  return hashPath.startsWith("/") ? hashPath : window.location.pathname;
-}
 
 let redirectingToLogin = false;
 
@@ -111,7 +107,7 @@ function redirectToModuleLogin(module) {
   if (currentPath.startsWith(loginPath) || redirectingToLogin) return;
 
   redirectingToLogin = true;
-  window.location.replace(loginPath);
+  replaceAppPath(loginPath);
 }
 
 function getAccessToken(config) {

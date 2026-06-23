@@ -4,6 +4,17 @@ const debugLog = (...args) => {}
 const debugWarn = (...args) => {}
 const debugError = (...args) => {}
 
+const getFirebaseConfigFromEnv = () => ({
+  serviceFileContent: "",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "",
+  fcmProjectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "",
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "",
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "",
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || "",
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "",
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || ""
+})
+
 
 const languageTabs = [
   { key: "default", label: "Default" },
@@ -127,16 +138,7 @@ export default function FirebaseNotification() {
   const [activeTab, setActiveTab] = useState("push-notification")
   const [activeLanguage, setActiveLanguage] = useState("bn")
   const [messages, setMessages] = useState(notificationMessages)
-  const [firebaseConfig, setFirebaseConfig] = useState({
-    serviceFileContent: "",
-    apiKey: "AIzaSyC_TqpDR7LNHxFEPd8cGjl_ka_Rj0ebECA",
-    fcmProjectId: "zomato-607fa",
-    messagingSenderId: "1065631021082",
-    authDomain: "zomato-607fa.firebaseapp.com",
-    appId: "1:1065631021082:web:7424afd0ad2054ed6879a3",
-    storageBucket: "zomato-607fa.firebasestorage.app",
-    measurementId: "G-7JJV7JYVRX"
-  })
+  const [firebaseConfig, setFirebaseConfig] = useState(getFirebaseConfigFromEnv)
 
   const handleMessageToggle = (id) => {
     setMessages(prev => prev.map(msg => 
@@ -156,22 +158,13 @@ export default function FirebaseNotification() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    debugLog("Form submitted:", { activeTab, messages, firebaseConfig })
+    debugLog("Firebase notification form submitted", { activeTab })
     alert("Firebase Notification settings saved successfully!")
   }
 
   const handleReset = () => {
     setMessages(notificationMessages)
-    setFirebaseConfig({
-      serviceFileContent: "",
-      apiKey: "AIzaSyC_TqpDR7LNHxFEPd8cGjl_ka_Rj0ebECA",
-      fcmProjectId: "zomato-607fa",
-      messagingSenderId: "1065631021082",
-      authDomain: "zomato-607fa.firebaseapp.com",
-      appId: "1:1065631021082:web:7424afd0ad2054ed6879a3",
-      storageBucket: "zomato-607fa.firebasestorage.app",
-      measurementId: "G-7JJV7JYVRX"
-    })
+    setFirebaseConfig(getFirebaseConfigFromEnv())
   }
 
   return (

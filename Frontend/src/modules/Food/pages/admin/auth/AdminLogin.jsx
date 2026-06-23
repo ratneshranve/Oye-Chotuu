@@ -38,9 +38,12 @@ export default function AdminLogin() {
     const message = location.state?.message
     if (message) {
       setSuccessMessage(message)
-      window.history.replaceState({}, document.title, location.pathname)
+      navigate(`${location.pathname}${location.search}`, {
+        replace: true,
+        state: null,
+      })
     }
-  }, [location.state?.message, location.pathname])
+  }, [location.state?.message, location.pathname, location.search, navigate])
 
   // Fetch business settings logo on mount
   useEffect(() => {

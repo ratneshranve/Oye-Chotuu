@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import axiosInstance from '@core/api/axios';
 import { getWithDedupe } from '@core/api/dedupe';
 import { isTokenExpired } from '@core/utils/token';
+import { getCurrentAppPath, replaceAppPath } from '@core/navigation/appLocation';
 
 const AuthContext = createContext(undefined);
 
@@ -40,14 +41,16 @@ const ROLE_STORAGE_KEYS = {
     customer: 'auth_customer',
     seller: 'auth_seller',
     admin: 'auth_admin',
-    delivery: 'auth_delivery'
+    delivery: 'auth_delivery',
+    restaurant: 'auth_restaurant'
 };
 
 const LEGACY_ROLE_STORAGE_KEYS = {
     customer: ['user_accessToken'],
     seller: ['seller_accessToken'],
     admin: ['admin_accessToken'],
-    delivery: ['delivery_accessToken']
+    delivery: ['delivery_accessToken'],
+    restaurant: ['restaurant_accessToken']
 };
 
 const extractProfilePayload = (response) => {
@@ -63,10 +66,6 @@ const getProfileEndpoint = (role) => {
     return '/auth/me';
 };
 
-const getCurrentAppPath = () => {
-    const hashPath = String(window.location.hash || '').replace(/^#/, '');
-    return hashPath.startsWith('/') ? hashPath : window.location.pathname;
-};
 
 export const AuthProvider = ({ children }) => {
     // Current role based on URL
@@ -78,7 +77,8 @@ export const AuthProvider = ({ children }) => {
 
         if (path.startsWith('/seller')) return 'seller';
         if (path.startsWith('/admin')) return 'admin';
-        if (path.startsWith('/delivery')) return 'delivery';
+        if (path.startsWith('/food/restaurant') || path.startsWith('/restaurant')) return 'restaurant';
+        if (path.startsWith('/delivery') || path.startsWith('/food/delivery')) return 'delivery';
         return 'customer';
     };
 
@@ -100,6 +100,7 @@ export const AuthProvider = ({ children }) => {
         customer: getSafeToken('customer'),
         seller: getSafeToken('seller'),
         admin: getSafeToken('admin'),
+        restaurant: getSafeToken('restaurant'),
         delivery: getSafeToken('delivery'),
     });
 
@@ -112,6 +113,17 @@ export const AuthProvider = ({ children }) => {
     // Fetch user profile on mount or token change
     useEffect(() => {
         const fetchProfile = async () => {
+            if (currentRole === 'restaurant') {
+                try {
+                    const storedUser = localStorage.getItem('restaurant_user');
+                    setUser(storedUser ? JSON.parse(storedUser) : null);
+                } catch {
+                    setUser(null);
+                }
+                setIsLoading(false);
+                return;
+            }
+
             if (token) {
                 setIsLoading(true);
                 try {
@@ -204,7 +216,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('adminInfo');
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
-        ['admin', 'seller', 'delivery', 'user'].forEach((module) => {
+        ['admin', 'seller', 'restaurant', 'delivery', 'user'].forEach((module) => {
             localStorage.removeItem(`${module}_accessToken`);
             localStorage.removeItem(`${module}_refreshToken`);
             localStorage.removeItem(`${module}_authenticated`);
@@ -218,13 +230,19 @@ export const AuthProvider = ({ children }) => {
             seller: null,
             admin: null,
             delivery: null,
+            restaurant: null,
         });
         setUser(null);
 
-        if (path.startsWith('/admin')) window.location.href = '/admin/login';
-        else if (path.startsWith('/seller')) window.location.href = '/seller/auth';
-        else if (path.startsWith('/delivery')) window.location.href = '/delivery/auth';
-        else window.location.href = '/user/auth/login';
+        if (path.startsWith('/admin')) replaceAppPath('/admin/login');
+        else if (path.startsWith('/seller')) replaceAppPath('/seller/auth');
+        else if (path.startsWith('/food/restaurant') || path.startsWith('/restaurant')) {
+            replaceAppPath('/food/restaurant/login');
+        } else if (path.startsWith('/delivery') || path.startsWith('/food/delivery')) {
+            replaceAppPath('/food/delivery/login');
+        } else {
+            replaceAppPath('/user/auth/login');
+        }
     };
     const refreshUser = async () => {
         if (token) {

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { replaceAppPath } from "@core/navigation/appLocation";
 import {
   checkOnboardingStatus,
   isRestaurantOnboardingComplete,
@@ -1406,7 +1407,7 @@ export default function OrdersMain() {
         if (!error.response?.data?.message?.includes("inactive")) {
           // Only redirect if it's not an "inactive" error (which we handle differently)
           setTimeout(() => {
-            window.location.href = "/restaurant/login";
+            replaceAppPath("/food/restaurant/login");
           }, 1500);
         }
       } else {

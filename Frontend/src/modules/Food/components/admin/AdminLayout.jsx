@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom"
 import AdminSidebar from "./AdminSidebar"
 import AdminNavbar from "./AdminNavbar"
 import { API_BASE_URL } from "@food/api/config"
+import { replaceAppPath } from "@core/navigation/appLocation"
 const debugLog = (...args) => {}
 const debugWarn = (...args) => {}
 const debugError = (...args) => {}
@@ -28,7 +29,7 @@ export default function AdminLayout() {
 
     const handleAuthRefreshFailed = (e) => {
       if (e.detail?.module === 'admin') {
-        window.location.href = '/admin/login';
+        replaceAppPath('/admin/login');
       }
     };
     window.addEventListener('authRefreshFailed', handleAuthRefreshFailed);
