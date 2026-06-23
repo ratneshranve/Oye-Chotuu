@@ -783,7 +783,7 @@ export default function FoodsList() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">Category</label>
-                <Popover open={categoryPopoverOpen} onOpenChange={setCategoryPopoverOpen}>
+                <Popover open={categoryPopoverOpen} onOpenChange={setCategoryPopoverOpen} modal={true}>
                   <PopoverTrigger asChild>
                     <button
                       type="button"
