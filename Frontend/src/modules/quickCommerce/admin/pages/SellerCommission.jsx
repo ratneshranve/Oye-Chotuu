@@ -354,7 +354,7 @@ export default function SellerCommission() {
                   className="w-full px-3 py-2 text-sm border rounded-lg bg-white"
                 >
                   <option value="percentage">Percentage (%)</option>
-                  <option value="amount">Fixed Amount (\u20B9)</option>
+                  <option value="amount">Fixed Amount (₹)</option>
                 </select>
               </div>
               <div className="space-y-2">

@@ -363,6 +363,7 @@ const serializeSellerProfile = (seller) => ({
   _id: seller._id,
   name: seller.name,
   shopName: seller.shopName,
+  profileImage: seller.profileImage || "",
   phone: seller.phoneLast10 || seller.phone || "",
   email: seller.email || "",
   role: "Seller",
@@ -1216,6 +1217,14 @@ export const updateSellerProfileController = async (req, res) => {
         ? req.body.shopInfo
         : {};
     const files = req.files && typeof req.files === "object" ? req.files : {};
+    
+    if (files?.profileImage?.[0]) {
+      seller.profileImage = await uploadImageBuffer(
+        files.profileImage[0].buffer,
+        "seller/profile",
+      );
+    }
+    
     const submitForApproval = optionalBoolean(
       req.body?.submitForApproval,
       false,

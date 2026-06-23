@@ -235,7 +235,8 @@ export default function DeliveryHomeV2({ tab = 'feed' }) {
   const lastSimUpdateSentAt = useRef(0);
   useEffect(() => {
     let interval;
-    if (isSimMode && simPath.length > 1 && simIndex < simPath.length - 1) {
+    const isMovingStatus = tripStatus === 'PICKING_UP' || tripStatus === 'PICKED_UP';
+    if (isSimMode && isMovingStatus && simPath.length > 1 && simIndex < simPath.length - 1) {
       console.log('[SimAuto] Glide Active √');
       
       interval = setInterval(() => {
@@ -315,12 +316,10 @@ export default function DeliveryHomeV2({ tab = 'feed' }) {
     { title: "Insurance", subtitle: "Policy & claim help", icon: <AlertTriangle className="text-green-600" />, phone: emergencyNumbers.insurance },
   ];
 
-    // Reset simulation only when a new trip/mode starts.
-    // Do not reset on every path refresh, or the rider keeps restarting
-    // from the beginning of the simulated route.
     useEffect(() => {
       if (isSimMode) {
         console.log('[SimAuto] Resetting simulation playhead...');
+        setSimPath([]);
         setSimIndex(0);
         setSimProgress(0);
       }

@@ -16,9 +16,11 @@ import {
   CheckCircle,
   LogOut,
   Trash2,
+  Pencil,
 } from "lucide-react";
 import { authAPI } from "../../../services/api";
 import { sellerApi } from "../services/sellerApi";
+import { ImageSourcePicker } from "@food/components/ImageSourcePicker";
 import { toast } from "sonner";
 import Card from "@shared/components/ui/Card";
 import Button from "@shared/components/ui/Button";
@@ -46,6 +48,9 @@ const SellerProfile = () => {
     radius: 5,
     address: "",
   });
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [isImagePickerOpen, setIsImagePickerOpen] = useState(false);
 
   useEffect(() => {
     fetchProfile();
@@ -62,6 +67,7 @@ const SellerProfile = () => {
       const response = await sellerApi.getProfile();
       const data = response.data.result;
       setProfile(data);
+      setImagePreview(data.profileImage || null);
       setFormData({
         name: data.name,
         shopName: data.shopName,
@@ -176,17 +182,23 @@ const SellerProfile = () => {
 
     setIsSaving(true);
     try {
-      const payload = {
-        ...formData,
-        phone: normalizedPhone,
-        email: trimmedEmail,
-        lat: formData.lat,
-        lng: formData.lng,
-        radius: formData.radius,
-      };
+      const payload = new FormData();
+      payload.append("name", formData.name);
+      payload.append("shopName", formData.shopName);
+      payload.append("phone", normalizedPhone);
+      payload.append("email", trimmedEmail);
+      if (formData.lat) payload.append("lat", formData.lat);
+      if (formData.lng) payload.append("lng", formData.lng);
+      if (formData.radius) payload.append("radius", formData.radius);
+      
+      if (imageFile) {
+        payload.append("profileImage", imageFile);
+      }
+
       await sellerApi.updateProfile(payload);
       toast.success("Profile updated successfully");
       setIsEditing(false);
+      setImageFile(null);
       await fetchProfile();
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to update profile");
@@ -234,12 +246,25 @@ const SellerProfile = () => {
         {/* Profile Info Row */}
         <div className="absolute bottom-8 left-4 right-4 md:left-12 md:right-12 flex flex-col md:flex-row items-center md:items-end gap-6 md:gap-10">
           {/* Avatar Container */}
-          <div className="h-32 w-32 md:h-44 md:w-44 rounded-full bg-white p-2 shadow-[0_30px_70px_rgba(0,0,0,0.15)] flex-shrink-0">
-            <div className="h-full w-full rounded-full bg-slate-50 flex items-center justify-center border-4 border-slate-50">
-              <span className="text-5xl md:text-7xl font-black text-slate-900">
-                {profile?.name?.charAt(0)}
-              </span>
+          <div className="h-32 w-32 md:h-44 md:w-44 rounded-full bg-white p-2 shadow-[0_30px_70px_rgba(0,0,0,0.15)] flex-shrink-0 group relative mb-4 md:mb-0">
+            <div className="h-full w-full rounded-full bg-slate-50 flex items-center justify-center border-4 border-slate-50 overflow-hidden relative">
+              {imagePreview ? (
+                <img src={imagePreview} alt="Profile" className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-5xl md:text-7xl font-black text-slate-900">
+                  {profile?.name?.charAt(0)}
+                </span>
+              )}
             </div>
+            {isEditing && (
+              <button
+                type="button"
+                onClick={() => setIsImagePickerOpen(true)}
+                className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-slate-900 text-white p-2.5 rounded-full shadow-lg hover:bg-slate-800 transition-colors border-2 border-white z-10 flex items-center justify-center"
+              >
+                <Pencil size={18} />
+              </button>
+            )}
           </div>
 
           {/* Info Block */}
@@ -658,6 +683,16 @@ const SellerProfile = () => {
           initialRadius={formData.radius}
         />
       )}
+
+      <ImageSourcePicker
+        isOpen={isImagePickerOpen}
+        onClose={() => setIsImagePickerOpen(false)}
+        onFileSelect={(file) => {
+          setImageFile(file);
+          setImagePreview(URL.createObjectURL(file));
+        }}
+        title="Update Profile Photo"
+      />
     </div>
   );
 };

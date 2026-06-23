@@ -28,7 +28,7 @@ import { BlurFade } from "@/components/ui/blur-fade";
 import ShimmerButton from "@/components/ui/shimmer-button";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import { exportToCSV } from "@/lib/exportUtils";
+import { exportToPDF } from "@/lib/exportUtils";
 import { useSellerEarnings } from "../context/SellerEarningsContext";
 
 const Earnings = () => {
@@ -83,21 +83,36 @@ const Earnings = () => {
           <div className="flex space-x-3">
             <Button
               onClick={() => {
-                const ledger = Array.isArray(data?.ledger) ? data.ledger : [];
+                let ledger = Array.isArray(data?.ledger) ? data.ledger : [];
                 if (ledger.length === 0) {
-                  toast.info("No transactions to export.");
-                  return;
+                  // Fallback to generate PDF even if no transactions
+                  ledger = [
+                    {
+                      id: "N/A",
+                      type: "Summary",
+                      amount: data?.balances?.totalNetEarnings ?? 0,
+                      status: "Completed",
+                      date: new Date().toLocaleDateString(),
+                      customer: "N/A",
+                      ref: "Summary",
+                    }
+                  ];
                 }
-                const exportData = ledger.map((txn) => ({
-                  id: txn.id ?? txn.ref ?? "",
-                  type: txn.type ?? "",
-                  amount: `₹${Number(txn.amount ?? 0).toLocaleString()}`,
-                  status: txn.status ?? "",
-                  date: txn.date ?? (txn.createdAt ? new Date(txn.createdAt).toLocaleDateString() : ""),
-                  customer: txn.customer ?? "",
-                  ref: txn.ref ?? "",
-                }));
-                exportToCSV(exportData, "Seller_Earnings_Report", {
+                const exportData = ledger.map((txn) => {
+                  const orderId = txn.order?.orderId || txn.orderId || txn.ref || "N/A";
+                  const customerName = txn.order?.customer?.name || txn.order?.user?.name || txn.customer?.name || txn.user?.name || (typeof txn.customer === 'string' ? txn.customer : "N/A");
+                  
+                  return {
+                    id: txn.id ?? txn._id ?? "",
+                    type: txn.type ?? "",
+                    amount: `Rs. ${Number(txn.amount ?? 0).toLocaleString()}`,
+                    status: txn.status ?? "",
+                    date: txn.date ?? (txn.createdAt ? new Date(txn.createdAt).toLocaleDateString() : ""),
+                    customer: customerName,
+                    ref: orderId,
+                  };
+                });
+                exportToPDF(exportData, "Seller_Earnings_Report", {
                   id: "Transaction ID",
                   type: "Type",
                   amount: "Amount",
@@ -105,11 +120,11 @@ const Earnings = () => {
                   date: "Date",
                   customer: "Customer",
                   ref: "Reference",
-                });
+                }, "Seller Earnings Report");
                 toast.success("Earnings report downloaded successfully!");
               }}
               variant="outline"
-              className="border-gray-200">
+              className="border-gray-200 relative z-20">
               <Download className="mr-2 h-5 w-5" />
               Download Report
             </Button>

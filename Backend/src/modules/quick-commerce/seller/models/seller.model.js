@@ -86,6 +86,11 @@ const sellerSchema = new mongoose.Schema(
       lowercase: true,
       default: "",
     },
+    profileImage: {
+      type: String,
+      trim: true,
+      default: "",
+    },
     phone: {
       type: String,
       required: true,

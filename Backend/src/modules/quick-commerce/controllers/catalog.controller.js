@@ -476,7 +476,7 @@ export const submitProductReview = async (req, res) => {
 };
 
 export const getStores = async (req, res) => {
-  setPublicCache(res, 300); // 5 minutes cache
+  setNoCache(res); // disabled cache to see profile images immediately
   
   try {
     // Find distinct sellers who have products in Quick Commerce
@@ -490,7 +490,7 @@ export const getStores = async (req, res) => {
           _id: store._id,
           id: store._id,
           name: store.shopName || store.name || 'Store',
-          image: store.logo || sampleProduct?.mainImage || sampleProduct?.image || '',
+          image: store.profileImage || store.logo || sampleProduct?.mainImage || sampleProduct?.image || '',
           description: store.description || '',
        };
     }));
@@ -503,7 +503,7 @@ export const getStores = async (req, res) => {
 };
 
 export const getStoreDetails = async (req, res) => {
-  setPublicCache(res, 300);
+  setNoCache(res);
   
   try {
     const store = await Seller.findById(req.params.storeId).lean();
@@ -519,7 +519,7 @@ export const getStoreDetails = async (req, res) => {
         _id: store._id,
         id: store._id,
         name: store.shopName || store.name || 'Store',
-        image: store.logo || sampleProduct?.mainImage || sampleProduct?.image || '',
+        image: store.profileImage || store.logo || sampleProduct?.mainImage || sampleProduct?.image || '',
         description: store.description || '',
       } 
     });
