@@ -1973,14 +1973,7 @@ const CheckoutPage = () => {
               </div>
             </div>
 
-            <button
-              onClick={handleShare}
-              className="h-12 px-4 flex items-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-2xl transition-all active:scale-95">
-              <Share2 size={20} className="text-white" />
-              <span className="text-xs font-black text-white uppercase tracking-widest hidden sm:block">
-                Share
-              </span>
-            </button>
+            <div className="w-12 h-12" />
           </div>
         </div>
       </div>

@@ -53,7 +53,7 @@ const AddProduct = () => {
     variants: [
       {
         id: Date.now(),
-        name: "Default",
+        name: "",
         price: "",
         salePrice: "",
         stock: "",

@@ -266,26 +266,6 @@ const Dashboard = () => {
                 <p className="text-2xl font-bold text-slate-900 mt-2">
                   {stat.value}
                 </p>
-                <div className="flex items-center gap-2 mt-2">
-                  <span
-                    className={cn(
-                      "text-xs font-semibold flex items-center gap-1",
-                      stat.changeType === "increase"
-                        ? "text-emerald-600"
-                        : "text-red-600",
-                    )}>
-                    <TrendingUp
-                      className={cn(
-                        "h-3 w-3",
-                        stat.changeType === "decrease" && "rotate-180",
-                      )}
-                    />
-                    {stat.change}
-                  </span>
-                  <span className="text-sm text-slate-600">
-                    {stat.description}
-                  </span>
-                </div>
               </div>
               <div className={cn("p-3 rounded-lg", stat.iconBg)}>
                 <stat.icon className={cn("h-6 w-6", stat.iconColor)} />
@@ -454,7 +434,7 @@ const Dashboard = () => {
                   axisLine={false}
                   tickLine={false}
                   tick={{ fill: "#475569", fontSize: 12 }}
-                  width={80}
+                  width={140}
                 />
                 <Tooltip
                   contentStyle={{

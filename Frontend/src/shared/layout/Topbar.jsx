@@ -111,7 +111,7 @@ const Topbar = ({ onMenuClick }) => {
                     <HiOutlineSearch className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 group-focus-within:text-primary transition-all duration-300" />
                     <input
                         type="text"
-                        placeholder={isSeller ? "Search products by name or SKU..." : "Search anything..."}
+                        placeholder={isSeller ? "Search" : "Search anything..."}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleSearchSubmit()}
