@@ -197,7 +197,7 @@ export default function SellerAuth() {
       style={{ paddingBottom: keyboardInset ? `${keyboardInset + 24}px` : undefined }}
     >
       {/* Top Green Section */}
-      <div className="w-full flex flex-col shrink-0 z-10 drop-shadow-md">
+      <div className="w-full flex flex-col shrink-0 z-20 drop-shadow-md relative">
         <div className="w-full relative overflow-hidden bg-[#16a34a] pb-4">
           {/* Back Button */}
           {step === "otp" && (
@@ -291,7 +291,7 @@ export default function SellerAuth() {
         </div>
       </div>
 
-      <div className="flex-1 max-w-[420px] mx-auto w-full px-4 flex flex-col mt-16 md:mt-20 relative z-20 pb-4 h-full overflow-y-auto">
+      <div className="flex-1 max-w-[420px] mx-auto w-full px-4 flex flex-col -mt-16 md:-mt-20 pt-32 md:pt-40 relative z-10 pb-4 h-full overflow-y-auto">
         {/* Main Card */}
         <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-gray-100 shrink-0 mb-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
           {step === "phone" ? (
@@ -444,7 +444,7 @@ export default function SellerAuth() {
         </div>
       </div>
 
-      <div className="text-center pt-4 pb-2">
+      <div className={`text-center pt-4 pb-2 ${keyboardInset > 0 ? "hidden" : "block"}`}>
         <p className="text-slate-400 text-xs font-medium">
           By continuing, you agree to our <br />
           <a href="/seller/terms" className="text-[#16a34a] font-bold hover:underline">
@@ -461,7 +461,7 @@ export default function SellerAuth() {
         </p>
       </div>
 
-      <div className="pb-8 text-center mt-auto">
+      <div className={`pb-8 text-center mt-auto ${keyboardInset > 0 ? "hidden" : "block"}`}>
           <p className="text-[10px] font-black text-slate-300 tracking-[0.2em] uppercase">
             &copy; {new Date().getFullYear()} {companyName.toUpperCase()} SELLER PORTAL
           </p>
