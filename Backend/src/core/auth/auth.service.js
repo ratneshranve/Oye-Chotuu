@@ -240,12 +240,12 @@ export const adminLogin = async (email, password) => {
 
   const admin = await FoodAdmin.findOne({ email });
   if (!admin) {
-    throw new AuthError("Invalid credentials");
+    throw new AuthError("Incorrect email");
   }
 
   const isMatch = await admin.comparePassword(password);
   if (!isMatch) {
-    throw new AuthError("Invalid credentials");
+    throw new AuthError("Incorrect password");
   }
 
   if (admin.isActive === false) {

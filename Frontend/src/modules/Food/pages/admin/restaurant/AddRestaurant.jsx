@@ -388,13 +388,19 @@ export default function AddRestaurant() {
 
   // Keep UX consistent: each step opens from top after Next/Back.
   useEffect(() => {
+    const scrollableMain = document.querySelector("main.overflow-y-auto")
+    if (scrollableMain) {
+      scrollableMain.scrollTo({ top: 0, behavior: "auto" })
+    } else {
+      if (typeof window !== "undefined" && window.scrollTo) window.scrollTo({ top: 0, behavior: "auto" })
+      if (typeof document !== "undefined") {
+        if (document.documentElement) document.documentElement.scrollTop = 0
+        if (document.body) document.body.scrollTop = 0
+      }
+    }
+    
     const contentEl = mainContentRef.current
     if (contentEl?.scrollTo) contentEl.scrollTo({ top: 0, behavior: "auto" })
-    if (typeof window !== "undefined" && window.scrollTo) window.scrollTo({ top: 0, behavior: "auto" })
-    if (typeof document !== "undefined") {
-      if (document.documentElement) document.documentElement.scrollTop = 0
-      if (document.body) document.body.scrollTop = 0
-    }
   }, [step])
 
   // Upload handler for images
