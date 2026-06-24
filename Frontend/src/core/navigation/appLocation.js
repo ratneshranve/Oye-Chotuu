@@ -32,3 +32,43 @@ export function replaceAppPath(path) {
 
   window.location.replace(target)
 }
+
+export function isPublicUserStorefrontPath(path = getCurrentAppPath()) {
+  const normalizedPath = String(path || "/").split("?")[0].replace(/\/+$/, "") || "/"
+
+  const protectedPrefixes = [
+    "/cart",
+    "/profile",
+    "/food/user/orders",
+    "/food/user/bookings",
+    "/food/user/notifications",
+    "/food/user/wallet",
+    "/food/user/complaints",
+    "/food/user/profile/payments",
+    "/food/user/profile/favorites",
+    "/food/user/profile/report-safety-emergency",
+    "/food/user/profile/accessibility",
+    "/food/user/profile/logout",
+    "/food/user/profile/refer-earn",
+    "/quick/orders",
+    "/quick/wallet",
+    "/quick/returns",
+    "/quick/checkout",
+    "/quick/profile",
+  ]
+
+  if (protectedPrefixes.some((prefix) => normalizedPath === prefix || normalizedPath.startsWith(`${prefix}/`))) {
+    return false
+  }
+
+  return (
+    normalizedPath === "/" ||
+    normalizedPath === "/food" ||
+    normalizedPath === "/food/user" ||
+    normalizedPath.startsWith("/food/user/") ||
+    normalizedPath === "/quick" ||
+    normalizedPath.startsWith("/quick/") ||
+    normalizedPath === "/dudhwala" ||
+    normalizedPath.startsWith("/dudhwala/")
+  )
+}

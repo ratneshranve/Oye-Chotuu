@@ -23,6 +23,13 @@ export const useUserNotifications = () => {
   // Fetch current user ID
   useEffect(() => {
     const fetchUserId = async () => {
+      const token =
+        localStorage.getItem('user_accessToken') ||
+        localStorage.getItem('auth_customer') ||
+        localStorage.getItem('accessToken') ||
+        null;
+      if (!token) return;
+
       try {
         const response = await userAPI.getProfile();
         if (response.data?.success && response.data.data?.user) {

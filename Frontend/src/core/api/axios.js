@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getCurrentAppPath, replaceAppPath } from '../navigation/appLocation';
+import { getCurrentAppPath, isPublicUserStorefrontPath, replaceAppPath } from '../navigation/appLocation';
 
 const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api/v1',
@@ -154,6 +154,10 @@ axiosInstance.interceptors.response.use(
                             : requestUrl.startsWith('/user') || requestUrl.startsWith('/customer') || requestUrl.startsWith('/auth')
                                 ? 'customer'
                                 : null;
+
+            if (currentModule === 'customer' && isPublicUserStorefrontPath(path)) {
+                return Promise.reject(error);
+            }
 
             // Prevent cross-module 401s from logging out the active session
             // (e.g. seller page accidentally calling an admin endpoint).

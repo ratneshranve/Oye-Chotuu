@@ -7,7 +7,7 @@
  */
 
 import axios from "axios";
-import { getCurrentAppPath, replaceAppPath } from "@core/navigation/appLocation";
+import { getCurrentAppPath, isPublicUserStorefrontPath, replaceAppPath } from "@core/navigation/appLocation";
 
 // Prefer explicit env. If not set, use same-origin (works with a Vite proxy).
 // This avoids hardcoding ports like 5000 that may conflict with local setups.
@@ -239,6 +239,17 @@ apiClient.interceptors.response.use(
     }
 
     const module = original.contextModule || getModuleFromUrl(original.url);
+
+    // Public storefront screens can make optional user requests (profile,
+    // notifications, wishlist/cart bootstrap). A stale or missing user token
+    // should not kick a guest out of the storefront; protected pages still
+    // redirect through their guards and this interceptor.
+    if (module === "user" && isPublicUserStorefrontPath()) {
+      if (!getRefreshToken(module)) {
+        clearModuleAuth(module);
+      }
+      return Promise.reject(err);
+    }
 
     // Invalid login/OTP credentials should remain visible on the auth screen.
     if (isAuthenticationRequest(original.url)) {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import AppRoutes from './routes'
 import SplashScreen from '@/components/ui/SplashScreen'
+import { getCurrentAppPath } from '@core/navigation/appLocation'
 
 function App() {
   const [showSplash, setShowSplash] = useState(false)
@@ -8,9 +9,7 @@ function App() {
   useEffect(() => {
     const hasSeen = sessionStorage.getItem('hasSeenSplash')
     
-    // In native apps (WebView), the actual path is often stored in the hash due to HashRouter.
-    const hashPath = window.location.hash ? window.location.hash.replace(/^#/, '') : '';
-    const effectivePath = hashPath || window.location.pathname || '/';
+    const effectivePath = getCurrentAppPath();
     
     // Determine if the route belongs to the user panel (exclude admin, seller, restaurant, and delivery)
     const isUserRoute = 

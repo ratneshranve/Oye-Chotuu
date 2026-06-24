@@ -21,7 +21,7 @@ const CategoryRail = memo(({
         {/* Offers Card - Rounded Square */}
         <div 
           className="flex-shrink-0 flex flex-col items-center gap-2 cursor-pointer group"
-          onClick={() => navigate("/user/under-250")}
+          onClick={() => navigate("/food/user/under-250")}
         >
           <div className="w-[72px] h-[72px] sm:w-[84px] sm:h-[84px] bg-[#cc2532] rounded-2xl flex flex-col items-center justify-center p-1 shadow-sm transition-transform group-hover:scale-105 group-active:scale-95">
             <span className="text-[10px] font-bold text-white/90">UNDER</span>
@@ -36,7 +36,7 @@ const CategoryRail = memo(({
         {!showCategorySkeleton && displayCategories.map((category, index) => (
           <Link
             key={category.id || index}
-            to={`/user/category/${category.slug || category.name.toLowerCase().replace(/\s+/g, "-")}`}
+            to={`/food/user/category/${category.slug || category.name.toLowerCase().replace(/\s+/g, "-")}`}
             className="flex-shrink-0 flex flex-col items-center gap-2 group"
           >
             <div className="w-[72px] h-[72px] sm:w-[84px] sm:h-[84px] rounded-full overflow-hidden shadow-sm border border-gray-100 transition-transform group-hover:scale-110">

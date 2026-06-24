@@ -7,34 +7,17 @@ import { ThemeProvider } from 'next-themes'
 import { AuthProvider } from '@core/context/AuthContext'
 import { SettingsProvider } from '@core/context/SettingsContext'
 import { ToastProvider } from '@shared/components/ui/Toast'
-
-function shouldUseHashRouter() {
-  if (typeof window === 'undefined') return false
-
-  const protocol = String(window.location?.protocol || '').toLowerCase()
-  const userAgent = String(window.navigator?.userAgent || '').toLowerCase()
-
-  return (
-    Boolean(window.flutter_inappwebview) ||
-    Boolean(window.ReactNativeWebView) ||
-    protocol === 'file:' ||
-    userAgent.includes(' wv') ||
-    userAgent.includes('; wv')
-  )
-}
+import { getCurrentAppPath, isNativeLikeShell } from '@core/navigation/appLocation'
 
 export function AppProviders({ children }) {
-  const isHashRouter = shouldUseHashRouter()
-  
+  const isHashRouter = isNativeLikeShell()
+
   if (isHashRouter && typeof window !== 'undefined') {
-    const path = window.location.pathname;
-    if (path !== '/' && !path.includes('index.html')) {
-      // Combine path and any existing hash to ensure we don't lose the intended route
-      const existingHash = window.location.hash.replace(/^#\/?/, '/');
-      const targetRoute = existingHash !== '/' && existingHash ? existingHash : path;
-      
-      // Force the base to be root and the route to be in the hash
-      window.history.replaceState(null, '', `/#${targetRoute}${window.location.search}`);
+    const currentHash = String(window.location.hash || '')
+    const currentPath = getCurrentAppPath()
+
+    if (!currentHash.startsWith('#/') && currentPath && currentPath !== '/') {
+      window.history.replaceState(null, '', `#${currentPath}${window.location.search}`)
     }
   }
 

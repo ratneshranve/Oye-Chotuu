@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@core/context/AuthContext';
+import { getCurrentAppPath } from '@core/navigation/appLocation';
 
 const ProtectedRoute = ({ children }) => {
     const { isAuthenticated, isLoading } = useAuth();
@@ -15,14 +16,19 @@ const ProtectedRoute = ({ children }) => {
     }
 
     if (!isAuthenticated) {
-        if (location.pathname.startsWith('/admin')) {
+        const currentPath = getCurrentAppPath() || location.pathname || '/';
+
+        if (currentPath.startsWith('/admin')) {
             return <Navigate to="/admin/login" state={{ from: location }} replace />;
         }
-        if (location.pathname.startsWith('/seller')) {
+        if (currentPath.startsWith('/seller')) {
             return <Navigate to="/seller/auth" state={{ from: location }} replace />;
         }
-        if (location.pathname.startsWith('/delivery')) {
-            return <Navigate to="/delivery/auth" state={{ from: location }} replace />;
+        if (currentPath.startsWith('/food/restaurant') || currentPath.startsWith('/restaurant')) {
+            return <Navigate to="/food/restaurant/login" state={{ from: location }} replace />;
+        }
+        if (currentPath.startsWith('/food/delivery') || currentPath.startsWith('/delivery')) {
+            return <Navigate to="/food/delivery/login" state={{ from: location }} replace />;
         }
         return <Navigate to="/user/auth/login" state={{ from: location }} replace />;
     }
