@@ -383,6 +383,13 @@ function OrderTrackingCardInner({ hasBottomNav = true }) {
     activeOrder.restaurantName || 
     (isQuickOrder ? "Store" : "Restaurant");
 
+  const storeImage = 
+    activeOrder.storeImage || 
+    activeOrder.sellerImage || 
+    activeOrder.restaurantImage || 
+    activeOrder.restaurant?.image || 
+    activeOrder.seller?.profileImage;
+
   const statusText = (() => {
     const s = String(orderStatus);
     const p = String(orderPhase);
@@ -432,7 +439,23 @@ function OrderTrackingCardInner({ hasBottomNav = true }) {
           </button>
 
           <div className="flex items-center gap-4 relative z-10 w-full">
-            {isQuickOrder ? <ShoppingAnimation /> : <CookingAnimation />}
+            {isQuickOrder ? (
+              storeImage ? (
+                <div className="h-12 w-12 rounded-xl border border-blue-100 shadow-[0_4px_15px_rgba(59,130,246,0.15)] shrink-0 overflow-hidden bg-white">
+                  <img src={storeImage} alt={displayName} className="w-full h-full object-cover" />
+                </div>
+              ) : (
+                <ShoppingAnimation />
+              )
+            ) : (
+              storeImage ? (
+                <div className="h-12 w-12 rounded-xl border border-red-100 shadow-[0_4px_15px_rgba(204,37,50,0.15)] shrink-0 overflow-hidden bg-white">
+                  <img src={storeImage} alt={displayName} className="w-full h-full object-cover" />
+                </div>
+              ) : (
+                <CookingAnimation />
+              )
+            )}
 
             <div className="flex-1 min-w-0 pr-4">
               <p className="text-gray-900 font-bold text-base md:text-lg truncate tracking-tight">{displayName}</p>

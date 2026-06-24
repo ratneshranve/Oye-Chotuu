@@ -48,17 +48,20 @@ const formatCurrency = (value) =>
     })}`;
 
 const getQuickOrderPayableTotal = (order = {}) => {
+    if (order?.pricing) {
+        const subtotal = Number(order.pricing.subtotal || 0);
+        const deliveryFee = Number(order.pricing.deliveryFee || 0);
+        const handlingFee = Number(order.pricing.handlingFee || 0);
+        const platformFee = Number(order.pricing.platformFee || 0);
+        const gst = Number(order.pricing.gstAmount || order.pricing.gst || 0);
+        const discount = Number(order.pricing.discount || 0);
+
+        const computed = subtotal + deliveryFee + handlingFee + platformFee + gst - discount;
+        if (computed > 0) return computed;
+    }
+
     const provided = Number(order?.amount || order?.totalAmount || order?.payableAmount || order?.total || 0);
-    if (Number.isFinite(provided) && provided > 0) return provided;
-
-    const pricingTotal = Number(order?.pricing?.total || 0);
-    const platformFee = Number(order?.pricing?.platformFee || 0);
-    const computed =
-        order?.pricing?.platformFeeIncluded === true
-            ? pricingTotal
-            : pricingTotal + (Number.isFinite(platformFee) && platformFee > 0 ? platformFee : 0);
-
-    return Number.isFinite(computed) ? Math.max(0, computed) : 0;
+    return Number.isFinite(provided) && provided > 0 ? provided : 0;
 };
 
 const getStatusStyles = (status) => {
@@ -170,14 +173,33 @@ export default function OrderDetail() {
 
     const handleExportIntelligence = () => {
         if (!order) return;
-        const blob = new Blob([JSON.stringify(order, null, 2)], { type: 'application/json;charset=utf-8' });
+        
+        const headers = ['Item ID', 'Name', 'Quantity', 'Unit Price', 'Total'];
+        const rows = orderItems.map(item => [
+            `"${item.productId || item.product?._id || 'NA'}"`,
+            `"${(item.name || 'Item').replace(/"/g, '""')}"`,
+            item.quantity || 0,
+            `"${formatCurrency(item.price)}"`,
+            `"${formatCurrency(Number(item.price || 0) * Number(item.quantity || 0))}"`,
+        ]);
+        
+        rows.push(['', '', '', '"Subtotal"', `"${formatCurrency(order.pricing?.subtotal)}"`]);
+        rows.push(['', '', '', '"Delivery Fee"', `"${formatCurrency(order.pricing?.deliveryFee)}"`]);
+        rows.push(['', '', '', '"Handling Fee"', `"${formatCurrency(order.pricing?.handlingFee)}"`]);
+        rows.push(['', '', '', '"Platform Fee"', `"${formatCurrency(order.pricing?.platformFee)}"`]);
+        rows.push(['', '', '', '"GST"', `"${formatCurrency(order.pricing?.gstAmount || order.pricing?.gst)}"`]);
+        rows.push(['', '', '', '"Total Payable"', `"${formatCurrency(getQuickOrderPayableTotal(order))}"`]);
+        
+        const csvContent = [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
+        
+        const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
         const downloadUrl = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = downloadUrl;
-        link.download = `quick-order-${orderDisplayId}.json`;
+        link.download = `quick-order-intelligence-${orderDisplayId}.csv`;
         link.click();
         URL.revokeObjectURL(downloadUrl);
-        showToast('Order intelligence exported', 'success');
+        showToast('Order intelligence exported to Excel (CSV)', 'success');
     };
 
     const handlePrintInvoice = () => {
