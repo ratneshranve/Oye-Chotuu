@@ -48,12 +48,15 @@ const paymentSchema = new mongoose.Schema(
         /** Full gateway response snapshot — stored for audit/support. Never expose to clients. */
         rawResponse: { type: mongoose.Schema.Types.Mixed, default: undefined },
 
-        metadata: { type: mongoose.Schema.Types.Mixed, default: undefined }
+        metadata: { type: mongoose.Schema.Types.Mixed, default: undefined },
+
+        idempotencyKey: { type: String, trim: true, default: '', sparse: true }
     },
     { collection: 'payments', timestamps: true }
 );
 
 paymentSchema.index({ orderId: 1, createdAt: -1 });
 paymentSchema.index({ userId: 1, status: 1, createdAt: -1 });
+paymentSchema.index({ idempotencyKey: 1 }, { unique: true, sparse: true });
 
 export const Payment = mongoose.model('Payment', paymentSchema);

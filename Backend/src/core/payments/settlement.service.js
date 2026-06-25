@@ -4,38 +4,64 @@ import { Transaction } from './models/transaction.model.js';
 import { debitWallet, unlockWalletAmount } from './wallet.service.js';
 import { logger } from '../../utils/logger.js';
 
+const normalizeIdempotencyKey = (key) => String(key || '').trim();
+
 /**
  * Create a settlement (payout request) for a restaurant or delivery partner.
  * Locks the settlement amount in their wallet until processed.
  */
-export async function createSettlement({ entityType, entityId, amount, notes = '', periodStart, periodEnd }) {
+export async function createSettlement({ entityType, entityId, amount, notes = '', periodStart, periodEnd, idempotencyKey }) {
+    const normalizedIdempotencyKey = normalizeIdempotencyKey(idempotencyKey);
+    if (normalizedIdempotencyKey) {
+        const existingSettlement = await Settlement.findOne({ idempotencyKey: normalizedIdempotencyKey }).lean();
+        if (existingSettlement) return existingSettlement;
+    }
+
     if (!['restaurant', 'deliveryBoy'].includes(entityType)) {
         throw new Error('Settlements only for restaurant or deliveryBoy');
     }
 
-    const settlement = await Settlement.create({
-        entityType,
-        entityId: new mongoose.Types.ObjectId(entityId),
-        amount: Number(amount),
-        currency: 'INR',
-        status: 'pending',
-        notes,
-        periodStart: periodStart || null,
-        periodEnd: periodEnd || null
-    });
+    let settlement;
+    try {
+        settlement = await Settlement.create({
+            entityType,
+            entityId: new mongoose.Types.ObjectId(entityId),
+            amount: Number(amount),
+            currency: 'INR',
+            status: 'pending',
+            notes,
+            periodStart: periodStart || null,
+            periodEnd: periodEnd || null,
+            idempotencyKey: normalizedIdempotencyKey || undefined
+        });
+    } catch (err) {
+        if (err?.code === 11000 && normalizedIdempotencyKey) {
+            const existingSettlement = await Settlement.findOne({ idempotencyKey: normalizedIdempotencyKey }).lean();
+            if (existingSettlement) return existingSettlement;
+        }
+        throw err;
+    }
 
     logger.info(`Settlement created: ${settlement._id} for ${entityType}:${entityId} amount=${amount}`);
     return settlement.toObject();
 }
 
 /**
- * Process a settlement — debit entity wallet + mark as processed.
+ * Process a settlement - debit entity wallet + mark as processed.
  */
 export async function processSettlement(settlementId, { processedBy, payoutRef = '' } = {}) {
-    const settlement = await Settlement.findById(settlementId);
-    if (!settlement) throw new Error('Settlement not found');
-    if (settlement.status === 'processed') return settlement.toObject();
-    if (settlement.status === 'failed') throw new Error('Cannot process a failed settlement');
+    const settlement = await Settlement.findOneAndUpdate(
+        { _id: settlementId, status: 'pending' },
+        { $set: { status: 'processing' } },
+        { new: true }
+    );
+    if (!settlement) {
+        const existingSettlement = await Settlement.findById(settlementId);
+        if (!existingSettlement) throw new Error('Settlement not found');
+        if (existingSettlement.status === 'processed') return existingSettlement.toObject();
+        if (existingSettlement.status === 'failed') throw new Error('Cannot process a failed settlement');
+        return existingSettlement.toObject();
+    }
 
     try {
         // Debit the entity's wallet
@@ -45,7 +71,8 @@ export async function processSettlement(settlementId, { processedBy, payoutRef =
             amount: settlement.amount,
             description: `Settlement payout #${settlement._id.toString().slice(-6)}`,
             category: 'settlement_payout',
-            metadata: { settlementId: settlement._id }
+            metadata: { settlementId: settlement._id },
+            idempotencyKey: `settlement:${settlement._id}:payout`
         });
 
         settlement.status = 'processed';
@@ -74,7 +101,7 @@ export async function processSettlement(settlementId, { processedBy, payoutRef =
 function resolveWalletForSettlement(entityType, entityId) {
     const id = new mongoose.Types.ObjectId(entityId);
     if (entityType === 'restaurant') {
-        // Dynamic import would be circular — import at top
+        // Dynamic import would be circular - import at top
         return {
             Model: mongoose.model('FoodRestaurantWallet'),
             filter: { restaurantId: id }

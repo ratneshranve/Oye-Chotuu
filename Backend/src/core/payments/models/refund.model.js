@@ -49,7 +49,9 @@ const refundSchema = new mongoose.Schema(
         processedAt: { type: Date, default: null },
         processedBy: { type: mongoose.Schema.Types.ObjectId, default: null },
 
-        metadata: { type: mongoose.Schema.Types.Mixed, default: undefined }
+        metadata: { type: mongoose.Schema.Types.Mixed, default: undefined },
+
+        idempotencyKey: { type: String, trim: true, default: '', sparse: true }
     },
     {
         collection: 'refunds',
@@ -58,5 +60,6 @@ const refundSchema = new mongoose.Schema(
 );
 
 refundSchema.index({ orderId: 1, status: 1 });
+refundSchema.index({ idempotencyKey: 1 }, { unique: true, sparse: true });
 
 export const Refund = mongoose.model('Refund', refundSchema);

@@ -3,12 +3,19 @@ import { QuickOrder } from '../models/order.model.js';
 import { returnStatuses } from '../../../constants/returnStatuses.js';
 import { calculateReturnDeductions } from './return-finance.service.js';
 
+const sameId = (left, right) => String(left || '') === String(right || '');
+
 /**
  * Validates if the order is eligible for a return.
  */
-export const validateReturnEligibility = async (orderId, productId, returnQuantity, returnWindowDays) => {
+export const validateReturnEligibility = async (orderId, productId, returnQuantity, returnWindowDays, userId = null) => {
   const order = await QuickOrder.findById(orderId);
   if (!order) throw new Error('Order not found');
+
+  // Return order ownership validation.
+  if (userId && !sameId(order.userId, userId)) {
+    throw new Error('Not authorized to create a return for this order');
+  }
 
   if (!['delivered', 'completed'].includes(order.orderStatus.toLowerCase())) {
     throw new Error('Returns are only allowed for delivered orders');
@@ -60,7 +67,7 @@ import { SellerOrder } from '../seller/models/sellerOrder.model.js';
 export const createReturnRequest = async (userId, data, returnWindowDays) => {
   const { orderId, productId, quantity, reason, description, userImages, refundMethod, bankDetails, upiId } = data;
   
-  const { order, orderItem } = await validateReturnEligibility(orderId, productId, quantity, returnWindowDays);
+  const { order, orderItem } = await validateReturnEligibility(orderId, productId, quantity, returnWindowDays, userId);
 
   const sellerId = orderItem.sourceId || order.restaurantId;
   const sellerOrder = await SellerOrder.findOne({ parentOrderId: order._id, sellerId });

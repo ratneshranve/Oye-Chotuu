@@ -3,6 +3,7 @@ import { config } from './env.js';
 import { logger } from '../utils/logger.js';
 import { verifyAccessToken } from '../core/auth/token.util.js';
 import { getFirebaseDB } from './firebase.js';
+import { FoodOrder } from '../modules/food/orders/models/order.model.js';
 
 
 let io = null;
@@ -29,6 +30,43 @@ function maskToken(token) {
     return `${trimmed.slice(0, 12)}...${trimmed.slice(-6)}`;
 }
 
+
+function sameId(left, right) {
+    return String(left || '') === String(right || '');
+}
+
+function isValidObjectId(value) {
+    return /^[a-fA-F0-9]{24}$/.test(String(value || ''));
+}
+
+function orderHasSeller(order, sellerId) {
+    const id = String(sellerId || '');
+    if (!id) return false;
+    const items = Array.isArray(order?.items) ? order.items : [];
+    const pickupPoints = Array.isArray(order?.pickupPoints) ? order.pickupPoints : [];
+    return items.some((item) => sameId(item?.sellerId, id) || sameId(item?.seller, id)) ||
+        pickupPoints.some((point) => sameId(point?.sellerId, id) || sameId(point?.ownerId, id));
+}
+
+async function canAccessTrackingRoom(socket, orderId) {
+    const role = String(socket.user?.role || '').trim().toUpperCase();
+    const userId = socket.user?.userId;
+    if (!orderId || !role || !userId) return false;
+    if (role === 'ADMIN' || role === 'SUB_ADMIN') return true;
+
+    const id = String(orderId);
+    const query = isValidObjectId(id) ? { $or: [{ _id: id }, { orderId: id }] } : { orderId: id };
+    const order = await FoodOrder.findOne(query)
+        .select('userId restaurantId dispatch.deliveryPartnerId items.sellerId items.seller pickupPoints.sellerId pickupPoints.ownerId')
+        .lean();
+
+    if (!order) return false;
+    if (role === 'USER') return sameId(order.userId, userId);
+    if (role === 'RESTAURANT') return sameId(order.restaurantId, userId);
+    if (role === 'DELIVERY_PARTNER') return sameId(order.dispatch?.deliveryPartnerId, userId);
+    if (role === 'SELLER') return orderHasSeller(order, userId);
+    return false;
+}
 const roomNames = {
     admin: (id) => `admin:${String(id)}`,
     restaurant: (id) => `restaurant:${String(id)}`,
@@ -186,10 +224,13 @@ export const initSocket = async (server) => {
         // ─── Live Tracking Events ───────────────────────────────────────
 
         // Users / restaurants subscribe to an order's real-time tracking room.
-        socket.on('join-tracking', (orderId) => {
+        socket.on('join-tracking', async (orderId) => {
             if (!orderId) return;
             const role = socket.user?.role;
-            if (role !== 'USER' && role !== 'RESTAURANT' && role !== 'DELIVERY_PARTNER' && role !== 'SELLER' && role !== 'ADMIN') return;
+            if (!(await canAccessTrackingRoom(socket, orderId))) {
+                logger.warn(`Socket ${socket.id} (${role}:${userId}) rejected tracking room ${String(orderId)}`);
+                return;
+            }
             const room = roomNames.tracking(orderId);
             socket.join(room);
             logger.info(`Socket ${socket.id} (${role}:${userId}) joined tracking room ${room}`);
@@ -197,10 +238,9 @@ export const initSocket = async (server) => {
         });
 
         // Backward-compatible alias used by some quick-commerce screens.
-        socket.on('join_order', (orderId) => {
+        socket.on('join_order', async (orderId) => {
             if (!orderId) return;
-            const role = socket.user?.role;
-            if (role !== 'USER' && role !== 'RESTAURANT' && role !== 'DELIVERY_PARTNER' && role !== 'SELLER' && role !== 'ADMIN') return;
+            if (!(await canAccessTrackingRoom(socket, orderId))) return;
             const room = roomNames.tracking(orderId);
             socket.join(room);
             socket.emit('tracking-room-joined', { room, orderId: String(orderId) });

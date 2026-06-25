@@ -3,27 +3,45 @@ import { Payment } from './models/payment.model.js';
 import { recordTransaction } from './transaction.service.js';
 import { logger } from '../../utils/logger.js';
 
+const normalizeIdempotencyKey = (key) => String(key || '').trim();
+
 /**
  * Create a new Payment record when an order is placed.
- * Does NOT move money — that happens on markPaymentSuccess().
+ * Does NOT move money â€” that happens on markPaymentSuccess().
  */
 export async function createPayment({
     orderId, userId, amount, method, gateway = 'none',
-    gatewayOrderId = '', module = 'food', metadata
+    gatewayOrderId = '', module = 'food', metadata, idempotencyKey
 }) {
+    const normalizedIdempotencyKey = normalizeIdempotencyKey(idempotencyKey);
+    if (normalizedIdempotencyKey) {
+        const existing = await Payment.findOne({ idempotencyKey: normalizedIdempotencyKey }).lean();
+        if (existing) return existing;
+    }
+
     const status = method === 'cash' ? 'pending' : method === 'wallet' ? 'success' : 'created';
-    const doc = await Payment.create({
-        orderId: new mongoose.Types.ObjectId(orderId),
-        userId: new mongoose.Types.ObjectId(userId),
-        amount: Number(amount),
-        currency: 'INR',
-        method,
-        gateway,
-        gatewayOrderId,
-        status,
-        module,
-        metadata
-    });
+    let doc;
+    try {
+        doc = await Payment.create({
+            orderId: new mongoose.Types.ObjectId(orderId),
+            userId: new mongoose.Types.ObjectId(userId),
+            amount: Number(amount),
+            currency: 'INR',
+            method,
+            gateway,
+            gatewayOrderId,
+            status,
+            module,
+            metadata,
+            idempotencyKey: normalizedIdempotencyKey || undefined
+        });
+    } catch (err) {
+        if (err?.code === 11000 && normalizedIdempotencyKey) {
+            const existing = await Payment.findOne({ idempotencyKey: normalizedIdempotencyKey }).lean();
+            if (existing) return existing;
+        }
+        throw err;
+    }
 
     logger.info(`Payment created: ${doc._id} method=${method} status=${status} amount=${amount}`);
 
@@ -39,7 +57,8 @@ export async function createPayment({
                 category: 'order_payment',
                 orderId: String(orderId),
                 paymentId: String(doc._id),
-                metadata: { method: 'wallet' }
+                metadata: { method: 'wallet' },
+                idempotencyKey: normalizedIdempotencyKey ? `${normalizedIdempotencyKey}:wallet-debit` : `wallet-payment:${doc._id}`
             });
         } catch (err) {
             // If wallet debit fails (insufficient balance), mark payment as failed
@@ -107,7 +126,7 @@ export async function getPaymentByGatewayId(gatewayPaymentId) {
  */
 export async function findOrCreatePayment({
     orderId, userId, amount, method, gateway = 'none',
-    gatewayOrderId = '', module = 'food'
+    gatewayOrderId = '', module = 'food', metadata, idempotencyKey
 }) {
     // Check if a non-failed payment already exists
     const existing = await Payment.findOne({
@@ -117,5 +136,5 @@ export async function findOrCreatePayment({
 
     if (existing) return existing;
 
-    return createPayment({ orderId, userId, amount, method, gateway, gatewayOrderId, module });
+    return createPayment({ orderId, userId, amount, method, gateway, gatewayOrderId, module, metadata, idempotencyKey });
 }

@@ -169,8 +169,9 @@ export const listSettlementsController = async (req, res, next) => {
 
 export const createSettlementController = async (req, res, next) => {
     try {
-        const { entityType, entityId, amount, notes, periodStart, periodEnd } = req.body;
-        const settlement = await createSettlement({ entityType, entityId, amount, notes, periodStart, periodEnd });
+        const { entityType, entityId, amount, notes, periodStart, periodEnd, idempotencyKey: bodyIdempotencyKey } = req.body;
+        const idempotencyKey = req.get?.('Idempotency-Key') || bodyIdempotencyKey || '';
+        const settlement = await createSettlement({ entityType, entityId, amount, notes, periodStart, periodEnd, idempotencyKey });
         return sendResponse(res, 201, 'Settlement created', { settlement });
     } catch (err) {
         next(err);

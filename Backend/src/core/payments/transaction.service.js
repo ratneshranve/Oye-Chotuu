@@ -34,6 +34,8 @@ function resolveWallet(entityType, entityId) {
 /** Fixed ObjectId for admin entity used in Transaction documents (singleton) */
 const ADMIN_ENTITY_OID = new mongoose.Types.ObjectId('000000000000000000000001');
 
+const normalizeIdempotencyKey = (key) => String(key || '').trim();
+
 /**
  * Ensure wallet exists, creating it if needed. Returns the wallet document.
  */
@@ -81,8 +83,23 @@ export async function recordTransaction(payload) {
         description = '', category = 'other',
         orderId = null, paymentId = null,
         metadata = undefined, module = 'food',
-        allowNegative = false
+        allowNegative = false,
+        idempotencyKey = ''
     } = payload;
+
+    const normalizedIdempotencyKey = normalizeIdempotencyKey(idempotencyKey);
+
+    if (normalizedIdempotencyKey) {
+        const existingTxn = await Transaction.findOne({ idempotencyKey: normalizedIdempotencyKey }).lean();
+        if (existingTxn) {
+            const wallet = await ensureWallet(entityType, entityId);
+            return {
+                transaction: existingTxn,
+                wallet: { balance: Number(wallet.balance) || 0 },
+                idempotent: true
+            };
+        }
+    }
 
     if (!['credit', 'debit'].includes(type)) throw new Error('type must be credit or debit');
     if (!Number.isFinite(amount) || amount <= 0) throw new Error('amount must be positive');
@@ -128,7 +145,8 @@ export async function recordTransaction(payload) {
             description,
             category,
             module,
-            metadata
+            metadata,
+            idempotencyKey: normalizedIdempotencyKey || undefined
         }], { session });
 
         // 4. Update wallet balance atomically
@@ -155,14 +173,26 @@ export async function recordTransaction(payload) {
 
         await session.commitTransaction();
 
-        logger.info(`Transaction recorded: ${type} ${amount} INR for ${entityType}:${entityId} → balance ${newBalance}`);
+        logger.info(`Transaction recorded: ${type} ${amount} INR for ${entityType}:${entityId} â†’ balance ${newBalance}`);
 
         return {
             transaction: txn.toObject(),
-            wallet: { balance: newBalance }
+            wallet: { balance: newBalance },
+            idempotent: false
         };
     } catch (err) {
         await session.abortTransaction();
+        if (err?.code === 11000 && normalizedIdempotencyKey) {
+            const existingTxn = await Transaction.findOne({ idempotencyKey: normalizedIdempotencyKey }).lean();
+            if (existingTxn) {
+                const wallet = await ensureWallet(entityType, entityId);
+                return {
+                    transaction: existingTxn,
+                    wallet: { balance: Number(wallet.balance) || 0 },
+                    idempotent: true
+                };
+            }
+        }
         logger.error(`recordTransaction failed: ${err.message}`);
         throw err;
     } finally {

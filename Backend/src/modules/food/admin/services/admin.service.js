@@ -4915,7 +4915,8 @@ export async function updateDeliveryWithdrawalStatus(id, { status, adminNote, re
                 description: `Withdrawal Approved - ${existing.orderId || existing._id}`,
                 category: 'settlement_payout',
                 metadata: { withdrawalId: existing._id, transactionId },
-                allowNegative: true
+                allowNegative: true,
+                idempotencyKey: `delivery-withdrawal:${existing._id}:debit`
             });
         }
     }

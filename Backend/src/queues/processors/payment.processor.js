@@ -1,6 +1,6 @@
 import { logger } from '../../utils/logger.js';
 import { creditWallet } from '../../core/payments/wallet.service.js';
-import { createPayment, markPaymentSuccess } from '../../core/payments/payment.service.js';
+import { findOrCreatePayment, markPaymentSuccess } from '../../core/payments/payment.service.js';
 import { initiateRefund } from '../../core/payments/refund.service.js';
 
 /**
@@ -68,7 +68,8 @@ async function handleDeliveryCompleted(data) {
                 description: `Order ${orderId} - restaurant commission`,
                 category: 'commission',
                 orderId: orderMongoId,
-                metadata: { orderId, paymentMethod }
+                metadata: { orderId, paymentMethod },
+                idempotencyKey: `delivery-completed:${orderMongoId || orderId}:restaurant:${restaurantId}`
             });
             logger.info(`[PaymentProcessor] Restaurant ${restaurantId} credited ${commissionAmount} for order ${orderId}`);
         } catch (err) {
@@ -79,23 +80,26 @@ async function handleDeliveryCompleted(data) {
     // 2. Credit delivery partner wallet with their earning
     if (deliveryPartnerId && riderEarning > 0) {
         try {
-            await creditWallet({
+            const creditResult = await creditWallet({
                 entityType: 'deliveryBoy',
                 entityId: deliveryPartnerId,
                 amount: riderEarning,
                 description: `Order ${orderId} - delivery earning`,
                 category: 'delivery_earning',
                 orderId: orderMongoId,
-                metadata: { orderId, paymentMethod }
+                metadata: { orderId, paymentMethod },
+                idempotencyKey: `delivery-completed:${orderMongoId || orderId}:delivery:${deliveryPartnerId}`
             });
 
             // Increment delivery count
-            const { FoodDeliveryWallet } = await import('../../modules/food/delivery/models/deliveryWallet.model.js');
-            const mongoose = await import('mongoose');
-            await FoodDeliveryWallet.updateOne(
-                { deliveryPartnerId: new mongoose.default.Types.ObjectId(deliveryPartnerId) },
-                { $inc: { totalDeliveries: 1 } }
-            );
+            if (!creditResult?.idempotent) {
+                const { FoodDeliveryWallet } = await import('../../modules/food/delivery/models/deliveryWallet.model.js');
+                const mongoose = await import('mongoose');
+                await FoodDeliveryWallet.updateOne(
+                    { deliveryPartnerId: new mongoose.default.Types.ObjectId(deliveryPartnerId) },
+                    { $inc: { totalDeliveries: 1 } }
+                );
+            }
 
             logger.info(`[PaymentProcessor] Delivery partner ${deliveryPartnerId} credited ${riderEarning} for order ${orderId}`);
         } catch (err) {
@@ -113,7 +117,8 @@ async function handleDeliveryCompleted(data) {
                 description: `Order ${orderId} - platform profit`,
                 category: 'platform_fee',
                 orderId: orderMongoId,
-                metadata: { orderId, paymentMethod, riderEarning }
+                metadata: { orderId, paymentMethod, riderEarning },
+                idempotencyKey: `delivery-completed:${orderMongoId || orderId}:platform`
             });
             logger.info(`[PaymentProcessor] Platform credited ${platformProfit} for order ${orderId}`);
         } catch (err) {
@@ -123,7 +128,7 @@ async function handleDeliveryCompleted(data) {
 }
 
 /**
- * Handle order cancellation — trigger refund if payment was made.
+ * Handle order cancellation - trigger refund if payment was made.
  */
 async function handleOrderCancelled(data) {
     const { orderMongoId, paymentId, paymentMethod, paymentStatus, userId, amount, reason } = data;
@@ -140,7 +145,8 @@ async function handleOrderCancelled(data) {
             userId,
             amount,
             reason: reason || 'Order cancelled',
-            refundTo: paymentMethod === 'wallet' ? 'wallet' : 'wallet' // Default to wallet refund
+            refundTo: paymentMethod === 'wallet' ? 'wallet' : 'wallet', // Default to wallet refund
+            idempotencyKey: `order-cancelled:${orderMongoId}:${paymentId}`
         });
         logger.info(`[PaymentProcessor] Refund initiated for order ${orderMongoId}`);
     } catch (err) {
@@ -149,20 +155,21 @@ async function handleOrderCancelled(data) {
 }
 
 /**
- * Handle payment verified — create a Payment record in the new system.
+ * Handle payment verified - create a Payment record in the new system.
  */
 async function handlePaymentVerified(data) {
     const { orderMongoId, orderId, userId, paymentMethod, paymentStatus, amount, gatewayPaymentId } = data;
 
     try {
-        const payment = await createPayment({
+        const payment = await findOrCreatePayment({
             orderId: orderMongoId,
             userId,
             amount,
             method: paymentMethod,
             gateway: paymentMethod === 'razorpay' ? 'razorpay' : 'none',
             gatewayOrderId: data.razorpayOrderId || '',
-            metadata: { orderId, source: 'payment_verified_event' }
+            metadata: { orderId, source: 'payment_verified_event' },
+            idempotencyKey: `payment-verified:${orderMongoId || orderId}:${gatewayPaymentId || data.razorpayOrderId || amount}`
         });
 
         if (paymentStatus === 'paid' && gatewayPaymentId) {

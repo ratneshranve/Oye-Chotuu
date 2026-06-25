@@ -16,7 +16,7 @@ import { logger } from '../../utils/logger.js';
  */
 export async function creditWallet({
     entityType, entityId, amount, description,
-    category = 'other', orderId, paymentId, metadata
+    category = 'other', orderId, paymentId, metadata, idempotencyKey
 }) {
     return recordTransaction({
         entityType,
@@ -27,7 +27,8 @@ export async function creditWallet({
         category,
         orderId: orderId ? String(orderId) : null,
         paymentId: paymentId ? String(paymentId) : null,
-        metadata
+        metadata,
+        idempotencyKey
     });
 }
 
@@ -36,7 +37,7 @@ export async function creditWallet({
  */
 export async function debitWallet({
     entityType, entityId, amount, description,
-    category = 'other', orderId, paymentId, metadata, allowNegative
+    category = 'other', orderId, paymentId, metadata, allowNegative, idempotencyKey
 }) {
     return recordTransaction({
         entityType,
@@ -48,7 +49,8 @@ export async function debitWallet({
         orderId: orderId ? String(orderId) : null,
         paymentId: paymentId ? String(paymentId) : null,
         metadata,
-        allowNegative
+        allowNegative,
+        idempotencyKey
     });
 }
 

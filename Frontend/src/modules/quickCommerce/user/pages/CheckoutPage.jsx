@@ -1651,6 +1651,7 @@ const CheckoutPage = () => {
         address: buildAddressForOrder(),
         paymentMode: selectedPayment === "online" ? "ONLINE" : "COD",
         discountTotal: discountAmount,
+        couponCode: selectedCoupon?.code || null,
         taxTotal: gstAmount,
         platformFee: platformFee,
         timeSlot: selectedTimeSlot,

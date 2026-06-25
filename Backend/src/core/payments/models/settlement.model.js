@@ -43,11 +43,14 @@ const settlementSchema = new mongoose.Schema(
         periodEnd: { type: Date, default: null },
 
         notes: { type: String, default: '', trim: true },
-        metadata: { type: mongoose.Schema.Types.Mixed, default: undefined }
+        metadata: { type: mongoose.Schema.Types.Mixed, default: undefined },
+
+        idempotencyKey: { type: String, trim: true, default: '', sparse: true }
     },
     { collection: 'settlements', timestamps: true }
 );
 
 settlementSchema.index({ entityType: 1, entityId: 1, status: 1, createdAt: -1 });
+settlementSchema.index({ idempotencyKey: 1 }, { unique: true, sparse: true });
 
 export const Settlement = mongoose.model('Settlement', settlementSchema);

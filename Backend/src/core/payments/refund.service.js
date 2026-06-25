@@ -5,19 +5,27 @@ import { creditWallet } from './wallet.service.js';
 import { getRazorpayInstance, isRazorpayConfigured } from '../../modules/food/orders/helpers/razorpay.helper.js';
 import { logger } from '../../utils/logger.js';
 
+const normalizeIdempotencyKey = (key) => String(key || '').trim();
+
 /**
  * Initiate a refund for a payment.
- * - For wallet payments → credits user wallet immediately.
- * - For gateway payments → creates a pending refund record (processGatewayRefund() does actual refund).
+ * - For wallet payments, credits user wallet immediately.
+ * - For gateway payments, creates a pending refund record (processGatewayRefund() does actual refund).
  */
-export async function initiateRefund({ paymentId, orderId, userId, amount, reason = '', refundTo }) {
+export async function initiateRefund({ paymentId, orderId, userId, amount, reason = '', refundTo, idempotencyKey }) {
+    const normalizedIdempotencyKey = normalizeIdempotencyKey(idempotencyKey);
+    if (normalizedIdempotencyKey) {
+        const existingRefund = await Refund.findOne({ idempotencyKey: normalizedIdempotencyKey }).lean();
+        if (existingRefund) return existingRefund;
+    }
+
     const payment = await Payment.findById(paymentId);
     if (!payment) throw new Error('Payment not found');
     if (payment.status !== 'success') throw new Error('Can only refund successful payments');
 
     // Determine refund path
     const to = refundTo || (payment.method === 'wallet' ? 'wallet' : 'wallet');
-    // Default to wallet refund for all methods — safer, faster. Admin can override to gateway.
+    // Default to wallet refund for all methods. Admin can override to gateway.
 
     const refund = await Refund.create({
         paymentId: new mongoose.Types.ObjectId(paymentId),
@@ -27,7 +35,8 @@ export async function initiateRefund({ paymentId, orderId, userId, amount, reaso
         currency: payment.currency || 'INR',
         reason,
         status: 'pending',
-        refundTo: to
+        refundTo: to,
+        idempotencyKey: normalizedIdempotencyKey || undefined
     });
 
     // If refunding to wallet, credit immediately
@@ -41,7 +50,8 @@ export async function initiateRefund({ paymentId, orderId, userId, amount, reaso
                 category: 'order_refund',
                 orderId: String(refund.orderId),
                 paymentId: String(paymentId),
-                metadata: { refundId: refund._id, reason }
+                metadata: { refundId: refund._id, reason },
+                idempotencyKey: normalizedIdempotencyKey ? `${normalizedIdempotencyKey}:wallet-credit` : `refund:${refund._id}:wallet-credit`
             });
 
             refund.status = 'processed';
@@ -49,7 +59,7 @@ export async function initiateRefund({ paymentId, orderId, userId, amount, reaso
             await refund.save();
 
             // Also credit back to the existing FoodUserWallet for backward compat
-            await addRefundToLegacyWallet(userId || payment.userId, refund.amount, orderId);
+            await addRefundToLegacyWallet(userId || payment.userId, refund.amount, orderId, refund._id);
 
             // Mark payment as refunded
             payment.status = 'refunded';
@@ -109,7 +119,8 @@ export async function processGatewayRefund(refundId) {
             userId: String(refund.userId),
             amount: refund.amount,
             reason: refund.reason,
-            refundTo: 'wallet'
+            refundTo: 'wallet',
+            idempotencyKey: `gateway-refund-fallback:${refund._id}`
         });
     }
 
@@ -144,17 +155,21 @@ export async function listRefunds({ status, page = 1, limit = 20 } = {}) {
 /**
  * Backward compatibility: add a refund transaction to the legacy FoodUserWallet embedded array.
  */
-async function addRefundToLegacyWallet(userId, amount, orderId) {
+async function addRefundToLegacyWallet(userId, amount, orderId, refundId) {
     try {
         const { FoodUserWallet } = await import('../../modules/food/user/models/userWallet.model.js');
         const wallet = await FoodUserWallet.findOne({ userId: new mongoose.Types.ObjectId(userId) });
         if (wallet) {
+            const legacyAlreadyCredited = Array.isArray(wallet.transactions) && wallet.transactions.some((txn) =>
+                String(txn?.metadata?.refundId || '') === String(refundId || '')
+            );
+            if (legacyAlreadyCredited) return;
             wallet.transactions.unshift({
                 type: 'refund',
                 amount,
                 status: 'Completed',
                 description: 'Order refund',
-                metadata: { source: 'order_refund', orderId: String(orderId) }
+                metadata: { source: 'order_refund', orderId: String(orderId), refundId: String(refundId || '') }
             });
             wallet.balance = (Number(wallet.balance) || 0) + amount;
             await wallet.save();

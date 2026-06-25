@@ -18,6 +18,7 @@ import {
 import { haversineKm } from '../../food/orders/services/order.helpers.js';
 import * as foodTransactionService from '../../food/orders/services/foodTransaction.service.js';
 import { emitQuickCommerceStatusUpdate } from '../services/quickStatusRealtime.service.js';
+import { getQuickCoupons } from '../services/content.service.js';
 import { notifyOwnerSafely } from '../../../core/notifications/firebase.service.js';
 import {
   createRazorpayOrder,
@@ -57,6 +58,55 @@ const getOrderPayableAmount = (order) => {
   return Number.isFinite(pricingTotal) ? Math.max(0, pricingTotal) : 0;
 };
 
+
+const getRequestedCouponCode = (body = {}) => {
+  const raw = body.couponCode || body.coupon || body.selectedCoupon?.code || body.appliedCoupon?.code;
+  if (raw && typeof raw === 'object') return String(raw.code || '').trim();
+  return String(raw || '').trim();
+};
+
+const isCouponDateActive = (coupon, now = new Date()) => {
+  const startsAt = coupon.startDate || coupon.validFrom;
+  const endsAt = coupon.expiryDate || coupon.validTill;
+  if (startsAt && new Date(startsAt) > now) return false;
+  if (endsAt && new Date(endsAt) < now) return false;
+  return true;
+};
+
+const calculateQuickCouponDiscount = async ({ code, subtotal }) => {
+  const couponCode = String(code || '').trim();
+  if (!couponCode) return { discount: 0, coupon: null };
+
+  const coupons = await getQuickCoupons();
+  const coupon = coupons.find(
+    (c) => String(c.code || '').toUpperCase() === couponCode.toUpperCase()
+  );
+
+  if (!coupon || coupon.isActive === false || !isCouponDateActive(coupon)) {
+    return { discount: 0, coupon: null };
+  }
+
+  const safeSubtotal = Math.max(0, Number(subtotal || 0));
+  const minOrder = Number(coupon.minOrderValue || coupon.minOrder || 0);
+  if (minOrder > 0 && safeSubtotal < minOrder) return { discount: 0, coupon: null };
+
+  const discountType = String(coupon.discountType || 'flat').toLowerCase();
+  const discountValue = Math.max(0, Number(coupon.discountValue || coupon.discount || 0));
+  const maxDiscount = Math.max(0, Number(coupon.maxDiscount || coupon.maxDiscountValue || 0));
+  let discountAmount = 0;
+
+  if (discountType === 'percent' || discountType === 'percentage') {
+    discountAmount = Math.round((safeSubtotal * discountValue) / 100);
+    if (maxDiscount > 0) discountAmount = Math.min(discountAmount, maxDiscount);
+  } else {
+    discountAmount = discountValue;
+  }
+
+  return {
+    discount: Math.min(Math.max(0, discountAmount), safeSubtotal),
+    coupon,
+  };
+};
 const normalizeOrderSummary = (order) => {
   const amount = getOrderPayableAmount(order);
   const paymentMethod = order?.payment?.method || order?.paymentMethod || 'cash';
@@ -301,7 +351,11 @@ export const placeOrder = async (req, res) => {
     }
 
     const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const discount = Math.max(0, Number(req.body?.discountTotal || 0));
+    const requestedCouponCode = getRequestedCouponCode(req.body);
+    const { discount, coupon: appliedCoupon } = await calculateQuickCouponDiscount({
+      code: requestedCouponCode,
+      subtotal,
+    });
     const { pricing } = await calculateQuickPricing({
       subtotal,
       discount,
@@ -401,6 +455,7 @@ export const placeOrder = async (req, res) => {
         ...pricing,
         subtotal,
         total,
+        ...(appliedCoupon ? { couponCode: appliedCoupon.code } : {}),
       },
       deliveryAddress,
       timeSlot: req.body?.timeSlot || 'now',
