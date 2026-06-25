@@ -1,16 +1,51 @@
-import { sendResponse } from '../../utils/response.js';
+import { sendResponse, sendError } from '../../utils/response.js';
 import { getPaymentsByOrder } from './payment.service.js';
 import { getTransactionsByOrder } from './transaction.service.js';
 import { getWalletBalance, getWalletWithTransactions, getUserWalletForFrontend } from './wallet.service.js';
 import { getRefundsByOrder, listRefunds } from './refund.service.js';
 import { createSettlement, processSettlement, listSettlements } from './settlement.service.js';
 import { logger } from '../../utils/logger.js';
+import { FoodOrder } from '../../modules/food/orders/models/order.model.js';
 
 // ─── User Endpoints ───
+
+const isAdminRole = (role) => ['ADMIN', 'SUB_ADMIN'].includes(String(role || '').toUpperCase());
+const sameId = (left, right) => String(left || '') === String(right || '');
+
+const assertOrderPaymentAccess = async (req, res, orderId) => {
+    const order = await FoodOrder.findById(orderId)
+        .select('userId restaurantId dispatch.deliveryPartnerId')
+        .lean();
+
+    if (!order) {
+        sendError(res, 404, 'Order not found');
+        return false;
+    }
+
+    const role = String(req.user?.role || '').toUpperCase();
+    const actorId = req.user?.userId;
+
+    if (isAdminRole(role)) return true;
+    if (role === 'USER' && sameId(order.userId, actorId)) return true;
+    if (role === 'RESTAURANT' && sameId(order.restaurantId, actorId)) return true;
+    if (role === 'DELIVERY_PARTNER' && sameId(order.dispatch?.deliveryPartnerId, actorId)) return true;
+
+    sendError(res, 403, 'Forbidden: order access denied');
+    return false;
+};
+
+const assertEntityWalletAccess = (req, res, entityId, entityRole, message) => {
+    const role = String(req.user?.role || '').toUpperCase();
+    if (isAdminRole(role)) return true;
+    if (role === entityRole && sameId(req.user?.userId, entityId)) return true;
+    sendError(res, 403, message);
+    return false;
+};
 
 export const getPaymentHistoryController = async (req, res, next) => {
     try {
         const { orderId } = req.params;
+        if (!(await assertOrderPaymentAccess(req, res, orderId))) return;
         const payments = await getPaymentsByOrder(orderId);
         return sendResponse(res, 200, 'Payment history fetched', { payments });
     } catch (err) {
@@ -21,6 +56,7 @@ export const getPaymentHistoryController = async (req, res, next) => {
 export const getOrderTransactionsController = async (req, res, next) => {
     try {
         const { orderId } = req.params;
+        if (!(await assertOrderPaymentAccess(req, res, orderId))) return;
         const transactions = await getTransactionsByOrder(orderId);
         return sendResponse(res, 200, 'Transactions fetched', { transactions });
     } catch (err) {
@@ -54,7 +90,8 @@ export const getUserWalletTransactionsController = async (req, res, next) => {
 
 export const getRestaurantWalletController = async (req, res, next) => {
     try {
-        const restaurantId = req.user?.restaurantId || req.params.restaurantId;
+        const restaurantId = req.params.restaurantId;
+        if (!assertEntityWalletAccess(req, res, restaurantId, 'RESTAURANT', 'Forbidden: restaurant wallet access denied')) return;
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 20;
         const data = await getWalletWithTransactions('restaurant', restaurantId, { page, limit });
@@ -68,7 +105,8 @@ export const getRestaurantWalletController = async (req, res, next) => {
 
 export const getDeliveryWalletController = async (req, res, next) => {
     try {
-        const deliveryPartnerId = req.user?.deliveryPartnerId || req.params.deliveryPartnerId;
+        const deliveryPartnerId = req.params.deliveryPartnerId;
+        if (!assertEntityWalletAccess(req, res, deliveryPartnerId, 'DELIVERY_PARTNER', 'Forbidden: delivery wallet access denied')) return;
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 20;
         const data = await getWalletWithTransactions('deliveryBoy', deliveryPartnerId, { page, limit });
@@ -166,6 +204,7 @@ export const listRefundsController = async (req, res, next) => {
 export const getRefundsByOrderController = async (req, res, next) => {
     try {
         const { orderId } = req.params;
+        if (!(await assertOrderPaymentAccess(req, res, orderId))) return;
         const refunds = await getRefundsByOrder(orderId);
         return sendResponse(res, 200, 'Refunds fetched', { refunds });
     } catch (err) {
