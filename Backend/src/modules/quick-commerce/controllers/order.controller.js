@@ -9,6 +9,7 @@ import { Seller } from '../seller/models/seller.model.js';
 import { SellerOrder } from '../seller/models/sellerOrder.model.js';
 import { QuickZone } from '../models/quick_zone.model.js';
 import { FoodZone } from '../../food/admin/models/zone.model.js';
+import { FoodDeliveryPartner } from '../../food/delivery/models/deliveryPartner.model.js';
 import { getSellerCommissionSnapshot } from '../admin/services/commission.service.js';
 import {
   calculateQuickPricing,
@@ -616,6 +617,41 @@ export const getMyOrders = async (req, res) => {
 
   const orders = await QuickOrder.find({ ...idQuery, orderType: 'quick' }).sort({ createdAt: -1 }).lean();
 
+  // Auto-expire check for placed orders
+  const placedOrderIds = orders.filter(o => String(o.orderStatus).toLowerCase() === 'placed').map(o => o.orderId);
+  if (placedOrderIds.length > 0) {
+    const expiredSellerOrders = await SellerOrder.find({
+      orderId: { $in: placedOrderIds },
+      status: 'pending',
+      sellerPendingExpiresAt: { $lt: new Date() },
+    });
+    
+    for (const so of expiredSellerOrders) {
+      await SellerOrder.updateOne({ _id: so._id }, { status: 'expired', workflowStatus: 'EXPIRED' });
+      await QuickOrder.updateOne(
+        { orderId: so.orderId },
+        {
+          orderStatus: 'cancelled_by_restaurant',
+          workflowStatus: 'CANCELLED',
+          $push: {
+            statusHistory: {
+              byRole: 'SYSTEM',
+              from: 'placed',
+              to: 'cancelled_by_restaurant',
+              note: 'Order was not accepted by the vendor in time',
+            },
+          },
+        }
+      );
+      
+      const memOrder = orders.find(o => o.orderId === so.orderId);
+      if (memOrder) {
+        memOrder.orderStatus = 'cancelled_by_restaurant';
+        memOrder.workflowStatus = 'CANCELLED';
+      }
+    }
+  }
+
   const sellerIds = [
     ...new Set(
       orders
@@ -692,11 +728,55 @@ export const getOrderById = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Order not found' });
     }
 
-    const sellerOrder = await SellerOrder.findOne({ orderId: order.orderId }).lean();
+    let sellerOrder = await SellerOrder.findOne({ orderId: order.orderId }).lean();
+
+    // Auto-expire check
+    if (
+      sellerOrder &&
+      sellerOrder.status === 'pending' &&
+      sellerOrder.sellerPendingExpiresAt &&
+      new Date() > new Date(sellerOrder.sellerPendingExpiresAt)
+    ) {
+      await SellerOrder.updateOne(
+        { _id: sellerOrder._id },
+        { status: 'expired', workflowStatus: 'EXPIRED' }
+      );
+      sellerOrder.status = 'expired';
+      sellerOrder.workflowStatus = 'EXPIRED';
+
+      if (!['delivered', 'cancelled_by_user', 'cancelled_by_restaurant', 'cancelled_by_admin'].includes(String(order.orderStatus).toLowerCase())) {
+        await QuickOrder.updateOne(
+          { _id: order._id },
+          {
+            orderStatus: 'cancelled_by_restaurant',
+            workflowStatus: 'CANCELLED',
+            $push: {
+              statusHistory: {
+                byRole: 'SYSTEM',
+                from: order.orderStatus || '',
+                to: 'cancelled_by_restaurant',
+                note: 'Order was not accepted by the vendor in time',
+              },
+            },
+          }
+        );
+        order.orderStatus = 'cancelled_by_restaurant';
+        order.workflowStatus = 'CANCELLED';
+        emitQuickOrderStatusUpdate(order, 'Order cancelled: Not accepted by vendor in time.');
+      }
+    }
+
     const seller =
       sellerOrder?.sellerId
-        ? await Seller.findById(sellerOrder.sellerId).select('_id name shopName location').lean()
+        ? await Seller.findById(sellerOrder.sellerId).select('_id name shopName location phone ownerPhone contactNumber').lean()
         : null;
+
+    let deliveryPartner = null;
+    if (order.dispatch?.deliveryPartnerId) {
+      deliveryPartner = await FoodDeliveryPartner.findById(order.dispatch.deliveryPartnerId)
+        .select('_id name phone avatar')
+        .lean();
+    }
 
     const deliveryAddress = order.deliveryAddress || {};
     const deliveryCoords = Array.isArray(deliveryAddress.location?.coordinates)
@@ -731,8 +811,18 @@ export const getOrderById = async (req, res) => {
               name: seller.shopName || seller.name || 'Store',
               shopName: seller.shopName || seller.name || 'Store',
               location: seller.location || null,
+              phone: seller.phone || seller.ownerPhone || seller.contactNumber || null,
+              ownerPhone: seller.ownerPhone || null,
             }
           : null,
+        deliveryPartner: deliveryPartner
+          ? {
+              _id: deliveryPartner._id,
+              name: deliveryPartner.name || 'Delivery Partner',
+              phone: deliveryPartner.phone || '',
+              avatar: deliveryPartner.avatar || ''
+            }
+          : order.deliveryPartner,
         sellerOrder: sellerOrder
           ? {
               _id: sellerOrder._id,

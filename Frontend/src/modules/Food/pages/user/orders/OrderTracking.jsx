@@ -350,7 +350,13 @@ const buildPickupSources = (apiOrder, previousOrder = null, restaurantAddress = 
       name: String(apiOrder?.restaurantName || previousOrder?.restaurant || "Restaurant").trim(),
       address: restaurantAddress || previousOrder?.restaurantAddress || "Restaurant location",
       phone: String(
-        apiOrder?.restaurantPhone ||
+        apiOrder?.seller?.phone ||
+          apiOrder?.seller?.ownerPhone ||
+          apiOrder?.storePhone ||
+          apiOrder?.store?.phone ||
+          apiOrder?.store?.ownerPhone ||
+          apiOrder?.storeId?.phone ||
+          apiOrder?.restaurantPhone ||
           apiOrder?.restaurantId?.phone ||
           apiOrder?.restaurant?.phone ||
           previousOrder?.restaurantPhone ||
@@ -1177,6 +1183,10 @@ export default function OrderTracking() {
       order?.restaurant?.phone ||
       order?.restaurant?.ownerPhone ||
       order?.restaurantId?.location?.phone ||
+      order?.seller?.phone ||
+      order?.seller?.ownerPhone ||
+      order?.store?.phone ||
+      order?.store?.ownerPhone ||
       order?.storeId?.phone ||
       order?.pickupSources?.[0]?.phone ||
       order?.items?.[0]?.restaurant?.phone ||
@@ -2432,6 +2442,11 @@ export default function OrderTracking() {
                       ? `${partner.label} for ${partner.sourceName}`
                       : partner?.statusText || 'Your delivery partner is arriving'}
                   </p>
+                  {(partner?.phone || order?.deliveryPartner?.phone) && (
+                    <p className="mt-1 text-sm font-medium text-gray-600 dark:text-gray-300">
+                      {partner?.phone || order?.deliveryPartner?.phone}
+                    </p>
+                  )}
                   {formatPartnerRating(partner?.rating) ? (
                     <div className="mt-1 flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-500">
                       <span className="font-semibold">★ {formatPartnerRating(partner?.rating)}</span>
@@ -2644,6 +2659,11 @@ export default function OrderTracking() {
                         </span>
                         <p className="mt-2 font-semibold text-gray-900 dark:text-white">{source.name}</p>
                         <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{source.address || 'Address not available'}</p>
+                        {(source.phone || order?.seller?.phone || order?.store?.phone || order?.storeId?.phone || order?.restaurant?.phone || order?.restaurantId?.phone) && (
+                          <p className="mt-1 text-sm font-medium text-gray-600 dark:text-gray-300">
+                            {source.phone || order?.seller?.phone || order?.store?.phone || order?.storeId?.phone || order?.restaurant?.phone || order?.restaurantId?.phone}
+                          </p>
+                        )}
                       </div>
                       {source.phone ? (
                         <motion.button
