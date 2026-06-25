@@ -1,11 +1,14 @@
 import express from 'express';
-import { upload } from '../../../middleware/upload.js';
+import { imageUpload } from '../../../middleware/upload.js';
 import { uploadImageBuffer } from '../../../services/cloudinary.service.js';
+import { authMiddleware } from '../../../core/auth/auth.middleware.js';
+import { requireRoles } from '../../../core/roles/role.middleware.js';
 
 const router = express.Router();
+const uploadRoles = requireRoles('ADMIN', 'SUB_ADMIN', 'USER', 'RESTAURANT', 'DELIVERY_PARTNER', 'SELLER');
 
 // POST /v1/uploads/image
-router.post('/image', upload.single('file'), async (req, res, next) => {
+router.post('/image', authMiddleware, uploadRoles, imageUpload.single('file'), async (req, res, next) => {
     try {
         if (!req.file || !req.file.buffer) {
             return res.status(400).json({

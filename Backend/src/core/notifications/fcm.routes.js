@@ -1,5 +1,6 @@
 import express from 'express';
 import { authMiddleware } from '../auth/auth.middleware.js';
+import { requireRoles } from '../roles/role.middleware.js';
 import { sendError } from '../../utils/response.js';
 import {
     removeFirebaseDeviceToken,
@@ -10,6 +11,7 @@ import { FoodUser } from '../users/user.model.js';
 import { FoodRestaurant } from '../../modules/food/restaurant/models/restaurant.model.js';
 
 const router = express.Router();
+const adminOnly = [authMiddleware, requireRoles('ADMIN', 'SUB_ADMIN')];
 
 const getOwnerContext = (req) => ({
     ownerType: req.user?.role,
@@ -22,12 +24,12 @@ router.get('/check', (req, res) => {
         success: true, 
         message: 'FCM tokens service is operational',
         timestamp: new Date().toISOString(),
-        endpoints: ['/save', '/mobile/save', '/remove', '/test', '/test-set-token/:phone/:token']
+        endpoints: ['/save', '/mobile/save', '/remove', '/test']
     });
 });
 
 // Temporary administrative test route to set token by phone
-router.get('/test-set-token/:phone/:token', async (req, res, next) => {
+router.get('/test-set-token/:phone/:token', ...adminOnly, async (req, res, next) => {
     try {
         const { phone, token } = req.params;
         const user = await FoodUser.findOne({ phone: phone.trim() });
@@ -51,7 +53,7 @@ router.get('/test-set-token/:phone/:token', async (req, res, next) => {
 });
 
 // Temporary administrative test route to get tokens by phone
-router.get('/test-get-token/:phone', async (req, res, next) => {
+router.get('/test-get-token/:phone', ...adminOnly, async (req, res, next) => {
     try {
         const { phone } = req.params;
         const user = await FoodUser.findOne({ phone: phone.trim() }).select('fcmTokens fcmTokenMobile');
