@@ -61,6 +61,7 @@ export default defineConfig(({ mode }) => {
       '@core': coreSrc,
       '@quickCommerce': path.resolve(__dirname, './src/modules/quickCommerce'),
       '@delivery': path.resolve(__dirname, './src/modules/DeliveryV2'),
+      'lottie-web': path.resolve(__dirname, './node_modules/lottie-web/build/player/lottie_light.js'),
 
       '@common': path.resolve(__dirname, './src/modules/common'),
       '@': path.resolve(__dirname, './src'),
@@ -86,5 +87,8 @@ export default defineConfig(({ mode }) => {
       },
     },
   },
+    build: {
+      chunkSizeWarningLimit: 1000,
+    },
   }
 })

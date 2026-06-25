@@ -3,6 +3,7 @@ import { motion } from "framer-motion"
 import { useLocation, useNavigate } from "react-router-dom"
 import { UtensilsCrossed, ShoppingBasket, ShieldCheck, User } from "lucide-react"
 import { cn } from "@food/utils/utils"
+import { getCachedSettings, loadBusinessSettings } from "@common/utils/businessSettings"
 
 const SERVICES = [
   {
@@ -65,7 +66,6 @@ export default function SuperAppPortal() {
   React.useEffect(() => {
     const loadSettings = async () => {
       try {
-        const { getCachedSettings, loadBusinessSettings } = await import("@common/utils/businessSettings")
         let settings = getCachedSettings()
         if (!settings) {
           settings = await loadBusinessSettings()

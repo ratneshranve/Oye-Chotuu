@@ -4,16 +4,15 @@ import { Toaster } from 'sonner'
 import App from './app/App.jsx'
 import { hasModuleSession } from './modules/Food/utils/auth.js'
 import { isNativeLikeShell } from './core/navigation/appLocation.js'
+import { loadBusinessSettings } from '@common/utils/businessSettings'
 import './shared/styles/global.css'
 
 const NATIVE_LAST_ROUTE_KEY = 'native_last_route'
 
 // ─── Quick-spicy Food Module Initialization ───────────────────────────────────
 
-// Load global business settings (favicon, title) — non-critical
-import('@common/utils/businessSettings')
-  .then(({ loadBusinessSettings }) => loadBusinessSettings())
-  .catch(() => { /* Silently fail — settings load when admin authenticates */ })
+// Load global business settings (favicon, title) - non-critical
+loadBusinessSettings().catch(() => { /* Silently fail - settings load when admin authenticates */ })
 
 // Apply saved theme
 const savedTheme = localStorage.getItem('appTheme') || 'light'

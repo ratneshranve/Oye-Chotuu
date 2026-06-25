@@ -6,7 +6,7 @@ import { toast } from "sonner"
 import { authAPI, userAPI } from "@food/api"
 import { isModuleAuthenticated, setAuthData } from "@food/utils/auth"
 import { useAuth } from "@core/context/AuthContext"
-import zozomenLogo from "@/assets/zozomenLogo.png"
+import appLogo from "@/assets/logo.png"
 import { loadBusinessSettings, getCachedSettings } from "@common/utils/businessSettings"
 
 export default function UnifiedOTPFastLogin() {
@@ -368,7 +368,7 @@ export default function UnifiedOTPFastLogin() {
               animate={{ scale: 1 }}
               className="w-24 h-24 md:w-28 md:h-28 bg-white rounded-full flex items-center justify-center mb-3 shadow-2xl overflow-hidden border-[2px] border-[#CB202D] ring-[4px] ring-white"
             >
-              <img src={logoUrl || zozomenLogo} alt="Logo" className="w-full h-full object-cover rounded-full" />
+              <img src={logoUrl || appLogo} alt="Logo" className="w-full h-full object-cover rounded-full" />
             </motion.div>
             
             <motion.h1

@@ -7,7 +7,7 @@ import { clearModuleAuth, isModuleAuthenticated } from "@food/utils/auth"
 import { useCompanyName } from "@food/hooks/useCompanyName"
 import { toast } from "sonner"
 import { motion } from "framer-motion"
-import zozomenLogo from "@/assets/zozomenLogo.png"
+import appLogo from "@/assets/logo.png"
 import { loadBusinessSettings, getCachedSettings } from "@common/utils/businessSettings"
 const debugLog = (...args) => {}
 const debugWarn = (...args) => {}
@@ -252,7 +252,7 @@ export default function DeliverySignIn() {
               animate={{ scale: 1 }}
               className="w-24 h-24 md:w-28 md:h-28 bg-white rounded-full flex items-center justify-center mb-3 shadow-2xl overflow-hidden border-[2px] border-[#005b96] ring-[4px] ring-white"
             >
-              <img src={logoUrl || zozomenLogo} alt="Logo" className="w-full h-full object-cover rounded-full" />
+              <img src={logoUrl || appLogo} alt="Logo" className="w-full h-full object-cover rounded-full" />
             </motion.div>
             
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-2 uppercase">
