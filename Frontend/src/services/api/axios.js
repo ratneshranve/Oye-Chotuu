@@ -239,12 +239,17 @@ apiClient.interceptors.response.use(
     }
 
     const module = original.contextModule || getModuleFromUrl(original.url);
+    const currentPath = getCurrentAppPath();
+
+    if (isPublicUserStorefrontPath(currentPath) && module !== "user") {
+      return Promise.reject(err);
+    }
 
     // Public storefront screens can make optional user requests (profile,
     // notifications, wishlist/cart bootstrap). A stale or missing user token
     // should not kick a guest out of the storefront; protected pages still
     // redirect through their guards and this interceptor.
-    if (module === "user" && isPublicUserStorefrontPath()) {
+    if (module === "user" && isPublicUserStorefrontPath(currentPath)) {
       if (!getRefreshToken(module)) {
         clearModuleAuth(module);
       }

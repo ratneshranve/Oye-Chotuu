@@ -36,8 +36,16 @@ export const useOrderManager = () => {
       return;
     }
 
-    const orderId = order?.orderId || order?._id || order?.id;
-    if (!orderId) {
+    const orderId = String(
+      order?.orderMongoId ||
+      order?.order_mongo_id ||
+      order?._id ||
+      order?.id ||
+      order?.orderId ||
+      order?.order_id ||
+      ''
+    ).trim();
+    if (!orderId || orderId === '0' || orderId.toLowerCase() === 'null' || orderId.toLowerCase() === 'undefined') {
       toast.error('Invalid order data');
       return;
     }
@@ -90,7 +98,9 @@ export const useOrderManager = () => {
 
         setActiveOrder({
           ...fullOrder,
-          orderId: orderId,
+          orderId,
+          displayOrderId: fullOrder.displayOrderId || fullOrder.orderId || order?.orderId || order?.order_id || orderId,
+          orderMongoId: fullOrder.orderMongoId || fullOrder._id || order?.orderMongoId || order?._id || orderId,
           pickupPoints,
           restaurantLocation: primaryPickupLocation || resLoc,
           customerLocation: cusLoc

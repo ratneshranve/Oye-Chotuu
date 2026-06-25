@@ -214,7 +214,7 @@ const Dashboard = () => {
       },
       address: addressStr || "—",
       items,
-      total: Number(order.pricing?.total ?? 0),
+      total: Number(order.pricing?.subtotal ?? order.pricing?.total ?? 0),
       status: order.status || "pending",
       payment:
         order.payment?.method === "cash" || order.payment?.method === "cod"
@@ -518,7 +518,7 @@ const Dashboard = () => {
                   </td>
                   <td className="py-4 px-4 align-middle">
                     <span className="text-sm font-semibold text-slate-900">
-                      ₹{order.pricing?.total || 0}
+                      ₹{order.pricing?.subtotal || order.pricing?.total || 0}
                     </span>
                   </td>
                   <td className="py-4 px-4 align-middle">

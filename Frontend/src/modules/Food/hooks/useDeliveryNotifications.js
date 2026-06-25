@@ -171,9 +171,47 @@ const buildDeliveryOrderNotification = (orderData = {}) => {
   };
 }
 
+const getValidDeliveryOfferId = (orderData = {}) => {
+  const candidates = [
+    orderData?.returnId,
+    orderData?.orderMongoId,
+    orderData?.order_mongo_id,
+    orderData?._id,
+    orderData?.id,
+    orderData?.orderId,
+    orderData?.order_id,
+  ];
+
+  for (const value of candidates) {
+    const id = String(value ?? '').trim();
+    if (id && id !== '0' && id.toLowerCase() !== 'null' && id.toLowerCase() !== 'undefined') {
+      return id;
+    }
+  }
+
+  return '';
+};
+
+const hasExplicitDeliveryOfferMarker = (orderData = {}) => {
+  const type = String(orderData?.type || '').trim().toLowerCase();
+  const moduleName = String(orderData?.module || orderData?.targetModule || '').trim().toLowerCase();
+
+  return (
+    type === 'new_order' ||
+    type === 'new_order_available' ||
+    type === 'return_pickup' ||
+    type === 'return_pickup_available' ||
+    type === 'new_return_pickup' ||
+    orderData?.type === 'RETURN_PICKUP' ||
+    moduleName === 'delivery' ||
+    orderData?.deliveryOffer === '1' ||
+    Boolean(orderData?.dispatch || orderData?.dispatchStatus || orderData?.dispatchLeg) ||
+    (Array.isArray(orderData?.pickupPoints) && orderData.pickupPoints.length > 0)
+  );
+};
 const isActionableDeliveryOffer = (orderData = {}) => {
   if (orderData?.type === 'RETURN_PICKUP') {
-    return Boolean(orderData?.returnId);
+    return Boolean(getValidDeliveryOfferId(orderData));
   }
   const orderStatus = String(
     orderData?.orderStatus || orderData?.status || ''
@@ -193,12 +231,7 @@ const isActionableDeliveryOffer = (orderData = {}) => {
     return false;
   }
 
-  return Boolean(
-    orderData?.orderId ||
-    orderData?.orderMongoId ||
-    orderData?._id ||
-    orderData?.id,
-  );
+  return Boolean(getValidDeliveryOfferId(orderData));
 };
 
 const triggerWebViewNativeNotification = async (orderData = {}) => {
@@ -1189,7 +1222,12 @@ export const useDeliveryNotifications = () => {
     }
     void readPendingDeliveryOffer().then((stored) => {
       const cachedOffer = stored?.payload?.data || stored?.payload || null;
-      if (cachedOffer && isActionableDeliveryOffer(cachedOffer) && !activeOrderRef.current) {
+      if (
+        cachedOffer &&
+        hasExplicitDeliveryOfferMarker(cachedOffer) &&
+        isActionableDeliveryOffer(cachedOffer) &&
+        !activeOrderRef.current
+      ) {
         debugLog('Restored delivery popup from cold-start FCM payload', {
           orderId: cachedOffer?.orderId || cachedOffer?.orderMongoId || cachedOffer?._id,
         });
@@ -1210,6 +1248,11 @@ export const useDeliveryNotifications = () => {
       const isReturn = orderData.type === 'RETURN_PICKUP';
       const normalizedData = isReturn ? { ...orderData, type: 'RETURN_PICKUP' } : orderData;
       
+      if (!hasExplicitDeliveryOfferMarker(normalizedData) || !isActionableDeliveryOffer(normalizedData)) {
+        debugLog('Ignoring non-delivery FCM popup trigger event', normalizedData);
+        return;
+      }
+
       debugLog('Received FCM popup trigger event', normalizedData);
       setNewOrder(normalizedData);
       handleIncomingOrderAlert(normalizedData);

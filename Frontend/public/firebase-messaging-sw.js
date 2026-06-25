@@ -19,12 +19,18 @@ const getNotificationKey = (payload) =>
   ].join("::");
 
 function isDeliveryOfferPayload(payload = {}) {
-  const type = String(payload?.data?.type || "").trim().toLowerCase();
+  const data = payload?.data || {};
+  const type = String(data.type || "").trim().toLowerCase();
   return (
     type === "new_order" ||
     type === "new_order_available" ||
     type === "return_pickup" ||
-    Boolean(payload?.data?.orderId || payload?.data?.orderMongoId || payload?.data?.returnId)
+    type === "return_pickup_available" ||
+    type === "new_return_pickup" ||
+    data.type === "RETURN_PICKUP" ||
+    data.deliveryOffer === "1" ||
+    data.targetModule === "delivery" ||
+    data.module === "delivery"
   );
 }
 

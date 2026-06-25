@@ -517,13 +517,19 @@ function showForegroundNotification(payload = {}) {
     payload?.data?.imageUrl ||
     undefined;
 
-  const isNewOrder = 
-    title.toLowerCase().includes("order") || 
-    body.toLowerCase().includes("order") || 
-    payload?.data?.orderId ||
-    payload?.data?.type === 'RETURN_PICKUP';
+  const dataType = String(payload?.data?.type || "").trim().toLowerCase();
+  const isDeliveryOffer =
+    dataType === "new_order" ||
+    dataType === "new_order_available" ||
+    dataType === "return_pickup" ||
+    dataType === "return_pickup_available" ||
+    dataType === "new_return_pickup" ||
+    payload?.data?.type === "RETURN_PICKUP" ||
+    payload?.data?.deliveryOffer === "1" ||
+    payload?.data?.targetModule === "delivery" ||
+    payload?.data?.module === "delivery";
 
-  if (isNewOrder && payload?.data) {
+  if (isDeliveryOffer && payload?.data) {
     if (typeof window !== 'undefined') {
       window.__fcmPendingDeliveryPopup = payload.data;
     }

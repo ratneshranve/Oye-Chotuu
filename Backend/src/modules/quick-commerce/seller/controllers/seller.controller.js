@@ -2012,18 +2012,18 @@ export const getSellerEarningsController = async (req, res) => {
       (orderNetEarnings > 0 ? orderNetEarnings : txnNetEarnings) + totalAdjustments;
 
     const grossSales = orders.reduce(
-      (sum, o) => sum + num(o.pricing?.total),
+      (sum, o) => sum + num(o.pricing?.subtotal),
       0,
     );
     const totalCommission = orders.reduce(
       (sum, o) => sum + num(o.pricing?.commission),
       0,
     );
-    const subtotal = orders.reduce(
-      (sum, o) => sum + num(o.pricing?.subtotal),
+    const totalOrderValue = orders.reduce(
+      (sum, o) => sum + num(o.pricing?.total),
       0,
     );
-    const deliveryFees = grossSales - subtotal;
+    const deliveryFees = totalOrderValue - grossSales;
 
     const totalWithdrawn = transactions
       .filter((item) => item.type === "Withdrawal" && item.status === "Settled")

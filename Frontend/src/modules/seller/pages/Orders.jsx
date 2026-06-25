@@ -218,7 +218,7 @@ const Orders = () => {
         pricing: {
           subtotal: Number(order.pricing?.subtotal || 0),
           commission: Number(order.pricing?.commission || 0),
-          total: Number(order.pricing?.total || 0),
+          total: Number(order.pricing?.subtotal || order.pricing?.total || 0),
           receivable: resolveSellerReceivable(order),
           deliveryFee: Number(order.pricing?.deliveryFee || 0),
           handlingFee: Number(order.pricing?.handlingFee || 0),

@@ -138,36 +138,11 @@ export default function CategoryPage() {
   }
 
   const fetchApprovedFoods = async () => {
-    if (Array.isArray(approvedFoodsCacheRef.current)) {
-      return approvedFoodsCacheRef.current
-    }
-
-    if (approvedFoodsInFlightRef.current) {
-      return approvedFoodsInFlightRef.current
-    }
-
-    approvedFoodsInFlightRef.current = (async () => {
-      try {
-        const response = await adminAPI.getFoods({ limit: 1000 })
-        const list = response?.data?.data?.foods || []
-        const approvedFoods = Array.isArray(list)
-          ? list.filter((food) =>
-              String(food?.approvalStatus || "").toLowerCase() === "approved" &&
-              food?.isAvailable !== false
-            )
-          : []
-
-        approvedFoodsCacheRef.current = approvedFoods
-        return approvedFoods
-      } catch {
-        approvedFoodsCacheRef.current = []
-        return []
-      } finally {
-        approvedFoodsInFlightRef.current = null
-      }
-    })()
-
-    return approvedFoodsInFlightRef.current
+    // User category pages must stay on public APIs only.
+    // If a restaurant menu is missing, skip the admin-only foods fallback.
+    approvedFoodsCacheRef.current = []
+    approvedFoodsInFlightRef.current = null
+    return []
   }
 
   useEffect(() => {
