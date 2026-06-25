@@ -10,7 +10,7 @@ import { setAuthData } from "@food/utils/auth";
 import { useAuth } from "@core/context/AuthContext";
 import { sellerApi } from "../services/sellerApi";
 import { registerWebPushForCurrentModule } from "@food/utils/firebaseMessaging";
-import appLogo from "@/assets/logo.png"
+import appLogo from "@/assets/Logo.png"
 import { loadBusinessSettings, getCachedSettings } from "@common/utils/businessSettings"
 
 const DEFAULT_COUNTRY_CODE = "+91";

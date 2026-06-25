@@ -10,7 +10,7 @@ import {
 import { checkOnboardingStatus, isRestaurantOnboardingComplete } from "@food/utils/onboardingUtils"
 import { useCompanyName } from "@food/hooks/useCompanyName"
 import { motion } from "framer-motion"
-import appLogo from "@/assets/logo.png"
+import appLogo from "@/assets/Logo.png"
 import { loadBusinessSettings, getCachedSettings } from "@common/utils/businessSettings"
 
 const debugLog = (...args) => {}

@@ -7,7 +7,7 @@ import { clearModuleAuth, isModuleAuthenticated } from "@food/utils/auth"
 import { useCompanyName } from "@food/hooks/useCompanyName"
 import { toast } from "sonner"
 import { motion } from "framer-motion"
-import appLogo from "@/assets/logo.png"
+import appLogo from "@/assets/Logo.png"
 import { loadBusinessSettings, getCachedSettings } from "@common/utils/businessSettings"
 const debugLog = (...args) => {}
 const debugWarn = (...args) => {}

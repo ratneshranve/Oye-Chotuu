@@ -6,7 +6,7 @@ import { toast } from "sonner"
 import { authAPI, userAPI } from "@food/api"
 import { isModuleAuthenticated, setAuthData } from "@food/utils/auth"
 import { useAuth } from "@core/context/AuthContext"
-import appLogo from "@/assets/logo.png"
+import appLogo from "@/assets/Logo.png"
 import { loadBusinessSettings, getCachedSettings } from "@common/utils/businessSettings"
 
 export default function UnifiedOTPFastLogin() {
