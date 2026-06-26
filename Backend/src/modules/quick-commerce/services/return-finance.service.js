@@ -37,13 +37,23 @@ export const calculateReturnDeductions = (order, sellerOrder, product, returnQua
   let adminDeduction = 0;
 
   if (sellerOrder && sellerOrder.pricing) {
-    const subtotal = sellerOrder.pricing.subtotal || 1;
-    const itemRatio = productValue / subtotal;
-    
-    // Quick Commerce stores seller commission in sellerOrder.pricing.commission
-    const proportionalCommission = (sellerOrder.pricing.commission || 0) * itemRatio;
-    sellerDeduction = productValue - proportionalCommission;
-    adminDeduction = proportionalCommission;
+    const sellerOrderItem = sellerOrder.items?.find(item => 
+      (item.productId && item.productId.toString() === targetProductId)
+    );
+
+    let itemCommission = 0;
+    if (sellerOrderItem && sellerOrderItem.commission !== undefined && sellerOrderItem.quantity > 0) {
+      // Exact commission for the returned quantity
+      itemCommission = (sellerOrderItem.commission / sellerOrderItem.quantity) * returnQuantity;
+    } else {
+      // Fallback proportional commission if item commission isn't tracked
+      const subtotal = sellerOrder.pricing.subtotal || 1;
+      const itemRatio = productValue / subtotal;
+      itemCommission = (sellerOrder.pricing.commission || 0) * itemRatio;
+    }
+
+    sellerDeduction = productValue - itemCommission;
+    adminDeduction = itemCommission;
   } else if (order.pricing && order.pricing.restaurantCommission) {
     // Fallback if SellerOrder not provided or doesn't have pricing
     const itemRatio = productValue / (order.pricing.subtotal || 1);

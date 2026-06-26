@@ -19,6 +19,7 @@ export const createReturnRequest = async (req, res) => {
     const returnReq = await returnService.createReturnRequest(userId, req.body, settings.returnWindowDays);
     res.status(201).json({ success: true, returnRequest: returnReq });
   } catch (error) {
+    console.error("createReturnRequest Error:", error);
     res.status(400).json({ success: false, message: error.message });
   }
 };
@@ -26,7 +27,7 @@ export const createReturnRequest = async (req, res) => {
 export const getUserReturns = async (req, res) => {
   try {
     const userId = req.user.userId;
-    const { orderId } = req.params;
+    const orderId = req.params.orderId || req.query.orderId;
     const filter = { userId };
     if (orderId) filter.orderId = orderId;
 

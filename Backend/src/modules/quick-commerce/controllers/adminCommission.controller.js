@@ -116,3 +116,95 @@ export const toggleSellerCommissionStatus = async (req, res) => {
         return res.status(500).json({ success: false, message: error.message });
     }
 };
+
+/** Get all products for a seller with their commission info */
+export const getSellerProductCommissions = async (req, res) => {
+    try {
+        const { sellerId } = req.params;
+        const SellerProduct = (await import('../seller/models/sellerProduct.model.js')).SellerProduct;
+
+        const products = await SellerProduct.find({ sellerId })
+            .select('_id name price salePrice mainImage status commission')
+            .sort({ createdAt: -1 })
+            .lean();
+
+        const sellerCommission = await QuickSellerCommission.findOne({ sellerId, status: { $ne: false } }).lean();
+
+        return res.json({
+            success: true,
+            data: {
+                products: products.map((p, i) => ({
+                    ...p,
+                    sl: i + 1,
+                    hasProductCommission: Boolean(p.commission?.value > 0),
+                    commissionType: p.commission?.type || 'percentage',
+                    commissionValue: p.commission?.value || 0,
+                })),
+                sellerCommission: sellerCommission?.defaultCommission || null,
+            }
+        });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+/** Update commission on a specific seller product */
+export const updateProductCommission = async (req, res) => {
+    try {
+        const { productId } = req.params;
+        const { commissionType, commissionValue } = req.body;
+        const SellerProduct = (await import('../seller/models/sellerProduct.model.js')).SellerProduct;
+
+        const product = await SellerProduct.findById(productId);
+        if (!product) return res.status(404).json({ success: false, message: 'Product not found' });
+
+        product.commission = {
+            type: ['percentage', 'amount'].includes(commissionType) ? commissionType : 'percentage',
+            value: Math.max(0, Number(commissionValue) || 0),
+        };
+        await product.save();
+
+        return res.json({
+            success: true,
+            data: {
+                product: {
+                    _id: product._id,
+                    name: product.name,
+                    commission: product.commission,
+                }
+            }
+        });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+/** Bulk update commission on multiple seller products */
+export const bulkUpdateProductCommission = async (req, res) => {
+    try {
+        const { products } = req.body; // [{ productId, commissionType, commissionValue }]
+        if (!Array.isArray(products) || products.length === 0) {
+            return res.status(400).json({ success: false, message: 'products array is required' });
+        }
+
+        const SellerProduct = (await import('../seller/models/sellerProduct.model.js')).SellerProduct;
+
+        const results = await Promise.all(
+            products.map(async ({ productId, commissionType, commissionValue }) => {
+                const product = await SellerProduct.findById(productId);
+                if (!product) return { productId, success: false, message: 'Not found' };
+
+                product.commission = {
+                    type: ['percentage', 'amount'].includes(commissionType) ? commissionType : 'percentage',
+                    value: Math.max(0, Number(commissionValue) || 0),
+                };
+                await product.save();
+                return { productId, success: true, commission: product.commission };
+            })
+        );
+
+        return res.json({ success: true, data: { results } });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: error.message });
+    }
+};

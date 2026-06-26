@@ -16,6 +16,7 @@ import {
   PackageOpen,
 } from "lucide-react"
 import { orderAPI, restaurantAPI } from "@food/api"
+import { customerApi } from "../../../../quickCommerce/user/services/customerApi"
 import { useCart } from "@food/context/CartContext"
 import { toast } from "sonner"
 import { jsPDF } from "jspdf"
@@ -58,6 +59,7 @@ export default function UserOrderDetails() {
   const [order, setOrder] = useState(null)
   const [restaurant, setRestaurant] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [activeReturns, setActiveReturns] = useState([])
 
   useEffect(() => {
     const fetchOrderDetails = async () => {
@@ -92,6 +94,17 @@ export default function UserOrderDetails() {
           } catch (restaurantError) {
             debugWarn("Failed to fetch restaurant details:", restaurantError)
             // Don't show error toast, just log it - order details can still be shown
+          }
+        }
+
+        if (orderData?.orderType === "quick" && orderData?._id) {
+          try {
+            const returnsResponse = await customerApi.getUserReturns({ orderId: orderData._id });
+            if (returnsResponse?.data?.success && returnsResponse?.data?.returns) {
+              setActiveReturns(returnsResponse.data.returns.map(r => String(r.productId?._id || r.productId)));
+            }
+          } catch (e) {
+            debugWarn("Failed to fetch order returns:", e);
           }
         }
       } catch (error) {
@@ -577,7 +590,7 @@ export default function UserOrderDetails() {
               </div>
               
               {/* Return Item Button for Delivered Quick Orders */}
-              {order?.orderType === "quick" && order?.status === "delivered" && (
+              {order?.orderType === "quick" && order?.status === "delivered" && !activeReturns.includes(String(item.itemId || item.id || item.productId || item._id)) && (
                 <div className="mt-2 ml-5 flex flex-col items-start gap-1">
                   {order?.returnEligibility?.isExpired === false || !order?.returnEligibility ? (
                     <>
@@ -603,8 +616,9 @@ export default function UserOrderDetails() {
                         <span className="text-[10px] text-gray-500 dark:text-gray-400 ml-1">
                           {(() => {
                             const diff = new Date(order.returnEligibility.returnWindowExpiresAt) - new Date();
-                            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                            if (days > 0) return `Return window closes in ${days} day${days > 1 ? 's' : ''}`;
+                            const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+                            if (days > 1) return `Return window closes in ${days} days`;
+                            if (days === 1) return `Return window closes in 1 day`;
                             return "Return window closes today";
                           })()}
                         </span>

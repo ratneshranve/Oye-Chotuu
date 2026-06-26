@@ -29,7 +29,7 @@ import {
   haversineKm,
   notifyOwnerSafely,
 } from "../../../food/orders/services/order.helpers.js";
-import { getSellerCommissionSnapshot } from "../../admin/services/commission.service.js";
+import { getSellerCommissionSnapshot, getItemCommissionSnapshot } from "../../admin/services/commission.service.js";
 import * as quickOrderService from "../../services/quickOrder.service.js";
 import {
   buildSellerCategoryTree,
@@ -126,9 +126,34 @@ const buildSellerOrderFromParentOrder = async (order, sellerId) => {
           ).toFixed(2),
         )
       : 0;
-  const { commissionAmount } = await getSellerCommissionSnapshot(
-    sellerId,
-    sellerSubtotal,
+  // Compute commission per item (product override > seller fallback)
+  const itemsWithCommission = await Promise.all(
+    quickItems.map(async (item) => {
+      const itemTotal = Number(item?.price || 0) * Math.max(1, Number(item?.quantity || 1));
+      const productId = mongoose.isValidObjectId(String(item?.itemId || ""))
+        ? String(item.itemId)
+        : null;
+      const { commissionAmount: itemCommission } = await getItemCommissionSnapshot(
+        sellerId,
+        productId,
+        itemTotal,
+      );
+      return {
+        productId: productId
+          ? new mongoose.Types.ObjectId(productId)
+          : null,
+        name: item?.name || "Item",
+        price: Number(item?.price || 0),
+        quantity: Math.max(1, Number(item?.quantity || 1)),
+        image: item?.image || "",
+        commission: itemCommission,
+      };
+    }),
+  );
+
+  const commissionAmount = itemsWithCommission.reduce(
+    (sum, item) => sum + Number(item.commission || 0),
+    0,
   );
   const sellerReceivable = Math.max(
     0,
@@ -169,15 +194,7 @@ const buildSellerOrderFromParentOrder = async (order, sellerId) => {
         "Customer",
       phone: addr?.phone || order?.customer?.phone || "",
     },
-    items: quickItems.map((item) => ({
-      productId: mongoose.isValidObjectId(String(item?.itemId || ""))
-        ? new mongoose.Types.ObjectId(String(item.itemId))
-        : null,
-      name: item?.name || "Item",
-      price: Number(item?.price || 0),
-      quantity: Math.max(1, Number(item?.quantity || 1)),
-      image: item?.image || "",
-    })),
+    items: itemsWithCommission,
     pricing: {
       subtotal: sellerSubtotal,
       commission: commissionAmount,
@@ -695,6 +712,15 @@ const parseProductPayload = async (req, existingProduct = null) => {
         ? existingProduct?.approvedAt || new Date()
         : null,
     variants,
+    commission: {
+      type: ['percentage', 'amount'].includes(str(req.body?.commissionType))
+        ? str(req.body?.commissionType)
+        : existingProduct?.commission?.type || 'percentage',
+      value: Math.max(0, num(
+        req.body?.commissionValue,
+        existingProduct?.commission?.value ?? 0,
+      )),
+    },
   };
 };
 

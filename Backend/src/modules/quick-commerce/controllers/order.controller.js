@@ -10,7 +10,7 @@ import { SellerOrder } from '../seller/models/sellerOrder.model.js';
 import { QuickZone } from '../models/quick_zone.model.js';
 import { FoodZone } from '../../food/admin/models/zone.model.js';
 import { FoodDeliveryPartner } from '../../food/delivery/models/deliveryPartner.model.js';
-import { getSellerCommissionSnapshot } from '../admin/services/commission.service.js';
+import { getSellerCommissionSnapshot, getItemCommissionSnapshot } from '../admin/services/commission.service.js';
 import {
   calculateQuickPricing,
   getRiderEarning as getQuickRiderEarning,
@@ -491,15 +491,45 @@ export const placeOrder = async (req, res) => {
     const sellerOrdersResults = sellerBuckets.size > 0
         ? await Promise.all(Array.from(sellerBuckets.entries()).map(async ([sellerId, sellerItems]) => {
             const sellerSubtotal = sellerItems.reduce(
-              (sum, item) => sum + Number(item.price || 0) * Number(item.quantity || 0),
+              (sum, item) => sum + Number(item.price || 0) * Math.max(1, Number(item.quantity || 1)),
               0,
             );
             const allocatedDeliveryFee = Number(
               ((deliveryFee * sellerSubtotal) / Math.max(subtotal, 1)).toFixed(2),
             );
 
-            // Calculate commission for this specific seller
-            const { commissionAmount } = await getSellerCommissionSnapshot(sellerId, sellerSubtotal);
+            // Compute commission per item
+            const itemsWithCommission = await Promise.all(
+              sellerItems.map(async (item) => {
+                const itemTotal = Number(item.price || 0) * Math.max(1, Number(item.quantity || 1));
+                const productId = mongoose.isValidObjectId(String(item.productId || ''))
+                  ? String(item.productId)
+                  : null;
+                const { commissionAmount: itemCommission, commissionType, commissionValue } = await getItemCommissionSnapshot(
+                  sellerId,
+                  productId,
+                  itemTotal,
+                );
+                return {
+                  productId: item.productId,
+                  name: item.name,
+                  price: item.price,
+                  quantity: item.quantity,
+                  image: item.image,
+                  commission: {
+                    type: commissionType,
+                    value: commissionValue,
+                  },
+                  commissionAmount: itemCommission,
+                };
+              })
+            );
+
+            const commissionAmount = itemsWithCommission.reduce(
+              (sum, item) => sum + Number(item.commissionAmount || 0),
+              0,
+            );
+
             const sellerReceivable = Math.max(
               0,
               Number((sellerSubtotal - commissionAmount).toFixed(2)),
@@ -514,13 +544,7 @@ export const placeOrder = async (req, res) => {
                 name: String(req.body?.address?.name || 'Customer').trim() || 'Customer',
                 phone: String(req.body?.address?.phone || '').trim(),
               },
-              items: sellerItems.map((item) => ({
-                productId: item.productId,
-                name: item.name,
-                price: item.price,
-                quantity: item.quantity,
-                image: item.image,
-              })),
+              items: itemsWithCommission,
               pricing: {
                 subtotal: sellerSubtotal,
                 commission: commissionAmount,

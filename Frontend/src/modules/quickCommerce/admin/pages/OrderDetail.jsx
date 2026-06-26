@@ -338,6 +338,7 @@ export default function OrderDetail() {
                                         <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Product Node</th>
                                         <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Unit Price</th>
                                         <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Qty</th>
+                                        <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Commission</th>
                                         <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Aggregate</th>
                                     </tr>
                                 </thead>
@@ -362,6 +363,22 @@ export default function OrderDetail() {
                                             <td className="px-6 py-5 text-center text-sm font-bold text-slate-600">{formatCurrency(item.price)}</td>
                                             <td className="px-6 py-5 text-center">
                                                 <span className="bg-slate-100 px-3 py-1 rounded-lg text-xs font-black text-slate-700">x{item.quantity || 0}</span>
+                                            </td>
+                                            <td className="px-6 py-5 text-center">
+                                                {item.commissionAmount !== undefined ? (
+                                                    <div className="flex flex-col items-center gap-1">
+                                                        <span className="text-sm font-bold text-emerald-600">
+                                                            {formatCurrency(item.commissionAmount)}
+                                                        </span>
+                                                        {item.commission?.value > 0 && (
+                                                            <span className="text-[9px] font-bold text-slate-400 uppercase">
+                                                                ({item.commission.type === 'percentage' ? `${item.commission.value}%` : `₹${item.commission.value}`})
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                ) : (
+                                                    <span className="text-xs text-slate-400">NA</span>
+                                                )}
                                             </td>
                                             <td className="px-6 py-5 text-right text-sm font-black text-slate-900">{formatCurrency(Number(item.price || 0) * Number(item.quantity || 0))}</td>
                                         </tr>

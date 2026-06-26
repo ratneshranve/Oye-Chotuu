@@ -42,6 +42,7 @@ const sellerOrderSchema = new mongoose.Schema(
             price: { type: Number, min: 0, default: 0 },
             quantity: { type: Number, min: 1, default: 1 },
             image: { type: String, default: "" },
+            commission: { type: Number, min: 0, default: 0 },
           },
           { _id: false },
         ),

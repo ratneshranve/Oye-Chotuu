@@ -193,6 +193,10 @@ const buildQuickAdminOrderResponse = (order, sellerMap = {}, sellerOrderMap = {}
   const total = Number(order?.total || 0);
   const pricingTotal = Number(order?.pricing?.total || 0);
   const platformFee = Number(order?.pricing?.platformFee || 0);
+  const computedPricingTotal = order?.pricing?.platformFeeIncluded === true || order?.orderType === 'quick' || order?.orderType === 'mixed'
+    ? pricingTotal
+    : pricingTotal + platformFee;
+
   const payableTotal = Math.max(
     0,
     paymentAmountDue,
@@ -200,7 +204,7 @@ const buildQuickAdminOrderResponse = (order, sellerMap = {}, sellerOrderMap = {}
     totalAmount,
     amount,
     total,
-    pricingTotal + platformFee,
+    computedPricingTotal,
   );
 
   const quickItems = Array.isArray(order?.items) ? order.items.filter((item) => item?.type === 'quick') : [];

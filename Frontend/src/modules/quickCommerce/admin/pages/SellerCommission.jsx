@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from "react"
 import { 
   Search, Plus, Edit, Trash2, ArrowUpDown, 
-  DollarSign, Percent, Loader2, X, Building2, IndianRupee
+  DollarSign, Percent, Loader2, X, Building2, IndianRupee, Package
 } from "lucide-react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@food/components/ui/dialog"
 import { adminApi } from "../services/adminApi"
@@ -19,6 +19,14 @@ export default function SellerCommission() {
   const [isSellerSelectOpen, setIsSellerSelectOpen] = useState(false)
   const [selectedCommission, setSelectedCommission] = useState(null)
   const [selectedSeller, setSelectedSeller] = useState(null)
+  
+  // Product Commission State
+  const [isProductCommissionOpen, setIsProductCommissionOpen] = useState(false)
+  const [sellerProducts, setSellerProducts] = useState([])
+  const [productCommissionLoading, setProductCommissionLoading] = useState(false)
+  const [productCommissionSaving, setProductCommissionSaving] = useState(false)
+  const [productSearchQuery, setProductSearchQuery] = useState("")
+  
   const [formData, setFormData] = useState({
     sellerId: "",
     defaultCommission: {
@@ -55,6 +63,15 @@ export default function SellerCommission() {
       String(seller._id).toLowerCase().includes(query)
     )
   }, [approvedSellers, searchQuery])
+
+  const filteredProducts = useMemo(() => {
+    if (!productSearchQuery.trim()) return sellerProducts
+    const query = productSearchQuery.toLowerCase().trim()
+    return sellerProducts.filter(product =>
+      product.name?.toLowerCase().includes(query) ||
+      String(product._id).toLowerCase().includes(query)
+    )
+  }, [sellerProducts, productSearchQuery])
 
   useEffect(() => {
     fetchBootstrap()
@@ -138,6 +155,48 @@ export default function SellerCommission() {
   const handleDelete = (commission) => {
     setSelectedCommission(commission)
     setIsDeleteOpen(true)
+  }
+
+  const handleViewProducts = async (commission) => {
+    try {
+      setProductCommissionLoading(true)
+      setSelectedCommission(commission)
+      setIsProductCommissionOpen(true)
+      const sellerIdStr = commission.sellerId || commission.seller?._id || "";
+      const response = await adminApi.getSellerProductCommissions(sellerIdStr)
+      if (response?.data?.data?.products) {
+        setSellerProducts(response.data.data.products)
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to load products')
+      setIsProductCommissionOpen(false)
+    } finally {
+      setProductCommissionLoading(false)
+    }
+  }
+
+  const handleUpdateProductCommission = async (productId, type, value) => {
+    try {
+      setProductCommissionSaving(true)
+      await adminApi.updateProductCommission(productId, { commissionType: type, commissionValue: value })
+      toast.success('Product commission updated')
+      // Update local state
+      setSellerProducts(prev => prev.map(p => {
+        if (p._id === productId) {
+          return {
+            ...p,
+            commissionType: type,
+            commissionValue: value,
+            hasProductCommission: parseFloat(value) > 0
+          }
+        }
+        return p
+      }))
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to update product commission')
+    } finally {
+      setProductCommissionSaving(false)
+    }
   }
 
   const confirmDelete = async () => {
@@ -280,8 +339,9 @@ export default function SellerCommission() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-center">
                           <div className="flex items-center justify-center gap-2">
-                            <button onClick={() => handleEdit(commission)} className="p-1.5 rounded text-blue-600 hover:bg-blue-50 transition-colors"><Edit className="w-4 h-4" /></button>
-                            <button onClick={() => handleDelete(commission)} className="p-1.5 rounded text-red-600 hover:bg-red-50 transition-colors"><Trash2 className="w-4 h-4" /></button>
+                            <button onClick={() => handleViewProducts(commission)} className="p-1.5 rounded text-emerald-600 hover:bg-emerald-50 transition-colors" title="Manage Product Commissions"><Package className="w-4 h-4" /></button>
+                            <button onClick={() => handleEdit(commission)} className="p-1.5 rounded text-blue-600 hover:bg-blue-50 transition-colors" title="Edit Seller Commission"><Edit className="w-4 h-4" /></button>
+                            <button onClick={() => handleDelete(commission)} className="p-1.5 rounded text-red-600 hover:bg-red-50 transition-colors" title="Delete Seller Commission"><Trash2 className="w-4 h-4" /></button>
                           </div>
                         </td>
                       </tr>
@@ -407,6 +467,120 @@ export default function SellerCommission() {
           <DialogFooter>
             <button onClick={() => setIsDeleteOpen(false)} className="px-4 py-2 text-sm font-medium border rounded-lg bg-white">Cancel</button>
             <button onClick={confirmDelete} disabled={deleting} className="px-4 py-2 text-sm font-medium bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50">Delete</button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isProductCommissionOpen} onOpenChange={setIsProductCommissionOpen}>
+        <DialogContent className="max-w-4xl bg-white p-0">
+          <DialogHeader className="px-6 pt-6 pb-4 border-b">
+            <DialogTitle className="text-lg font-semibold flex items-center gap-2">
+              <Package className="w-5 h-5 text-emerald-600" />
+              Product Commissions - {selectedCommission?.sellerName}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="p-6 space-y-4">
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-slate-500">
+                Set individual commission rates for products. If a product commission is 0, the seller's default commission (
+                <span className="font-semibold text-slate-700">
+                  {selectedCommission?.defaultCommission?.type === 'percentage' ? `${selectedCommission?.defaultCommission?.value}%` : `\u20B9${selectedCommission?.defaultCommission?.value}`}
+                </span>
+                ) will be used.
+              </p>
+              <div className="relative w-64">
+                <input 
+                  type="text" 
+                  placeholder="Search products..." 
+                  value={productSearchQuery} 
+                  onChange={(e) => setProductSearchQuery(e.target.value)}
+                  className="pl-10 pr-4 py-2 w-full text-sm rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-emerald-500"
+                />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              </div>
+            </div>
+
+            {productCommissionLoading ? (
+              <div className="flex items-center justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-emerald-600" />
+              </div>
+            ) : (
+              <div className="overflow-x-auto max-h-[500px] border rounded-lg">
+                <table className="w-full relative">
+                  <thead className="bg-slate-50 sticky top-0 z-10 border-b border-slate-200">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600">Product</th>
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600">Price</th>
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600">Commission Type</th>
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600">Commission Value</th>
+                      <th className="px-4 py-3 text-center text-xs font-semibold text-slate-600">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {filteredProducts.length === 0 ? (
+                      <tr>
+                        <td colSpan={5} className="px-4 py-8 text-center text-slate-500">No products found</td>
+                      </tr>
+                    ) : (
+                      filteredProducts.map((product) => (
+                        <tr key={product._id} className={product.hasProductCommission ? "bg-emerald-50/30" : ""}>
+                          <td className="px-4 py-3">
+                            <div className="flex items-center gap-3">
+                              {product.mainImage ? (
+                                <img src={product.mainImage} alt={product.name} className="w-10 h-10 rounded object-cover border border-slate-200" />
+                              ) : (
+                                <div className="w-10 h-10 rounded bg-slate-100 flex items-center justify-center border border-slate-200">
+                                  <Package className="w-5 h-5 text-slate-400" />
+                                </div>
+                              )}
+                              <div>
+                                <p className="font-medium text-sm text-slate-900">{product.name}</p>
+                                <p className="text-xs text-slate-500">ID: {String(product._id).slice(-8).toUpperCase()}</p>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-4 py-3 text-sm text-slate-700">
+                            ₹{product.salePrice > 0 ? product.salePrice : product.price}
+                          </td>
+                          <td className="px-4 py-3">
+                            <select 
+                              value={product.commissionType || 'percentage'}
+                              onChange={(e) => setSellerProducts(prev => prev.map(p => p._id === product._id ? { ...p, commissionType: e.target.value } : p))}
+                              className="w-full px-2 py-1.5 text-sm border rounded-lg bg-white"
+                            >
+                              <option value="percentage">Percentage (%)</option>
+                              <option value="amount">Fixed Amount (₹)</option>
+                            </select>
+                          </td>
+                          <td className="px-4 py-3">
+                            <input 
+                              type="number" 
+                              min="0"
+                              value={product.commissionValue || ''} 
+                              onChange={(e) => setSellerProducts(prev => prev.map(p => p._id === product._id ? { ...p, commissionValue: e.target.value } : p))}
+                              className="w-full px-2 py-1.5 text-sm border rounded-lg border-slate-300"
+                              placeholder="0"
+                            />
+                          </td>
+                          <td className="px-4 py-3 text-center">
+                            <button 
+                              onClick={() => handleUpdateProductCommission(product._id, product.commissionType, product.commissionValue)}
+                              disabled={productCommissionSaving}
+                              className="px-3 py-1.5 text-xs font-medium rounded bg-slate-100 text-slate-700 hover:bg-emerald-600 hover:text-white transition-colors disabled:opacity-50"
+                            >
+                              Save
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+          <DialogFooter className="px-6 py-4 bg-slate-50 border-t">
+            <button onClick={() => setIsProductCommissionOpen(false)} className="px-4 py-2 text-sm font-medium rounded-lg border bg-white">Close</button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

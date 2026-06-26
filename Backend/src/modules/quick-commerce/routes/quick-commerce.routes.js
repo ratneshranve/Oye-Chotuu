@@ -99,6 +99,9 @@ import {
   updateSellerCommission,
   deleteSellerCommission,
   toggleSellerCommissionStatus,
+  getSellerProductCommissions,
+  updateProductCommission,
+  bulkUpdateProductCommission,
 } from "../controllers/adminCommission.controller.js";
 import {
   createDeliveryCommissionRule,
@@ -371,6 +374,9 @@ router.patch(
   ...adminOnly,
   toggleSellerCommissionStatus,
 );
+router.get("/admin/seller-commissions/:sellerId/products", ...adminOnly, getSellerProductCommissions);
+router.put("/admin/seller-commissions/products/bulk", ...adminOnly, bulkUpdateProductCommission);
+router.put("/admin/seller-commissions/products/:productId", ...adminOnly, updateProductCommission);
 router.get("/admin/fee-settings", ...adminOnly, getFeeSettings);
 router.put("/admin/fee-settings", ...adminOnly, createOrUpdateFeeSettings);
 router.get(

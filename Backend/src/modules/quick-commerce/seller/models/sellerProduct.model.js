@@ -103,6 +103,14 @@ const sellerProductSchema = new mongoose.Schema(
       enum: ["active", "inactive"],
       default: "active",
     },
+    commission: {
+      type: {
+        type: String,
+        enum: ['percentage', 'amount'],
+        default: 'percentage',
+      },
+      value: { type: Number, default: 0, min: 0 },
+    },
     variants: {
       type: [sellerVariantSchema],
       default: [],

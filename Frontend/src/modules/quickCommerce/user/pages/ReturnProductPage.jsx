@@ -99,7 +99,7 @@ const ReturnProductPage = () => {
       }
     } catch (err) {
       console.error(err);
-      toast.error("An error occurred");
+      toast.error(err.response?.data?.message || "An error occurred");
     } finally {
       setLoading(false);
     }
