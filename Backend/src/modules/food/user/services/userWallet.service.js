@@ -212,3 +212,39 @@ export const refundWalletBalance = async (userId, amountInr, description = 'Orde
     return { wallet: await getUserWallet(userId) };
 };
 
+export const addMoneyToUserWalletByAdmin = async (userId, amountInr, adminInfo = {}) => {
+    const amount = Number(amountInr);
+    if (!Number.isFinite(amount) || amount <= 0) {
+        throw new ValidationError('Amount must be greater than 0');
+    }
+    const wallet = await ensureWallet(userId);
+    const description = adminInfo.name ? `Added by Admin (${adminInfo.name})` : 'Added by Admin';
+    
+    wallet.transactions.unshift({
+        type: 'addition',
+        amount,
+        status: 'Completed',
+        description,
+        metadata: { source: 'admin_addition', adminId: adminInfo.id }
+    });
+    
+    wallet.balance = Number(wallet.balance || 0) + amount;
+    await wallet.save();
+    await syncUserWalletBalance(userId, wallet.balance);
+    
+    // Notify user
+    try {
+        const { notifyOwnerSafely } = await import('../../../../core/notifications/firebase.service.js');
+        await notifyOwnerSafely(
+            { ownerType: 'USER', ownerId: userId },
+            {
+                title: 'Wallet Credited',
+                body: `₹${amount} has been added to your wallet.`
+            }
+        );
+    } catch (error) {
+        console.error('Failed to send push notification for wallet credit:', error);
+    }
+    
+    return { wallet: await getUserWallet(userId) };
+};

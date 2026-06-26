@@ -38,6 +38,8 @@ router.get('/notifications/broadcast', notificationBroadcastController.getBroadc
 router.delete('/notifications/broadcast/:id', notificationBroadcastController.deleteBroadcastNotificationController);
 
 // ----- Customers -----
+router.get('/users/search', adminController.searchUsers);
+router.post('/wallet/add-money', adminController.addMoneyToUserWallet);
 router.get('/customers', adminController.getCustomers);
 router.get('/customers/:id', adminController.getCustomerById);
 router.patch('/customers/:id/status', adminController.updateCustomerStatus);

@@ -10,6 +10,36 @@ import { validateDeliveryEmergencyHelpUpsertDto } from '../validators/deliveryEm
 import { validateReferralSettingsUpsertDto } from '../validators/referralSettings.validator.js';
 
 // ----- Customers / Users -----
+import { addMoneyToUserWalletByAdmin } from '../../user/services/userWallet.service.js';
+
+export async function searchUsers(req, res, next) {
+    try {
+        const { q } = req.query;
+        if (!q || String(q).trim().length < 3) {
+            return res.status(200).json({ success: true, data: [] });
+        }
+        const data = await adminService.searchUsers(q);
+        res.status(200).json({ success: true, message: 'Users fetched successfully', data });
+    } catch (error) {
+        next(error);
+    }
+}
+
+export async function addMoneyToUserWallet(req, res, next) {
+    try {
+        const { userId, amount } = req.body;
+        if (!userId || !amount) {
+            return res.status(400).json({ success: false, message: 'userId and amount are required' });
+        }
+        // Extract admin info from token
+        const adminInfo = { id: req.user?._id, name: req.user?.name || req.user?.fName };
+        const result = await addMoneyToUserWalletByAdmin(userId, amount, adminInfo);
+        res.status(200).json({ success: true, message: 'Money added to wallet successfully', data: result });
+    } catch (error) {
+        next(error);
+    }
+}
+
 export async function getCustomers(req, res, next) {
     try {
         const data = await adminService.getCustomers(req.query || {});

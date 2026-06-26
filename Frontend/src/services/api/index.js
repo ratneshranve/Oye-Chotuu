@@ -208,6 +208,10 @@ export const dudhwalaAPI = {
 
 /** Admin API - new backend only (GET /auth/me, PATCH /auth/admin/profile, POST /auth/admin/change-password) */
 export const adminAPI = {
+  searchUsers: (query) =>
+    apiClient.get(`/food/admin/users/search?q=${encodeURIComponent(query)}`, { contextModule: "admin" }),
+  addMoneyToUserWallet: (userId, amount) =>
+    apiClient.post(`/food/admin/wallet/add-money`, { userId, amount }, { contextModule: "admin" }),
   getSidebarBadges: () =>
     apiClient.get("/food/admin/sidebar-badges", { contextModule: "admin" }),
   login: (email, password) => authService.adminLogin(email, password),

@@ -38,6 +38,12 @@ export const commonAdminSidebarMenu = [
         label: "Manage Sub Admins",
         path: "/admin/global-settings/sub-admins",
         icon: "Users",
+      },
+      {
+        type: "link",
+        label: "User Wallet",
+        path: "/admin/global-settings/wallet-management",
+        icon: "Wallet",
       }
     ]
   }

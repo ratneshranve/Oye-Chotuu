@@ -147,6 +147,7 @@ const WhyChotuuManagement = lazy(() => import("@/modules/Dudhwala/admin/pages/Wh
 const GlobalApplicationSettings = lazy(() => import("@/modules/common/admin/pages/GlobalApplicationSettings"));
 const ModuleManagement = lazy(() => import("@/modules/common/admin/pages/ModuleManagement"));
 const SubAdminPage = lazy(() => import("@/modules/common/admin/pages/SubAdminPage"));
+const WalletManagement = lazy(() => import("@/modules/common/admin/pages/WalletManagement"));
 
 const AdminDefaultRedirect = () => {
   let target = "food";
@@ -216,6 +217,7 @@ export default function AdminRouter() {
             <Route path="admin" element={<AdminProfile />} />
             <Route path="modules" element={<ModuleManagement />} />
             <Route path="sub-admins" element={<SubAdminPage />} />
+            <Route path="wallet-management" element={<WalletManagement />} />
           </Route>
 
           {/* FOOD ADMIN - All food related routes nested here */}

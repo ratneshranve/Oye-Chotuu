@@ -1205,6 +1205,25 @@ async function getEligibleFoodCustomerIds() {
     return ids.filter((id) => mongoose.Types.ObjectId.isValid(id));
 }
 
+export async function searchUsers(searchTerm) {
+    if (!searchTerm || String(searchTerm).trim().length < 3) {
+        return [];
+    }
+    const regex = new RegExp(String(searchTerm).trim(), 'i');
+    const users = await FoodUser.find({
+        role: 'USER',
+        $or: [
+            { name: { $regex: regex } },
+            { phone: { $regex: regex } },
+            { email: { $regex: regex } }
+        ]
+    })
+    .select('name phone email walletBalance isActive profileImage')
+    .limit(20)
+    .lean();
+    return users;
+}
+
 export async function getCustomers(query = {}) {
     const limit = Math.min(Math.max(parseInt(query.limit, 10) || 50, 1), 1000);
     const page = Math.max(parseInt(query.page, 10) || 1, 1);
