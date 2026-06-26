@@ -8,16 +8,6 @@ import { useNavigate } from 'react-router-dom';
  * useOrderManager - Professional hook for real-world trip lifecycle actions.
  * Connects directly to the backend API services.
  */
-import { useDeliveryStore } from '@/modules/DeliveryV2/store/useDeliveryStore';
-import { deliveryAPI } from '@food/api';
-import { toast } from 'sonner';
-import { getPrimaryPickupLocation, normalizeLocationPoint, normalizePickupPoints } from '@/modules/DeliveryV2/utils/orderRouting';
-import { useNavigate } from 'react-router-dom';
-
-/**
- * useOrderManager - Professional hook for real-world trip lifecycle actions.
- * Connects directly to the backend API services.
- */
 export const useOrderManager = () => {
   const navigate = useNavigate();
   const { 
