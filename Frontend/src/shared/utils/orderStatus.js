@@ -64,6 +64,15 @@ export function getLegacyStatusFromOrder(order) {
     return "delivered";
   }
 
+  // Explicitly check for cancelled status
+  if (
+    String(order.orderStatus || "").toLowerCase().includes("cancel") ||
+    String(order.status || "").toLowerCase().includes("cancel") ||
+    String(order.workflowStatus || "").toUpperCase() === "CANCELLED"
+  ) {
+    return "cancelled";
+  }
+
   const v = Number(order.workflowVersion) || 0;
   if (v >= 2 && order.workflowStatus) {
     const workflowStatus = String(order.workflowStatus).toUpperCase();

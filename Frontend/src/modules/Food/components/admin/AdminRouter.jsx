@@ -148,7 +148,25 @@ const GlobalApplicationSettings = lazy(() => import("@/modules/common/admin/page
 const ModuleManagement = lazy(() => import("@/modules/common/admin/pages/ModuleManagement"));
 const SubAdminPage = lazy(() => import("@/modules/common/admin/pages/SubAdminPage"));
 
-
+const AdminDefaultRedirect = () => {
+  let target = "food";
+  try {
+    const adminUserStr = localStorage.getItem('admin_user');
+    if (adminUserStr) {
+      const adminInfo = JSON.parse(adminUserStr);
+      if (adminInfo.role !== 'ADMIN' && adminInfo.servicesAccess && Array.isArray(adminInfo.servicesAccess)) {
+        if (!adminInfo.servicesAccess.includes('food')) {
+          if (adminInfo.servicesAccess.includes('quickCommerce')) {
+            target = "quick-commerce";
+          } else if (adminInfo.servicesAccess.includes('dudhwala')) {
+            target = "dudhwala";
+          }
+        }
+      }
+    }
+  } catch (e) {}
+  return <Navigate to={target} replace />;
+};
 
 export default function AdminRouter() {
   return (
@@ -169,7 +187,7 @@ export default function AdminRouter() {
           }
         >
           {/* Default Admin Redirect */}
-          <Route path="/" element={<Navigate to="food" replace />} />
+          <Route path="/" element={<AdminDefaultRedirect />} />
 
           {/* Quick Commerce Admin Routes */}
           <Route path="quick-commerce/*" element={<QuickCommerceAdminRoutes />} />
@@ -350,8 +368,8 @@ export default function AdminRouter() {
 
         </Route>
 
-        {/* Redirect unknown admin routes to food admin */}
-        <Route path="*" element={<Navigate to="/admin/food" replace />} />
+        {/* Redirect unknown admin routes to default admin route */}
+        <Route path="*" element={<Navigate to="/admin" replace />} />
       </Routes>
     </Suspense>
   );

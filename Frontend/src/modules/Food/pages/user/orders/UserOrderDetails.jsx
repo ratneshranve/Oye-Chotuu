@@ -578,25 +578,41 @@ export default function UserOrderDetails() {
               
               {/* Return Item Button for Delivered Quick Orders */}
               {order?.orderType === "quick" && order?.status === "delivered" && (
-                <div className="mt-2 ml-5">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const orderMongoId = order._id || orderId;
-                      const itemId = item.itemId || item.id || item.productId || item._id;
-                      if (!itemId) {
-                        toast.error("Product ID not available for return");
-                        return;
-                      }
-                      navigate(`/quick/orders/${encodeURIComponent(String(orderMongoId))}/return/${encodeURIComponent(String(itemId))}`, {
-                        state: { item, order }
-                      });
-                    }}
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-full transition-colors"
-                  >
-                    <PackageOpen className="w-3.5 h-3.5" />
-                    Return Item
-                  </button>
+                <div className="mt-2 ml-5 flex flex-col items-start gap-1">
+                  {order?.returnEligibility?.isExpired === false || !order?.returnEligibility ? (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const orderMongoId = order._id || orderId;
+                          const itemId = item.itemId || item.id || item.productId || item._id;
+                          if (!itemId) {
+                            toast.error("Product ID not available for return");
+                            return;
+                          }
+                          navigate(`/quick/orders/${encodeURIComponent(String(orderMongoId))}/return/${encodeURIComponent(String(itemId))}`, {
+                            state: { item, order }
+                          });
+                        }}
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-full transition-colors"
+                      >
+                        <PackageOpen className="w-3.5 h-3.5" />
+                        Return Item
+                      </button>
+                      {order.returnEligibility?.returnWindowExpiresAt && (
+                        <span className="text-[10px] text-gray-500 dark:text-gray-400 ml-1">
+                          {(() => {
+                            const diff = new Date(order.returnEligibility.returnWindowExpiresAt) - new Date();
+                            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                            if (days > 0) return `Return window closes in ${days} day${days > 1 ? 's' : ''}`;
+                            return "Return window closes today";
+                          })()}
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    <span className="text-[10px] text-gray-400 dark:text-gray-500 italic mt-1 ml-1">Return window has expired</span>
+                  )}
                 </div>
               )}
             </div>

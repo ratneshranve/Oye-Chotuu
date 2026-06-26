@@ -843,11 +843,41 @@ export const getOrderById = async (req, res) => {
     const dropOtp = order.deliveryVerification?.dropOtp || {};
     const handoverOtp = String(order.deliveryOtp || '').trim();
 
+    // Calculate return eligibility
+    let returnWindowDays = 3;
+    try {
+      // Dynamic import to avoid circular dependencies or missing imports
+      const { QuickReturnSettings } = await import('../models/ReturnSettings.model.js');
+      const settings = await QuickReturnSettings.findOne();
+      if (settings && settings.returnWindowDays !== undefined) {
+        returnWindowDays = settings.returnWindowDays;
+      }
+    } catch (err) {
+      logger.error('Error fetching return settings in getOrderById:', err);
+    }
+
+    const deliveredPhase = order.deliveryState?.phases?.find(p => p.phase === 'delivered');
+    const deliveredDate = deliveredPhase?.timestamp || order.updatedAt;
+    const windowMs = returnWindowDays * 24 * 60 * 60 * 1000;
+    const now = new Date();
+    const isReturnWindowExpired = String(order.orderStatus).toLowerCase() === 'delivered' 
+      ? (now.getTime() - new Date(deliveredDate).getTime() > windowMs) 
+      : false;
+    const returnWindowExpiresAt = String(order.orderStatus).toLowerCase() === 'delivered' 
+      ? new Date(new Date(deliveredDate).getTime() + windowMs) 
+      : null;
+
     return res.json({
       success: true,
       result: {
         ...order,
         id: order._id,
+        returnEligibility: {
+          returnWindowDays,
+          deliveredDate,
+          returnWindowExpiresAt,
+          isExpired: isReturnWindowExpired,
+        },
         _id: order._id,
         orderNumber: order.orderId,
         orderId: order.orderId,

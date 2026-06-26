@@ -2634,6 +2634,30 @@ export async function getOrderById(
   if (!order) throw new NotFoundError("Order not found");
   await populateQuickOrderSellers(order);
 
+  if (order.orderType === 'quick' && String(order.orderStatus).toLowerCase() === 'delivered') {
+    let returnWindowDays = 3;
+    try {
+      const { QuickReturnSettings } = await import('../../quick-commerce/models/ReturnSettings.model.js');
+      const settings = await QuickReturnSettings.findOne();
+      if (settings && settings.returnWindowDays !== undefined) {
+        returnWindowDays = settings.returnWindowDays;
+      }
+    } catch (e) {
+      console.error("Error fetching return settings", e);
+    }
+
+    const deliveredPhase = order.deliveryState?.phases?.find(p => p.phase === 'delivered');
+    const deliveredDate = deliveredPhase?.timestamp || order.updatedAt;
+    const windowMs = returnWindowDays * 24 * 60 * 60 * 1000;
+    const now = new Date();
+    order.returnEligibility = {
+      returnWindowDays,
+      deliveredDate,
+      returnWindowExpiresAt: new Date(new Date(deliveredDate).getTime() + windowMs),
+      isExpired: (now.getTime() - new Date(deliveredDate).getTime() > windowMs)
+    };
+  }
+
   if (admin) return normalizeOrderForClient(order);
 
   const orderUserId = order.userId?._id?.toString() || order.userId?.toString();
