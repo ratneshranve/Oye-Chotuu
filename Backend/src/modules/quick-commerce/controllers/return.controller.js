@@ -439,6 +439,9 @@ export const updateDeliveryReturnStatus = async (req, res) => {
       if (currentStatus !== returnStatuses.PICKED_UP) {
         throw new Error('Can only mark as Received by Seller when current status is Picked Up');
       }
+      if (returnReq.sellerDeliveryOtp !== req.body.otp) {
+        throw new Error('Invalid or missing Seller Delivery OTP');
+      }
     } else {
       throw new Error('Invalid status update path. Only sequential line-by-line updates (Assigned -> Picked Up -> Received by Seller) are allowed.');
     }
@@ -466,6 +469,25 @@ export const updateDeliveryReturnStatus = async (req, res) => {
       .populate('sellerId', 'name shopName phone location');
 
     res.json({ success: true, returnRequest: populated });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+export const verifyDeliveryReturnDropOtp = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { otp } = req.body;
+    const deliveryPartnerId = req.user.userId;
+
+    const returnReq = await QuickReturnRequest.findOne({ _id: id, deliveryPartnerId });
+    if (!returnReq) throw new Error('Return request not found or not assigned to you');
+
+    if (returnReq.sellerDeliveryOtp !== otp) {
+      throw new Error('Invalid OTP');
+    }
+
+    res.json({ success: true, message: 'OTP verified successfully' });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }

@@ -32,9 +32,13 @@ router.post('/image', authMiddleware, uploadRoles, imageUpload.single('file'), a
             }
         });
     } catch (error) {
-        next(error);
+        console.error("Upload error details:", error);
+        return res.status(500).json({
+            success: false,
+            message: error.message || 'Internal server error',
+            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        });
     }
 });
 
 export default router;
-

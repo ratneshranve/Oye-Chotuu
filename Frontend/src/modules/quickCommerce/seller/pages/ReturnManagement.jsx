@@ -65,7 +65,11 @@ const ReturnManagement = () => {
                 </tr>
               ) : (
                 returns.map((ret) => (
-                  <tr key={ret._id} className="hover:bg-gray-50 dark:hover:bg-neutral-800/50 transition-colors">
+                  <tr 
+                    key={ret._id} 
+                    onClick={() => navigate(`/seller/quick-commerce/returns/${ret._id}`)}
+                    className="hover:bg-gray-50 dark:hover:bg-neutral-800/50 transition-colors cursor-pointer"
+                  >
                     <td className="px-6 py-4 text-gray-800 dark:text-gray-200 font-medium">
                       {ret.orderId?.slice(-6).toUpperCase() || "N/A"}
                     </td>

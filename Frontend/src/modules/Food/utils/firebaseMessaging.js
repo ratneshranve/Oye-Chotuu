@@ -247,7 +247,15 @@ async function playPushSound(payload = {}) {
 
     if (typeof navigator !== "undefined" && typeof navigator.vibrate === "function") {
       pushDebugLog(PUSH_DEBUG_PREFIX, "Triggering vibration");
-      navigator.vibrate([200, 100, 200, 100, 300]);
+      try {
+        if (navigator.userActivation && !navigator.userActivation.hasBeenActive) {
+          // Skip vibration if user hasn't interacted to prevent browser intervention warning
+        } else {
+          navigator.vibrate([200, 100, 200, 100, 300]);
+        }
+      } catch (e) {
+        // Ignore
+      }
     }
 
     if (usedNativeBridge) {

@@ -101,7 +101,13 @@ const OtpModal = ({ order, onVerified, onClose }) => {
     if (otpString.length < 4) return;
     setIsVerifyingOtp(true);
     try {
-      const res = await deliveryAPI.verifyDropOtp(orderId, otpString);
+      let res;
+      if (order.type === 'RETURN_PICKUP') {
+        res = await deliveryAPI.verifyReturnDropOtp(orderId, otpString);
+      } else {
+        res = await deliveryAPI.verifyDropOtp(orderId, otpString);
+      }
+      
       if (res?.data?.success) {
         setIsOtpVerified(true);
         // toast.success("OTP Verified Successfully");

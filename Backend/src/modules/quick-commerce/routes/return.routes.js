@@ -26,6 +26,7 @@ router.get('/delivery/returns/history', requireAuth, requireRoles('DELIVERY_PART
 router.put('/delivery/returns/:id/accept', requireAuth, requireRoles('DELIVERY_PARTNER'), returnController.acceptDeliveryPickup);
 router.post('/delivery/returns/:id/confirm-pickup', requireAuth, requireRoles('DELIVERY_PARTNER'), returnController.confirmPickup);
 router.put('/delivery/returns/:id/status', requireAuth, requireRoles('DELIVERY_PARTNER'), returnController.updateDeliveryReturnStatus);
+router.post('/delivery/returns/:id/verify-drop-otp', requireAuth, requireRoles('DELIVERY_PARTNER'), returnController.verifyDeliveryReturnDropOtp);
 router.put('/delivery/returns/:id/reject-broadcast', requireAuth, requireRoles('DELIVERY_PARTNER'), returnController.rejectDeliveryBroadcast);
 
 // ---- Seller Routes ----

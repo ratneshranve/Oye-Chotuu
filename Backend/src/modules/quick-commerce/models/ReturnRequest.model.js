@@ -47,6 +47,7 @@ const quickReturnRequestSchema = new mongoose.Schema({
   
   // Security
   pickupOtp: { type: String, default: '' },
+  sellerDeliveryOtp: { type: String, default: '' },
   pickupImage: { type: String, default: '' },
   sellerVerificationImages: { type: [String], default: [] },
   

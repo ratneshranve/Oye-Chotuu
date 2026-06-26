@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { ChevronLeft, Upload, Loader2 } from "lucide-react";
+import { ChevronLeft, Upload, Loader2, X } from "lucide-react";
 import { toast } from "sonner";
 import { customerApi } from "../services/customerApi";
+import { uploadAPI } from "@food/api";
+import { ImageSourcePicker } from "@food/components/ImageSourcePicker";
 
 const ReturnProductPage = () => {
   const navigate = useNavigate();
@@ -32,6 +34,7 @@ const ReturnProductPage = () => {
   const [upiId, setUpiId] = useState(() => getSessionData("upiId", ""));
 
   const [loading, setLoading] = useState(false);
+  const [imagePickerConfig, setImagePickerConfig] = useState(null);
 
   useEffect(() => {
     const keys = { quantity, reason, description, images, refundMethod, accountNumber, ifsc, accountHolder, upiId };
@@ -40,15 +43,37 @@ const ReturnProductPage = () => {
     });
   }, [orderId, productId, quantity, reason, description, images, refundMethod, accountNumber, ifsc, accountHolder, upiId]);
 
-  const handleImageUpload = async (e) => {
-    const files = Array.from(e.target.files);
-    if (!files.length) return;
-    
-    // Stub for image upload - in real app would use your cloud storage upload
-    // const uploadedUrls = await Promise.all(files.map(uploadToCloudinary));
-    // For now, we will just simulate it
-    const fakeUrls = files.map(file => URL.createObjectURL(file));
-    setImages(prev => [...prev, ...fakeUrls]);
+  const handleImageSelect = async (file) => {
+    try {
+      setLoading(true);
+      toast.info("Uploading image...");
+      const res = await uploadAPI.uploadMedia(file, { folder: "returns" });
+      const imageUrl = res?.data?.data?.url || res?.data?.url;
+      
+      if (imageUrl) {
+        setImages(prev => [...prev, imageUrl]);
+        toast.success("Image uploaded successfully");
+      } else {
+        throw new Error("Failed to get image URL");
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      toast.error("Failed to upload image. Please try again.");
+    } finally {
+      setLoading(false);
+      setImagePickerConfig(null);
+    }
+  };
+
+  const handleOpenPicker = () => {
+    setImagePickerConfig({
+      title: "Upload Return Item Photo",
+      fileNamePrefix: `return_${orderId}_${productId}`
+    });
+  };
+
+  const handleRemoveImage = (indexToRemove) => {
+    setImages(prev => prev.filter((_, i) => i !== indexToRemove));
   };
 
   const handleSubmit = async (e) => {
@@ -185,14 +210,20 @@ const ReturnProductPage = () => {
             <h3 className="font-semibold text-slate-900 dark:text-white mb-3">Upload Images</h3>
             <div className="flex flex-wrap gap-3">
               {images.map((img, i) => (
-                <div key={i} className="w-20 h-20 rounded-lg overflow-hidden border border-slate-200">
+                <div key={i} className="relative w-20 h-20 rounded-lg overflow-hidden border border-slate-200 group">
                   <img src={img} alt="Upload" className="w-full h-full object-cover" />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveImage(i)}
+                    className="absolute top-1 right-1 bg-black/60 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <X size={12} />
+                  </button>
                 </div>
               ))}
-              <label className="w-20 h-20 rounded-lg border-2 border-dashed border-slate-300 dark:border-neutral-600 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-50 dark:hover:bg-neutral-700 transition-colors">
-                <Upload size={20} className="text-slate-400" />
-                <span className="text-[10px] text-slate-500 mt-1">Upload</span>
-                <input type="file" multiple accept="image/*" className="hidden" onChange={handleImageUpload} />
+              <label onClick={handleOpenPicker} className="w-20 h-20 rounded-lg border-2 border-dashed border-slate-300 dark:border-neutral-600 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-50 dark:hover:bg-neutral-700 transition-colors">
+                {loading ? <Loader2 size={20} className="text-slate-400 animate-spin" /> : <Upload size={20} className="text-slate-400" />}
+                <span className="text-[10px] text-slate-500 mt-1">{loading ? '...' : 'Upload'}</span>
               </label>
             </div>
           </div>
@@ -239,6 +270,15 @@ const ReturnProductPage = () => {
           </button>
         </form>
       </div>
+      {imagePickerConfig && (
+        <ImageSourcePicker
+          isOpen={!!imagePickerConfig}
+          onClose={() => setImagePickerConfig(null)}
+          onFileSelect={handleImageSelect}
+          title={imagePickerConfig.title}
+          fileNamePrefix={imagePickerConfig.fileNamePrefix}
+        />
+      )}
     </div>
   );
 };

@@ -135,6 +135,25 @@ const ReturnDetails = () => {
                     <p className="text-sm font-medium text-amber-800">The delivery partner has picked up the return. Await drop-off at your store.</p>
                   </div>
 
+                  <div className="p-4 bg-indigo-50 border border-indigo-200 rounded-xl flex flex-col items-center justify-center text-center">
+                    <p className="text-sm font-bold text-indigo-900 uppercase tracking-widest mb-1">Handover OTP</p>
+                    <p className="text-3xl font-black tracking-[0.2em] text-indigo-600 font-mono">
+                      {returnReq.sellerDeliveryOtp || '----'}
+                    </p>
+                    <p className="text-xs font-medium text-indigo-700/80 mt-2 max-w-[200px]">
+                      Share this code with the delivery partner when receiving the package.
+                    </p>
+                  </div>
+
+                  <div className="relative flex items-center justify-center">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-gray-300 dark:border-neutral-700"></div>
+                    </div>
+                    <div className="relative bg-white dark:bg-neutral-800 px-4 text-xs text-gray-500 uppercase tracking-widest font-bold">
+                      OR MANUALLY ACCEPT
+                    </div>
+                  </div>
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Upload Photo of Received Package</label>
                     {sellerImage ? (

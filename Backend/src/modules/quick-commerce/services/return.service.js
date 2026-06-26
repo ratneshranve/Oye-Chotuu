@@ -76,6 +76,7 @@ export const createReturnRequest = async (userId, data, returnWindowDays) => {
 
   // Generate OTP immediately
   const pickupOtp = Math.floor(1000 + Math.random() * 9000).toString();
+  const sellerDeliveryOtp = Math.floor(1000 + Math.random() * 9000).toString();
 
   const newReturn = new QuickReturnRequest({
     orderId,
@@ -96,6 +97,7 @@ export const createReturnRequest = async (userId, data, returnWindowDays) => {
     adminEarningDeduction: deductions.adminDeduction,
     
     pickupOtp,
+    sellerDeliveryOtp,
     status: returnStatuses.RETURN_REQUESTED,
     statusHistory: [{
       status: returnStatuses.RETURN_REQUESTED,

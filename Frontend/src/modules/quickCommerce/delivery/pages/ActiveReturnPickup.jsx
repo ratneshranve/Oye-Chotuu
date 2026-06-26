@@ -34,6 +34,7 @@ const ActiveReturnPickup = () => {
   const [actionLoading, setActionLoading] = useState(false);
   
   const [otp, setOtp] = useState("");
+  const [sellerOtp, setSellerOtp] = useState("");
   const [pickupImage, setPickupImage] = useState("");
   const [showPicker, setShowPicker] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -371,14 +372,32 @@ const ActiveReturnPickup = () => {
               <div className="flex-grow border-t border-emerald-200/50"></div>
             </div>
 
+            <div className="bg-white p-4 rounded-lg border border-emerald-100 mt-4 mb-4">
+              <label className="block text-sm font-medium text-emerald-900 mb-2">
+                Enter Seller OTP to Confirm Drop
+              </label>
+              <input
+                type="text"
+                placeholder="4-digit OTP"
+                maxLength={4}
+                value={sellerOtp}
+                onChange={(e) => setSellerOtp(e.target.value.replace(/\D/g, ""))}
+                className="w-full text-center text-2xl tracking-[0.5em] font-bold p-3 border-2 border-emerald-200 rounded-lg focus:outline-none focus:border-emerald-500 bg-emerald-50 text-emerald-900 placeholder:text-emerald-300 placeholder:tracking-normal placeholder:text-base placeholder:font-medium"
+              />
+            </div>
+
             <button
               onClick={async () => {
+                if (!sellerOtp || sellerOtp.length !== 4) {
+                  toast.error("Please enter a valid 4-digit OTP from seller");
+                  return;
+                }
                 setActionLoading(true);
                 try {
-                  const response = await apiClient.put(`/quick-commerce/delivery/returns/${id}/status`, { status: "RETURN_RECEIVED_BY_SELLER" }, { contextModule: 'delivery' });
+                  const response = await apiClient.put(`/quick-commerce/delivery/returns/${id}/status`, { status: "RETURN_RECEIVED_BY_SELLER", otp: sellerOtp }, { contextModule: 'delivery' });
                   const data = response.data || {};
                   if (data.success) {
-                    toast.success("Status manually updated to RETURN_RECEIVED_BY_SELLER");
+                    toast.success("Return drop confirmed with seller!");
                     if (data.returnRequest) {
                       setReturnReq(data.returnRequest);
                     } else {
@@ -389,7 +408,7 @@ const ActiveReturnPickup = () => {
                     toast.error(data.message || "Failed to update status");
                   }
                 } catch (error) {
-                  toast.error("Error updating status");
+                  toast.error(error?.response?.data?.message || "Error updating status");
                 } finally {
                   setActionLoading(false);
                 }
@@ -397,7 +416,7 @@ const ActiveReturnPickup = () => {
               disabled={actionLoading}
               className="w-full bg-emerald-100 hover:bg-emerald-200 text-emerald-700 font-bold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2"
             >
-              Mark as Received by Seller
+              Confirm Seller Drop
             </button>
           </div>
         )}

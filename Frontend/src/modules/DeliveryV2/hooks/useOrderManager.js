@@ -8,6 +8,16 @@ import { useNavigate } from 'react-router-dom';
  * useOrderManager - Professional hook for real-world trip lifecycle actions.
  * Connects directly to the backend API services.
  */
+import { useDeliveryStore } from '@/modules/DeliveryV2/store/useDeliveryStore';
+import { deliveryAPI } from '@food/api';
+import { toast } from 'sonner';
+import { getPrimaryPickupLocation, normalizeLocationPoint, normalizePickupPoints } from '@/modules/DeliveryV2/utils/orderRouting';
+import { useNavigate } from 'react-router-dom';
+
+/**
+ * useOrderManager - Professional hook for real-world trip lifecycle actions.
+ * Connects directly to the backend API services.
+ */
 export const useOrderManager = () => {
   const navigate = useNavigate();
   const { 
@@ -15,8 +25,13 @@ export const useOrderManager = () => {
   } = useDeliveryStore();
 
   const acceptOrder = async (order) => {
-    if (order?.type === 'RETURN_PICKUP') {
-      const returnId = order?.returnId || order?._id || order?.id;
+    const isReturnPickup = 
+      order?.type === 'RETURN_PICKUP' || 
+      order?.returnId || 
+      order?.productName === 'Returned Product';
+
+    if (isReturnPickup) {
+      const returnId = order?.returnId || order?._id || order?.id || order?.orderId;
       if (!returnId) {
         toast.error('Invalid return request data');
         return;
@@ -197,6 +212,8 @@ export const useOrderManager = () => {
     }
   };
 
+
+
   /**
    * Finalize Delivery with OTP Check
    */
@@ -204,35 +221,49 @@ export const useOrderManager = () => {
     const { paymentMode } = options;
     const orderId = activeOrder?.orderId;
     try {
-      // 1. Verify OTP first
-      const verifyRes = await deliveryAPI.verifyDropOtp(orderId, otp);
-      
-      if (verifyRes?.data?.success) {
-        let finalOrder = verifyRes.data?.data?.order || activeOrder;
-        
-        try {
-          // 2. Mark as complete
-          const completeRes = await deliveryAPI.completeDelivery(orderId, { 
-            otp, 
-            rating: 5,
-            paymentMode
-          });
-          if (completeRes.data?.success && completeRes.data?.data?.order) {
-            finalOrder = completeRes.data.data.order;
-          }
-        } catch (completeErr) {
-          console.warn('Complete call failed, but OTP was verified.', completeErr);
-          // If already completed, we proceed to show the summary with whatever we have
+      if (activeOrder?.type === 'RETURN_PICKUP') {
+        // Return Pickups
+        const verifyRes = await deliveryAPI.verifyReturnDropOtp(orderId, otp);
+        if (verifyRes?.data?.success) {
+          const completeRes = await deliveryAPI.updateDeliveryReturnStatus(orderId, "RETURN_RECEIVED_BY_SELLER", { otp });
+          let finalOrder = completeRes.data?.returnRequest || activeOrder;
+          if (finalOrder) setActiveOrder(finalOrder);
+          updateTripStatus('COMPLETED');
+        } else {
+          toast.error('Invalid OTP. Please check with seller.');
+          throw new Error('Invalid OTP');
         }
-        
-        // Update local order state so Summary Modal shows 'delivered' status
-        if (finalOrder) setActiveOrder(finalOrder);
-        
-        updateTripStatus('COMPLETED');
-        // toast.success('Delivery Success!');
       } else {
-        toast.error('Invalid OTP. Please check with customer.');
-        throw new Error('Invalid OTP');
+        // 1. Verify OTP first
+        const verifyRes = await deliveryAPI.verifyDropOtp(orderId, otp);
+        
+        if (verifyRes?.data?.success) {
+          let finalOrder = verifyRes.data?.data?.order || activeOrder;
+          
+          try {
+            // 2. Mark as complete
+            const completeRes = await deliveryAPI.completeDelivery(orderId, { 
+              otp, 
+              rating: 5,
+              paymentMode
+            });
+            if (completeRes.data?.success && completeRes.data?.data?.order) {
+              finalOrder = completeRes.data.data.order;
+            }
+          } catch (completeErr) {
+            console.warn('Complete call failed, but OTP was verified.', completeErr);
+            // If already completed, we proceed to show the summary with whatever we have
+          }
+          
+          // Update local order state so Summary Modal shows 'delivered' status
+          if (finalOrder) setActiveOrder(finalOrder);
+          
+          updateTripStatus('COMPLETED');
+          // toast.success('Delivery Success!');
+        } else {
+          toast.error('Invalid OTP. Please check with customer.');
+          throw new Error('Invalid OTP');
+        }
       }
     } catch (error) {
       console.error('Completion Error:', error);
