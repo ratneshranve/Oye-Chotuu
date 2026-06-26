@@ -528,6 +528,13 @@ export default function UnifiedOTPFastLogin() {
                     />
                   ))}
                 </div>
+
+                <div className="text-center mt-3">
+                  <p className="text-xs font-bold text-green-600">
+                    Congratulations! You already know the OTP: 1234 🎉
+                  </p>
+                </div>
+
                 <div className="text-center mt-3">
                   {resendTimer > 0 ? (
                     <p className="text-xs text-gray-500 font-medium">

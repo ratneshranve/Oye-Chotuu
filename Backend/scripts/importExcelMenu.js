@@ -37,6 +37,7 @@ async function run() {
         console.log(`Found ${rawData.length} rows in the excel sheet.`);
 
         let insertedCount = 0;
+        const categoryCache = {}; // Cache to prevent duplicates
 
         for (let i = 0; i < rawData.length; i++) {
             const row = rawData[i];
@@ -52,27 +53,35 @@ async function run() {
                 continue;
             }
 
-            // 1. Check or Create Category
-            let category = await FoodCategory.findOne({
-                name: { $regex: new RegExp(`^${categoryName}$`, 'i') },
-                $or: [
-                    { restaurantId: RESTAURANT_ID },
-                    { restaurantId: { $exists: false } },
-                    { restaurantId: null }
-                ]
-            });
+            const lowerCat = categoryName.toLowerCase();
 
-            if (!category) {
-                console.log(`Row ${i + 1}: Category "${categoryName}" not found. Creating new category...`);
-                category = await FoodCategory.create({
-                    name: categoryName,
-                    restaurantId: RESTAURANT_ID,
-                    createdByRestaurantId: RESTAURANT_ID,
-                    approvalStatus: 'approved',
-                    isApproved: true,
-                    isActive: true,
-                    foodTypeScope: 'Both'
+            // 1. Check or Create Category
+            let category;
+            if (categoryCache[lowerCat]) {
+                category = categoryCache[lowerCat];
+            } else {
+                category = await FoodCategory.findOne({
+                    name: { $regex: new RegExp(`^${categoryName}$`, 'i') },
+                    $or: [
+                        { restaurantId: RESTAURANT_ID },
+                        { restaurantId: { $exists: false } },
+                        { restaurantId: null }
+                    ]
                 });
+
+                if (!category) {
+                    console.log(`Row ${i + 1}: Category "${categoryName}" not found. Creating new category...`);
+                    category = await FoodCategory.create({
+                        name: categoryName,
+                        restaurantId: RESTAURANT_ID,
+                        createdByRestaurantId: RESTAURANT_ID,
+                        approvalStatus: 'approved',
+                        isApproved: true,
+                        isActive: true,
+                        foodTypeScope: 'Both'
+                    });
+                }
+                categoryCache[lowerCat] = category;
             }
 
             // 2. Check if Item already exists to avoid duplicates
