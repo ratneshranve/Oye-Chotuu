@@ -490,11 +490,6 @@ export default function OTP() {
                 </div>
               )}
 
-              <div className="text-center">
-                <p className="text-sm font-medium text-green-600 dark:text-green-400">
-                  Congratulations! You already know the OTP: 1234 🎉
-                </p>
-              </div>
 
               {/* Resend Section */}
               <div className="text-center">
