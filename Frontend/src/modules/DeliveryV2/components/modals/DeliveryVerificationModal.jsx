@@ -85,13 +85,29 @@ const OtpModal = ({ order, onVerified, onClose }) => {
   const orderId = order.orderId || order._id || "ORD";
 
   const handleOtpChange = (index, value) => {
-    if (value && !/^\d+$/.test(value)) return;
-    const newOtp = [...otp];
-    newOtp[index] = value.substring(value.length - 1);
-    setOtp(newOtp);
-    if (value && index < 3) inputRefs.current[index + 1]?.focus();
-  };
+    const digits = String(value || "").replace(/\D/g, "");
+    if (!digits) {
+      const newOtp = [...otp];
+      newOtp[index] = "";
+      setOtp(newOtp);
+      return;
+    }
 
+    const newOtp = [...otp];
+    const incomingDigits = digits.slice(0, 4 - index).split("");
+    incomingDigits.forEach((digit, offset) => {
+      newOtp[index + offset] = digit;
+    });
+    setOtp(newOtp);
+
+    const nextEmptyIndex = newOtp.findIndex((digit) => !digit);
+    if (nextEmptyIndex >= 0) {
+      inputRefs.current[nextEmptyIndex]?.focus();
+    } else {
+      inputRefs.current[3]?.blur();
+      document.activeElement?.blur?.();
+    }
+  };
   const handleKeyDown = (index, e) => {
     if (e.key === "Backspace" && !otp[index] && index > 0)
       inputRefs.current[index - 1]?.focus();
@@ -160,8 +176,11 @@ const OtpModal = ({ order, onVerified, onClose }) => {
             <input
               key={i}
               ref={(el) => (inputRefs.current[i] = el)}
-              type="number"
+              type="text"
               disabled={isOtpVerified}
+              inputMode="numeric"
+              pattern="[0-9]*"
+              maxLength={4}
               value={digit}
               onChange={(e) => handleOtpChange(i, e.target.value)}
               onKeyDown={(e) => handleKeyDown(i, e)}
@@ -221,13 +240,35 @@ const PaymentModal = ({ order, otpString, onComplete, onClose }) => {
   const amountToCollect = order.payment?.amountDue || order.payableAmount || order.totalAmount || order.amountToCollect || order.pricing?.total || 0;
 
   const handlePaymentOtpChange = (index, value) => {
-    if (value && !/^\d+$/.test(value)) return;
-    const newOtp = [...paymentOtp];
-    newOtp[index] = value.substring(value.length - 1);
-    setPaymentOtp(newOtp);
-    if (value && index < 3) paymentInputRefs.current[index + 1]?.focus();
-  };
+    const digits = String(value || "").replace(/\D/g, "");
+    if (!digits) {
+      const newOtp = [...paymentOtp];
+      newOtp[index] = "";
+      setPaymentOtp(newOtp);
+      setIsPaymentOtpVerified(false);
+      return;
+    }
 
+    const newOtp = [...paymentOtp];
+    const incomingDigits = digits.slice(0, 4 - index).split("");
+    incomingDigits.forEach((digit, offset) => {
+      newOtp[index + offset] = digit;
+    });
+
+    const enteredOtp = newOtp.join("");
+    const isComplete = enteredOtp.length === 4;
+    setPaymentOtp(newOtp);
+    setIsPaymentOtpVerified(isComplete && enteredOtp === otpString);
+
+    if (isComplete) {
+      paymentInputRefs.current[3]?.blur();
+      document.activeElement?.blur?.();
+      return;
+    }
+
+    const nextEmptyIndex = newOtp.findIndex((digit) => !digit);
+    if (nextEmptyIndex >= 0) paymentInputRefs.current[nextEmptyIndex]?.focus();
+  };
   const handlePaymentKeyDown = (index, e) => {
     if (e.key === "Backspace" && !paymentOtp[index] && index > 0)
       paymentInputRefs.current[index - 1]?.focus();
@@ -403,8 +444,11 @@ const PaymentModal = ({ order, otpString, onComplete, onClose }) => {
                     <input
                       key={i}
                       ref={(el) => (paymentInputRefs.current[i] = el)}
-                      type="number"
+                      type="text"
                       disabled={isPaymentOtpVerified}
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      maxLength={4}
                       value={digit}
                       onChange={(e) =>
                         handlePaymentOtpChange(i, e.target.value)
@@ -601,3 +645,5 @@ export const DeliveryVerificationModal = ({ order, onComplete, onClose }) => {
     </AnimatePresence>
   );
 };
+
+

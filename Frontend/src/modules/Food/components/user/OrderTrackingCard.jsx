@@ -70,6 +70,10 @@ const ShoppingAnimation = memo(() => (
 import { useOrders } from "@food/context/OrdersContext";
 import { orderAPI } from "@food/api";
 
+const LIVE_ORDER_ETA_EVENT = "food-live-order-eta";
+const LIVE_ORDER_ETA_STORAGE_KEY = "food_live_order_eta_by_id";
+const LIVE_ORDER_ETA_MAX_AGE_MS = 15 * 60 * 1000;
+
 const getOrderKey = (order) => order?.id || order?._id || order?.orderId || null;
 const getCustomerToken = () =>
   localStorage.getItem("auth_customer") ||
@@ -82,6 +86,50 @@ const getOrderStatus = (order) =>
 
 const getOrderPhase = (order) =>
   String(order?.deliveryState?.currentPhase || "").toLowerCase();
+const getOrderKeys = (order) => [
+  order?.id,
+  order?._id,
+  order?.orderId,
+  order?.mongoId,
+  order?.orderMongoId,
+].map((id) => String(id || "").trim()).filter(Boolean);
+
+const parseEtaMinutes = (value) => {
+  if (typeof value === "number" && Number.isFinite(value)) return Math.ceil(value);
+  const text = String(value || "").toLowerCase();
+  if (!text) return null;
+  const hourMatch = text.match(/(\d+)\s*(?:h|hr|hour)/);
+  const minuteMatch = text.match(/(\d+)\s*(?:m|min|minute)/);
+  if (hourMatch || minuteMatch) {
+    return (Number(hourMatch?.[1] || 0) * 60) + Number(minuteMatch?.[1] || 0);
+  }
+  const firstNumber = text.match(/\d+/)?.[0];
+  return firstNumber ? Number(firstNumber) : null;
+};
+
+const formatEtaDisplay = (value) => {
+  const mins = parseEtaMinutes(value);
+  if (mins !== null && Number.isFinite(mins)) return `${Math.max(1, mins)} min`;
+  return value ? String(value) : null;
+};
+
+const getCachedLiveEta = (order) => {
+  const keys = getOrderKeys(order);
+  if (!keys.length) return null;
+  try {
+    const cached = JSON.parse(localStorage.getItem(LIVE_ORDER_ETA_STORAGE_KEY) || "{}");
+    const now = Date.now();
+    for (const key of keys) {
+      const entry = cached?.[key];
+      if (entry?.eta && now - Number(entry.updatedAt || 0) <= LIVE_ORDER_ETA_MAX_AGE_MS) {
+        return entry.eta;
+      }
+    }
+  } catch {
+    return null;
+  }
+  return null;
+};
 
 const ACTIVE_PHASES = new Set([
   "created",
@@ -151,6 +199,7 @@ function OrderTrackingCardInner({ hasBottomNav = true }) {
   const { orders: contextOrders } = useOrders();
   const hasCustomerAuth = !!getCustomerToken();
   const [timeRemaining, setTimeRemaining] = useState(null);
+  const [liveEta, setLiveEta] = useState(null);
   const [apiOrders, setApiOrders] = useState([]);
   const [hasFetchedApi, setHasFetchedApi] = useState(false);
   const [activeOrderOverride, setActiveOrderOverride] = useState(null);
@@ -250,6 +299,25 @@ function OrderTrackingCardInner({ hasBottomNav = true }) {
     const key = String(getOrderKey(activeOrder) || "");
     activeOrderKeyRef.current = key;
     activeOrderSnapshotRef.current = activeOrder;
+  }, [activeOrder]);
+  useEffect(() => {
+    const activeKeys = new Set(getOrderKeys(activeOrder));
+    if (!activeKeys.size) {
+      setLiveEta(null);
+      return;
+    }
+
+    setLiveEta(getCachedLiveEta(activeOrder));
+
+    const handleLiveEta = (event) => {
+      const detail = event?.detail || {};
+      const eventKeys = Array.isArray(detail.orderIds) ? detail.orderIds.map((id) => String(id)) : [];
+      if (!eventKeys.some((id) => activeKeys.has(id))) return;
+      setLiveEta(detail.eta || null);
+    };
+
+    window.addEventListener(LIVE_ORDER_ETA_EVENT, handleLiveEta);
+    return () => window.removeEventListener(LIVE_ORDER_ETA_EVENT, handleLiveEta);
   }, [activeOrder]);
 
   useEffect(() => {
@@ -477,9 +545,9 @@ function OrderTrackingCardInner({ hasBottomNav = true }) {
                         minute: "2-digit",
                       })
                     : "Scheduled"
-                  : timeRemaining !== null
+                  : formatEtaDisplay(liveEta) || (timeRemaining !== null
                     ? `${Math.max(1, timeRemaining)} min`
-                    : "--"}
+                    : "--")}
               </p>
             </div>
           </div>
@@ -491,3 +559,5 @@ function OrderTrackingCardInner({ hasBottomNav = true }) {
 
 const OrderTrackingCard = memo(OrderTrackingCardInner);
 export default OrderTrackingCard;
+
+

@@ -11,6 +11,7 @@ import { FoodZone } from '../../admin/models/zone.model.js';
 import { FoodFeeSettings } from '../../admin/models/feeSettings.model.js';
 import { ValidationError, ForbiddenError, NotFoundError } from '../../../../core/auth/errors.js';
 import { buildPaginationOptions, buildPaginatedResult } from '../../../../utils/helpers.js';
+import { isPointInPolygon } from '../../../../utils/geo.js';
 import { FoodOffer } from '../../admin/models/offer.model.js';
 import { FoodOfferUsage } from '../../admin/models/offerUsage.model.js';
 import { FoodDeliveryCommissionRule } from '../../admin/models/deliveryCommissionRule.model.js';
@@ -358,55 +359,32 @@ async function evaluateCombinedPickupEligibility(pickupPoints = [], deliveryAddr
 
 async function listNearbyPartnersForPoint(point, { maxKm = 15, limit = 5 } = {}) {
   const latLng = getPointLatLng(point?.location);
-  if (!latLng) {
-    const fallbackPartners = await FoodDeliveryPartner.find({
-      status: "approved",
-      availabilityStatus: "online",
-    })
-      .select("_id")
-      .limit(Math.max(1, limit))
-      .lean();
+  if (!latLng) return [];
 
-    return fallbackPartners.map((partner) => ({
-      partnerId: partner._id,
-      distanceKm: null,
-    }));
+  const zones = await FoodZone.find({ isActive: true }).lean();
+  const sourceZone = zones.find((zone) => isPointInPolygon(latLng.lat, latLng.lng, zone.coordinates));
+  if (!sourceZone) {
+    logger.warn("Split dispatch skipped: pickup point has no active zone match. No riders will be notified.");
+    return [];
   }
 
   const partners = await FoodDeliveryPartner.find({
     status: "approved",
     availabilityStatus: "online",
-    lastLat: { $exists: true, $ne: null },
-    lastLng: { $exists: true, $ne: null },
   })
-    .select("_id lastLat lastLng")
+    .select("_id lastLat lastLng lastLocationAt")
     .lean();
 
-  const nearbyPartners = partners
+  return partners
+    .filter((partner) => hasFreshRiderLocation(partner))
+    .filter((partner) => isPointInPolygon(Number(partner.lastLat), Number(partner.lastLng), sourceZone.coordinates))
     .map((partner) => ({
       partnerId: partner._id,
-      distanceKm: haversineKm(latLng.lat, latLng.lng, partner.lastLat, partner.lastLng),
+      distanceKm: haversineKm(latLng.lat, latLng.lng, Number(partner.lastLat), Number(partner.lastLng)),
     }))
     .filter((partner) => Number.isFinite(partner.distanceKm) && partner.distanceKm <= maxKm)
     .sort((a, b) => a.distanceKm - b.distanceKm)
     .slice(0, Math.max(1, limit));
-
-  if (nearbyPartners.length > 0) {
-    return nearbyPartners;
-  }
-
-  const fallbackPartners = await FoodDeliveryPartner.find({
-    status: "approved",
-    availabilityStatus: "online",
-  })
-    .select("_id")
-    .limit(Math.max(1, limit))
-    .lean();
-
-  return fallbackPartners.map((partner) => ({
-    partnerId: partner._id,
-    distanceKm: null,
-  }));
 }
 
 function pushStatusHistory(order, { byRole, byId, from, to, note = "" }) {
@@ -1282,68 +1260,86 @@ async function notifySellerOrderCancelled(orderDoc, sellerOrders, reason) {
 }
 
 
+const STALE_RIDER_GPS_MS = 10 * 60 * 1000;
+
+const getSourceZoneId = (source) =>
+  source?.zoneId ||
+  source?.shopInfo?.zoneId ||
+  source?.zone?._id ||
+  source?.zone ||
+  null;
+
+const getSourceCoords = (source) => {
+  const coords = source?.location?.coordinates || source?.shopInfo?.location?.coordinates;
+  if (Array.isArray(coords) && coords.length >= 2) {
+    const lng = Number(coords[0]);
+    const lat = Number(coords[1]);
+    if (Number.isFinite(lat) && Number.isFinite(lng)) return { lat, lng };
+  }
+  const lat = Number(source?.location?.latitude ?? source?.shopInfo?.location?.latitude);
+  const lng = Number(source?.location?.longitude ?? source?.shopInfo?.location?.longitude);
+  if (Number.isFinite(lat) && Number.isFinite(lng)) return { lat, lng };
+  return null;
+};
+
+const resolveSourceZone = async (source) => {
+  const explicitZoneId = getSourceZoneId(source);
+  if (explicitZoneId && mongoose.Types.ObjectId.isValid(String(explicitZoneId))) {
+    const zone = await FoodZone.findOne({ _id: explicitZoneId, isActive: true }).lean();
+    if (zone) return zone;
+  }
+
+  const coords = getSourceCoords(source);
+  if (!coords) return null;
+  const zones = await FoodZone.find({ isActive: true }).lean();
+  return zones.find((zone) => isPointInPolygon(coords.lat, coords.lng, zone.coordinates)) || null;
+};
+
+const hasFreshRiderLocation = (partner) => {
+  if (!Number.isFinite(Number(partner?.lastLat)) || !Number.isFinite(Number(partner?.lastLng))) return false;
+  if (!partner?.lastLocationAt) return false;
+  return Date.now() - new Date(partner.lastLocationAt).getTime() <= STALE_RIDER_GPS_MS;
+};
+
 async function listNearbyOnlineDeliveryPartners(
   restaurantId,
   { maxKm = 15, limit = 25 } = {},
 ) {
-  const restaurant = await FoodRestaurant.findById(restaurantId)
-    .select("location")
-    .lean();
-  if (!restaurant?.location?.coordinates?.length) {
-    // Fallback: if restaurant location is missing, notify any online approved partners.
-    const partners = await FoodDeliveryPartner.find({
-      status: "approved",
-      availabilityStatus: "online",
-    })
-      .select("_id")
-      .limit(Math.max(1, limit))
-      .lean();
-    return {
-      restaurant: null,
-      partners: partners.map((p) => ({ partnerId: p._id, distanceKm: null })),
-    };
+  const restaurant = await FoodRestaurant.findById(restaurantId).lean();
+  const restaurantZone = await resolveSourceZone(restaurant);
+  if (!restaurantZone) {
+    logger.warn(`Dispatch skipped: restaurant ${restaurantId} has no active zone match. No riders will be notified.`);
+    return { restaurant, zone: null, partners: [] };
   }
 
-  const [rLng, rLat] = restaurant.location.coordinates;
+  const restaurantCoords = getSourceCoords(restaurant);
   const partners = await FoodDeliveryPartner.find({
     status: "approved",
     availabilityStatus: "online",
-    lastLat: { $exists: true, $ne: null },
-    lastLng: { $exists: true, $ne: null },
   })
-    .select("_id lastLat lastLng")
+    .select("_id lastLat lastLng lastLocationAt")
     .lean();
-
-  console.log(
-    `[DEBUG] listNearby: Restaurant [${rLat}, ${rLng}] found ${partners.length} online approved partners with GPS`,
-  );
 
   const scored = [];
   for (const p of partners) {
-    const d = haversineKm(rLat, rLng, p.lastLat, p.lastLng);
-    if (Number.isFinite(d) && d <= maxKm)
-      scored.push({ partnerId: p._id, distanceKm: d });
+    if (!hasFreshRiderLocation(p)) continue;
+    if (!isPointInPolygon(Number(p.lastLat), Number(p.lastLng), restaurantZone.coordinates)) continue;
+
+    const distanceKm = restaurantCoords
+      ? haversineKm(restaurantCoords.lat, restaurantCoords.lng, Number(p.lastLat), Number(p.lastLng))
+      : null;
+
+    if (distanceKm === null || (Number.isFinite(distanceKm) && distanceKm <= maxKm)) {
+      scored.push({ partnerId: p._id, distanceKm });
+    }
   }
 
-  scored.sort((a, b) => a.distanceKm - b.distanceKm);
-  const picked = scored.slice(0, Math.max(1, limit));
-
-  // Fallback: if no one has GPS yet, still notify online partners (common right after login).
-  if (picked.length === 0) {
-    const anyOnline = await FoodDeliveryPartner.find({
-      status: "approved",
-      availabilityStatus: "online",
-    })
-      .select("_id")
-      .limit(Math.max(1, limit))
-      .lean();
-    return {
-      restaurant,
-      partners: anyOnline.map((p) => ({ partnerId: p._id, distanceKm: null })),
-    };
-  }
-
-  return { restaurant, partners: picked };
+  scored.sort((a, b) => (a.distanceKm ?? Number.MAX_SAFE_INTEGER) - (b.distanceKm ?? Number.MAX_SAFE_INTEGER));
+  return {
+    restaurant,
+    zone: restaurantZone,
+    partners: scored.slice(0, Math.max(1, limit)),
+  };
 }
 
 async function refreshSplitDispatchLegCandidates(order) {
@@ -4833,3 +4829,7 @@ export async function updateOrderInstructions(orderId, userId, instructions) {
 
   return sanitizeOrderForExternal(order);
 }
+
+
+
+

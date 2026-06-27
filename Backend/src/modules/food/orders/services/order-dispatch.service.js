@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { FoodOrder, FoodSettings } from "../models/order.model.js";
 import { FoodRestaurant } from "../../restaurant/models/restaurant.model.js";
+import { FoodZone } from "../../admin/models/zone.model.js";
 import { Seller } from "../../../quick-commerce/seller/models/seller.model.js";
 import { FoodDeliveryPartner } from "../../delivery/models/deliveryPartner.model.js";
 import {
@@ -11,6 +12,7 @@ import { logger } from "../../../../utils/logger.js";
 import { config } from "../../../../config/env.js";
 import { getIO, rooms } from "../../../../config/socket.js";
 import { addOrderJob } from "../../../../queues/producers/order.producer.js";
+import { isPointInPolygon } from "../../../../utils/geo.js";
 import {
   buildDeliverySocketPayload,
   buildOrderIdentityFilter,
@@ -19,36 +21,64 @@ import {
   notifyOwnersSafely,
 } from "./order.helpers.js";
 
+const STALE_RIDER_GPS_MS = 10 * 60 * 1000;
+
+const getSourceZoneId = (source) =>
+  source?.zoneId ||
+  source?.shopInfo?.zoneId ||
+  source?.zone?._id ||
+  source?.zone ||
+  null;
+
+const getSourceCoords = (source) => {
+  const coords = source?.location?.coordinates || source?.shopInfo?.location?.coordinates;
+  if (Array.isArray(coords) && coords.length >= 2) {
+    const lng = Number(coords[0]);
+    const lat = Number(coords[1]);
+    if (Number.isFinite(lat) && Number.isFinite(lng)) return { lat, lng };
+  }
+  const lat = Number(source?.location?.latitude ?? source?.shopInfo?.location?.latitude);
+  const lng = Number(source?.location?.longitude ?? source?.shopInfo?.location?.longitude);
+  if (Number.isFinite(lat) && Number.isFinite(lng)) return { lat, lng };
+  return null;
+};
+
+const resolveSourceZone = async (source) => {
+  const explicitZoneId = getSourceZoneId(source);
+  if (explicitZoneId && mongoose.Types.ObjectId.isValid(String(explicitZoneId))) {
+    const zone = await FoodZone.findOne({ _id: explicitZoneId, isActive: true }).lean();
+    if (zone) return zone;
+  }
+
+  const coords = getSourceCoords(source);
+  if (!coords) return null;
+  const zones = await FoodZone.find({ isActive: true }).lean();
+  return zones.find((zone) => isPointInPolygon(coords.lat, coords.lng, zone.coordinates)) || null;
+};
+
+const hasFreshRiderLocation = (partner) => {
+  if (!Number.isFinite(Number(partner?.lastLat)) || !Number.isFinite(Number(partner?.lastLng))) return false;
+  if (!partner?.lastLocationAt) return false;
+  return Date.now() - new Date(partner.lastLocationAt).getTime() <= STALE_RIDER_GPS_MS;
+};
 async function listNearbyOnlineDeliveryPartners(
   sourceId,
   { maxKm = 15, limit = 25, sourceType = "food" } = {},
 ) {
-  if (!sourceId) return { partners: [], source: null };
+  if (!sourceId) return { partners: [], source: null, zone: null };
   const sId = (sourceId?._id || sourceId).toString();
 
-  let source = null;
-  if (sourceType === "quick") {
-    source = await Seller.findById(sId).lean();
-  } else {
-    source = await FoodRestaurant.findById(sId).lean();
+  const source = sourceType === "quick"
+    ? await Seller.findById(sId).lean()
+    : await FoodRestaurant.findById(sId).lean();
+
+  const sourceZone = await resolveSourceZone(source);
+  if (!sourceZone) {
+    logger.warn(`Dispatch skipped: source ${sId} has no active zone match. No riders will be notified.`);
+    return { source, zone: null, partners: [] };
   }
 
-  if (!source?.location?.coordinates?.length) {
-    const partners = await FoodDeliveryPartner.find({
-      status: "approved",
-      availabilityStatus: "online",
-    })
-      .select("_id status name")
-      .limit(Math.max(1, limit))
-      .lean();
-
-    return {
-      source,
-      partners: partners.map((p) => ({ partnerId: p._id, distanceKm: null })),
-    };
-  }
-
-  const [rLng, rLat] = source.location.coordinates;
+  const sourceCoords = getSourceCoords(source);
   const allOnline = await FoodDeliveryPartner.find({
     availabilityStatus: "online",
   })
@@ -60,53 +90,28 @@ async function listNearbyOnlineDeliveryPartners(
     process.env.NODE_ENV === "production"
       ? ["approved"]
       : ["approved", "pending"];
-  const STALE_GPS_MS = 10 * 60 * 1000;
 
   for (const p of allOnline) {
     if (!allowedStatuses.includes(p.status)) continue;
+    if (!hasFreshRiderLocation(p)) continue;
+    if (!isPointInPolygon(Number(p.lastLat), Number(p.lastLng), sourceZone.coordinates)) continue;
 
-    const isStale =
-      !p.lastLocationAt ||
-      Date.now() - new Date(p.lastLocationAt).getTime() > STALE_GPS_MS;
-    if (p.lastLat == null || p.lastLng == null || isStale) {
-      scored.push({ partnerId: p._id, distanceKm: 999, status: p.status });
-      continue;
-    }
+    const distanceKm = sourceCoords
+      ? haversineKm(sourceCoords.lat, sourceCoords.lng, Number(p.lastLat), Number(p.lastLng))
+      : null;
 
-    const d = haversineKm(rLat, rLng, p.lastLat, p.lastLng);
-    if (Number.isFinite(d) && d <= maxKm) {
-      scored.push({ partnerId: p._id, distanceKm: d, status: p.status });
+    if (distanceKm === null || (Number.isFinite(distanceKm) && distanceKm <= maxKm)) {
+      scored.push({ partnerId: p._id, distanceKm, status: p.status });
     }
   }
 
-  scored.sort((a, b) => a.distanceKm - b.distanceKm);
+  scored.sort((a, b) => (a.distanceKm ?? Number.MAX_SAFE_INTEGER) - (b.distanceKm ?? Number.MAX_SAFE_INTEGER));
   const picked = scored.slice(0, Math.max(1, limit));
+  const final = config.env === "production"
+    ? picked.filter((p) => p.status === "approved")
+    : picked;
 
-  if (picked.length === 0) {
-    const anyOnline = await FoodDeliveryPartner.find({
-      status: { $in: allowedStatuses },
-      availabilityStatus: "online",
-    })
-      .select("_id status name")
-      .limit(Math.max(1, limit))
-      .lean();
-
-    return {
-      source,
-      partners: anyOnline.map((p) => ({
-        partnerId: p._id,
-        distanceKm: null,
-        status: p.status,
-      })),
-    };
-  }
-
-  const final =
-    config.env === "production"
-      ? picked.filter((p) => p.status === "approved")
-      : picked;
-
-  return { source, partners: final };
+  return { source, zone: sourceZone, partners: final };
 }
 
 export async function getDispatchSettings() {
@@ -433,3 +438,6 @@ export async function resendDeliveryNotificationRestaurant(
     notifiedCount: res?.notifiedCount || 0,
   };
 }
+
+
+

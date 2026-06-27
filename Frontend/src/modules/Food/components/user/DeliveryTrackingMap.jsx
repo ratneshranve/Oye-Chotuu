@@ -42,6 +42,8 @@ const CUSTOMER_PIN_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="48" hei
 </svg>`;
 
 const debugLog = (...args) => console.log('[DeliveryTrackingMap]', ...args);
+const LIVE_ORDER_ETA_EVENT = "food-live-order-eta";
+const LIVE_ORDER_ETA_STORAGE_KEY = "food_live_order_eta_by_id";
 
 const DeliveryTrackingMap = ({
   orderId,
@@ -77,6 +79,25 @@ const DeliveryTrackingMap = ({
       .filter(Boolean);
     return [...new Set(ids)];
   }, [orderId, orderTrackingIds]);
+
+  const publishEtaUpdate = useCallback((eta) => {
+    if (!eta || !trackingIds.length) return;
+    setCurrentEta(eta);
+    try {
+      const now = Date.now();
+      const cached = JSON.parse(localStorage.getItem(LIVE_ORDER_ETA_STORAGE_KEY) || "{}");
+      trackingIds.forEach((id) => {
+        cached[id] = { eta, updatedAt: now };
+      });
+      localStorage.setItem(LIVE_ORDER_ETA_STORAGE_KEY, JSON.stringify(cached));
+      window.dispatchEvent(new CustomEvent(LIVE_ORDER_ETA_EVENT, {
+        detail: { orderIds: trackingIds, eta, updatedAt: now },
+      }));
+    } catch (error) {
+      debugLog('Unable to cache live ETA', error);
+    }
+    if (onEtaUpdate) onEtaUpdate(eta);
+  }, [onEtaUpdate, trackingIds]);
 
   const backendUrl = useMemo(() => {
     return (API_BASE_URL || '').replace(/\/api\/v1\/?$/i, '').replace(/\/api\/?$/i, '');
@@ -133,8 +154,7 @@ const DeliveryTrackingMap = ({
       }
       if (data?.eta) {
         debugLog('?? Received real-time ETA:', data.eta);
-        setCurrentEta(data.eta);
-        if (onEtaUpdate) onEtaUpdate(data.eta);
+        publishEtaUpdate(data.eta);
       }
     }));
 
@@ -166,8 +186,7 @@ const DeliveryTrackingMap = ({
         }
 
         if (data.eta) {
-          setCurrentEta(data.eta);
-          if (onEtaUpdate) onEtaUpdate(data.eta);
+          publishEtaUpdate(data.eta);
         }
       }
     });
@@ -176,7 +195,7 @@ const DeliveryTrackingMap = ({
       unsubs.forEach(u => u?.());
       socketRef.current?.disconnect();
     };
-  }, [trackingIds, backendUrl, beginRiderTransition, onEtaUpdate]);
+  }, [trackingIds, backendUrl, beginRiderTransition, publishEtaUpdate]);
 
   // 3. Smooth Animation Loop (60 FPS Glide)
   useEffect(() => {
@@ -260,13 +279,10 @@ const DeliveryTrackingMap = ({
       // Extract ETA from directions
       const durationText = result?.routes?.[0]?.legs?.[0]?.duration?.text;
       if (durationText) {
-        setCurrentEta(durationText);
-        if (onEtaUpdate) {
-          onEtaUpdate(durationText);
-        }
+        publishEtaUpdate(durationText);
       }
     }
-  }, [onEtaUpdate]);
+  }, [publishEtaUpdate]);
 
   const shouldUpdateRoute = useMemo(() => {
     if (!directions) return true;
@@ -602,3 +618,4 @@ const DeliveryTrackingMap = ({
 };
 
 export default DeliveryTrackingMap;
+
