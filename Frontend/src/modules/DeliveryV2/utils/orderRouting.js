@@ -1,3 +1,13 @@
+const joinAddress = (...parts) => parts.map((part) => String(part || '').trim()).filter(Boolean).join(', ');
+
+const firstText = (...values) => {
+  for (const value of values) {
+    const text = String(value || '').trim();
+    if (text) return text;
+  }
+  return '';
+};
+
 const formatCoordinateAddress = (location) => {
   if (!location) return "";
   const lat = Number(location.lat);
@@ -26,6 +36,51 @@ export const normalizeLocationPoint = (value) => {
   return null;
 };
 
+const getFoodAddress = (order) => firstText(
+  order?.restaurantAddress,
+  order?.restaurant_address,
+  order?.restaurantLocation?.address,
+  order?.restaurantLocation?.formattedAddress,
+  order?.restaurantId?.location?.address,
+  order?.restaurantId?.location?.formattedAddress,
+  order?.restaurant?.location?.address,
+  order?.restaurant?.location?.formattedAddress,
+  order?.restaurantId?.address,
+  order?.restaurant?.address,
+  joinAddress(order?.restaurantId?.addressLine1, order?.restaurantId?.area, order?.restaurantId?.city, order?.restaurantId?.state),
+  joinAddress(order?.restaurant?.addressLine1, order?.restaurant?.area, order?.restaurant?.city, order?.restaurant?.state),
+);
+
+const getFoodPhone = (order) => firstText(
+  order?.restaurantPhone,
+  order?.restaurant_phone,
+  order?.restaurantId?.phone,
+  order?.restaurantId?.ownerPhone,
+  order?.restaurantId?.mobile,
+  order?.restaurantId?.contactPhone,
+  order?.restaurant?.phone,
+  order?.restaurant?.ownerPhone,
+  order?.restaurant?.mobile,
+  order?.restaurant?.contactPhone,
+);
+
+const getQuickAddress = (order) => firstText(
+  order?.storeAddress,
+  order?.sellerAddress,
+  order?.seller?.location?.address,
+  order?.seller?.location?.formattedAddress,
+  order?.seller?.address,
+  joinAddress(order?.seller?.addressLine1, order?.seller?.area, order?.seller?.city, order?.seller?.state),
+);
+
+const getQuickPhone = (order) => firstText(
+  order?.storePhone,
+  order?.sellerPhone,
+  order?.seller?.phone,
+  order?.seller?.ownerPhone,
+  order?.seller?.contactPhone,
+);
+
 export const normalizePickupPoints = (order) => {
   const raw = Array.isArray(order?.pickupPoints) ? order.pickupPoints : [];
   const explicitOrderType = String(
@@ -48,6 +103,7 @@ export const normalizePickupPoints = (order) => {
           point?.formattedAddress ||
           point?.location?.address ||
           point?.location?.formattedAddress ||
+          (pickupType === "quick" ? getQuickAddress(order) : getFoodAddress(order)) ||
           "",
       ).trim();
       return {
@@ -56,7 +112,7 @@ export const normalizePickupPoints = (order) => {
         sourceId: String(point?.sourceId || ""),
         sourceName,
         address: address || formatCoordinateAddress(location),
-        phone: String(point?.phone || point?.contactPhone || "").trim(),
+        phone: String(point?.phone || point?.contactPhone || (pickupType === "quick" ? getQuickPhone(order) : getFoodPhone(order)) || "").trim(),
         location,
       };
     })
@@ -82,9 +138,7 @@ export const normalizePickupPoints = (order) => {
     const address = String(
       order?.dispatchLeg?.address ||
         order?.pickupAddress ||
-        (pickupType === "quick"
-          ? order?.storeAddress || order?.sellerAddress
-          : order?.restaurantAddress || order?.restaurantLocation?.address) ||
+        (pickupType === "quick" ? getQuickAddress(order) : getFoodAddress(order)) ||
         "",
     ).trim();
 
@@ -95,13 +149,7 @@ export const normalizePickupPoints = (order) => {
         sourceId: String(order?.dispatchLeg?.sourceId || ""),
         sourceName,
         address: address || formatCoordinateAddress(dispatchLegLocation),
-        phone: String(
-          order?.dispatchLeg?.phone ||
-            (pickupType === "quick"
-              ? order?.storePhone || order?.sellerPhone
-              : order?.restaurantPhone || order?.restaurantId?.phone) ||
-            "",
-        ).trim(),
+        phone: String(order?.dispatchLeg?.phone || (pickupType === "quick" ? getQuickPhone(order) : getFoodPhone(order)) || "").trim(),
         location: dispatchLegLocation,
       },
     ];
@@ -122,18 +170,10 @@ export const normalizePickupPoints = (order) => {
       : order?.restaurantName || order?.restaurantId?.restaurantName || order?.restaurantId?.name || "Restaurant",
   ).trim();
   const fallbackAddress = String(
-    fallbackPickupType === "quick"
-      ? order?.storeAddress ||
-          order?.sellerAddress ||
-          order?.seller?.location?.address ||
-          order?.seller?.location?.formattedAddress ||
-          ""
-      : order?.restaurantAddress || order?.restaurantLocation?.address || ""
+    fallbackPickupType === "quick" ? getQuickAddress(order) : getFoodAddress(order),
   ).trim();
   const fallbackPhone = String(
-    fallbackPickupType === "quick"
-      ? order?.storePhone || order?.sellerPhone || order?.seller?.phone || ""
-      : order?.restaurantPhone || order?.restaurantId?.phone || ""
+    fallbackPickupType === "quick" ? getQuickPhone(order) : getFoodPhone(order),
   ).trim();
 
   return [

@@ -4,7 +4,7 @@ import { calculateDistance } from '@/modules/DeliveryV2/hooks/proximity.utils';
 
 /**
  * useProximityCheck - Professional hook for dynamic range monitoring.
- * Ensures rider can only advance based on Admin-defined ranges.
+ * Distance is informational only; rider actions are not locked by proximity.
  * 
  * @returns {Object} { distanceToTarget, isWithinRange, actionLimit }
  */
@@ -50,12 +50,7 @@ export const useProximityCheck = () => {
     );
   }, [riderLocation, targetLocation]);
 
-  // Dev mode bypass
-  const isDevMode = import.meta.env.VITE_APP_MODE === 'developer' || 
-                    import.meta.env.VITE_ENABLE_RANGE_BYPASS === 'true' ||
-                    import.meta.env.DEV;
-
-  const isWithinRange = isDevMode ? true : (distanceToTarget <= actionLimit);
+  const isWithinRange = true;
 
   return {
     distanceToTarget,
