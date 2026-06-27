@@ -6,6 +6,7 @@ import {
   Navigation, CheckCircle2, Camera, Loader2, Image as ImageIcon
 } from 'lucide-react';
 import { ActionSlider } from '@/modules/DeliveryV2/components/ui/ActionSlider';
+import { OrderDetailsDropdown } from '@/modules/DeliveryV2/components/ui/OrderDetailsDropdown';
 import { uploadAPI } from '@food/api';
 import { toast } from 'sonner';
 import { openCamera } from "@food/utils/imageUploadUtils";
@@ -180,6 +181,8 @@ export const PickupActionModal = ({
             </button>
           </div>
         </div>
+
+        <OrderDetailsDropdown order={order} />
 
         <div className="mb-4 space-y-2">
           {pickupStops.map((pickup, index) => {

@@ -14,6 +14,7 @@ import {
 import { deliveryAPI } from "@food/api";
 import { toast } from "sonner";
 import { ActionSlider } from "@/modules/DeliveryV2/components/ui/ActionSlider";
+import { OrderDetailsDropdown } from "@/modules/DeliveryV2/components/ui/OrderDetailsDropdown";
 
 const Backdrop = ({ onClose }) => (
   <motion.div
@@ -151,7 +152,7 @@ const OtpModal = ({ order, onVerified, onClose }) => {
             <X className="w-5 h-5" />
           </button>
         </div>
-
+        <OrderDetailsDropdown order={order} />
         <DeliveryInstructionsPanel note={order?.note} />
 
         <div className="flex justify-center gap-3 mb-8">
@@ -341,7 +342,7 @@ const PaymentModal = ({ order, otpString, onComplete, onClose }) => {
               <X className="w-5 h-5" />
             </button>
           </div>
-
+          <OrderDetailsDropdown order={order} />
           <DeliveryInstructionsPanel note={order?.note} />
 
           <div className="bg-amber-50 rounded-3xl p-6 border border-amber-100 mb-8">

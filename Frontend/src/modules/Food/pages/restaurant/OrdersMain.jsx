@@ -112,7 +112,9 @@ const transformOrderForList = (order) => ({
   photoUrl: getOrderPreviewItem(order.items)?.image || null,
   photoAlt: getOrderPreviewItem(order.items)?.name || "Order",
   paymentMethod: order.paymentMethod || order.payment?.method || null,
-  deliveryPartnerId: order.deliveryPartnerId || null,
+  deliveryPartnerId: order.deliveryPartner?._id || order.deliveryPartner?.id || (typeof order.deliveryPartnerId === 'object' ? order.deliveryPartnerId?._id : order.deliveryPartnerId) || (typeof order.dispatch?.deliveryPartnerId === 'object' ? order.dispatch?.deliveryPartnerId?._id : order.dispatch?.deliveryPartnerId) || (typeof order.assignmentInfo?.deliveryPartnerId === 'object' ? order.assignmentInfo?.deliveryPartnerId?._id : order.assignmentInfo?.deliveryPartnerId) || null,
+  deliveryPartnerName: order.deliveryPartner?.name || order.deliveryPartnerId?.name || order.dispatch?.deliveryPartnerId?.name || order.assignmentInfo?.deliveryPartnerId?.name || null,
+  deliveryPartnerPhone: order.deliveryPartner?.phone || order.deliveryPartnerId?.phone || order.dispatch?.deliveryPartnerId?.phone || order.assignmentInfo?.deliveryPartnerId?.phone || null,
   dispatchStatus: order.dispatch?.status || null,
   preparingTimestamp: order.tracking?.preparing?.timestamp
     ? new Date(order.tracking.preparing.timestamp)
@@ -2053,6 +2055,13 @@ export default function OrdersMain() {
                         />
                       </div>
                     )}
+                  {selectedOrder.deliveryPartnerId && selectedOrder.deliveryPartnerName && (
+                    <div className="text-[11px] text-gray-700 font-medium text-right mt-1 bg-gray-50 px-2 py-1 rounded-lg border border-gray-100">
+                      <span className="font-bold text-gray-900">{selectedOrder.deliveryPartnerName}</span>
+                      <br/>
+                      {selectedOrder.deliveryPartnerPhone}
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -2134,6 +2143,8 @@ function OrderCard({
   photoUrl,
   photoAlt,
   deliveryPartnerId,
+  deliveryPartnerName,
+  deliveryPartnerPhone,
   dispatchStatus,
   onSelect,
   onCancel,
@@ -2175,6 +2186,8 @@ function OrderCard({
             itemsSummary,
             restaurantNote,
             paymentMethod,
+            deliveryPartnerName,
+            deliveryPartnerPhone,
           })
         }
         className="w-full text-left flex gap-3 items-stretch cursor-pointer">
@@ -2252,7 +2265,7 @@ function OrderCard({
                         deliveryPartnerId ? "bg-[#49AB14]" : "bg-orange-500"
                       }`}
                     />
-                    {deliveryPartnerId ? "Assigned" : "Not Assigned"}
+                    {deliveryPartnerId ? (deliveryPartnerName ? `${deliveryPartnerName} - ${deliveryPartnerPhone}` : "Assigned") : "Not Assigned"}
                   </span>
                   {dispatchStatus !== "accepted" && (
                     <ResendNotificationButton
@@ -2349,7 +2362,9 @@ function PreparingOrders({
   restaurantNote: order.restaurantNote || order.note || null,
               photoUrl: getOrderPreviewItem(order.items)?.image || null,
               photoAlt: getOrderPreviewItem(order.items)?.name || "Order",
-              deliveryPartnerId: order.deliveryPartnerId || null,
+              deliveryPartnerId: order.deliveryPartner?._id || order.deliveryPartner?.id || (typeof order.deliveryPartnerId === 'object' ? order.deliveryPartnerId?._id : order.deliveryPartnerId) || (typeof order.dispatch?.deliveryPartnerId === 'object' ? order.dispatch?.deliveryPartnerId?._id : order.dispatch?.deliveryPartnerId) || (typeof order.assignmentInfo?.deliveryPartnerId === 'object' ? order.assignmentInfo?.deliveryPartnerId?._id : order.assignmentInfo?.deliveryPartnerId) || null,
+              deliveryPartnerName: order.deliveryPartner?.name || order.deliveryPartnerId?.name || order.dispatch?.deliveryPartnerId?.name || order.assignmentInfo?.deliveryPartnerId?.name || null,
+              deliveryPartnerPhone: order.deliveryPartner?.phone || order.deliveryPartnerId?.phone || order.dispatch?.deliveryPartnerId?.phone || order.assignmentInfo?.deliveryPartnerId?.phone || null,
               dispatchStatus: order.dispatch?.status || null,
               paymentMethod:
                 order.paymentMethod || order.payment?.method || null,
@@ -2661,7 +2676,9 @@ function ReadyOrders({ onSelectOrder, refreshToken = 0, searchTerm = "" }) {
             photoUrl: getOrderPreviewItem(order.items)?.image || null,
             photoAlt: getOrderPreviewItem(order.items)?.name || "Order",
             paymentMethod: order.paymentMethod || order.payment?.method || null,
-            deliveryPartnerId: order.deliveryPartnerId || null,
+            deliveryPartnerId: order.deliveryPartner?._id || order.deliveryPartner?.id || (typeof order.deliveryPartnerId === 'object' ? order.deliveryPartnerId?._id : order.deliveryPartnerId) || (typeof order.dispatch?.deliveryPartnerId === 'object' ? order.dispatch?.deliveryPartnerId?._id : order.dispatch?.deliveryPartnerId) || (typeof order.assignmentInfo?.deliveryPartnerId === 'object' ? order.assignmentInfo?.deliveryPartnerId?._id : order.assignmentInfo?.deliveryPartnerId) || null,
+            deliveryPartnerName: order.deliveryPartner?.name || order.deliveryPartnerId?.name || order.dispatch?.deliveryPartnerId?.name || order.assignmentInfo?.deliveryPartnerId?.name || null,
+            deliveryPartnerPhone: order.deliveryPartner?.phone || order.deliveryPartnerId?.phone || order.dispatch?.deliveryPartnerId?.phone || order.assignmentInfo?.deliveryPartnerId?.phone || null,
             dispatchStatus: order.dispatch?.status || null,
           }));
 
@@ -2782,7 +2799,9 @@ const OutForDeliveryOrders = ({ onSelectOrder, refreshToken = 0 , searchTerm = "
             photoUrl: getOrderPreviewItem(order.items)?.image || null,
             photoAlt: getOrderPreviewItem(order.items)?.name || "Order",
             paymentMethod: order.paymentMethod || order.payment?.method || null,
-            deliveryPartnerId: order.deliveryPartnerId || null,
+            deliveryPartnerId: order.deliveryPartner?._id || order.deliveryPartner?.id || (typeof order.deliveryPartnerId === 'object' ? order.deliveryPartnerId?._id : order.deliveryPartnerId) || (typeof order.dispatch?.deliveryPartnerId === 'object' ? order.dispatch?.deliveryPartnerId?._id : order.dispatch?.deliveryPartnerId) || (typeof order.assignmentInfo?.deliveryPartnerId === 'object' ? order.assignmentInfo?.deliveryPartnerId?._id : order.assignmentInfo?.deliveryPartnerId) || null,
+            deliveryPartnerName: order.deliveryPartner?.name || order.deliveryPartnerId?.name || order.dispatch?.deliveryPartnerId?.name || order.assignmentInfo?.deliveryPartnerId?.name || null,
+            deliveryPartnerPhone: order.deliveryPartner?.phone || order.deliveryPartnerId?.phone || order.dispatch?.deliveryPartnerId?.phone || order.assignmentInfo?.deliveryPartnerId?.phone || null,
             dispatchStatus: order.dispatch?.status || null,
           }));
 
