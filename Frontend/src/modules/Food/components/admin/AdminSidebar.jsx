@@ -350,7 +350,6 @@ export default function AdminSidebar({ isOpen = false, onClose, onCollapseChange
     else if (isDudhwalaAdmin) menu = dudhwalaAdminSidebarMenu
 
     // Special case for the "Module Switcher" or shared links if they exist
-    if (isQuickAdmin && !enabledModules.quickCommerce) return []
     if (isDudhwalaAdmin && !enabledModules.dudhwala) return []
     if (!isQuickAdmin && !isCommonAdmin && !isDudhwalaAdmin && !enabledModules.food) return []
 
@@ -836,7 +835,7 @@ export default function AdminSidebar({ isOpen = false, onClose, onCollapseChange
                       ChotuuFood
                     </button>
                   )}
-                  {enabledModules.quickCommerce && (!adminInfo?.servicesAccess || adminInfo.role === 'ADMIN' || adminInfo.servicesAccess.includes('quickCommerce')) && (
+                  {(!adminInfo?.servicesAccess || adminInfo.role === 'ADMIN' || adminInfo.servicesAccess.includes('quickCommerce')) && (
                     <button
                       key="quick-module-btn"
                       type="button"
@@ -961,4 +960,5 @@ export default function AdminSidebar({ isOpen = false, onClose, onCollapseChange
     </>
   )
 }
+
 
