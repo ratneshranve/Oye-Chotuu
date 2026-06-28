@@ -798,6 +798,19 @@ function buildDeliveryOrderView(orderDoc, deliveryPartnerId, options = {}) {
     order.deliveryPartnerId = assignedLeg.deliveryPartnerId || order.deliveryPartnerId || null;
   }
 
+  const dropOtp = orderDoc?.deliveryVerification?.dropOtp || {};
+  const verifiedOtp = String(orderDoc?.deliveryOtp || "").trim();
+  if (dropOtp.required && dropOtp.verified && verifiedOtp) {
+    order.deliveryVerification = {
+      ...(order.deliveryVerification || {}),
+      dropOtp: {
+        ...(order.deliveryVerification?.dropOtp || {}),
+        required: true,
+        verified: true,
+        code: verifiedOtp,
+      },
+    };
+  }
   return order;
 }
 
@@ -3397,6 +3410,7 @@ export async function getCurrentTripDelivery(deliveryPartnerId) {
   })
     .populate({ path: "restaurantId", select: "restaurantName name phone location addressLine1 area city state profileImage" })
     .populate({ path: "userId", select: "name phone" })
+    .select("+deliveryOtp")
     .sort({ updatedAt: -1 })
     .lean();
 
@@ -3790,7 +3804,7 @@ export async function confirmReachedPickupDelivery(orderId, deliveryPartnerId) {
   const identity = buildOrderIdentityFilter(orderId);
   if (!identity) throw new ValidationError("Order id required");
 
-  const order = await FoodOrder.findOne(identity);
+  const order = await FoodOrder.findOne(identity).select("+deliveryOtp");
   if (!order) throw new NotFoundError("Order not found");
   if (!isOrderAssignedToDeliveryPartner(order, deliveryPartnerId)) {
     throw new ForbiddenError("Not your order");
@@ -3868,7 +3882,7 @@ export async function confirmPickupDelivery(
   billImageUrl,
 ) {
   const identity = buildOrderIdentityFilter(orderId);
-  const order = await FoodOrder.findOne(identity);
+  const order = await FoodOrder.findOne(identity).select("+deliveryOtp");
   if (!order) throw new NotFoundError("Order not found");
   if (!isOrderAssignedToDeliveryPartner(order, deliveryPartnerId)) {
     throw new ForbiddenError("Not your order");
@@ -4000,8 +4014,6 @@ export async function verifyDropOtpDelivery(orderId, deliveryPartnerId, otp) {
   if (!order.deliveryVerification) order.deliveryVerification = { dropOtp: {} };
   order.deliveryVerification.dropOtp.verified = true;
   order.markModified('deliveryVerification.dropOtp.verified');
-  
-  order.deliveryOtp = "";
   await order.save();
 
     emitOrderUpdate(order, deliveryPartnerId);
@@ -4015,7 +4027,7 @@ export async function verifyDropOtpDelivery(orderId, deliveryPartnerId, otp) {
 
 export async function completeDelivery(orderId, deliveryPartnerId, body = {}) {
   const identity = buildOrderIdentityFilter(orderId);
-  const order = await FoodOrder.findOne(identity);
+  const order = await FoodOrder.findOne(identity).select("+deliveryOtp");
   if (!order) throw new NotFoundError("Order not found");
   if (!isOrderAssignedToDeliveryPartner(order, deliveryPartnerId)) {
     throw new ForbiddenError("Not your order");
@@ -4031,9 +4043,24 @@ export async function completeDelivery(orderId, deliveryPartnerId, body = {}) {
   }
 
   if (
+    otp &&
     order.deliveryVerification?.dropOtp?.required &&
-    !order.deliveryVerification?.dropOtp?.verified && 
-    !otp // Only throw if OTP is not provided here as fallback
+    !order.deliveryVerification?.dropOtp?.verified
+  ) {
+    const expected = String(order.deliveryOtp || "").trim();
+    if (expected && expected === String(otp).trim()) {
+      if (!order.deliveryVerification) order.deliveryVerification = { dropOtp: {} };
+      order.deliveryVerification.dropOtp.verified = true;
+      order.markModified("deliveryVerification.dropOtp.verified");
+    } else {
+      throw new ValidationError("Invalid handover OTP provided.");
+    }
+  }
+
+  if (
+    order.deliveryVerification?.dropOtp?.required &&
+    !order.deliveryVerification?.dropOtp?.verified &&
+    !otp
   ) {
     throw new ValidationError(
       "Customer handover OTP is required. Verify the OTP from the customer before completing delivery.",
@@ -4077,7 +4104,7 @@ export async function completeDelivery(orderId, deliveryPartnerId, body = {}) {
     to: "delivered",
     note: "Delivery completed successfully",
   });
-
+  order.deliveryOtp = "";
   await order.save();
   emitOrderUpdate(order, deliveryPartnerId);
   const ledgerKind =
@@ -4568,6 +4595,112 @@ export async function listOrdersAdmin(query) {
   return { ...paginated, orders: paginated.data };
 }
 
+export async function updateOrderStatusAdmin(orderId, adminId, body = {}) {
+  const identity = buildOrderIdentityFilter(orderId);
+  if (!identity) throw new ValidationError("Order id required");
+
+  const nextStatus = String(body?.orderStatus || body?.status || "").trim().toLowerCase();
+  const reason = String(body?.reason || "Admin status override").trim();
+  const allowedStatuses = new Set(["delivered", "cancelled_by_admin"]);
+  if (!allowedStatuses.has(nextStatus)) {
+    throw new ValidationError("Admin can only mark this order as delivered or cancelled by admin.");
+  }
+
+  const order = await FoodOrder.findOne(identity).select("+deliveryOtp");
+  if (!order) throw new NotFoundError("Order not found");
+
+  const from = String(order.orderStatus || "");
+  if (["delivered", "cancelled_by_user", "cancelled_by_restaurant", "cancelled_by_admin"].includes(from)) {
+    throw new ValidationError(`Order is already in terminal status '${from}'.`);
+  }
+
+  const now = new Date();
+  order.orderStatus = nextStatus;
+
+  if (nextStatus === "delivered") {
+    order.deliveryOtp = "";
+    order.payment = {
+      ...(order.payment?.toObject?.() || order.payment || {}),
+      status: "paid",
+    };
+    order.deliveryState = {
+      ...(order.deliveryState?.toObject?.() || order.deliveryState || {}),
+      currentPhase: "delivered",
+      status: "delivered",
+      deliveredAt: order.deliveryState?.deliveredAt || now,
+    };
+  } else {
+    order.deliveryOtp = "";
+    const isOnlinePaid = ["razorpay", "razorpay_qr", "wallet"].includes(String(order.payment?.method || "").toLowerCase()) &&
+      ["paid", "authorized", "captured", "settled"].includes(String(order.payment?.status || "").toLowerCase());
+    if (!isOnlinePaid && order.payment) {
+      order.payment.status = "cancelled";
+    }
+    order.deliveryState = {
+      ...(order.deliveryState?.toObject?.() || order.deliveryState || {}),
+      status: "cancelled_by_admin",
+    };
+  }
+
+  order.dispatch = {
+    ...(order.dispatch?.toObject?.() || order.dispatch || {}),
+    status: nextStatus === "delivered" ? "accepted" : "cancelled",
+  };
+
+  pushStatusHistory(order, {
+    byRole: "ADMIN",
+    byId: adminId && mongoose.Types.ObjectId.isValid(adminId) ? new mongoose.Types.ObjectId(adminId) : undefined,
+    from,
+    to: nextStatus,
+    note: reason,
+  });
+
+  await order.save();
+
+  try {
+    const ledgerKind = nextStatus === "delivered" ? "admin_marked_delivered" : "cancelled_by_admin";
+    await foodTransactionService.updateTransactionStatus(order._id, ledgerKind, {
+      status: nextStatus === "delivered" ? "captured" : "failed",
+      recordedByRole: "ADMIN",
+      recordedById: adminId,
+      note: reason,
+    });
+  } catch (err) {
+    logger.warn(`Admin order status transaction sync failed: ${err?.message || err}`);
+  }
+
+  try {
+    const io = getIO();
+    if (io) {
+      const payload = {
+        orderMongoId: order._id?.toString?.(),
+        orderId: order.orderId,
+        orderStatus: order.orderStatus,
+        deliveryState: order.deliveryState,
+        dispatch: order.dispatch,
+        title: "Order status updated by admin",
+        message: `Status changed to ${nextStatus.replace(/_/g, " ")}`,
+      };
+      if (order.userId) io.to(rooms.user(order.userId)).emit("order_status_update", payload);
+      if (order.restaurantId) io.to(rooms.restaurant(order.restaurantId)).emit("order_status_update", payload);
+      if (order.dispatch?.deliveryPartnerId) {
+        io.to(rooms.delivery(order.dispatch.deliveryPartnerId)).emit("order_status_update", payload);
+      }
+    }
+  } catch (err) {
+    logger.warn(`Admin order status socket emit failed: ${err?.message || err}`);
+  }
+
+  enqueueOrderEvent("admin_order_status_updated", {
+    orderMongoId: order._id?.toString?.(),
+    orderId: order.orderId,
+    adminId,
+    from,
+    to: nextStatus,
+  });
+
+  return sanitizeOrderForExternal(order);
+}
 export async function assignDeliveryPartnerAdmin(
   orderId,
   deliveryPartnerId,
@@ -4829,7 +4962,6 @@ export async function updateOrderInstructions(orderId, userId, instructions) {
 
   return sanitizeOrderForExternal(order);
 }
-
 
 
 

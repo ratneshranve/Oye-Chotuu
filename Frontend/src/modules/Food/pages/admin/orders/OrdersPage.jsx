@@ -759,6 +759,30 @@ export default function OrdersPage({ statusKey = "all" }) {
     }
   }
 
+  const handleAdminStatusChange = async (order, payload) => {
+    const orderIdToUse = order.id || order._id || order.orderId
+    if (!orderIdToUse) {
+      toast.error("Order ID not found")
+      return
+    }
+
+    try {
+      setProcessingActionOrderId(order.id || order.orderId)
+      const response = await adminAPI.updateOrderStatus(orderIdToUse, payload)
+      if (response.data?.success) {
+        toast.success(response.data?.message || "Order status updated")
+        setIsViewOrderOpen(false)
+        await fetchOrders({ silent: true, withRingCheck: false })
+      } else {
+        toast.error(response.data?.message || "Failed to update order status")
+      }
+    } catch (error) {
+      debugError("Error updating order status:", error)
+      toast.error(error.response?.data?.message || "Failed to update order status")
+    } finally {
+      setProcessingActionOrderId(null)
+    }
+  }
   const handleDeleteOrder = async (order) => {
     const orderIdToUse = order.id || order._id || order.orderId
     if (!orderIdToUse) {
@@ -974,6 +998,8 @@ export default function OrdersPage({ statusKey = "all" }) {
         isOpen={isViewOrderOpen}
         onOpenChange={setIsViewOrderOpen}
         order={selectedOrder}
+        onStatusChange={handleAdminStatusChange}
+        isUpdatingStatus={processingActionOrderId === (selectedOrder?.id || selectedOrder?.orderId)}
       />
       <RefundModal
         isOpen={refundModalOpen}
@@ -997,4 +1023,5 @@ export default function OrdersPage({ statusKey = "all" }) {
     </div>
   )
 }
+
 

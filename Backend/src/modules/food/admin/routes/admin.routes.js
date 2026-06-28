@@ -198,6 +198,7 @@ router.patch('/dining/restaurants/:restaurantId', diningAdminController.updateDi
 // ----- Orders -----
 router.get('/orders', orderController.listOrdersAdminController);
 router.get('/orders/:orderId', orderController.getOrderByIdAdminController);
+router.patch('/orders/:orderId/status', orderController.updateOrderStatusAdminController);
 router.post('/orders/:orderId/refund', adminController.processRefund);
 router.delete('/orders/:orderId', orderController.deleteOrderAdminController);
 
@@ -209,3 +210,4 @@ router.get('/sidebar-badges', adminController.getSidebarBadges);
 router.get('/notifications/fssai-expired', adminController.getExpiredFssaiNotifications);
 
 export default router;
+

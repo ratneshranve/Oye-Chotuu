@@ -605,7 +605,6 @@ export async function confirmReachedPickupDelivery(orderId, deliveryPartnerId) {
     note: 'Reached pickup location',
   });
   await order.save();
-
   emitOrderUpdate(order, deliveryPartnerId);
 
   try {
@@ -832,7 +831,6 @@ export async function verifyDropOtpDelivery(orderId, deliveryPartnerId, otp) {
   order.deliveryVerification.dropOtp.verified = true;
   order.markModified('deliveryVerification.dropOtp.verified');
   await order.save();
-
   emitOrderUpdate(order, deliveryPartnerId);
   enqueueOrderEvent('drop_otp_verified', {
     orderMongoId: order._id?.toString?.(),
@@ -919,6 +917,7 @@ export async function completeDelivery(orderId, deliveryPartnerId, body = {}) {
     note: 'Delivery completed successfully',
   });
 
+  order.deliveryOtp = '';
   await order.save();
 
   const ledgerKind =
@@ -1010,3 +1009,4 @@ export async function updateOrderStatusDelivery(orderId, deliveryPartnerId, orde
   });
   return order.toObject();
 }
+

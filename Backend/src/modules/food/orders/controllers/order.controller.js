@@ -344,6 +344,16 @@ export async function getOrderByIdAdminController(req, res, next) {
     }
 }
 
+export async function updateOrderStatusAdminController(req, res, next) {
+    try {
+        const adminId = req.user?.userId;
+        const orderId = req.params.orderId;
+        const order = await orderService.updateOrderStatusAdmin(orderId, adminId, req.body || {});
+        return sendResponse(res, 200, 'Order status updated', { order });
+    } catch (err) {
+        next(err);
+    }
+}
 export async function assignDeliveryPartnerController(req, res, next) {
     try {
         const adminId = req.user?.userId;
@@ -377,4 +387,5 @@ export async function resendDeliveryNotificationRestaurantController(req, res, n
         next(err);
     }
 }
+
 

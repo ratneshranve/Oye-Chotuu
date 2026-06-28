@@ -627,6 +627,10 @@ export const adminAPI = {
     apiClient.get(`/food/admin/orders/${String(orderId)}`, {
       contextModule: "admin",
     }),
+  updateOrderStatus: (orderId, body = {}) =>
+    apiClient.patch(`/food/admin/orders/${String(orderId)}/status`, body ?? {}, {
+      contextModule: "admin",
+    }),
   processRefund: (orderId, body = {}) =>
     apiClient.post(`/food/admin/orders/${String(orderId)}/refund`, body ?? {}, {
       contextModule: "admin",
@@ -2904,3 +2908,4 @@ export const customCakeAPI = {
   quoteRequest: (id, body) => apiClient.patch(`/food/restaurant/custom-cakes/requests/${id}/quote`, body, { contextModule: "restaurant" }),
   rejectRequest: (id, body) => apiClient.patch(`/food/restaurant/custom-cakes/requests/${id}/reject`, body, { contextModule: "restaurant" }),
 };
+

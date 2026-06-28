@@ -1,4 +1,5 @@
-import { Eye, MapPin, Package, User, Phone, Mail, Calendar, Clock, Truck, CreditCard, X, Receipt, CheckCircle2 } from "lucide-react"
+import { useEffect, useState } from "react"
+import { Eye, MapPin, Package, User, Phone, Mail, Calendar, Clock, Truck, CreditCard, X, Receipt, CheckCircle2, Loader2 } from "lucide-react"
 import {
   Dialog,
   DialogContent,
@@ -36,10 +37,38 @@ const getPaymentStatusColor = (paymentStatus) => {
   if (paymentStatus === "Unpaid" || paymentStatus === "Failed") return "text-red-600"
   return "text-slate-600"
 }
+const ADMIN_STATUS_OPTIONS = [
+  { value: "delivered", label: "Delivered" },
+  { value: "cancelled_by_admin", label: "Cancel Order" },
+]
 
-export default function ViewOrderDialog({ isOpen, onOpenChange, order }) {
+const getOrderKey = (order) => order?._id || order?.id || order?.orderMongoId || order?.orderId
+
+const canAdminChangeStatus = (orderStatus) => {
+  const status = String(orderStatus || "").trim().toLowerCase()
+  return !["delivered", "canceled", "cancelled", "cancelled by admin", "cancelled by restaurant", "cancelled by user", "payment failed", "refunded"].includes(status)
+}
+
+export default function ViewOrderDialog({ isOpen, onOpenChange, order, onStatusChange, isUpdatingStatus }) {
+  const [statusValue, setStatusValue] = useState("")
+  const [statusReason, setStatusReason] = useState("")
+  const orderKey = getOrderKey(order)
+  const canChangeStatus = canAdminChangeStatus(order?.orderStatus)
+
+  useEffect(() => {
+    setStatusValue("")
+    setStatusReason("")
+  }, [orderKey])
+
   if (!order) return null
 
+  const handleStatusSubmit = () => {
+    if (!statusValue || !onStatusChange || !orderKey) return
+    onStatusChange(order, {
+      orderStatus: statusValue,
+      reason: statusReason || "Admin status override",
+    })
+  }
   // Debug: Log order data to check billImageUrl
   if (order.billImageUrl) {
     debugLog('?? Bill Image URL found:', order.billImageUrl)
@@ -192,6 +221,40 @@ export default function ViewOrderDialog({ isOpen, onOpenChange, order }) {
                       }).toUpperCase()}
                     </p>
                   )}
+                </div>
+              )}
+              {canChangeStatus && onStatusChange && (
+                <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 space-y-3">
+                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Change Status</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-2">
+                    <select
+                      value={statusValue}
+                      onChange={(event) => setStatusValue(event.target.value)}
+                      disabled={isUpdatingStatus}
+                      className="h-10 rounded-md border border-slate-200 bg-white px-3 text-sm font-medium text-slate-800 outline-none focus:border-orange-400 disabled:opacity-60"
+                    >
+                      <option value="">Select status</option>
+                      {ADMIN_STATUS_OPTIONS.map((option) => (
+                        <option key={option.value} value={option.value}>{option.label}</option>
+                      ))}
+                    </select>
+                    <button
+                      type="button"
+                      onClick={handleStatusSubmit}
+                      disabled={!statusValue || isUpdatingStatus}
+                      className="h-10 inline-flex items-center justify-center gap-2 rounded-md bg-orange-600 px-4 text-sm font-bold text-white hover:bg-orange-700 disabled:opacity-60 disabled:cursor-not-allowed"
+                    >
+                      {isUpdatingStatus ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
+                      Update
+                    </button>
+                  </div>
+                  <input
+                    value={statusReason}
+                    onChange={(event) => setStatusReason(event.target.value)}
+                    disabled={isUpdatingStatus}
+                    placeholder="Reason"
+                    className="h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-800 outline-none focus:border-orange-400 disabled:opacity-60"
+                  />
                 </div>
               )}
               {(order.paymentStatus || order.paymentCollectionStatus != null) && (
@@ -459,5 +522,9 @@ export default function ViewOrderDialog({ isOpen, onOpenChange, order }) {
     </Dialog>
   )
 }
+
+
+
+
 
 
