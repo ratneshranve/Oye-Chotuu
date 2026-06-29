@@ -203,6 +203,7 @@ export function buildDeliverySocketPayload(orderDoc, restaurantDoc = null) {
   ]
     .map((v) => String(v || '').trim())
     .filter(Boolean);
+  const customerInstructions = String(deliveryAddress.instructions || order?.instructions || '').trim();
 
   return {
     orderMongoId:
@@ -250,6 +251,8 @@ export function buildDeliverySocketPayload(orderDoc, restaurantDoc = null) {
     },
     deliveryAddress: order?.deliveryAddress,
     customerAddress: customerAddressParts.length ? customerAddressParts.join(', ') : "",
+    customerInstructions,
+    instructions: customerInstructions,
     customerName: order?.customerName || order?.deliveryAddress?.fullName || order?.deliveryAddress?.name || order?.userId?.name || "",
     customerPhone: order?.customerPhone || order?.deliveryAddress?.phone || order?.userId?.phone || "",
     userName: order?.customerName || order?.deliveryAddress?.fullName || order?.deliveryAddress?.name || order?.userId?.name || "",

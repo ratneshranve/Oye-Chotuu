@@ -78,6 +78,7 @@ export const OrderDetailsDropdown = ({ order }) => {
   );
 
   const customerInstructions = firstText(
+    order.customerInstructions,
     order.deliveryAddress?.instructions,
     order.deliveryLocation?.instructions,
     order.address?.instructions,

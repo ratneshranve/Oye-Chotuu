@@ -23,6 +23,7 @@ const addressSchema = z.object({
     fullName: z.string().optional(),
     street: z.string().min(1, 'Street required'),
     additionalDetails: z.string().optional(),
+    instructions: z.string().optional(),
     city: z.string().min(1, 'City required'),
     state: z.string().min(1, 'State required'),
     zipCode: z.string().optional(),

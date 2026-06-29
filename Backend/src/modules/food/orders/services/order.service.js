@@ -848,7 +848,23 @@ function buildDeliverySocketPayload(orderDoc, restaurantDoc = null) {
   const order = orderDoc?.toObject ? orderDoc.toObject() : orderDoc || {};
   const restaurant = restaurantDoc || order?.restaurantId || null;
   const restaurantLocation = restaurant?.location || {};
+  const deliveryAddress = order?.deliveryAddress || {};
   const pickupPoints = Array.isArray(order?.pickupPoints) ? order.pickupPoints : [];
+
+  const customerAddressParts = [
+    deliveryAddress.formattedAddress,
+    deliveryAddress.address,
+    deliveryAddress.addressLine1,
+    deliveryAddress.street,
+    deliveryAddress.additionalDetails,
+    deliveryAddress.area,
+    deliveryAddress.city,
+    deliveryAddress.state,
+    deliveryAddress.zipCode || deliveryAddress.postalCode || deliveryAddress.pincode,
+  ]
+    .map((value) => String(value || '').trim())
+    .filter(Boolean);
+  const customerInstructions = String(deliveryAddress.instructions || order?.instructions || '').trim();
 
   return {
     orderMongoId:
@@ -894,7 +910,9 @@ function buildDeliverySocketPayload(orderDoc, restaurantDoc = null) {
       state: restaurantLocation?.state || restaurant?.state || "",
     },
     deliveryAddress: order?.deliveryAddress,
-    customerAddress: order?.deliveryAddress?.formattedAddress || order?.deliveryAddress?.addressLine1 || "",
+    customerAddress: customerAddressParts.length ? customerAddressParts.join(', ') : "",
+    customerInstructions,
+    instructions: customerInstructions,
     customerName: order?.userId?.name || order?.customerName || "",
     customerPhone: order?.userId?.phone || order?.deliveryAddress?.phone || "",
     userName: order?.userId?.name || order?.customerName || "",
