@@ -85,6 +85,10 @@ const RUPEE_SYMBOL = "\u20B9"
 const CART_RECIPIENT_DETAILS_STORAGE_KEY = "food-cart-recipient-details-v1"
 const CART_ORDER_NOTE_STORAGE_KEY = "food-cart-order-note-v1"
 const CART_RESTAURANT_NOTE_STORAGE_KEY = "food-cart-restaurant-note-v1"
+const optionalString = (value) => {
+  const normalized = String(value || "").trim()
+  return normalized || undefined
+}
 const mapOrderItem = (item) => ({
   itemId: item.itemId || item.id,
   name: item.name,
@@ -100,8 +104,8 @@ const mapOrderItem = (item) => ({
       ? item.quickStoreName || item.storeName || "Quick Commerce"
       : item.restaurant || item.restaurantName || "Restaurant"),
   price: item.price,
-  variantId: item.variantId || undefined,
-  variantName: item.variantName || undefined,
+  variantId: optionalString(item.variantId),
+  variantName: optionalString(item.variantName),
   variantPrice: item.variantPrice || item.price,
   quantity: item.quantity || 1,
   image: sanitizeOrderImage(item.image || item.imageUrl || ""),
@@ -109,7 +113,7 @@ const mapOrderItem = (item) => ({
   notes: sanitizeOrderNotes(item.notes || ""),
   preparationTime: item.preparationTime,
   isCustomCake: item.isCustomCake || undefined,
-  customCakeRequestId: item.customCakeRequestId || undefined,
+  customCakeRequestId: optionalString(item.customCakeRequestId),
 })
 
 const normalizeOrderAddress = (address, { recipientName = "", recipientPhone = "" } = {}) => {
@@ -1394,7 +1398,7 @@ export default function Cart() {
 
         const response = await orderAPI.calculateOrder({
           items,
-          restaurantId: restaurantData?.restaurantId || restaurantData?._id || restaurantId || null,
+          restaurantId: optionalString(restaurantData?.restaurantId || restaurantData?._id || restaurantId),
           address: defaultAddress,
           couponCode: coupon.code
         })
@@ -1444,7 +1448,7 @@ export default function Cart() {
 
       const response = await orderAPI.calculateOrder({
         items,
-        restaurantId: restaurantData?.restaurantId || restaurantData?._id || restaurantId || null,
+        restaurantId: optionalString(restaurantData?.restaurantId || restaurantData?._id || restaurantId),
         address: defaultAddress,
         couponCode: inputCode
       })
@@ -1492,9 +1496,8 @@ export default function Cart() {
 
         const response = await orderAPI.calculateOrder({
           items,
-          restaurantId: restaurantData?.restaurantId || restaurantData?._id || restaurantId || null,
+          restaurantId: optionalString(restaurantData?.restaurantId || restaurantData?._id || restaurantId),
           address: defaultAddress,
-          couponCode: null
         })
 
         if (response?.data?.success && response?.data?.data?.pricing) {
