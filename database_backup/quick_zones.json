@@ -1,0 +1,110 @@
+[
+  {
+    "_id": "69cf553c54ca6245f7e5c678",
+    "__v": 1,
+    "coordinates": [
+      {
+        "latitude": 22.819541,
+        "longitude": 75.847091
+      },
+      {
+        "latitude": 22.678964,
+        "longitude": 75.789412
+      },
+      {
+        "latitude": 22.632073425800684,
+        "longitude": 75.83919451318359
+      },
+      {
+        "latitude": 22.645065108242306,
+        "longitude": 75.86048003173829
+      },
+      {
+        "latitude": 22.632707294350723,
+        "longitude": 75.89515576757812
+      },
+      {
+        "latitude": 22.663758,
+        "longitude": 75.909575
+      },
+      {
+        "latitude": 22.64855,
+        "longitude": 75.928115
+      },
+      {
+        "latitude": 22.704304,
+        "longitude": 75.975493
+      },
+      {
+        "latitude": 22.728372,
+        "longitude": 75.939101
+      },
+      {
+        "latitude": 22.789158,
+        "longitude": 75.971373
+      },
+      {
+        "latitude": 22.815743,
+        "longitude": 75.921248
+      }
+    ],
+    "country": "India",
+    "createdAt": "2026-04-03T05:50:52.940Z",
+    "isActive": true,
+    "name": "indore",
+    "serviceLocation": "indore",
+    "unit": "kilometer",
+    "updatedAt": "2026-06-12T05:59:17.102Z",
+    "zoneName": "indore"
+  },
+  {
+    "_id": "6a3c09fe28f467bbdd29b8b6",
+    "name": "kishtwar",
+    "zoneName": "kishtwar",
+    "country": "India",
+    "serviceLocation": "kishtwar",
+    "unit": "kilometer",
+    "coordinates": [
+      {
+        "latitude": 33.2934080801752,
+        "longitude": 75.7569442535884
+      },
+      {
+        "latitude": 33.29939844358848,
+        "longitude": 75.78372342839309
+      },
+      {
+        "latitude": 33.30833067999778,
+        "longitude": 75.78106267705031
+      },
+      {
+        "latitude": 33.312060615800796,
+        "longitude": 75.78286512150832
+      },
+      {
+        "latitude": 33.314355881599184,
+        "longitude": 75.7826076294429
+      },
+      {
+        "latitude": 33.33009834141979,
+        "longitude": 75.77020509495803
+      },
+      {
+        "latitude": 33.3534019996549,
+        "longitude": 75.76767308964797
+      },
+      {
+        "latitude": 33.35020259747055,
+        "longitude": 75.75222356572219
+      },
+      {
+        "latitude": 33.33937573707493,
+        "longitude": 75.7444988037593
+      }
+    ],
+    "isActive": true,
+    "createdAt": "2026-06-24T16:46:54.443Z",
+    "updatedAt": "2026-06-24T16:46:54.443Z",
+    "__v": 0
+  }
+]

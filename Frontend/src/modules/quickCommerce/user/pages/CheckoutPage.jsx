@@ -667,6 +667,7 @@ const CheckoutPage = () => {
     { value: 30, label: "₹30" },
   ];
   const [customTip, setCustomTip] = useState("");
+  const [addressInstructions, setAddressInstructions] = useState("");
 
   const deliveryFee = pricingPreview?.deliveryFeeCharged || 0;
   const handlingFee = pricingPreview?.handlingFeeCharged || 0;
@@ -1648,7 +1649,10 @@ const CheckoutPage = () => {
 
       const orderData = {
         items: getCheckoutCartItemsForSync(),
-        address: buildAddressForOrder(),
+        address: {
+          ...buildAddressForOrder(),
+          instructions: addressInstructions
+        },
         paymentMode: selectedPayment === "online" ? "ONLINE" : "COD",
         discountTotal: discountAmount,
         couponCode: selectedCoupon?.code || null,
@@ -2153,6 +2157,21 @@ const CheckoutPage = () => {
                     We&apos;ll deliver to the address you&apos;ve entered above.
                   </p>
                 </div>
+              </motion.div>
+
+              {/* Delivery Instructions Section */}
+              <motion.div className="mt-4 pt-4 border-t border-slate-100 dark:border-neutral-800">
+                <label htmlFor="address-instructions" className="block text-[13px] font-bold text-gray-800 dark:text-gray-200 mb-2">
+                  Address Details (Optional)
+                </label>
+                <textarea
+                  id="address-instructions"
+                  rows={2}
+                  value={addressInstructions}
+                  onChange={(e) => setAddressInstructions(e.target.value)}
+                  placeholder="e.g., 5th floor, B block, Corporate house. Helps delivery boy find your location easily."
+                  className="w-full px-3 py-2 text-sm text-gray-700 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#0c831f] focus:border-transparent dark:bg-neutral-800 dark:border-neutral-700 dark:text-gray-300 resize-none transition-all"
+                />
               </motion.div>
             </motion.div>
 

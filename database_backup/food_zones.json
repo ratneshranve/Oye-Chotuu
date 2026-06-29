@@ -1,0 +1,130 @@
+[
+  {
+    "_id": "69b85a63fb04545984776cdb",
+    "name": "Indore",
+    "zoneName": "Indore",
+    "country": "India",
+    "serviceLocation": "Indore",
+    "unit": "kilometer",
+    "coordinates": [
+      {
+        "latitude": 22.809832,
+        "longitude": 75.853205
+      },
+      {
+        "latitude": 22.71739,
+        "longitude": 75.749522
+      },
+      {
+        "latitude": 22.604603,
+        "longitude": 75.79484
+      },
+      {
+        "latitude": 22.723724,
+        "longitude": 76.047526
+      },
+      {
+        "latitude": 22.828186,
+        "longitude": 75.888224
+      }
+    ],
+    "isActive": true,
+    "createdAt": "2026-03-16T19:30:43.768Z",
+    "updatedAt": "2026-03-17T17:03:27.800Z",
+    "__v": 1
+  },
+  {
+    "_id": "6a363444b49d18854bcb06e6",
+    "name": "Kishtwar",
+    "zoneName": "Kishtwar",
+    "country": "India",
+    "serviceLocation": "Kishtwar",
+    "unit": "kilometer",
+    "coordinates": [
+      {
+        "latitude": 33.326848983329334,
+        "longitude": 75.74600600489536
+      },
+      {
+        "latitude": 33.32666969356641,
+        "longitude": 75.74613475092808
+      },
+      {
+        "latitude": 33.32649040343453,
+        "longitude": 75.74613475092808
+      },
+      {
+        "latitude": 33.32620353845629,
+        "longitude": 75.7462634969608
+      },
+      {
+        "latitude": 33.315983357533206,
+        "longitude": 75.749181740369
+      },
+      {
+        "latitude": 33.297117701434786,
+        "longitude": 75.76102637537876
+      },
+      {
+        "latitude": 33.29636442511939,
+        "longitude": 75.76669120081822
+      },
+      {
+        "latitude": 33.30059703619248,
+        "longitude": 75.78278445490757
+      },
+      {
+        "latitude": 33.31228945346718,
+        "longitude": 75.78866385706822
+      },
+      {
+        "latitude": 33.32304796136657,
+        "longitude": 75.78497313746372
+      },
+      {
+        "latitude": 33.330219562210814,
+        "longitude": 75.77231311091343
+      },
+      {
+        "latitude": 33.33430711057593,
+        "longitude": 75.7740726400272
+      },
+      {
+        "latitude": 33.33886055702973,
+        "longitude": 75.77278517970005
+      },
+      {
+        "latitude": 33.33889640999426,
+        "longitude": 75.77252768763462
+      },
+      {
+        "latitude": 33.34377227567418,
+        "longitude": 75.76845072993198
+      },
+      {
+        "latitude": 33.34882711288125,
+        "longitude": 75.76772116907993
+      },
+      {
+        "latitude": 33.351193106061395,
+        "longitude": 75.7669057775394
+      },
+      {
+        "latitude": 33.35033275234469,
+        "longitude": 75.76553248652378
+      },
+      {
+        "latitude": 33.34517045149423,
+        "longitude": 75.74420356043736
+      },
+      {
+        "latitude": 33.33950590813326,
+        "longitude": 75.74214362391392
+      }
+    ],
+    "isActive": true,
+    "createdAt": "2026-06-20T06:33:40.448Z",
+    "updatedAt": "2026-06-28T09:37:14.633Z",
+    "__v": 3
+  }
+]

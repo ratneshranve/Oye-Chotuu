@@ -1,0 +1,16 @@
+[
+  {
+    "_id": "6a3a85844e9b1b6a7951fde6",
+    "deliveryPartnerId": "6a2d0a80cabfce527e985073",
+    "balance": -140,
+    "lockedAmount": 0,
+    "cashInHand": 0,
+    "totalEarnings": 0,
+    "totalBonus": 0,
+    "totalSettled": 0,
+    "totalDeliveries": 0,
+    "createdAt": "2026-06-23T13:09:24.736Z",
+    "updatedAt": "2026-06-23T13:09:24.767Z",
+    "__v": 0
+  }
+]

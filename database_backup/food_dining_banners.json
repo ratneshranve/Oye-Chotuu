@@ -1,0 +1,25 @@
+[
+  {
+    "_id": "69ba63097006689630e9a659",
+    "imageUrl": "https://res.cloudinary.com/appzeto-master-product/image/upload/v1773822739/food/dining-banners/a79kbqhelojzmon6awzb.png",
+    "publicId": "food/dining-banners/a79kbqhelojzmon6awzb",
+    "ctaText": "50% OFF",
+    "sortOrder": 0,
+    "isActive": true,
+    "createdAt": "2026-03-18T08:32:09.279Z",
+    "updatedAt": "2026-03-18T08:32:09.279Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a27fbbcb3c7519e93a13cd2",
+    "imageUrl": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1781005244/food/dining-banners/reyarvslxurjfxcq3d3y.webp",
+    "publicId": "food/dining-banners/reyarvslxurjfxcq3d3y",
+    "title": "tst",
+    "ctaText": "30 % off",
+    "sortOrder": 0,
+    "isActive": true,
+    "createdAt": "2026-06-09T11:40:44.914Z",
+    "updatedAt": "2026-06-09T11:40:44.914Z",
+    "__v": 0
+  }
+]

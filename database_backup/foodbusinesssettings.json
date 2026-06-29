@@ -1,0 +1,27 @@
+[
+  {
+    "_id": "69ede086a09f6e78251e209c",
+    "companyName": "Appzeto",
+    "email": "admin@appzeto.com",
+    "phone": {
+      "countryCode": "+91",
+      "number": ""
+    },
+    "address": "",
+    "state": "",
+    "pincode": "",
+    "region": "India",
+    "logo": {
+      "url": "",
+      "publicId": ""
+    },
+    "favicon": {
+      "url": "",
+      "publicId": ""
+    },
+    "themeColor": "#0a0a0a",
+    "createdAt": "2026-04-26T09:53:10.804Z",
+    "updatedAt": "2026-04-26T09:53:10.804Z",
+    "__v": 0
+  }
+]

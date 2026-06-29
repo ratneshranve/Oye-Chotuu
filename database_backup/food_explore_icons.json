@@ -1,0 +1,54 @@
+[
+  {
+    "_id": "69b84af7c175fffd9a67d8b5",
+    "label": "Offers",
+    "iconUrl": "https://res.cloudinary.com/appzeto-master-product/image/upload/f_webp,q_auto/v1777447797/food/explore-icons/b3vqtbacz2epklusk5yh.webp",
+    "publicId": "food/explore-icons/b3vqtbacz2epklusk5yh",
+    "linkType": "custom",
+    "targetPath": "/user/offers",
+    "sortOrder": 0,
+    "isActive": true,
+    "createdAt": "2026-03-16T18:24:55.446Z",
+    "updatedAt": "2026-04-29T07:29:57.808Z",
+    "__v": 0
+  },
+  {
+    "_id": "69b84d5864596f91b05a051a",
+    "label": "Gourmet",
+    "iconUrl": "https://res.cloudinary.com/appzeto-master-product/image/upload/f_webp,q_auto/v1778061748/food/explore-icons/zbruitwve2h6vpullka3.webp",
+    "publicId": "food/explore-icons/zbruitwve2h6vpullka3",
+    "linkType": "custom",
+    "targetPath": "/user/gourmet",
+    "sortOrder": 1,
+    "isActive": true,
+    "createdAt": "2026-03-16T18:35:04.552Z",
+    "updatedAt": "2026-05-06T10:02:28.771Z",
+    "__v": 0
+  },
+  {
+    "_id": "69b84d6664596f91b05a051e",
+    "label": "Top 10",
+    "iconUrl": "https://res.cloudinary.com/appzeto-master-product/image/upload/v1773686118/food/explore-icons/loaq1lwichngjewdcpym.png",
+    "publicId": "food/explore-icons/loaq1lwichngjewdcpym",
+    "linkType": "custom",
+    "targetPath": "/user/top-10",
+    "sortOrder": 2,
+    "isActive": true,
+    "createdAt": "2026-03-16T18:35:18.514Z",
+    "updatedAt": "2026-03-16T18:35:18.514Z",
+    "__v": 0
+  },
+  {
+    "_id": "69b84d9a64596f91b05a0522",
+    "label": "Collections",
+    "iconUrl": "https://res.cloudinary.com/appzeto-master-product/image/upload/f_webp,q_auto/v1777447810/food/explore-icons/ledtxc0nfpeognhakw2w.webp",
+    "publicId": "food/explore-icons/ledtxc0nfpeognhakw2w",
+    "linkType": "custom",
+    "targetPath": "/user/profile/favorites",
+    "sortOrder": 3,
+    "isActive": true,
+    "createdAt": "2026-03-16T18:36:10.376Z",
+    "updatedAt": "2026-04-29T07:30:10.766Z",
+    "__v": 0
+  }
+]

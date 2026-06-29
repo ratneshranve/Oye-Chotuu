@@ -1133,7 +1133,7 @@ function CustomCakesList() {
   );
 }
 
-function AllOrders({ onSelectOrder, onCancel , searchTerm = "" }) {
+function AllOrders({ onSelectOrder, onCancel , searchTerm = "", refreshToken = 0 }) {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -1197,7 +1197,7 @@ function AllOrders({ onSelectOrder, onCancel , searchTerm = "" }) {
       if (intervalId) clearInterval(intervalId);
       if (countdownIntervalId) clearInterval(countdownIntervalId);
     };
-  }, []);
+  }, [refreshToken]);
 
   const handleMarkReady = async ({ orderId, mongoId }) => {
     const orderKey = mongoId || orderId;
@@ -1307,6 +1307,7 @@ function AllOrders({ onSelectOrder, onCancel , searchTerm = "" }) {
 }
 
 export default function OrdersMain() {
+  const { newOrder } = useRestaurantNotifications();
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const [activeFilter, setActiveFilter] = useState("all");
@@ -1337,6 +1338,13 @@ export default function OrdersMain() {
 
   const [ordersRefreshToken, setOrdersRefreshToken] = useState(0);
   const requestOrdersRefresh = () => setOrdersRefreshToken((prev) => prev + 1);
+
+  // Trigger global refresh when a new order comes in via socket
+  useEffect(() => {
+    if (newOrder) {
+      requestOrdersRefresh();
+    }
+  }, [newOrder]);
   const [restaurantStatus, setRestaurantStatus] = useState({
     isActive: null,
     rejectionReason: null,
@@ -1654,7 +1662,9 @@ export default function OrdersMain() {
           <AllOrders
             onSelectOrder={handleSelectOrder}
             onCancel={handleCancelClick}
-           searchTerm={searchTerm} />
+            searchTerm={searchTerm}
+            refreshToken={ordersRefreshToken}
+          />
         );
       case "preparing":
         return (

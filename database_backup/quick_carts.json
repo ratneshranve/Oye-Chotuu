@@ -1,0 +1,20 @@
+[
+  {
+    "_id": "6a3e77949d1773d30cf1c4dc",
+    "userId": "6a16cfd299f1e0145b99ba66",
+    "__v": 1,
+    "createdAt": "2026-06-26T12:59:00.508Z",
+    "items": [],
+    "sessionId": "user:6a16cfd299f1e0145b99ba66",
+    "updatedAt": "2026-06-26T12:59:34.158Z"
+  },
+  {
+    "_id": "6a3e855e9d1773d30cf1c52e",
+    "userId": "6a16d20099f1e0145b99bbcb",
+    "__v": 1,
+    "createdAt": "2026-06-26T13:57:50.693Z",
+    "items": [],
+    "sessionId": "user:6a16d20099f1e0145b99bbcb",
+    "updatedAt": "2026-06-26T13:58:00.574Z"
+  }
+]

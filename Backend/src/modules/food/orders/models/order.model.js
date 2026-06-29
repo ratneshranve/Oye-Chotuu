@@ -82,6 +82,7 @@ const deliveryAddressSchema = new mongoose.Schema(
         state: { type: String, required: true, trim: true },
         zipCode: { type: String, default: '', trim: true },
         phone: { type: String, default: '', trim: true },
+        instructions: { type: String, default: '', trim: true },
         location: {
             type: geoPointSchema,
             default: undefined

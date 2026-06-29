@@ -1,0 +1,295 @@
+[
+  {
+    "_id": "69e7272e8d6a82e0f8e128f9",
+    "__v": 12,
+    "categoryIds": [
+      "69ba676a7006689630e9a6e3",
+      "69ba7e87a81e2752cacc17b7",
+      "69cf3caaeca4233964277b3f"
+    ],
+    "createdAt": "2026-04-21T07:28:46.428Z",
+    "isEnabled": true,
+    "maxGuests": 8,
+    "pendingRequest": null,
+    "primaryCategoryId": "69cf3caaeca4233964277b3f",
+    "pureVegRestaurant": false,
+    "restaurantId": "69b8f156f1ecccbb2e25d030",
+    "updatedAt": "2026-05-01T18:45:27.934Z"
+  },
+  {
+    "_id": "69eb3c065b4f3138220575b3",
+    "__v": 0,
+    "categoryIds": [
+      "69ba7e87a81e2752cacc17b7",
+      "69cf3caaeca4233964277b3f"
+    ],
+    "createdAt": "2026-04-24T09:46:46.200Z",
+    "isEnabled": true,
+    "maxGuests": 6,
+    "pendingRequest": {
+      "categoryIds": [],
+      "primaryCategoryId": null,
+      "requestedAt": null,
+      "note": ""
+    },
+    "primaryCategoryId": "69cf3caaeca4233964277b3f",
+    "pureVegRestaurant": true,
+    "restaurantId": "69ba83b6f2a2e60a9ab85b93",
+    "updatedAt": "2026-04-24T09:46:46.200Z"
+  },
+  {
+    "_id": "69eb589ae7c9fcd148cf19b7",
+    "__v": 0,
+    "categoryIds": [
+      "69ba676a7006689630e9a6e3",
+      "69ba7e87a81e2752cacc17b7"
+    ],
+    "createdAt": "2026-04-24T11:48:42.061Z",
+    "isEnabled": true,
+    "maxGuests": 6,
+    "pendingRequest": {
+      "categoryIds": [],
+      "primaryCategoryId": null,
+      "requestedAt": null,
+      "note": ""
+    },
+    "primaryCategoryId": "69ba7e87a81e2752cacc17b7",
+    "pureVegRestaurant": false,
+    "restaurantId": "69ca0bac9efa09cab443667c",
+    "updatedAt": "2026-04-24T11:48:42.061Z"
+  },
+  {
+    "_id": "69eb58a6e7c9fcd148cf19c4",
+    "__v": 0,
+    "categoryIds": [
+      "69ba7e87a81e2752cacc17b7",
+      "69cf3caaeca4233964277b3f"
+    ],
+    "createdAt": "2026-04-24T11:48:54.478Z",
+    "isEnabled": true,
+    "maxGuests": 6,
+    "pendingRequest": {
+      "categoryIds": [],
+      "primaryCategoryId": null,
+      "requestedAt": null,
+      "note": ""
+    },
+    "primaryCategoryId": "69cf3caaeca4233964277b3f",
+    "pureVegRestaurant": true,
+    "restaurantId": "69ca73e2376311192367d217",
+    "updatedAt": "2026-04-24T11:48:54.478Z"
+  },
+  {
+    "_id": "69ecb09b888a299005416fa0",
+    "__v": 0,
+    "categoryIds": [
+      "69ba676a7006689630e9a6e3",
+      "69ba7e87a81e2752cacc17b7"
+    ],
+    "createdAt": "2026-04-25T12:16:27.664Z",
+    "isEnabled": true,
+    "maxGuests": 11,
+    "pendingRequest": {
+      "categoryIds": [],
+      "primaryCategoryId": null,
+      "requestedAt": null,
+      "note": ""
+    },
+    "primaryCategoryId": "69ba7e87a81e2752cacc17b7",
+    "pureVegRestaurant": true,
+    "restaurantId": "69ecad0a7fe94f851c59ea5b",
+    "updatedAt": "2026-04-25T12:16:27.664Z"
+  },
+  {
+    "_id": "69ecb0a7888a299005416fb1",
+    "__v": 0,
+    "categoryIds": [
+      "69ba7e87a81e2752cacc17b7",
+      "69cf3caaeca4233964277b3f"
+    ],
+    "createdAt": "2026-04-25T12:16:39.520Z",
+    "isEnabled": true,
+    "maxGuests": 18,
+    "pendingRequest": {
+      "categoryIds": [],
+      "primaryCategoryId": null,
+      "requestedAt": null,
+      "note": ""
+    },
+    "primaryCategoryId": "69cf3caaeca4233964277b3f",
+    "pureVegRestaurant": false,
+    "restaurantId": "69ecad0a7fe94f851c59ea56",
+    "updatedAt": "2026-04-25T12:16:39.520Z"
+  },
+  {
+    "_id": "69ecb0c1888a299005416fd2",
+    "__v": 0,
+    "categoryIds": [
+      "69ba676a7006689630e9a6e3",
+      "69cf3caaeca4233964277b3f"
+    ],
+    "createdAt": "2026-04-25T12:17:05.371Z",
+    "isEnabled": true,
+    "maxGuests": 18,
+    "pendingRequest": {
+      "categoryIds": [],
+      "primaryCategoryId": null,
+      "requestedAt": null,
+      "note": ""
+    },
+    "primaryCategoryId": "69cf3caaeca4233964277b3f",
+    "pureVegRestaurant": true,
+    "restaurantId": "69ecad097fe94f851c59ea36",
+    "updatedAt": "2026-04-25T12:17:05.371Z"
+  },
+  {
+    "_id": "69ecb18c888a29900541705e",
+    "__v": 0,
+    "categoryIds": [
+      "69ba676a7006689630e9a6e3",
+      "69ba7e87a81e2752cacc17b7",
+      "69cf3caaeca4233964277b3f"
+    ],
+    "createdAt": "2026-04-25T12:20:28.760Z",
+    "isEnabled": true,
+    "maxGuests": 12,
+    "pendingRequest": {
+      "categoryIds": [],
+      "primaryCategoryId": null,
+      "requestedAt": null,
+      "note": ""
+    },
+    "primaryCategoryId": "69cf3caaeca4233964277b3f",
+    "pureVegRestaurant": false,
+    "restaurantId": "69ecad097fe94f851c59ea0b",
+    "updatedAt": "2026-04-25T12:20:28.760Z"
+  },
+  {
+    "_id": "69ecb26c6ee5035bc8f1d33b",
+    "__v": 0,
+    "categoryIds": [
+      "69ba676a7006689630e9a6e3",
+      "69ba7e87a81e2752cacc17b7",
+      "69cf3caaeca4233964277b3f"
+    ],
+    "createdAt": "2026-04-25T12:24:12.293Z",
+    "isEnabled": true,
+    "maxGuests": 6,
+    "pendingRequest": {
+      "categoryIds": [],
+      "primaryCategoryId": null,
+      "requestedAt": null,
+      "note": ""
+    },
+    "primaryCategoryId": "69ba676a7006689630e9a6e3",
+    "pureVegRestaurant": false,
+    "restaurantId": "69d53ba2bc10f4ddba46af8c",
+    "updatedAt": "2026-04-25T12:24:12.293Z"
+  },
+  {
+    "_id": "69ba64c77006689630e9a699",
+    "restaurantId": "69b805de9c070c51724618e6",
+    "categoryIds": [
+      "69ba676a7006689630e9a6e3"
+    ],
+    "primaryCategoryId": "69ba676a7006689630e9a6e3",
+    "isEnabled": true,
+    "maxGuests": 6,
+    "createdAt": "2026-03-18T08:39:35.305Z",
+    "updatedAt": "2026-03-18T09:26:08.836Z",
+    "__v": 2
+  },
+  {
+    "_id": "69ce0f6e4264d0fb56e10f96",
+    "restaurantId": "69cb0060619bc270534f783c",
+    "categoryIds": [],
+    "primaryCategoryId": null,
+    "isEnabled": true,
+    "maxGuests": 2,
+    "pureVegRestaurant": true,
+    "createdAt": "2026-04-02T06:40:46.805Z",
+    "updatedAt": "2026-04-02T06:40:59.135Z",
+    "__v": 0
+  },
+  {
+    "_id": "69f17f898649d5e8ef6c6472",
+    "restaurantId": "69ee02d673ac72cb55f41a24",
+    "categoryIds": [
+      "69ba7e87a81e2752cacc17b7"
+    ],
+    "primaryCategoryId": "69ba7e87a81e2752cacc17b7",
+    "isEnabled": true,
+    "maxGuests": 10,
+    "pendingRequest": null,
+    "pureVegRestaurant": false,
+    "createdAt": "2026-04-29T03:48:25.521Z",
+    "updatedAt": "2026-04-29T16:56:44.508Z",
+    "__v": 1
+  },
+  {
+    "_id": "69f346c4ba9ad9a74b5fbfe9",
+    "restaurantId": "69f30d709d1f0f98649d1b09",
+    "categoryIds": [
+      "69ba676a7006689630e9a6e3",
+      "69ba7e87a81e2752cacc17b7"
+    ],
+    "primaryCategoryId": "69ba7e87a81e2752cacc17b7",
+    "isEnabled": true,
+    "maxGuests": 20,
+    "pendingRequest": null,
+    "pureVegRestaurant": false,
+    "createdAt": "2026-04-30T12:10:44.351Z",
+    "updatedAt": "2026-04-30T12:30:27.206Z",
+    "__v": 1
+  },
+  {
+    "_id": "69f4f1d7430be3fdf0077b54",
+    "restaurantId": "69f39cb92cf9be4835b8e1e7",
+    "categoryIds": [
+      "69ba676a7006689630e9a6e3",
+      "69ba7e87a81e2752cacc17b7",
+      "69cf3caaeca4233964277b3f"
+    ],
+    "primaryCategoryId": "69cf3caaeca4233964277b3f",
+    "isEnabled": true,
+    "maxGuests": 9,
+    "pendingRequest": null,
+    "pureVegRestaurant": false,
+    "createdAt": "2026-05-01T18:32:55.450Z",
+    "updatedAt": "2026-05-01T18:33:42.554Z",
+    "__v": 1
+  },
+  {
+    "_id": "6a1d214f4f8f2e03a1633837",
+    "restaurantId": "69ee02d673ac72cb55f41a15",
+    "categoryIds": [
+      "69cf3caaeca4233964277b3f"
+    ],
+    "primaryCategoryId": "69cf3caaeca4233964277b3f",
+    "isEnabled": true,
+    "maxGuests": 6,
+    "pendingRequest": null,
+    "pureVegRestaurant": false,
+    "createdAt": "2026-06-01T06:06:07.483Z",
+    "updatedAt": "2026-06-01T06:06:58.486Z",
+    "__v": 1
+  },
+  {
+    "_id": "6a27bacc35547789fbcaae3a",
+    "restaurantId": "6a265ec235547789fbca0064",
+    "categoryIds": [
+      "69ba676a7006689630e9a6e3",
+      "69ba7e87a81e2752cacc17b7",
+      "69cf3caaeca4233964277b3f",
+      "6a26b34935547789fbca6b80"
+    ],
+    "primaryCategoryId": "69ba676a7006689630e9a6e3",
+    "isEnabled": true,
+    "maxGuests": 6,
+    "pendingRequest": null,
+    "pureVegRestaurant": true,
+    "createdAt": "2026-06-09T07:03:40.836Z",
+    "updatedAt": "2026-06-09T09:20:17.218Z",
+    "__v": 1
+  }
+]

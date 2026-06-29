@@ -1,0 +1,69 @@
+[
+  {
+    "_id": "6a3cc63c28f467bbdd29c1ee",
+    "name": "Rohan gupta",
+    "shopName": "Mahaveer super store",
+    "email": "rohanguptarg8@gmail.com",
+    "profileImage": "",
+    "phone": "7889486783",
+    "role": "SELLER",
+    "isVerified": true,
+    "isActive": true,
+    "approved": true,
+    "approvalStatus": "approved",
+    "onboardingSubmitted": true,
+    "approvalNotes": "",
+    "approvedAt": "2026-06-25T08:14:13.907Z",
+    "rejectedAt": null,
+    "serviceRadius": 5,
+    "lastLogin": "2026-06-26T08:29:15.056Z",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "bankInfo": {
+      "bankName": "Jammu and Kashmir bank",
+      "accountHolderName": "Rohan Gupta",
+      "accountNumber": "0031021380000029",
+      "ifscCode": "JAKA0KSTWAR",
+      "accountType": "Current",
+      "upiId": "Rohanguptarg8-1@oksbi",
+      "upiQrImage": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782369127/seller/upi-qr/brj0unqgdryxizvkkn0t.webp"
+    },
+    "documents": {
+      "panNumber": "BNTPG8821Q",
+      "gstRegistered": false,
+      "gstNumber": "210",
+      "gstLegalName": "",
+      "fssaiNumber": "21023191000485",
+      "fssaiExpiry": "2028-09-17T00:00:00.000Z",
+      "shopLicenseNumber": "1624895971",
+      "shopLicenseImage": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782369129/seller/shop-license/qdmsoaystpht4tpucdel.webp",
+      "shopLicenseExpiry": "2029-03-31T00:00:00.000Z",
+      "isDocumentsVerified": false
+    },
+    "shopInfo": {
+      "businessType": "General Store",
+      "alternatePhone": "9622313951",
+      "supportEmail": "errohanguptarg8@gmail.com",
+      "openingHours": "",
+      "zoneId": "6a3c09fe28f467bbdd29b8b6",
+      "zoneSource": "quick",
+      "zoneName": "kishtwar"
+    },
+    "phoneDigits": "7889486783",
+    "phoneLast10": "7889486783",
+    "createdAt": "2026-06-25T06:10:04.158Z",
+    "updatedAt": "2026-06-27T12:45:53.531Z",
+    "__v": 2,
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        75.763855,
+        33.323281
+      ],
+      "latitude": 33.323281,
+      "longitude": 75.763855,
+      "formattedAddress": "8QC7+JJF, Shaktinagar, Kishtwar, 182204",
+      "address": "8QC7+JJF, Shaktinagar, Kishtwar, 182204"
+    }
+  }
+]

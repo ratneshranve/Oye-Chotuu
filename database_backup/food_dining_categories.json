@@ -1,0 +1,70 @@
+[
+  {
+    "_id": "69ba676a7006689630e9a6e3",
+    "name": "Cafes",
+    "slug": "cafes",
+    "imageUrl": "https://res.cloudinary.com/appzeto-master-product/image/upload/v1773823860/appzeto/dining/categories/x67xfzxdhzknt9gpbxoo.jpg",
+    "isActive": true,
+    "sortOrder": 0,
+    "restaurantIds": [
+      "69b805de9c070c51724618e6",
+      "69ba83b6f2a2e60a9ab85b93",
+      "69f30d709d1f0f98649d1b09",
+      "69f39cb92cf9be4835b8e1e7",
+      "69b8f156f1ecccbb2e25d030",
+      "6a265ec235547789fbca0064"
+    ],
+    "createdAt": "2026-03-18T08:50:50.468Z",
+    "updatedAt": "2026-06-09T09:20:17.252Z",
+    "__v": 0
+  },
+  {
+    "_id": "69ba7e87a81e2752cacc17b7",
+    "name": "Family Restaurants",
+    "slug": "family-restaurants",
+    "imageUrl": "https://res.cloudinary.com/appzeto-master-product/image/upload/v1773829930/appzeto/dining/categories/snbf6q39wh3oirovrj9h.jpg",
+    "isActive": true,
+    "sortOrder": 0,
+    "restaurantIds": [
+      "69b8f156f1ecccbb2e25d030",
+      "69ee02d673ac72cb55f41a24",
+      "69f30d709d1f0f98649d1b09",
+      "69f39cb92cf9be4835b8e1e7",
+      "6a265ec235547789fbca0064"
+    ],
+    "createdAt": "2026-03-18T10:29:27.830Z",
+    "updatedAt": "2026-06-09T09:20:17.252Z",
+    "__v": 0
+  },
+  {
+    "_id": "69cf3caaeca4233964277b3f",
+    "name": "xyz",
+    "slug": "xyz",
+    "imageUrl": "https://res.cloudinary.com/appzeto-master-product/image/upload/v1775189161/appzeto/dining/categories/e0ar8sgawm4x3hqjvdx0.jpg",
+    "isActive": true,
+    "sortOrder": 0,
+    "restaurantIds": [
+      "69f39cb92cf9be4835b8e1e7",
+      "69b8f156f1ecccbb2e25d030",
+      "69ee02d673ac72cb55f41a15",
+      "6a265ec235547789fbca0064"
+    ],
+    "createdAt": "2026-04-03T04:06:02.425Z",
+    "updatedAt": "2026-06-09T09:20:17.252Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a26b34935547789fbca6b80",
+    "name": "cake",
+    "slug": "cake",
+    "imageUrl": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1780921160/appzeto/dining/categories/ab0uieplq230mey8lqvf.webp",
+    "isActive": true,
+    "sortOrder": 0,
+    "restaurantIds": [
+      "6a265ec235547789fbca0064"
+    ],
+    "createdAt": "2026-06-08T12:19:21.028Z",
+    "updatedAt": "2026-06-09T09:20:17.252Z",
+    "__v": 0
+  }
+]

@@ -1,0 +1,12 @@
+[
+  {
+    "_id": "69e21cc2fdd73ef07feda0d8",
+    "defaultPricePerLitre": 60,
+    "taxPercent": 0,
+    "deliveryCharges": 0,
+    "minOrderQuantity": 0.5,
+    "createdAt": "2026-04-17T11:42:58.340Z",
+    "updatedAt": "2026-04-17T11:42:58.340Z",
+    "__v": 0
+  }
+]

@@ -1,0 +1,87 @@
+[
+  {
+    "_id": "69b7d81bf5f15307df179d05",
+    "email": "admin@gmail.com",
+    "password": "$2a$10$JqZahuXGOlM2HeN1HIsOR.FQFnqM8jdAIQ76zk1VHAYwAsuwSxep6",
+    "role": "ADMIN",
+    "servicesAccess": [
+      "food"
+    ],
+    "createdAt": "2026-03-16T10:14:51.433Z",
+    "updatedAt": "2026-06-27T07:17:24.724Z",
+    "__v": 2,
+    "name": "Ratnesh Ranve",
+    "phone": "9770133148",
+    "profileImage": "https://res.cloudinary.com/appzeto-master-product/image/upload/v1773726285/admin-profiles/vzeezk9dwg2jsunpu2u0.jpg",
+    "isActive": true,
+    "fcmTokenMobile": [],
+    "fcmTokens": [],
+    "hotelFcmTokens": {
+      "web": "fRvth71z0PU69tLjZ7gHPQ:APA91bGCKo18YV4ynUk2naBnTNUNBO9cwvf_PaV50QeAfB8k0CvXJIC-F8z2sPZDUVAE1oOtPnyjvMylmknF1vsFaNWL0xeTbvqtS_GR5bj18ud0GYVABQo"
+    }
+  },
+  {
+    "_id": "69edd55d01f0351b96f91c52",
+    "__v": 0,
+    "createdAt": "2026-04-26T09:05:33.985Z",
+    "email": "admin@admin.com",
+    "fcmTokenMobile": [],
+    "fcmTokens": [],
+    "hotelFcmTokens": {
+      "app": null,
+      "web": "dz1ZBfxtsfR6mkuUjFNl7T:APA91bE8ABgzJY7wIXkIrVHCHBR7-swyIqbIqCRp6t6ztu1J5iH9_-WuFaeTghDs7C0jmBBaVwtg736qRzbaCoEX2Jx0Ed0hxVnp7deSCdSXSiOf7NAE7sU"
+    },
+    "isActive": true,
+    "name": "System Admin",
+    "password": "$2a$10$6UcIyOjWFhclj//4JginveyRpDT88dJaVVEn0X1zZLjTCrg/aiQ4a",
+    "phone": "",
+    "profileImage": "",
+    "role": "ADMIN",
+    "servicesAccess": [
+      "food",
+      "quickCommerce",
+      "taxi",
+      "hotel"
+    ],
+    "updatedAt": "2026-05-04T05:43:17.255Z"
+  },
+  {
+    "_id": "6a362d32c1cf744c7f61d93d",
+    "email": "brighubhan01@gmail.com",
+    "password": "$2a$10$YC1/DrfVAXsAgOBiNLEwTu7nJ4b.erBjmJa2YvxyLxEYW0FQTqLHy",
+    "name": "Brighu Nandan Bhan",
+    "phone": "",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "role": "ADMIN",
+    "isActive": true,
+    "servicesAccess": [
+      "food",
+      "quickCommerce"
+    ],
+    "createdAt": "2026-06-20T06:03:30.337Z",
+    "updatedAt": "2026-06-20T12:07:08.929Z",
+    "__v": 1
+  },
+  {
+    "_id": "6a3c05e528f467bbdd29b0aa",
+    "email": "nareshkumarbhadarwah@gmail.com",
+    "password": "$2a$10$ErWzscSKDC1Sb.TK4v/f1etaIZ8oQ24pHhwOw9/xa124gd9ebhNY2",
+    "name": "Naresh Kumar",
+    "phone": "",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "role": "SUB_ADMIN",
+    "isActive": true,
+    "servicesAccess": [
+      "food",
+      "quickCommerce",
+      "dudhwala"
+    ],
+    "createdAt": "2026-06-24T16:29:25.144Z",
+    "updatedAt": "2026-06-28T03:06:37.966Z",
+    "__v": 0
+  }
+]

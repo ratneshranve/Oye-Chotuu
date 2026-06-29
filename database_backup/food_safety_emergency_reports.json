@@ -1,0 +1,28 @@
+[
+  {
+    "_id": "6a1e7d532dc552c8619ec0d6",
+    "userId": "6a0172f9a66d7677b04af682",
+    "userName": "Ratnesh",
+    "userEmail": "",
+    "userPhone": "9770133148",
+    "message": "i want safety",
+    "status": "resolved",
+    "priority": "medium",
+    "createdAt": "2026-06-02T06:50:59.214Z",
+    "updatedAt": "2026-06-02T06:56:52.949Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a2fe63b9f4cd52de41ccff5",
+    "userId": "6a1ad2bc919a5393fc9d3a0d",
+    "userName": "Jiya",
+    "userEmail": "",
+    "userPhone": "7348419775",
+    "message": "Tfgcghvhvh",
+    "status": "unread",
+    "priority": "medium",
+    "createdAt": "2026-06-15T11:47:07.036Z",
+    "updatedAt": "2026-06-15T11:47:07.036Z",
+    "__v": 0
+  }
+]

@@ -1,0 +1,4595 @@
+[
+  {
+    "_id": "6a42325d48d41cb004245e22",
+    "orderType": "food",
+    "orderId": "FOD-3YWNSP",
+    "sessionId": "",
+    "userId": "6a413f44264c9701cd343705",
+    "restaurantId": "6a363ee6b49d18854bcb08d3",
+    "zoneId": "69b85a63fb04545984776cdb",
+    "items": [
+      {
+        "itemId": "6a38eab37a1a3673c129cbf0",
+        "name": "ICE CREAM",
+        "type": "food",
+        "sourceId": "6a363ee6b49d18854bcb08d3",
+        "sourceName": "Grill in Kishtwar",
+        "price": 55,
+        "quantity": 2,
+        "isVeg": true,
+        "image": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782114994/appzeto/restaurant/menu-items/vahip377vcpclyknbfyj.webp",
+        "notes": ""
+      }
+    ],
+    "pickupPoints": [
+      {
+        "pickupType": "food",
+        "sourceId": "6a363ee6b49d18854bcb08d3",
+        "sourceName": "Grill in Kishtwar",
+        "address": "8Q97+5C6, 12, Shaktinagar Main Bazar, Shaktinagar, Kishtwar, 182204",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.763428,
+            33.317918
+          ]
+        },
+        "itemIds": [
+          "6a38eab37a1a3673c129cbf0"
+        ]
+      }
+    ],
+    "deliveryAddress": {
+      "label": "Home",
+      "street": "House no 128 ward no 9",
+      "additionalDetails": "Near pakeeza Enterprises opp Madrasa",
+      "city": "Kishtwar",
+      "state": "Jk",
+      "zipCode": "182204",
+      "phone": "8082859342",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          75.8577,
+          22.7196
+        ]
+      }
+    },
+    "pricing": {
+      "subtotal": 110,
+      "tax": 6,
+      "packagingFee": 0,
+      "handlingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "gstAmount": 0,
+      "gst": 0,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 141,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "paid",
+      "amountDue": 141,
+      "refund": {
+        "status": "none",
+        "amount": 0,
+        "refundId": "",
+        "requestedAt": null,
+        "requestedByUser": false,
+        "reason": ""
+      }
+    },
+    "orderStatus": "delivered",
+    "dispatch": {
+      "modeAtCreation": "manual",
+      "status": "accepted",
+      "deliveryPartnerId": "6a242d8835547789fbc9eb21",
+      "offeredTo": [
+        {
+          "partnerId": "6a242d8835547789fbc9eb21",
+          "at": "2026-06-29T08:59:13.187Z",
+          "action": "offered"
+        },
+        {
+          "partnerId": "6a42118748d41cb0042401c4",
+          "at": "2026-06-29T08:59:13.187Z",
+          "action": "offered"
+        }
+      ],
+      "acceptedAt": "2026-06-29T08:59:15.755Z",
+      "assignedAt": "2026-06-29T08:59:15.754Z"
+    },
+    "dispatchPlan": {
+      "strategy": "single",
+      "combinedPickupEligible": false,
+      "pickupDistanceKm": null,
+      "sameDirection": false,
+      "reason": "Pickup or delivery coordinates are unavailable",
+      "legs": [
+        {
+          "legId": "food:6a363ee6b49d18854bcb08d3",
+          "pickupType": "food",
+          "sourceId": "6a363ee6b49d18854bcb08d3",
+          "sourceName": "Grill in Kishtwar",
+          "deliveryFee": 0,
+          "riderEarning": 0,
+          "deliveryPartnerId": null,
+          "assignedAt": null,
+          "partnerCandidates": []
+        }
+      ]
+    },
+    "statusHistory": [
+      {
+        "at": "2026-06-29T08:52:45.409Z",
+        "byRole": "SYSTEM",
+        "from": "",
+        "to": "created",
+        "note": "Order placed"
+      },
+      {
+        "at": "2026-06-29T08:54:27.188Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a363ee6b49d18854bcb08d3",
+        "from": "created",
+        "to": "preparing",
+        "note": ""
+      },
+      {
+        "at": "2026-06-29T08:59:15.755Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "unassigned",
+        "to": "accepted",
+        "note": ""
+      },
+      {
+        "at": "2026-06-29T09:01:50.306Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a363ee6b49d18854bcb08d3",
+        "from": "preparing",
+        "to": "ready_for_pickup",
+        "note": ""
+      },
+      {
+        "at": "2026-06-29T09:01:55.906Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "en_route_to_pickup",
+        "to": "reached_pickup",
+        "note": "Reached pickup location"
+      },
+      {
+        "at": "2026-06-29T09:02:12.865Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "ready_for_pickup",
+        "to": "picked_up",
+        "note": "Order picked up"
+      },
+      {
+        "at": "2026-06-29T09:02:18.916Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "picked_up",
+        "to": "reached_drop",
+        "note": "Reached drop location"
+      },
+      {
+        "at": "2026-06-29T09:08:08.476Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "picked_up",
+        "to": "delivered",
+        "note": "Delivery completed successfully"
+      }
+    ],
+    "note": "",
+    "restaurantNote": "",
+    "sendCutlery": true,
+    "deliveryFleet": "standard",
+    "scheduledAt": null,
+    "riderEarning": 5908,
+    "platformProfit": 0,
+    "deliveryOtp": "",
+    "isCustomCake": false,
+    "customCakeRequestId": null,
+    "deliveryState": {
+      "currentPhase": "delivered",
+      "status": "delivered",
+      "reachedPickupAt": "2026-06-29T09:01:55.905Z",
+      "reachedDropAt": "2026-06-29T09:02:18.916Z",
+      "pickedUpAt": "2026-06-29T09:02:12.865Z",
+      "deliveredAt": "2026-06-29T09:08:08.475Z"
+    },
+    "deliveryVerification": {
+      "dropOtp": {
+        "required": true,
+        "verified": true
+      }
+    },
+    "createdAt": "2026-06-29T08:52:45.419Z",
+    "updatedAt": "2026-06-29T09:08:08.493Z",
+    "__v": 8,
+    "transactionId": "6a42325d48d41cb004245e24"
+  },
+  {
+    "_id": "6a421c5f48d41cb004242e13",
+    "orderType": "food",
+    "orderId": "FOD-R78BNA",
+    "sessionId": "",
+    "userId": "6a16d20099f1e0145b99bbcb",
+    "restaurantId": "6a363ee6b49d18854bcb08d3",
+    "zoneId": "6a363444b49d18854bcb06e6",
+    "items": [
+      {
+        "itemId": "6a38e76b6ae6a0c841519b46",
+        "name": "Kit Kat Shake",
+        "type": "food",
+        "sourceId": "6a363ee6b49d18854bcb08d3",
+        "sourceName": "Grill in Kishtwar",
+        "price": 119,
+        "quantity": 1,
+        "isVeg": true,
+        "image": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782114154/appzeto/restaurant/menu-items/j5bcq4nmmgwmvkgaebw8.webp",
+        "notes": ""
+      }
+    ],
+    "pickupPoints": [
+      {
+        "pickupType": "food",
+        "sourceId": "6a363ee6b49d18854bcb08d3",
+        "sourceName": "Grill in Kishtwar",
+        "address": "8Q97+5C6, 12, Shaktinagar Main Bazar, Shaktinagar, Kishtwar, 182204",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.763428,
+            33.317918
+          ]
+        },
+        "itemIds": [
+          "6a38e76b6ae6a0c841519b46"
+        ]
+      }
+    ],
+    "deliveryAddress": {
+      "label": "Home",
+      "street": "Kishtwar, Jammu and Kashmir",
+      "additionalDetails": "Kishtwar",
+      "city": "Kishtwar",
+      "state": "Jammu and Kashmir",
+      "zipCode": "",
+      "phone": "9149500373",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          75.7640629,
+          33.3226453
+        ]
+      }
+    },
+    "pricing": {
+      "subtotal": 119,
+      "tax": 6,
+      "packagingFee": 0,
+      "handlingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "gstAmount": 0,
+      "gst": 0,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 150,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "paid",
+      "amountDue": 150,
+      "refund": {
+        "status": "none",
+        "amount": 0,
+        "refundId": "",
+        "requestedAt": null,
+        "requestedByUser": false,
+        "reason": ""
+      }
+    },
+    "orderStatus": "delivered",
+    "dispatch": {
+      "modeAtCreation": "manual",
+      "status": "accepted",
+      "deliveryPartnerId": "6a242d8835547789fbc9eb21",
+      "offeredTo": [
+        {
+          "partnerId": "6a242d8835547789fbc9eb21",
+          "at": "2026-06-29T07:20:24.900Z",
+          "action": "offered"
+        }
+      ],
+      "acceptedAt": "2026-06-29T07:20:32.739Z",
+      "assignedAt": "2026-06-29T07:20:32.739Z"
+    },
+    "dispatchPlan": {
+      "strategy": "single",
+      "combinedPickupEligible": false,
+      "pickupDistanceKm": null,
+      "sameDirection": false,
+      "reason": "Pickup or delivery coordinates are unavailable",
+      "legs": [
+        {
+          "legId": "food:6a363ee6b49d18854bcb08d3",
+          "pickupType": "food",
+          "sourceId": "6a363ee6b49d18854bcb08d3",
+          "sourceName": "Grill in Kishtwar",
+          "deliveryFee": 0,
+          "riderEarning": 0,
+          "deliveryPartnerId": null,
+          "assignedAt": null,
+          "partnerCandidates": []
+        }
+      ]
+    },
+    "statusHistory": [
+      {
+        "at": "2026-06-29T07:18:55.758Z",
+        "byRole": "SYSTEM",
+        "from": "",
+        "to": "created",
+        "note": "Order placed"
+      },
+      {
+        "at": "2026-06-29T07:19:34.430Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a363ee6b49d18854bcb08d3",
+        "from": "created",
+        "to": "preparing",
+        "note": ""
+      },
+      {
+        "at": "2026-06-29T07:20:32.739Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "unassigned",
+        "to": "accepted",
+        "note": ""
+      },
+      {
+        "at": "2026-06-29T07:20:40.825Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "en_route_to_pickup",
+        "to": "reached_pickup",
+        "note": "Reached pickup location"
+      },
+      {
+        "at": "2026-06-29T07:20:59.211Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a363ee6b49d18854bcb08d3",
+        "from": "preparing",
+        "to": "ready_for_pickup",
+        "note": ""
+      },
+      {
+        "at": "2026-06-29T07:21:23.510Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "ready_for_pickup",
+        "to": "picked_up",
+        "note": "Order picked up"
+      },
+      {
+        "at": "2026-06-29T07:21:37.167Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "picked_up",
+        "to": "reached_drop",
+        "note": "Reached drop location"
+      },
+      {
+        "at": "2026-06-29T07:21:56.029Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "picked_up",
+        "to": "delivered",
+        "note": "Delivery completed successfully"
+      }
+    ],
+    "note": "",
+    "restaurantNote": "",
+    "sendCutlery": true,
+    "deliveryFleet": "standard",
+    "scheduledAt": null,
+    "riderEarning": 25,
+    "platformProfit": 0,
+    "deliveryOtp": "",
+    "isCustomCake": false,
+    "customCakeRequestId": null,
+    "deliveryState": {
+      "currentPhase": "delivered",
+      "status": "delivered",
+      "reachedPickupAt": "2026-06-29T07:20:40.824Z",
+      "reachedDropAt": "2026-06-29T07:21:37.167Z",
+      "pickedUpAt": "2026-06-29T07:21:23.509Z",
+      "deliveredAt": "2026-06-29T07:21:56.029Z"
+    },
+    "deliveryVerification": {
+      "dropOtp": {
+        "required": true,
+        "verified": true
+      }
+    },
+    "createdAt": "2026-06-29T07:18:55.770Z",
+    "updatedAt": "2026-06-29T07:21:56.033Z",
+    "__v": 12,
+    "transactionId": "6a421c5f48d41cb004242e15"
+  },
+  {
+    "_id": "6a421beb48d41cb004242c6b",
+    "orderType": "food",
+    "orderId": "FOD-YPURS5",
+    "sessionId": "",
+    "userId": "6a16d20099f1e0145b99bbcb",
+    "restaurantId": "6a363ee6b49d18854bcb08d3",
+    "zoneId": "6a363444b49d18854bcb06e6",
+    "items": [
+      {
+        "itemId": "6a38e5ee6ae6a0c84151975d",
+        "name": "Mango Shake",
+        "type": "food",
+        "sourceId": "6a363ee6b49d18854bcb08d3",
+        "sourceName": "Grill in Kishtwar",
+        "price": 99,
+        "quantity": 1,
+        "isVeg": true,
+        "image": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782113773/appzeto/restaurant/menu-items/zmuh9giuwn7cu2w2tpfe.webp",
+        "notes": ""
+      }
+    ],
+    "pickupPoints": [
+      {
+        "pickupType": "food",
+        "sourceId": "6a363ee6b49d18854bcb08d3",
+        "sourceName": "Grill in Kishtwar",
+        "address": "8Q97+5C6, 12, Shaktinagar Main Bazar, Shaktinagar, Kishtwar, 182204",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.763428,
+            33.317918
+          ]
+        },
+        "itemIds": [
+          "6a38e5ee6ae6a0c84151975d"
+        ]
+      }
+    ],
+    "deliveryAddress": {
+      "label": "Home",
+      "street": "Kishtwar, Jammu and Kashmir",
+      "additionalDetails": "Kishtwar",
+      "city": "Kishtwar",
+      "state": "Jammu and Kashmir",
+      "zipCode": "",
+      "phone": "9149500373",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          75.7640629,
+          33.3226453
+        ]
+      }
+    },
+    "pricing": {
+      "subtotal": 99,
+      "tax": 5,
+      "packagingFee": 0,
+      "handlingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "gstAmount": 0,
+      "gst": 0,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 129,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "cod_pending",
+      "amountDue": 129,
+      "refund": {
+        "status": "none",
+        "amount": 0,
+        "refundId": "",
+        "requestedAt": null,
+        "requestedByUser": false,
+        "reason": ""
+      }
+    },
+    "orderStatus": "cancelled_by_restaurant",
+    "dispatch": {
+      "modeAtCreation": "manual",
+      "status": "unassigned",
+      "deliveryPartnerId": null,
+      "offeredTo": []
+    },
+    "dispatchPlan": {
+      "strategy": "single",
+      "combinedPickupEligible": false,
+      "pickupDistanceKm": null,
+      "sameDirection": false,
+      "reason": "Pickup or delivery coordinates are unavailable",
+      "legs": [
+        {
+          "legId": "food:6a363ee6b49d18854bcb08d3",
+          "pickupType": "food",
+          "sourceId": "6a363ee6b49d18854bcb08d3",
+          "sourceName": "Grill in Kishtwar",
+          "deliveryFee": 0,
+          "riderEarning": 0,
+          "deliveryPartnerId": null,
+          "assignedAt": null,
+          "partnerCandidates": []
+        }
+      ]
+    },
+    "statusHistory": [
+      {
+        "at": "2026-06-29T07:16:59.740Z",
+        "byRole": "SYSTEM",
+        "from": "",
+        "to": "created",
+        "note": "Order placed"
+      },
+      {
+        "at": "2026-06-29T07:18:33.957Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a363ee6b49d18854bcb08d3",
+        "from": "created",
+        "to": "cancelled_by_restaurant",
+        "note": ""
+      }
+    ],
+    "note": "",
+    "restaurantNote": "",
+    "sendCutlery": true,
+    "deliveryFleet": "standard",
+    "scheduledAt": null,
+    "riderEarning": 25,
+    "platformProfit": 0,
+    "deliveryOtp": "",
+    "isCustomCake": false,
+    "customCakeRequestId": null,
+    "deliveryState": {
+      "currentPhase": "en_route_to_pickup",
+      "status": "",
+      "reachedPickupAt": null,
+      "reachedDropAt": null,
+      "pickedUpAt": null,
+      "deliveredAt": null
+    },
+    "deliveryVerification": {
+      "dropOtp": {
+        "required": false,
+        "verified": false
+      }
+    },
+    "createdAt": "2026-06-29T07:16:59.754Z",
+    "updatedAt": "2026-06-29T07:18:33.961Z",
+    "__v": 1,
+    "transactionId": "6a421beb48d41cb004242c6d"
+  },
+  {
+    "_id": "6a4214a148d41cb004241737",
+    "orderType": "food",
+    "orderId": "FOD-QERMGG",
+    "sessionId": "",
+    "userId": "6a16d20099f1e0145b99bbcb",
+    "restaurantId": "6a3a33cbc0e66a94884abd17",
+    "zoneId": "6a363444b49d18854bcb06e6",
+    "items": [
+      {
+        "itemId": "6a3bb7b728f467bbdd2993bc",
+        "name": "Chicken Parda Biryani",
+        "type": "food",
+        "sourceId": "6a3a33cbc0e66a94884abd17",
+        "sourceName": "The Tandoor Square",
+        "price": 160,
+        "quantity": 1,
+        "isVeg": true,
+        "image": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782298551/appzeto/restaurant/menu-items/rgzfinltwlqweetsthys.webp",
+        "notes": ""
+      }
+    ],
+    "pickupPoints": [
+      {
+        "pickupType": "food",
+        "sourceId": "6a3a33cbc0e66a94884abd17",
+        "sourceName": "The Tandoor Square",
+        "address": "8Q97+5C6, 45, Shaktinagar, Kishtwar, 182204",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.763271,
+            33.318076
+          ]
+        },
+        "itemIds": [
+          "6a3bb7b728f467bbdd2993bc"
+        ]
+      }
+    ],
+    "deliveryAddress": {
+      "label": "Home",
+      "street": "Kishtwar, Jammu and Kashmir",
+      "additionalDetails": "Kishtwar",
+      "city": "Kishtwar",
+      "state": "Jammu and Kashmir",
+      "zipCode": "",
+      "phone": "9149500373",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          75.7640629,
+          33.3226453
+        ]
+      }
+    },
+    "pricing": {
+      "subtotal": 160,
+      "tax": 8,
+      "packagingFee": 0,
+      "handlingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "gstAmount": 0,
+      "gst": 0,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 193,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "paid",
+      "amountDue": 193,
+      "refund": {
+        "status": "none",
+        "amount": 0,
+        "refundId": "",
+        "requestedAt": null,
+        "requestedByUser": false,
+        "reason": ""
+      }
+    },
+    "orderStatus": "delivered",
+    "dispatch": {
+      "modeAtCreation": "manual",
+      "status": "accepted",
+      "deliveryPartnerId": "6a242d8835547789fbc9eb21",
+      "offeredTo": [
+        {
+          "partnerId": "6a242d8835547789fbc9eb21",
+          "at": "2026-06-29T06:47:10.598Z",
+          "action": "offered"
+        },
+        {
+          "partnerId": "6a42118748d41cb0042401c4",
+          "at": "2026-06-29T06:47:10.598Z",
+          "action": "offered"
+        }
+      ],
+      "acceptedAt": "2026-06-29T06:47:12.314Z",
+      "assignedAt": "2026-06-29T06:47:12.314Z"
+    },
+    "dispatchPlan": {
+      "strategy": "single",
+      "combinedPickupEligible": false,
+      "pickupDistanceKm": null,
+      "sameDirection": false,
+      "reason": "Pickup or delivery coordinates are unavailable",
+      "legs": [
+        {
+          "legId": "food:6a3a33cbc0e66a94884abd17",
+          "pickupType": "food",
+          "sourceId": "6a3a33cbc0e66a94884abd17",
+          "sourceName": "The Tandoor Square",
+          "deliveryFee": 0,
+          "riderEarning": 0,
+          "deliveryPartnerId": null,
+          "assignedAt": null,
+          "partnerCandidates": []
+        }
+      ]
+    },
+    "statusHistory": [
+      {
+        "at": "2026-06-29T06:45:53.755Z",
+        "byRole": "SYSTEM",
+        "from": "",
+        "to": "created",
+        "note": "Order placed"
+      },
+      {
+        "at": "2026-06-29T06:46:25.454Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a3a33cbc0e66a94884abd17",
+        "from": "created",
+        "to": "preparing",
+        "note": ""
+      },
+      {
+        "at": "2026-06-29T06:47:12.314Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "unassigned",
+        "to": "accepted",
+        "note": ""
+      },
+      {
+        "at": "2026-06-29T06:47:19.581Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "en_route_to_pickup",
+        "to": "reached_pickup",
+        "note": "Reached pickup location"
+      },
+      {
+        "at": "2026-06-29T06:47:29.507Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a3a33cbc0e66a94884abd17",
+        "from": "preparing",
+        "to": "ready_for_pickup",
+        "note": ""
+      },
+      {
+        "at": "2026-06-29T06:47:48.001Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "ready_for_pickup",
+        "to": "picked_up",
+        "note": "Order picked up"
+      },
+      {
+        "at": "2026-06-29T06:47:54.741Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "picked_up",
+        "to": "reached_drop",
+        "note": "Reached drop location"
+      },
+      {
+        "at": "2026-06-29T06:48:20.196Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "picked_up",
+        "to": "delivered",
+        "note": "Delivery completed successfully"
+      }
+    ],
+    "note": "",
+    "restaurantNote": "",
+    "sendCutlery": true,
+    "deliveryFleet": "standard",
+    "scheduledAt": null,
+    "riderEarning": 25,
+    "platformProfit": 0,
+    "deliveryOtp": "",
+    "isCustomCake": false,
+    "customCakeRequestId": null,
+    "deliveryState": {
+      "currentPhase": "delivered",
+      "status": "delivered",
+      "reachedPickupAt": "2026-06-29T06:47:19.580Z",
+      "reachedDropAt": "2026-06-29T06:47:54.741Z",
+      "pickedUpAt": "2026-06-29T06:47:48.001Z",
+      "deliveredAt": "2026-06-29T06:48:20.196Z"
+    },
+    "deliveryVerification": {
+      "dropOtp": {
+        "required": true,
+        "verified": true
+      }
+    },
+    "createdAt": "2026-06-29T06:45:53.785Z",
+    "updatedAt": "2026-06-29T06:48:20.200Z",
+    "__v": 12,
+    "transactionId": "6a4214a148d41cb004241739"
+  },
+  {
+    "_id": "6a414152264c9701cd343cdb",
+    "orderType": "food",
+    "orderId": "FOD-5ESTWS",
+    "sessionId": "",
+    "userId": "6a40ae02264c9701cd3249e1",
+    "restaurantId": "6a365b18b49d18854bcb2c9d",
+    "zoneId": "6a363444b49d18854bcb06e6",
+    "items": [
+      {
+        "itemId": "6a3a88ae4e9b1b6a795203b5",
+        "name": "Tawa Roasted Chicken",
+        "type": "food",
+        "sourceId": "6a365b18b49d18854bcb2c9d",
+        "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+        "price": 350,
+        "quantity": 1,
+        "isVeg": true,
+        "image": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782220973/appzeto/restaurant/menu-items/v8ln4megjtni5ylzigsz.webp",
+        "notes": ""
+      }
+    ],
+    "pickupPoints": [
+      {
+        "pickupType": "food",
+        "sourceId": "6a365b18b49d18854bcb2c9d",
+        "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+        "address": "8Q59+J9J, Kishtwar, 182204",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.768164,
+            33.309673
+          ]
+        },
+        "itemIds": [
+          "6a3a88ae4e9b1b6a795203b5"
+        ]
+      }
+    ],
+    "deliveryAddress": {
+      "label": "Home",
+      "street": "41 GB",
+      "additionalDetails": "",
+      "city": "40 GB",
+      "state": "Rajasthan",
+      "zipCode": "457119",
+      "phone": "9697723380",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          75.77846549676596,
+          33.31442634706051
+        ]
+      }
+    },
+    "pricing": {
+      "subtotal": 350,
+      "tax": 18,
+      "packagingFee": 0,
+      "handlingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "gstAmount": 0,
+      "gst": 0,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 393,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "razorpay",
+      "status": "cancelled",
+      "amountDue": 393,
+      "razorpay": {
+        "orderId": "order_T76ZtHGFl3mYai",
+        "paymentId": "",
+        "signature": ""
+      },
+      "refund": {
+        "status": "none",
+        "amount": 0,
+        "refundId": "",
+        "requestedAt": null,
+        "requestedByUser": false,
+        "reason": ""
+      }
+    },
+    "orderStatus": "cancelled_by_user",
+    "dispatch": {
+      "modeAtCreation": "manual",
+      "status": "unassigned",
+      "deliveryPartnerId": null,
+      "offeredTo": []
+    },
+    "dispatchPlan": {
+      "strategy": "single",
+      "combinedPickupEligible": false,
+      "pickupDistanceKm": null,
+      "sameDirection": false,
+      "reason": "Pickup or delivery coordinates are unavailable",
+      "legs": [
+        {
+          "legId": "food:6a365b18b49d18854bcb2c9d",
+          "pickupType": "food",
+          "sourceId": "6a365b18b49d18854bcb2c9d",
+          "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+          "deliveryFee": 0,
+          "riderEarning": 0,
+          "deliveryPartnerId": null,
+          "assignedAt": null,
+          "partnerCandidates": []
+        }
+      ]
+    },
+    "statusHistory": [
+      {
+        "at": "2026-06-28T15:44:18.810Z",
+        "byRole": "SYSTEM",
+        "from": "",
+        "to": "created",
+        "note": "Order placed"
+      },
+      {
+        "at": "2026-06-28T15:44:30.467Z",
+        "byRole": "USER",
+        "byId": "6a40ae02264c9701cd3249e1",
+        "from": "created",
+        "to": "cancelled_by_user",
+        "note": "Payment Cancelled"
+      }
+    ],
+    "note": "",
+    "restaurantNote": "",
+    "sendCutlery": true,
+    "deliveryFleet": "standard",
+    "scheduledAt": null,
+    "riderEarning": 30,
+    "platformProfit": 0,
+    "deliveryOtp": "",
+    "isCustomCake": false,
+    "customCakeRequestId": null,
+    "deliveryState": {
+      "currentPhase": "en_route_to_pickup",
+      "status": "",
+      "reachedPickupAt": null,
+      "reachedDropAt": null,
+      "pickedUpAt": null,
+      "deliveredAt": null
+    },
+    "deliveryVerification": {
+      "dropOtp": {
+        "required": false,
+        "verified": false
+      }
+    },
+    "createdAt": "2026-06-28T15:44:18.944Z",
+    "updatedAt": "2026-06-28T15:44:30.478Z",
+    "__v": 1,
+    "transactionId": "6a414152264c9701cd343cdd"
+  },
+  {
+    "_id": "6a411a70264c9701cd33e9bb",
+    "orderType": "food",
+    "orderId": "FOD-67VXFL",
+    "sessionId": "",
+    "userId": "6a411a3d264c9701cd33e8d4",
+    "restaurantId": "6a3a4af2c0e66a94884ad339",
+    "zoneId": "6a363444b49d18854bcb06e6",
+    "items": [
+      {
+        "itemId": "6a3e37c88b6a205bb70a4525",
+        "name": "Coffee",
+        "type": "food",
+        "sourceId": "6a3a4af2c0e66a94884ad339",
+        "sourceName": "Celebration Food court",
+        "price": 30,
+        "quantity": 1,
+        "isVeg": true,
+        "image": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782462407/appzeto/restaurant/menu-items/wgvxhfryljs2qzoruq4s.webp",
+        "notes": ""
+      }
+    ],
+    "pickupPoints": [
+      {
+        "pickupType": "food",
+        "sourceId": "6a3a4af2c0e66a94884ad339",
+        "sourceName": "Celebration Food court",
+        "address": "8Q88+2CV, Kishtwar, 182204",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.765886,
+            33.315666
+          ]
+        },
+        "itemIds": [
+          "6a3e37c88b6a205bb70a4525"
+        ]
+      }
+    ],
+    "deliveryAddress": {
+      "label": "Home",
+      "street": "Kishtwar, Jammu and Kashmir",
+      "additionalDetails": "Kishtwar",
+      "city": "Kishtwar",
+      "state": "Jammu and Kashmir",
+      "zipCode": "",
+      "phone": "9541869196",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          75.7658455,
+          33.3157159
+        ]
+      }
+    },
+    "pricing": {
+      "subtotal": 30,
+      "tax": 2,
+      "packagingFee": 0,
+      "handlingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "gstAmount": 0,
+      "gst": 0,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 57,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "cod_pending",
+      "amountDue": 57,
+      "refund": {
+        "status": "none",
+        "amount": 0,
+        "refundId": "",
+        "requestedAt": null,
+        "requestedByUser": false,
+        "reason": ""
+      }
+    },
+    "orderStatus": "cancelled_by_restaurant",
+    "dispatch": {
+      "modeAtCreation": "manual",
+      "status": "unassigned",
+      "deliveryPartnerId": null,
+      "offeredTo": []
+    },
+    "dispatchPlan": {
+      "strategy": "single",
+      "combinedPickupEligible": false,
+      "pickupDistanceKm": null,
+      "sameDirection": false,
+      "reason": "Pickup or delivery coordinates are unavailable",
+      "legs": [
+        {
+          "legId": "food:6a3a4af2c0e66a94884ad339",
+          "pickupType": "food",
+          "sourceId": "6a3a4af2c0e66a94884ad339",
+          "sourceName": "Celebration Food court",
+          "deliveryFee": 0,
+          "riderEarning": 0,
+          "deliveryPartnerId": null,
+          "assignedAt": null,
+          "partnerCandidates": []
+        }
+      ]
+    },
+    "statusHistory": [
+      {
+        "at": "2026-06-28T12:58:24.928Z",
+        "byRole": "SYSTEM",
+        "from": "",
+        "to": "created",
+        "note": "Order placed"
+      },
+      {
+        "at": "2026-06-28T12:58:54.365Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a3a4af2c0e66a94884ad339",
+        "from": "created",
+        "to": "cancelled_by_restaurant",
+        "note": ""
+      }
+    ],
+    "note": "",
+    "restaurantNote": "",
+    "sendCutlery": true,
+    "deliveryFleet": "standard",
+    "scheduledAt": null,
+    "riderEarning": 20,
+    "platformProfit": 5,
+    "deliveryOtp": "",
+    "isCustomCake": false,
+    "customCakeRequestId": null,
+    "deliveryState": {
+      "currentPhase": "en_route_to_pickup",
+      "status": "",
+      "reachedPickupAt": null,
+      "reachedDropAt": null,
+      "pickedUpAt": null,
+      "deliveredAt": null
+    },
+    "deliveryVerification": {
+      "dropOtp": {
+        "required": false,
+        "verified": false
+      }
+    },
+    "createdAt": "2026-06-28T12:58:24.941Z",
+    "updatedAt": "2026-06-28T12:58:54.370Z",
+    "__v": 1,
+    "transactionId": "6a411a70264c9701cd33e9bd"
+  },
+  {
+    "_id": "6a4101ca264c9701cd3364f8",
+    "orderType": "food",
+    "orderId": "FOD-DX4TPA",
+    "sessionId": "",
+    "userId": "6a3fcaaaef820ecdd1892c96",
+    "restaurantId": "6a3a4af2c0e66a94884ad339",
+    "zoneId": "6a363444b49d18854bcb06e6",
+    "items": [
+      {
+        "itemId": "6a3e7ef19cd9d6097b3e279b",
+        "name": "Paneer Momos Tandoori",
+        "type": "food",
+        "sourceId": "6a3a4af2c0e66a94884ad339",
+        "sourceName": "Celebration Food court",
+        "price": 160,
+        "quantity": 1,
+        "isVeg": true,
+        "image": "",
+        "notes": ""
+      }
+    ],
+    "pickupPoints": [
+      {
+        "pickupType": "food",
+        "sourceId": "6a3a4af2c0e66a94884ad339",
+        "sourceName": "Celebration Food court",
+        "address": "8Q88+2CV, Kishtwar, 182204",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.765886,
+            33.315666
+          ]
+        },
+        "itemIds": [
+          "6a3e7ef19cd9d6097b3e279b"
+        ]
+      }
+    ],
+    "deliveryAddress": {
+      "label": "Home",
+      "street": "Kishtwar, Jammu and Kashmir",
+      "additionalDetails": "Kishtwar",
+      "city": "Kishtwar",
+      "state": "Jammu and Kashmir",
+      "zipCode": "",
+      "phone": "8082053151",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          75.7689445,
+          33.3182646
+        ]
+      }
+    },
+    "pricing": {
+      "subtotal": 160,
+      "tax": 8,
+      "packagingFee": 0,
+      "handlingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "gstAmount": 0,
+      "gst": 0,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 193,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "razorpay_qr",
+      "status": "paid",
+      "amountDue": 193,
+      "refund": {
+        "status": "none",
+        "amount": 0,
+        "refundId": "",
+        "requestedAt": null,
+        "requestedByUser": false,
+        "reason": ""
+      },
+      "qr": {
+        "imageUrl": "https://rzp.io/rzp/bZ7lRnSU",
+        "paymentLinkId": "plink_T72b6eUQxTpSG8",
+        "shortUrl": "https://rzp.io/rzp/bZ7lRnSU",
+        "status": "paid",
+        "expiresAt": null
+      }
+    },
+    "orderStatus": "delivered",
+    "dispatch": {
+      "modeAtCreation": "manual",
+      "status": "accepted",
+      "deliveryPartnerId": "6a242d8835547789fbc9eb21",
+      "offeredTo": [],
+      "acceptedAt": "2026-06-28T11:13:50.270Z",
+      "assignedAt": "2026-06-28T11:13:50.270Z"
+    },
+    "dispatchPlan": {
+      "strategy": "single",
+      "combinedPickupEligible": false,
+      "pickupDistanceKm": null,
+      "sameDirection": false,
+      "reason": "Pickup or delivery coordinates are unavailable",
+      "legs": [
+        {
+          "legId": "food:6a3a4af2c0e66a94884ad339",
+          "pickupType": "food",
+          "sourceId": "6a3a4af2c0e66a94884ad339",
+          "sourceName": "Celebration Food court",
+          "deliveryFee": 0,
+          "riderEarning": 0,
+          "deliveryPartnerId": null,
+          "assignedAt": null,
+          "partnerCandidates": []
+        }
+      ]
+    },
+    "statusHistory": [
+      {
+        "at": "2026-06-28T11:13:14.649Z",
+        "byRole": "SYSTEM",
+        "from": "",
+        "to": "created",
+        "note": "Order placed"
+      },
+      {
+        "at": "2026-06-28T11:13:33.045Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a3a4af2c0e66a94884ad339",
+        "from": "created",
+        "to": "preparing",
+        "note": ""
+      },
+      {
+        "at": "2026-06-28T11:13:50.270Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "unassigned",
+        "to": "accepted",
+        "note": ""
+      },
+      {
+        "at": "2026-06-28T11:20:47.652Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "en_route_to_pickup",
+        "to": "reached_pickup",
+        "note": "Reached pickup location"
+      },
+      {
+        "at": "2026-06-28T11:41:42.858Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "preparing",
+        "to": "picked_up",
+        "note": "Order picked up"
+      },
+      {
+        "at": "2026-06-28T11:41:48.410Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "picked_up",
+        "to": "reached_drop",
+        "note": "Reached drop location"
+      },
+      {
+        "at": "2026-06-28T11:52:03.933Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "picked_up",
+        "to": "delivered",
+        "note": "Delivery completed successfully"
+      }
+    ],
+    "note": "",
+    "restaurantNote": "",
+    "sendCutlery": true,
+    "deliveryFleet": "standard",
+    "scheduledAt": null,
+    "riderEarning": 24,
+    "platformProfit": 1,
+    "deliveryOtp": "",
+    "isCustomCake": false,
+    "customCakeRequestId": null,
+    "deliveryState": {
+      "currentPhase": "delivered",
+      "status": "delivered",
+      "reachedPickupAt": "2026-06-28T11:20:47.652Z",
+      "reachedDropAt": "2026-06-28T11:41:48.410Z",
+      "pickedUpAt": "2026-06-28T11:41:42.857Z",
+      "deliveredAt": "2026-06-28T11:52:03.932Z"
+    },
+    "deliveryVerification": {
+      "dropOtp": {
+        "required": true,
+        "verified": true
+      }
+    },
+    "createdAt": "2026-06-28T11:13:14.658Z",
+    "updatedAt": "2026-06-28T11:52:03.939Z",
+    "__v": 6,
+    "transactionId": "6a4101ca264c9701cd3364fa"
+  },
+  {
+    "_id": "6a40f7d2264c9701cd3331ad",
+    "orderType": "food",
+    "orderId": "FOD-L35T5D",
+    "sessionId": "",
+    "userId": "6a40f79e264c9701cd33308d",
+    "restaurantId": "6a3a4af2c0e66a94884ad339",
+    "zoneId": "6a363444b49d18854bcb06e6",
+    "items": [
+      {
+        "itemId": "6a3e46de9d9fe7910bdfae9f",
+        "name": "Chicken Noodles",
+        "type": "food",
+        "sourceId": "6a3a4af2c0e66a94884ad339",
+        "sourceName": "Celebration Food court",
+        "price": 190,
+        "quantity": 1,
+        "isVeg": true,
+        "image": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782471651/appzeto/restaurant/menu-items/coeucekt2mcjrtwadcej.webp",
+        "notes": ""
+      }
+    ],
+    "pickupPoints": [
+      {
+        "pickupType": "food",
+        "sourceId": "6a3a4af2c0e66a94884ad339",
+        "sourceName": "Celebration Food court",
+        "address": "8Q88+2CV, Kishtwar, 182204",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.765886,
+            33.315666
+          ]
+        },
+        "itemIds": [
+          "6a3e46de9d9fe7910bdfae9f"
+        ]
+      }
+    ],
+    "deliveryAddress": {
+      "label": "Home",
+      "street": "Kishtwar, Jammu and Kashmir",
+      "additionalDetails": "",
+      "city": "Kishtwar",
+      "state": "Jammu and Kashmir",
+      "zipCode": "452018",
+      "phone": "8492004133",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          75.7638138,
+          33.3227773
+        ]
+      }
+    },
+    "pricing": {
+      "subtotal": 190,
+      "tax": 10,
+      "packagingFee": 0,
+      "handlingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "gstAmount": 0,
+      "gst": 0,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 225,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "razorpay_qr",
+      "status": "paid",
+      "amountDue": 225,
+      "refund": {
+        "status": "none",
+        "amount": 0,
+        "refundId": "",
+        "requestedAt": null,
+        "requestedByUser": false,
+        "reason": ""
+      },
+      "qr": {
+        "imageUrl": "https://rzp.io/rzp/hEip6Cz",
+        "paymentLinkId": "plink_T71jeM1WGcMSQ6",
+        "shortUrl": "https://rzp.io/rzp/hEip6Cz",
+        "status": "paid",
+        "expiresAt": null
+      }
+    },
+    "orderStatus": "delivered",
+    "dispatch": {
+      "modeAtCreation": "manual",
+      "status": "accepted",
+      "deliveryPartnerId": "6a242d8835547789fbc9eb21",
+      "offeredTo": [
+        {
+          "partnerId": "6a242d8835547789fbc9eb21",
+          "at": "2026-06-28T10:42:50.343Z",
+          "action": "offered"
+        },
+        {
+          "partnerId": "6a3f3ba2cdfc56f7a6d99645",
+          "at": "2026-06-28T10:42:50.343Z",
+          "action": "offered"
+        }
+      ],
+      "acceptedAt": "2026-06-28T10:42:52.015Z",
+      "assignedAt": "2026-06-28T10:42:52.015Z"
+    },
+    "dispatchPlan": {
+      "strategy": "single",
+      "combinedPickupEligible": false,
+      "pickupDistanceKm": null,
+      "sameDirection": false,
+      "reason": "Pickup or delivery coordinates are unavailable",
+      "legs": [
+        {
+          "legId": "food:6a3a4af2c0e66a94884ad339",
+          "pickupType": "food",
+          "sourceId": "6a3a4af2c0e66a94884ad339",
+          "sourceName": "Celebration Food court",
+          "deliveryFee": 0,
+          "riderEarning": 0,
+          "deliveryPartnerId": null,
+          "assignedAt": null,
+          "partnerCandidates": []
+        }
+      ]
+    },
+    "statusHistory": [
+      {
+        "at": "2026-06-28T10:30:42.236Z",
+        "byRole": "SYSTEM",
+        "from": "",
+        "to": "created",
+        "note": "Order placed"
+      },
+      {
+        "at": "2026-06-28T10:31:03.620Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a3a4af2c0e66a94884ad339",
+        "from": "created",
+        "to": "preparing",
+        "note": ""
+      },
+      {
+        "at": "2026-06-28T10:42:52.016Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "unassigned",
+        "to": "accepted",
+        "note": ""
+      },
+      {
+        "at": "2026-06-28T10:42:54.937Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "en_route_to_pickup",
+        "to": "reached_pickup",
+        "note": "Reached pickup location"
+      },
+      {
+        "at": "2026-06-28T10:48:48.217Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "preparing",
+        "to": "picked_up",
+        "note": "Order picked up"
+      },
+      {
+        "at": "2026-06-28T10:48:57.834Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "picked_up",
+        "to": "reached_drop",
+        "note": "Reached drop location"
+      }
+    ],
+    "note": "",
+    "restaurantNote": "",
+    "sendCutlery": true,
+    "deliveryFleet": "standard",
+    "scheduledAt": null,
+    "riderEarning": 28,
+    "platformProfit": 0,
+    "deliveryOtp": "",
+    "isCustomCake": false,
+    "customCakeRequestId": null,
+    "deliveryState": {
+      "currentPhase": "at_drop",
+      "status": "reached_drop",
+      "reachedPickupAt": "2026-06-28T10:42:54.936Z",
+      "reachedDropAt": "2026-06-28T10:48:57.834Z",
+      "pickedUpAt": "2026-06-28T10:48:48.216Z",
+      "deliveredAt": null
+    },
+    "deliveryVerification": {
+      "dropOtp": {
+        "required": true,
+        "verified": true
+      }
+    },
+    "createdAt": "2026-06-28T10:30:42.250Z",
+    "updatedAt": "2026-06-28T11:01:05.943Z",
+    "__v": 10,
+    "transactionId": "6a40f7d2264c9701cd3331af"
+  },
+  {
+    "_id": "6a40f0ce264c9701cd3317f6",
+    "orderType": "food",
+    "orderId": "FOD-BDWESZ",
+    "sessionId": "",
+    "userId": "6a40b0d7264c9701cd324f1a",
+    "restaurantId": "6a3a4af2c0e66a94884ad339",
+    "zoneId": "6a363444b49d18854bcb06e6",
+    "items": [
+      {
+        "itemId": "6a3e46dd9d9fe7910bdfae97",
+        "name": "Chicken Fried Rice",
+        "type": "food",
+        "sourceId": "6a3a4af2c0e66a94884ad339",
+        "sourceName": "Celebration Food court",
+        "price": 190,
+        "quantity": 1,
+        "isVeg": true,
+        "image": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782471755/appzeto/restaurant/menu-items/juw7eo67januqdnb6v0v.webp",
+        "notes": ""
+      }
+    ],
+    "pickupPoints": [
+      {
+        "pickupType": "food",
+        "sourceId": "6a3a4af2c0e66a94884ad339",
+        "sourceName": "Celebration Food court",
+        "address": "8Q88+2CV, Kishtwar, 182204",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.765886,
+            33.315666
+          ]
+        },
+        "itemIds": [
+          "6a3e46dd9d9fe7910bdfae97"
+        ]
+      }
+    ],
+    "deliveryAddress": {
+      "label": "Home",
+      "street": "NH244",
+      "additionalDetails": "",
+      "city": "Kishtwar",
+      "state": "Jammu and Kashmir",
+      "zipCode": "182204",
+      "phone": "9541030106",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          75.76983911861225,
+          33.30798248471717
+        ]
+      }
+    },
+    "pricing": {
+      "subtotal": 190,
+      "tax": 10,
+      "packagingFee": 0,
+      "handlingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "gstAmount": 0,
+      "gst": 0,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 225,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "cod_pending",
+      "amountDue": 225,
+      "refund": {
+        "status": "none",
+        "amount": 0,
+        "refundId": "",
+        "requestedAt": null,
+        "requestedByUser": false,
+        "reason": ""
+      }
+    },
+    "orderStatus": "delivered",
+    "dispatch": {
+      "modeAtCreation": "manual",
+      "status": "accepted",
+      "deliveryPartnerId": "6a242d8835547789fbc9eb21",
+      "offeredTo": [
+        {
+          "partnerId": "6a242d8835547789fbc9eb21",
+          "at": "2026-06-28T10:04:26.456Z",
+          "action": "offered"
+        }
+      ],
+      "acceptedAt": "2026-06-28T10:04:28.224Z",
+      "assignedAt": "2026-06-28T10:04:28.224Z"
+    },
+    "dispatchPlan": {
+      "strategy": "single",
+      "combinedPickupEligible": false,
+      "pickupDistanceKm": null,
+      "sameDirection": false,
+      "reason": "Pickup or delivery coordinates are unavailable",
+      "legs": [
+        {
+          "legId": "food:6a3a4af2c0e66a94884ad339",
+          "pickupType": "food",
+          "sourceId": "6a3a4af2c0e66a94884ad339",
+          "sourceName": "Celebration Food court",
+          "deliveryFee": 0,
+          "riderEarning": 0,
+          "deliveryPartnerId": null,
+          "assignedAt": null,
+          "partnerCandidates": []
+        }
+      ]
+    },
+    "statusHistory": [
+      {
+        "at": "2026-06-28T10:00:46.202Z",
+        "byRole": "SYSTEM",
+        "from": "",
+        "to": "created",
+        "note": "Order placed"
+      },
+      {
+        "at": "2026-06-28T10:01:03.933Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a3a4af2c0e66a94884ad339",
+        "from": "created",
+        "to": "preparing",
+        "note": ""
+      },
+      {
+        "at": "2026-06-28T10:04:28.224Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "unassigned",
+        "to": "accepted",
+        "note": ""
+      },
+      {
+        "at": "2026-06-28T10:04:46.544Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "en_route_to_pickup",
+        "to": "reached_pickup",
+        "note": "Reached pickup location"
+      },
+      {
+        "at": "2026-06-28T10:22:11.149Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "preparing",
+        "to": "picked_up",
+        "note": "Order picked up"
+      },
+      {
+        "at": "2026-06-28T10:23:00.709Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "picked_up",
+        "to": "reached_drop",
+        "note": "Reached drop location"
+      }
+    ],
+    "note": "",
+    "restaurantNote": "",
+    "sendCutlery": true,
+    "deliveryFleet": "standard",
+    "scheduledAt": null,
+    "riderEarning": 29,
+    "platformProfit": 0,
+    "deliveryOtp": "5420",
+    "isCustomCake": false,
+    "customCakeRequestId": null,
+    "deliveryState": {
+      "currentPhase": "at_drop",
+      "status": "reached_drop",
+      "reachedPickupAt": "2026-06-28T10:04:46.544Z",
+      "reachedDropAt": "2026-06-28T10:23:00.709Z",
+      "pickedUpAt": "2026-06-28T10:22:11.147Z",
+      "deliveredAt": null
+    },
+    "deliveryVerification": {
+      "dropOtp": {
+        "required": true,
+        "verified": false
+      }
+    },
+    "createdAt": "2026-06-28T10:00:46.208Z",
+    "updatedAt": "2026-06-28T10:23:00.722Z",
+    "__v": 6,
+    "transactionId": "6a40f0ce264c9701cd3317f8"
+  },
+  {
+    "_id": "6a40e05f264c9701cd32e114",
+    "orderType": "food",
+    "orderId": "FOD-2BTLJG",
+    "sessionId": "",
+    "userId": "6a40e013264c9701cd32ddf3",
+    "restaurantId": "6a3a4af2c0e66a94884ad339",
+    "zoneId": "6a363444b49d18854bcb06e6",
+    "items": [
+      {
+        "itemId": "6a3e46dd9d9fe7910bdfae8b",
+        "name": "Veg Fried Rice",
+        "type": "food",
+        "sourceId": "6a3a4af2c0e66a94884ad339",
+        "sourceName": "Celebration Food court",
+        "price": 160,
+        "quantity": 1,
+        "isVeg": true,
+        "image": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782471885/appzeto/restaurant/menu-items/ile6i4oxa7shzewxhmdz.webp",
+        "notes": ""
+      }
+    ],
+    "pickupPoints": [
+      {
+        "pickupType": "food",
+        "sourceId": "6a3a4af2c0e66a94884ad339",
+        "sourceName": "Celebration Food court",
+        "address": "8Q88+2CV, Kishtwar, 182204",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.765886,
+            33.315666
+          ]
+        },
+        "itemIds": [
+          "6a3e46dd9d9fe7910bdfae8b"
+        ]
+      }
+    ],
+    "deliveryAddress": {
+      "label": "Home",
+      "street": "Kishtwar, Jammu and Kashmir",
+      "additionalDetails": "Kishtwar",
+      "city": "Kishtwar",
+      "state": "Jammu and Kashmir",
+      "zipCode": "",
+      "phone": "7889566955",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          75.7603508,
+          33.3314728
+        ]
+      }
+    },
+    "pricing": {
+      "subtotal": 160,
+      "tax": 8,
+      "packagingFee": 0,
+      "handlingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "gstAmount": 0,
+      "gst": 0,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 193,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "razorpay_qr",
+      "status": "paid",
+      "amountDue": 193,
+      "refund": {
+        "status": "none",
+        "amount": 0,
+        "refundId": "",
+        "requestedAt": null,
+        "requestedByUser": false,
+        "reason": ""
+      },
+      "qr": {
+        "imageUrl": "https://rzp.io/rzp/mb1kiKi",
+        "paymentLinkId": "plink_T6zuQgESilgZff",
+        "shortUrl": "https://rzp.io/rzp/mb1kiKi",
+        "status": "paid",
+        "expiresAt": null
+      }
+    },
+    "orderStatus": "delivered",
+    "dispatch": {
+      "modeAtCreation": "manual",
+      "status": "accepted",
+      "deliveryPartnerId": "6a242d8835547789fbc9eb21",
+      "offeredTo": [
+        {
+          "partnerId": "6a242d8835547789fbc9eb21",
+          "at": "2026-06-28T09:00:59.108Z",
+          "action": "offered"
+        }
+      ],
+      "acceptedAt": "2026-06-28T09:01:24.441Z",
+      "assignedAt": "2026-06-28T09:01:24.441Z"
+    },
+    "dispatchPlan": {
+      "strategy": "single",
+      "combinedPickupEligible": false,
+      "pickupDistanceKm": null,
+      "sameDirection": false,
+      "reason": "Pickup or delivery coordinates are unavailable",
+      "legs": [
+        {
+          "legId": "food:6a3a4af2c0e66a94884ad339",
+          "pickupType": "food",
+          "sourceId": "6a3a4af2c0e66a94884ad339",
+          "sourceName": "Celebration Food court",
+          "deliveryFee": 0,
+          "riderEarning": 0,
+          "deliveryPartnerId": null,
+          "assignedAt": null,
+          "partnerCandidates": []
+        }
+      ]
+    },
+    "statusHistory": [
+      {
+        "at": "2026-06-28T08:50:39.056Z",
+        "byRole": "SYSTEM",
+        "from": "",
+        "to": "created",
+        "note": "Order placed"
+      },
+      {
+        "at": "2026-06-28T08:53:21.499Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a3a4af2c0e66a94884ad339",
+        "from": "created",
+        "to": "preparing",
+        "note": ""
+      },
+      {
+        "at": "2026-06-28T08:56:20.226Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a3a4af2c0e66a94884ad339",
+        "from": "preparing",
+        "to": "ready_for_pickup",
+        "note": ""
+      },
+      {
+        "at": "2026-06-28T09:01:24.441Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "unassigned",
+        "to": "accepted",
+        "note": ""
+      },
+      {
+        "at": "2026-06-28T09:01:27.269Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "en_route_to_pickup",
+        "to": "reached_pickup",
+        "note": "Reached pickup location"
+      },
+      {
+        "at": "2026-06-28T09:03:53.288Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "ready_for_pickup",
+        "to": "picked_up",
+        "note": "Order picked up"
+      },
+      {
+        "at": "2026-06-28T09:04:12.722Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "picked_up",
+        "to": "reached_drop",
+        "note": "Reached drop location"
+      },
+      {
+        "at": "2026-06-28T09:13:36.750Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "picked_up",
+        "to": "delivered",
+        "note": "Delivery completed successfully"
+      }
+    ],
+    "note": "",
+    "restaurantNote": "",
+    "sendCutlery": true,
+    "deliveryFleet": "standard",
+    "scheduledAt": null,
+    "riderEarning": 30,
+    "platformProfit": 0,
+    "deliveryOtp": "",
+    "isCustomCake": false,
+    "customCakeRequestId": null,
+    "deliveryState": {
+      "currentPhase": "delivered",
+      "status": "delivered",
+      "reachedPickupAt": "2026-06-28T09:01:27.269Z",
+      "reachedDropAt": "2026-06-28T09:04:12.721Z",
+      "pickedUpAt": "2026-06-28T09:03:53.288Z",
+      "deliveredAt": "2026-06-28T09:13:36.748Z"
+    },
+    "deliveryVerification": {
+      "dropOtp": {
+        "required": true,
+        "verified": true
+      }
+    },
+    "createdAt": "2026-06-28T08:50:39.064Z",
+    "updatedAt": "2026-06-28T09:13:36.759Z",
+    "__v": 10,
+    "transactionId": "6a40e05f264c9701cd32e116"
+  },
+  {
+    "_id": "6a40da1a264c9701cd32c6bc",
+    "orderType": "food",
+    "orderId": "FOD-4WDVMP",
+    "sessionId": "",
+    "userId": "6a16d20099f1e0145b99bbcb",
+    "restaurantId": "6a3a4af2c0e66a94884ad339",
+    "zoneId": "6a363444b49d18854bcb06e6",
+    "items": [
+      {
+        "itemId": "6a3e37c88b6a205bb70a4525",
+        "name": "Coffee",
+        "type": "food",
+        "sourceId": "6a3a4af2c0e66a94884ad339",
+        "sourceName": "Celebration Food court",
+        "price": 30,
+        "quantity": 1,
+        "isVeg": true,
+        "image": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782462407/appzeto/restaurant/menu-items/wgvxhfryljs2qzoruq4s.webp",
+        "notes": ""
+      }
+    ],
+    "pickupPoints": [
+      {
+        "pickupType": "food",
+        "sourceId": "6a3a4af2c0e66a94884ad339",
+        "sourceName": "Celebration Food court",
+        "address": "8Q88+2CV, Kishtwar, 182204",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.765886,
+            33.315666
+          ]
+        },
+        "itemIds": [
+          "6a3e37c88b6a205bb70a4525"
+        ]
+      }
+    ],
+    "deliveryAddress": {
+      "label": "Home",
+      "street": "Kishtwar, Jammu and Kashmir",
+      "additionalDetails": "Kishtwar",
+      "city": "Kishtwar",
+      "state": "Jammu and Kashmir",
+      "zipCode": "",
+      "phone": "9149500373",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          75.7645844,
+          33.3222236
+        ]
+      }
+    },
+    "pricing": {
+      "subtotal": 30,
+      "tax": 2,
+      "packagingFee": 0,
+      "handlingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "gstAmount": 0,
+      "gst": 0,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 57,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "paid",
+      "amountDue": 57,
+      "refund": {
+        "status": "none",
+        "amount": 0,
+        "refundId": "",
+        "requestedAt": null,
+        "requestedByUser": false,
+        "reason": ""
+      }
+    },
+    "orderStatus": "delivered",
+    "dispatch": {
+      "modeAtCreation": "manual",
+      "status": "accepted",
+      "deliveryPartnerId": "6a242d8835547789fbc9eb21",
+      "offeredTo": [
+        {
+          "partnerId": "6a242d8835547789fbc9eb21",
+          "at": "2026-06-28T08:25:18.586Z",
+          "action": "offered"
+        }
+      ],
+      "acceptedAt": "2026-06-28T08:25:21.534Z",
+      "assignedAt": "2026-06-28T08:25:21.534Z"
+    },
+    "dispatchPlan": {
+      "strategy": "single",
+      "combinedPickupEligible": false,
+      "pickupDistanceKm": null,
+      "sameDirection": false,
+      "reason": "Pickup or delivery coordinates are unavailable",
+      "legs": [
+        {
+          "legId": "food:6a3a4af2c0e66a94884ad339",
+          "pickupType": "food",
+          "sourceId": "6a3a4af2c0e66a94884ad339",
+          "sourceName": "Celebration Food court",
+          "deliveryFee": 0,
+          "riderEarning": 0,
+          "deliveryPartnerId": null,
+          "assignedAt": null,
+          "partnerCandidates": []
+        }
+      ]
+    },
+    "statusHistory": [
+      {
+        "at": "2026-06-28T08:23:54.942Z",
+        "byRole": "SYSTEM",
+        "from": "",
+        "to": "created",
+        "note": "Order placed"
+      },
+      {
+        "at": "2026-06-28T08:24:38.648Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a3a4af2c0e66a94884ad339",
+        "from": "created",
+        "to": "preparing",
+        "note": ""
+      },
+      {
+        "at": "2026-06-28T08:24:56.744Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a3a4af2c0e66a94884ad339",
+        "from": "preparing",
+        "to": "ready_for_pickup",
+        "note": ""
+      },
+      {
+        "at": "2026-06-28T08:25:21.534Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "unassigned",
+        "to": "accepted",
+        "note": ""
+      },
+      {
+        "at": "2026-06-28T08:25:24.024Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "en_route_to_pickup",
+        "to": "reached_pickup",
+        "note": "Reached pickup location"
+      },
+      {
+        "at": "2026-06-28T08:25:37.328Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "ready_for_pickup",
+        "to": "picked_up",
+        "note": "Order picked up"
+      },
+      {
+        "at": "2026-06-28T08:25:44.270Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "picked_up",
+        "to": "reached_drop",
+        "note": "Reached drop location"
+      },
+      {
+        "at": "2026-06-28T08:32:14.278Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "picked_up",
+        "to": "delivered",
+        "note": "Delivery completed successfully"
+      }
+    ],
+    "note": "",
+    "restaurantNote": "",
+    "sendCutlery": true,
+    "deliveryFleet": "standard",
+    "scheduledAt": null,
+    "riderEarning": 27,
+    "platformProfit": 0,
+    "deliveryOtp": "",
+    "isCustomCake": false,
+    "customCakeRequestId": null,
+    "deliveryState": {
+      "currentPhase": "delivered",
+      "status": "delivered",
+      "reachedPickupAt": "2026-06-28T08:25:24.023Z",
+      "reachedDropAt": "2026-06-28T08:25:44.270Z",
+      "pickedUpAt": "2026-06-28T08:25:37.328Z",
+      "deliveredAt": "2026-06-28T08:32:14.277Z"
+    },
+    "deliveryVerification": {
+      "dropOtp": {
+        "required": true,
+        "verified": true
+      }
+    },
+    "createdAt": "2026-06-28T08:23:54.954Z",
+    "updatedAt": "2026-06-28T08:32:14.280Z",
+    "__v": 8,
+    "transactionId": "6a40da1a264c9701cd32c6be"
+  },
+  {
+    "_id": "6a3fe0f1ef820ecdd1898a71",
+    "orderType": "food",
+    "orderId": "FOD-EB9SPU",
+    "sessionId": "",
+    "userId": "6a3fdc74ef820ecdd1897554",
+    "restaurantId": "6a365b18b49d18854bcb2c9d",
+    "zoneId": "6a363444b49d18854bcb06e6",
+    "items": [
+      {
+        "itemId": "6a3aaa984e9b1b6a79521d60",
+        "name": "Paneer Tikka",
+        "type": "food",
+        "sourceId": "6a365b18b49d18854bcb2c9d",
+        "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+        "price": 180,
+        "quantity": 1,
+        "isVeg": true,
+        "image": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782229655/appzeto/restaurant/menu-items/mm5lwvgepca5rginumlq.webp",
+        "notes": ""
+      }
+    ],
+    "pickupPoints": [
+      {
+        "pickupType": "food",
+        "sourceId": "6a365b18b49d18854bcb2c9d",
+        "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+        "address": "8Q59+J9J, Kishtwar, 182204",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.768164,
+            33.309673
+          ]
+        },
+        "itemIds": [
+          "6a3aaa984e9b1b6a79521d60"
+        ]
+      }
+    ],
+    "deliveryAddress": {
+      "label": "Home",
+      "street": "Kishtwar Jammu and Kashmir 182204 India",
+      "additionalDetails": "Opposite Daffodil High School",
+      "city": "Kishtwar",
+      "state": "Jammu and Kashmir",
+      "zipCode": "182204",
+      "phone": "9906187490",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          75.76942130000002,
+          33.31079079999999
+        ]
+      }
+    },
+    "pricing": {
+      "subtotal": 180,
+      "tax": 9,
+      "packagingFee": 0,
+      "handlingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "gstAmount": 0,
+      "gst": 0,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 214,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "paid",
+      "amountDue": 214,
+      "refund": {
+        "status": "none",
+        "amount": 0,
+        "refundId": "",
+        "requestedAt": null,
+        "requestedByUser": false,
+        "reason": ""
+      }
+    },
+    "orderStatus": "delivered",
+    "dispatch": {
+      "modeAtCreation": "manual",
+      "status": "accepted",
+      "deliveryPartnerId": "6a3f3d63cdfc56f7a6d99667",
+      "offeredTo": [],
+      "acceptedAt": "2026-06-27T14:41:10.296Z",
+      "assignedAt": "2026-06-27T14:41:10.296Z"
+    },
+    "dispatchPlan": {
+      "strategy": "single",
+      "combinedPickupEligible": false,
+      "pickupDistanceKm": null,
+      "sameDirection": false,
+      "reason": "Pickup or delivery coordinates are unavailable",
+      "legs": [
+        {
+          "legId": "food:6a365b18b49d18854bcb2c9d",
+          "pickupType": "food",
+          "sourceId": "6a365b18b49d18854bcb2c9d",
+          "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+          "deliveryFee": 0,
+          "riderEarning": 0,
+          "deliveryPartnerId": null,
+          "assignedAt": null,
+          "partnerCandidates": []
+        }
+      ]
+    },
+    "statusHistory": [
+      {
+        "at": "2026-06-27T14:40:49.126Z",
+        "byRole": "SYSTEM",
+        "from": "",
+        "to": "created",
+        "note": "Order placed"
+      },
+      {
+        "at": "2026-06-27T14:41:07.062Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a365b18b49d18854bcb2c9d",
+        "from": "created",
+        "to": "preparing",
+        "note": ""
+      },
+      {
+        "at": "2026-06-27T14:41:10.296Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a3f3d63cdfc56f7a6d99667",
+        "from": "unassigned",
+        "to": "accepted",
+        "note": ""
+      },
+      {
+        "at": "2026-06-27T14:41:27.053Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a3f3d63cdfc56f7a6d99667",
+        "from": "en_route_to_pickup",
+        "to": "reached_pickup",
+        "note": "Reached pickup location"
+      },
+      {
+        "at": "2026-06-27T15:11:16.877Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a365b18b49d18854bcb2c9d",
+        "from": "preparing",
+        "to": "ready_for_pickup",
+        "note": ""
+      },
+      {
+        "at": "2026-06-27T15:14:14.459Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a3f3d63cdfc56f7a6d99667",
+        "from": "ready_for_pickup",
+        "to": "picked_up",
+        "note": "Order picked up"
+      },
+      {
+        "at": "2026-06-27T15:14:17.583Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a3f3d63cdfc56f7a6d99667",
+        "from": "picked_up",
+        "to": "reached_drop",
+        "note": "Reached drop location"
+      },
+      {
+        "at": "2026-06-27T15:27:09.110Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a3f3d63cdfc56f7a6d99667",
+        "from": "picked_up",
+        "to": "delivered",
+        "note": "Delivery completed successfully"
+      }
+    ],
+    "note": "",
+    "restaurantNote": "",
+    "sendCutlery": true,
+    "deliveryFleet": "standard",
+    "scheduledAt": null,
+    "riderEarning": 22,
+    "platformProfit": 3,
+    "deliveryOtp": "",
+    "isCustomCake": false,
+    "customCakeRequestId": null,
+    "deliveryState": {
+      "currentPhase": "delivered",
+      "status": "delivered",
+      "reachedPickupAt": "2026-06-27T14:41:27.052Z",
+      "reachedDropAt": "2026-06-27T15:14:17.583Z",
+      "pickedUpAt": "2026-06-27T15:14:14.458Z",
+      "deliveredAt": "2026-06-27T15:27:09.109Z"
+    },
+    "deliveryVerification": {
+      "dropOtp": {
+        "required": true,
+        "verified": true
+      }
+    },
+    "createdAt": "2026-06-27T14:40:49.131Z",
+    "updatedAt": "2026-06-27T15:27:09.118Z",
+    "__v": 7,
+    "transactionId": "6a3fe0f1ef820ecdd1898a73"
+  },
+  {
+    "_id": "6a3fe0b4ef820ecdd189871a",
+    "orderType": "food",
+    "orderId": "FOD-PXAZ4W",
+    "sessionId": "",
+    "userId": "6a3fdc74ef820ecdd1897554",
+    "restaurantId": "6a365b18b49d18854bcb2c9d",
+    "zoneId": "6a363444b49d18854bcb06e6",
+    "items": [
+      {
+        "itemId": "6a3aaaca4e9b1b6a79521dbc",
+        "name": "Honey Chilli Potatoes",
+        "type": "food",
+        "sourceId": "6a365b18b49d18854bcb2c9d",
+        "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+        "price": 100,
+        "quantity": 1,
+        "isVeg": true,
+        "image": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782229705/appzeto/restaurant/menu-items/jfpjrozu41yxljphg5yo.webp",
+        "notes": ""
+      }
+    ],
+    "pickupPoints": [
+      {
+        "pickupType": "food",
+        "sourceId": "6a365b18b49d18854bcb2c9d",
+        "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+        "address": "8Q59+J9J, Kishtwar, 182204",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.768164,
+            33.309673
+          ]
+        },
+        "itemIds": [
+          "6a3aaaca4e9b1b6a79521dbc"
+        ]
+      }
+    ],
+    "deliveryAddress": {
+      "label": "Home",
+      "street": "Kishtwar Jammu and Kashmir 182204 India",
+      "additionalDetails": "Opposite Daffodil High School",
+      "city": "Kishtwar",
+      "state": "Jammu and Kashmir",
+      "zipCode": "182204",
+      "phone": "9906187490",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          75.76942130000002,
+          33.31079079999999
+        ]
+      }
+    },
+    "pricing": {
+      "subtotal": 100,
+      "tax": 5,
+      "packagingFee": 0,
+      "handlingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "gstAmount": 0,
+      "gst": 0,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 130,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "paid",
+      "amountDue": 130,
+      "refund": {
+        "status": "none",
+        "amount": 0,
+        "refundId": "",
+        "requestedAt": null,
+        "requestedByUser": false,
+        "reason": ""
+      }
+    },
+    "orderStatus": "delivered",
+    "dispatch": {
+      "modeAtCreation": "manual",
+      "status": "accepted",
+      "deliveryPartnerId": "6a242d8835547789fbc9eb21",
+      "offeredTo": [
+        {
+          "partnerId": "6a3f3d17cdfc56f7a6d9965d",
+          "at": "2026-06-27T15:06:12.474Z",
+          "action": "offered"
+        },
+        {
+          "partnerId": "6a242d8835547789fbc9eb21",
+          "at": "2026-06-27T15:06:12.474Z",
+          "action": "offered"
+        },
+        {
+          "partnerId": "6a3f3d63cdfc56f7a6d99667",
+          "at": "2026-06-27T15:06:12.474Z",
+          "action": "offered"
+        },
+        {
+          "partnerId": "69b8053e60f4a642f86dcb62",
+          "at": "2026-06-27T15:06:12.474Z",
+          "action": "offered"
+        }
+      ],
+      "acceptedAt": "2026-06-27T15:06:50.794Z",
+      "assignedAt": "2026-06-27T15:06:50.794Z"
+    },
+    "dispatchPlan": {
+      "strategy": "single",
+      "combinedPickupEligible": false,
+      "pickupDistanceKm": null,
+      "sameDirection": false,
+      "reason": "Pickup or delivery coordinates are unavailable",
+      "legs": [
+        {
+          "legId": "food:6a365b18b49d18854bcb2c9d",
+          "pickupType": "food",
+          "sourceId": "6a365b18b49d18854bcb2c9d",
+          "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+          "deliveryFee": 0,
+          "riderEarning": 0,
+          "deliveryPartnerId": null,
+          "assignedAt": null,
+          "partnerCandidates": []
+        }
+      ]
+    },
+    "statusHistory": [
+      {
+        "at": "2026-06-27T14:39:48.857Z",
+        "byRole": "SYSTEM",
+        "from": "",
+        "to": "created",
+        "note": "Order placed"
+      },
+      {
+        "at": "2026-06-27T14:40:11.609Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a365b18b49d18854bcb2c9d",
+        "from": "created",
+        "to": "preparing",
+        "note": ""
+      },
+      {
+        "at": "2026-06-27T15:06:50.794Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "unassigned",
+        "to": "accepted",
+        "note": ""
+      },
+      {
+        "at": "2026-06-27T15:06:52.915Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "en_route_to_pickup",
+        "to": "reached_pickup",
+        "note": "Reached pickup location"
+      },
+      {
+        "at": "2026-06-27T15:07:11.156Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "preparing",
+        "to": "picked_up",
+        "note": "Order picked up"
+      },
+      {
+        "at": "2026-06-27T15:08:04.746Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "picked_up",
+        "to": "reached_drop",
+        "note": "Reached drop location"
+      },
+      {
+        "at": "2026-06-27T15:27:49.420Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "picked_up",
+        "to": "delivered",
+        "note": "Delivery completed successfully"
+      }
+    ],
+    "note": "",
+    "restaurantNote": "",
+    "sendCutlery": true,
+    "deliveryFleet": "standard",
+    "scheduledAt": null,
+    "riderEarning": 22,
+    "platformProfit": 3,
+    "deliveryOtp": "",
+    "isCustomCake": false,
+    "customCakeRequestId": null,
+    "deliveryState": {
+      "currentPhase": "delivered",
+      "status": "delivered",
+      "reachedPickupAt": "2026-06-27T15:06:52.915Z",
+      "reachedDropAt": "2026-06-27T15:08:04.746Z",
+      "pickedUpAt": "2026-06-27T15:07:11.155Z",
+      "deliveredAt": "2026-06-27T15:27:49.419Z"
+    },
+    "deliveryVerification": {
+      "dropOtp": {
+        "required": true,
+        "verified": true
+      }
+    },
+    "createdAt": "2026-06-27T14:39:48.865Z",
+    "updatedAt": "2026-06-27T15:27:49.423Z",
+    "__v": 27,
+    "transactionId": "6a3fe0b4ef820ecdd189871c"
+  },
+  {
+    "_id": "6a3fdfb4ef820ecdd189816d",
+    "orderType": "food",
+    "orderId": "FOD-RPY387",
+    "sessionId": "",
+    "userId": "6a2ab903b3c7519e93a24735",
+    "restaurantId": "6a365b18b49d18854bcb2c9d",
+    "zoneId": "6a363444b49d18854bcb06e6",
+    "items": [
+      {
+        "itemId": "6a3aaaca4e9b1b6a79521dbc",
+        "name": "Honey Chilli Potatoes",
+        "type": "food",
+        "sourceId": "6a365b18b49d18854bcb2c9d",
+        "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+        "price": 100,
+        "quantity": 1,
+        "isVeg": true,
+        "image": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782229705/appzeto/restaurant/menu-items/jfpjrozu41yxljphg5yo.webp",
+        "notes": ""
+      }
+    ],
+    "pickupPoints": [
+      {
+        "pickupType": "food",
+        "sourceId": "6a365b18b49d18854bcb2c9d",
+        "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+        "address": "8Q59+J9J, Kishtwar, 182204",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.768164,
+            33.309673
+          ]
+        },
+        "itemIds": [
+          "6a3aaaca4e9b1b6a79521dbc"
+        ]
+      }
+    ],
+    "deliveryAddress": {
+      "label": "Home",
+      "street": "Kishtwar, Jammu and Kashmir",
+      "additionalDetails": "Kishtwar",
+      "city": "Kishtwar",
+      "state": "Jammu and Kashmir",
+      "zipCode": "",
+      "phone": "7889357021",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          75.7638708,
+          33.3226025
+        ]
+      }
+    },
+    "pricing": {
+      "subtotal": 100,
+      "tax": 5,
+      "packagingFee": 0,
+      "handlingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "gstAmount": 0,
+      "gst": 0,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 130,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "razorpay_qr",
+      "status": "paid",
+      "amountDue": 130,
+      "refund": {
+        "status": "none",
+        "amount": 0,
+        "refundId": "",
+        "requestedAt": null,
+        "requestedByUser": false,
+        "reason": ""
+      },
+      "qr": {
+        "imageUrl": "https://rzp.io/rzp/ExVM6Yza",
+        "paymentLinkId": "plink_T6hmlRFGeRCA5I",
+        "shortUrl": "https://rzp.io/rzp/ExVM6Yza",
+        "status": "paid",
+        "expiresAt": null
+      }
+    },
+    "orderStatus": "delivered",
+    "dispatch": {
+      "modeAtCreation": "manual",
+      "status": "accepted",
+      "deliveryPartnerId": "6a3f3d17cdfc56f7a6d9965d",
+      "offeredTo": [
+        {
+          "partnerId": "6a3f3d17cdfc56f7a6d9965d",
+          "at": "2026-06-27T15:03:13.083Z",
+          "action": "offered"
+        },
+        {
+          "partnerId": "6a3f3d63cdfc56f7a6d99667",
+          "at": "2026-06-27T15:03:13.083Z",
+          "action": "offered"
+        },
+        {
+          "partnerId": "6a242d8835547789fbc9eb21",
+          "at": "2026-06-27T15:03:13.083Z",
+          "action": "offered"
+        },
+        {
+          "partnerId": "6a3f3ba2cdfc56f7a6d99645",
+          "at": "2026-06-27T15:03:13.083Z",
+          "action": "offered"
+        },
+        {
+          "partnerId": "69b8053e60f4a642f86dcb62",
+          "at": "2026-06-27T15:03:13.083Z",
+          "action": "offered"
+        }
+      ],
+      "acceptedAt": "2026-06-27T15:03:17.320Z",
+      "assignedAt": "2026-06-27T15:03:17.320Z"
+    },
+    "dispatchPlan": {
+      "strategy": "single",
+      "combinedPickupEligible": false,
+      "pickupDistanceKm": null,
+      "sameDirection": false,
+      "reason": "Pickup or delivery coordinates are unavailable",
+      "legs": [
+        {
+          "legId": "food:6a365b18b49d18854bcb2c9d",
+          "pickupType": "food",
+          "sourceId": "6a365b18b49d18854bcb2c9d",
+          "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+          "deliveryFee": 0,
+          "riderEarning": 0,
+          "deliveryPartnerId": null,
+          "assignedAt": null,
+          "partnerCandidates": []
+        }
+      ]
+    },
+    "statusHistory": [
+      {
+        "at": "2026-06-27T14:35:32.833Z",
+        "byRole": "SYSTEM",
+        "from": "",
+        "to": "created",
+        "note": "Order placed"
+      },
+      {
+        "at": "2026-06-27T14:36:03.773Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a365b18b49d18854bcb2c9d",
+        "from": "created",
+        "to": "preparing",
+        "note": ""
+      },
+      {
+        "at": "2026-06-27T15:02:15.630Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a365b18b49d18854bcb2c9d",
+        "from": "preparing",
+        "to": "ready_for_pickup",
+        "note": ""
+      },
+      {
+        "at": "2026-06-27T15:03:17.321Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a3f3d17cdfc56f7a6d9965d",
+        "from": "unassigned",
+        "to": "accepted",
+        "note": ""
+      },
+      {
+        "at": "2026-06-27T15:03:19.774Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a3f3d17cdfc56f7a6d9965d",
+        "from": "en_route_to_pickup",
+        "to": "reached_pickup",
+        "note": "Reached pickup location"
+      },
+      {
+        "at": "2026-06-27T15:06:46.264Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a3f3d17cdfc56f7a6d9965d",
+        "from": "ready_for_pickup",
+        "to": "picked_up",
+        "note": "Order picked up"
+      },
+      {
+        "at": "2026-06-27T15:06:50.560Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a3f3d17cdfc56f7a6d9965d",
+        "from": "picked_up",
+        "to": "reached_drop",
+        "note": "Reached drop location"
+      }
+    ],
+    "note": "",
+    "restaurantNote": "",
+    "sendCutlery": true,
+    "deliveryFleet": "standard",
+    "scheduledAt": null,
+    "riderEarning": 30,
+    "platformProfit": 0,
+    "deliveryOtp": "",
+    "isCustomCake": false,
+    "customCakeRequestId": null,
+    "deliveryState": {
+      "currentPhase": "at_drop",
+      "status": "reached_drop",
+      "reachedPickupAt": "2026-06-27T15:03:19.773Z",
+      "reachedDropAt": "2026-06-27T15:06:50.559Z",
+      "pickedUpAt": "2026-06-27T15:06:46.263Z",
+      "deliveredAt": null
+    },
+    "deliveryVerification": {
+      "dropOtp": {
+        "required": true,
+        "verified": true
+      }
+    },
+    "createdAt": "2026-06-27T14:35:32.841Z",
+    "updatedAt": "2026-06-27T15:33:48.259Z",
+    "__v": 15,
+    "transactionId": "6a3fdfb4ef820ecdd189816f"
+  },
+  {
+    "_id": "6a3fcca2ef820ecdd18934d9",
+    "orderType": "food",
+    "orderId": "FOD-ZNN4AT",
+    "sessionId": "",
+    "userId": "6a3fcc1eef820ecdd189331c",
+    "restaurantId": "6a365b18b49d18854bcb2c9d",
+    "zoneId": "6a363444b49d18854bcb06e6",
+    "items": [
+      {
+        "itemId": "6a3aaafa4e9b1b6a79521e16",
+        "name": "Chilli Potatoes",
+        "type": "food",
+        "sourceId": "6a365b18b49d18854bcb2c9d",
+        "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+        "price": 100,
+        "quantity": 1,
+        "isVeg": true,
+        "image": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782229753/appzeto/restaurant/menu-items/pq6u5napwfxvmeixgxk8.webp",
+        "notes": ""
+      },
+      {
+        "itemId": "6a3aaaca4e9b1b6a79521dbc",
+        "name": "Honey Chilli Potatoes",
+        "type": "food",
+        "sourceId": "6a365b18b49d18854bcb2c9d",
+        "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+        "price": 100,
+        "quantity": 1,
+        "isVeg": true,
+        "image": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782229705/appzeto/restaurant/menu-items/jfpjrozu41yxljphg5yo.webp",
+        "notes": ""
+      }
+    ],
+    "pickupPoints": [
+      {
+        "pickupType": "food",
+        "sourceId": "6a365b18b49d18854bcb2c9d",
+        "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+        "address": "8Q59+J9J, Kishtwar, 182204",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.768164,
+            33.309673
+          ]
+        },
+        "itemIds": [
+          "6a3aaafa4e9b1b6a79521e16",
+          "6a3aaaca4e9b1b6a79521dbc"
+        ]
+      }
+    ],
+    "deliveryAddress": {
+      "label": "Home",
+      "street": "Kishtwar, Jammu and Kashmir",
+      "additionalDetails": "Kishtwar",
+      "city": "Kishtwar",
+      "state": "Jammu and Kashmir",
+      "zipCode": "",
+      "phone": "8493924501",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          75.7647309,
+          33.324801
+        ]
+      }
+    },
+    "pricing": {
+      "subtotal": 200,
+      "tax": 10,
+      "packagingFee": 0,
+      "handlingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "gstAmount": 0,
+      "gst": 0,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 235,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "paid",
+      "amountDue": 235,
+      "refund": {
+        "status": "none",
+        "amount": 0,
+        "refundId": "",
+        "requestedAt": null,
+        "requestedByUser": false,
+        "reason": ""
+      }
+    },
+    "orderStatus": "delivered",
+    "dispatch": {
+      "modeAtCreation": "manual",
+      "status": "accepted",
+      "deliveryPartnerId": "6a3f3d63cdfc56f7a6d99667",
+      "offeredTo": [
+        {
+          "partnerId": "69b8053e60f4a642f86dcb62",
+          "at": "2026-06-27T13:15:12.718Z",
+          "action": "offered"
+        },
+        {
+          "partnerId": "6a242d8835547789fbc9eb21",
+          "at": "2026-06-27T13:15:12.718Z",
+          "action": "offered"
+        },
+        {
+          "partnerId": "6a3f3ba2cdfc56f7a6d99645",
+          "at": "2026-06-27T13:15:12.718Z",
+          "action": "offered"
+        },
+        {
+          "partnerId": "6a3f3d17cdfc56f7a6d9965d",
+          "at": "2026-06-27T13:15:12.718Z",
+          "action": "offered"
+        },
+        {
+          "partnerId": "6a3f3d63cdfc56f7a6d99667",
+          "at": "2026-06-27T13:15:12.718Z",
+          "action": "offered"
+        }
+      ],
+      "acceptedAt": "2026-06-27T13:15:19.215Z",
+      "assignedAt": "2026-06-27T13:15:19.215Z"
+    },
+    "dispatchPlan": {
+      "strategy": "single",
+      "combinedPickupEligible": false,
+      "pickupDistanceKm": null,
+      "sameDirection": false,
+      "reason": "Pickup or delivery coordinates are unavailable",
+      "legs": [
+        {
+          "legId": "food:6a365b18b49d18854bcb2c9d",
+          "pickupType": "food",
+          "sourceId": "6a365b18b49d18854bcb2c9d",
+          "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+          "deliveryFee": 0,
+          "riderEarning": 0,
+          "deliveryPartnerId": null,
+          "assignedAt": null,
+          "partnerCandidates": []
+        }
+      ]
+    },
+    "statusHistory": [
+      {
+        "at": "2026-06-27T13:14:10.312Z",
+        "byRole": "SYSTEM",
+        "from": "",
+        "to": "created",
+        "note": "Order placed"
+      },
+      {
+        "at": "2026-06-27T13:14:48.860Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a365b18b49d18854bcb2c9d",
+        "from": "created",
+        "to": "preparing",
+        "note": ""
+      },
+      {
+        "at": "2026-06-27T13:15:19.215Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a3f3d63cdfc56f7a6d99667",
+        "from": "unassigned",
+        "to": "accepted",
+        "note": ""
+      },
+      {
+        "at": "2026-06-27T13:15:27.871Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a3f3d63cdfc56f7a6d99667",
+        "from": "en_route_to_pickup",
+        "to": "reached_pickup",
+        "note": "Reached pickup location"
+      },
+      {
+        "at": "2026-06-27T13:26:24.884Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a365b18b49d18854bcb2c9d",
+        "from": "preparing",
+        "to": "ready_for_pickup",
+        "note": ""
+      },
+      {
+        "at": "2026-06-27T13:37:56.991Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a3f3d63cdfc56f7a6d99667",
+        "from": "ready_for_pickup",
+        "to": "picked_up",
+        "note": "Order picked up"
+      },
+      {
+        "at": "2026-06-27T13:37:59.571Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a3f3d63cdfc56f7a6d99667",
+        "from": "picked_up",
+        "to": "reached_drop",
+        "note": "Reached drop location"
+      },
+      {
+        "at": "2026-06-27T13:55:34.736Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a3f3d63cdfc56f7a6d99667",
+        "from": "picked_up",
+        "to": "delivered",
+        "note": "Delivery completed successfully"
+      }
+    ],
+    "note": "",
+    "restaurantNote": "",
+    "sendCutlery": true,
+    "deliveryFleet": "standard",
+    "scheduledAt": null,
+    "riderEarning": 30,
+    "platformProfit": 0,
+    "deliveryOtp": "",
+    "isCustomCake": false,
+    "customCakeRequestId": null,
+    "deliveryState": {
+      "currentPhase": "delivered",
+      "status": "delivered",
+      "reachedPickupAt": "2026-06-27T13:15:27.870Z",
+      "reachedDropAt": "2026-06-27T13:37:59.571Z",
+      "pickedUpAt": "2026-06-27T13:37:56.991Z",
+      "deliveredAt": "2026-06-27T13:55:34.736Z"
+    },
+    "deliveryVerification": {
+      "dropOtp": {
+        "required": true,
+        "verified": true
+      }
+    },
+    "createdAt": "2026-06-27T13:14:10.324Z",
+    "updatedAt": "2026-06-27T13:55:34.742Z",
+    "__v": 8,
+    "transactionId": "6a3fcca2ef820ecdd18934db"
+  },
+  {
+    "_id": "6a3fcae4ef820ecdd1892ded",
+    "orderType": "food",
+    "orderId": "FOD-UJVV75",
+    "sessionId": "",
+    "userId": "6a3fcaaaef820ecdd1892c96",
+    "restaurantId": "6a365b18b49d18854bcb2c9d",
+    "zoneId": "6a363444b49d18854bcb06e6",
+    "items": [
+      {
+        "itemId": "6a3a79b5c0e66a94884af1b6",
+        "name": "Pan Fried Momo",
+        "type": "food",
+        "sourceId": "6a365b18b49d18854bcb2c9d",
+        "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+        "price": 100,
+        "quantity": 1,
+        "isVeg": true,
+        "image": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782217140/appzeto/restaurant/menu-items/xmwbiplrsufqnakbjkhh.webp",
+        "notes": ""
+      }
+    ],
+    "pickupPoints": [
+      {
+        "pickupType": "food",
+        "sourceId": "6a365b18b49d18854bcb2c9d",
+        "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+        "address": "8Q59+J9J, Kishtwar, 182204",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.768164,
+            33.309673
+          ]
+        },
+        "itemIds": [
+          "6a3a79b5c0e66a94884af1b6"
+        ]
+      }
+    ],
+    "deliveryAddress": {
+      "label": "Home",
+      "street": "Kishtwar, Jammu and Kashmir",
+      "additionalDetails": "Kishtwar",
+      "city": "Kishtwar",
+      "state": "Jammu and Kashmir",
+      "zipCode": "",
+      "phone": "8082053151",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          75.7710653,
+          33.3193789
+        ]
+      }
+    },
+    "pricing": {
+      "subtotal": 100,
+      "tax": 5,
+      "packagingFee": 0,
+      "handlingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "gstAmount": 0,
+      "gst": 0,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 130,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "cancelled",
+      "amountDue": 130,
+      "refund": {
+        "status": "none",
+        "amount": 0,
+        "refundId": "",
+        "requestedAt": null,
+        "requestedByUser": false,
+        "reason": ""
+      }
+    },
+    "orderStatus": "cancelled_by_user",
+    "dispatch": {
+      "modeAtCreation": "manual",
+      "status": "unassigned",
+      "deliveryPartnerId": null,
+      "offeredTo": []
+    },
+    "dispatchPlan": {
+      "strategy": "single",
+      "combinedPickupEligible": false,
+      "pickupDistanceKm": null,
+      "sameDirection": false,
+      "reason": "Pickup or delivery coordinates are unavailable",
+      "legs": [
+        {
+          "legId": "food:6a365b18b49d18854bcb2c9d",
+          "pickupType": "food",
+          "sourceId": "6a365b18b49d18854bcb2c9d",
+          "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+          "deliveryFee": 0,
+          "riderEarning": 0,
+          "deliveryPartnerId": null,
+          "assignedAt": null,
+          "partnerCandidates": []
+        }
+      ]
+    },
+    "statusHistory": [
+      {
+        "at": "2026-06-27T13:06:44.559Z",
+        "byRole": "SYSTEM",
+        "from": "",
+        "to": "created",
+        "note": "Order placed"
+      },
+      {
+        "at": "2026-06-27T13:07:07.870Z",
+        "byRole": "USER",
+        "byId": "6a3fcaaaef820ecdd1892c96",
+        "from": "created",
+        "to": "cancelled_by_user",
+        "note": "I changed my mind"
+      }
+    ],
+    "note": "",
+    "restaurantNote": "",
+    "sendCutlery": true,
+    "deliveryFleet": "standard",
+    "scheduledAt": null,
+    "riderEarning": 30,
+    "platformProfit": 0,
+    "deliveryOtp": "",
+    "isCustomCake": false,
+    "customCakeRequestId": null,
+    "deliveryState": {
+      "currentPhase": "en_route_to_pickup",
+      "status": "",
+      "reachedPickupAt": null,
+      "reachedDropAt": null,
+      "pickedUpAt": null,
+      "deliveredAt": null
+    },
+    "deliveryVerification": {
+      "dropOtp": {
+        "required": false,
+        "verified": false
+      }
+    },
+    "createdAt": "2026-06-27T13:06:44.570Z",
+    "updatedAt": "2026-06-27T13:07:07.873Z",
+    "__v": 1,
+    "transactionId": "6a3fcae4ef820ecdd1892def"
+  },
+  {
+    "_id": "6a3f88f8954ca65f3fa3a796",
+    "orderType": "food",
+    "orderId": "FOD-CXEVHZ",
+    "sessionId": "",
+    "userId": "6a16d20099f1e0145b99bbcb",
+    "restaurantId": "6a365b18b49d18854bcb2c9d",
+    "zoneId": "6a363444b49d18854bcb06e6",
+    "items": [
+      {
+        "itemId": "6a3a884c4e9b1b6a79520342",
+        "name": "Afghani Chicken",
+        "type": "food",
+        "sourceId": "6a365b18b49d18854bcb2c9d",
+        "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+        "price": 400,
+        "quantity": 1,
+        "isVeg": true,
+        "image": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782220876/appzeto/restaurant/menu-items/alsgvvmecrezajtt6har.webp",
+        "notes": ""
+      }
+    ],
+    "pickupPoints": [
+      {
+        "pickupType": "food",
+        "sourceId": "6a365b18b49d18854bcb2c9d",
+        "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+        "address": "8Q59+J9J, Kishtwar, 182204",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.768164,
+            33.309673
+          ]
+        },
+        "itemIds": [
+          "6a3a884c4e9b1b6a79520342"
+        ]
+      }
+    ],
+    "deliveryAddress": {
+      "label": "Home",
+      "street": "Kishtwar, Jammu and Kashmir",
+      "additionalDetails": "Kishtwar",
+      "city": "Kishtwar",
+      "state": "Jammu and Kashmir",
+      "zipCode": "",
+      "phone": "9149500373",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          75.763131,
+          33.3234287
+        ]
+      }
+    },
+    "pricing": {
+      "subtotal": 400,
+      "tax": 40,
+      "packagingFee": 0,
+      "handlingFee": 0,
+      "deliveryFee": 60,
+      "platformFee": 50,
+      "gstAmount": 0,
+      "gst": 0,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 550,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "cod_pending",
+      "amountDue": 550,
+      "refund": {
+        "status": "none",
+        "amount": 0,
+        "refundId": "",
+        "requestedAt": null,
+        "requestedByUser": false,
+        "reason": ""
+      }
+    },
+    "orderStatus": "cancelled_by_restaurant",
+    "dispatch": {
+      "modeAtCreation": "manual",
+      "status": "unassigned",
+      "deliveryPartnerId": null,
+      "offeredTo": []
+    },
+    "dispatchPlan": {
+      "strategy": "single",
+      "combinedPickupEligible": false,
+      "pickupDistanceKm": null,
+      "sameDirection": false,
+      "reason": "Pickup or delivery coordinates are unavailable",
+      "legs": [
+        {
+          "legId": "food:6a365b18b49d18854bcb2c9d",
+          "pickupType": "food",
+          "sourceId": "6a365b18b49d18854bcb2c9d",
+          "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+          "deliveryFee": 0,
+          "riderEarning": 0,
+          "deliveryPartnerId": null,
+          "assignedAt": null,
+          "partnerCandidates": []
+        }
+      ]
+    },
+    "statusHistory": [
+      {
+        "at": "2026-06-27T08:25:28.036Z",
+        "byRole": "SYSTEM",
+        "from": "",
+        "to": "created",
+        "note": "Order placed"
+      },
+      {
+        "at": "2026-06-27T08:26:56.608Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a365b18b49d18854bcb2c9d",
+        "from": "created",
+        "to": "cancelled_by_restaurant",
+        "note": ""
+      }
+    ],
+    "note": "",
+    "restaurantNote": "",
+    "sendCutlery": true,
+    "deliveryFleet": "standard",
+    "scheduledAt": null,
+    "riderEarning": 30,
+    "platformProfit": 80,
+    "deliveryOtp": "",
+    "isCustomCake": false,
+    "customCakeRequestId": null,
+    "deliveryState": {
+      "currentPhase": "en_route_to_pickup",
+      "status": "",
+      "reachedPickupAt": null,
+      "reachedDropAt": null,
+      "pickedUpAt": null,
+      "deliveredAt": null
+    },
+    "deliveryVerification": {
+      "dropOtp": {
+        "required": false,
+        "verified": false
+      }
+    },
+    "createdAt": "2026-06-27T08:25:28.046Z",
+    "updatedAt": "2026-06-27T08:26:56.611Z",
+    "__v": 1,
+    "transactionId": "6a3f88f8954ca65f3fa3a798"
+  },
+  {
+    "_id": "6a3f84f9954ca65f3fa3982c",
+    "orderType": "food",
+    "orderId": "FOD-BFA88F",
+    "sessionId": "",
+    "userId": "6a16cfd299f1e0145b99ba66",
+    "restaurantId": "6a365b18b49d18854bcb2c9d",
+    "zoneId": "69b85a63fb04545984776cdb",
+    "items": [
+      {
+        "itemId": "6a3aaa984e9b1b6a79521d60",
+        "name": "Paneer Tikka",
+        "type": "food",
+        "sourceId": "6a365b18b49d18854bcb2c9d",
+        "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+        "price": 180,
+        "quantity": 1,
+        "isVeg": true,
+        "image": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782229655/appzeto/restaurant/menu-items/mm5lwvgepca5rginumlq.webp",
+        "notes": ""
+      }
+    ],
+    "pickupPoints": [
+      {
+        "pickupType": "food",
+        "sourceId": "6a365b18b49d18854bcb2c9d",
+        "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+        "address": "8Q59+J9J, Kishtwar, 182204",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.768164,
+            33.309673
+          ]
+        },
+        "itemIds": [
+          "6a3aaa984e9b1b6a79521d60"
+        ]
+      }
+    ],
+    "deliveryAddress": {
+      "label": "Home",
+      "street": "Kishtwar pandit gam near daffodil high school",
+      "additionalDetails": "",
+      "city": "Indore",
+      "state": "Madhya Pradesh",
+      "zipCode": "452001",
+      "phone": "7051102822",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          75.86819959999998,
+          22.72036160000001
+        ]
+      }
+    },
+    "pricing": {
+      "subtotal": 180,
+      "tax": 18,
+      "packagingFee": 0,
+      "handlingFee": 0,
+      "deliveryFee": 60,
+      "platformFee": 50,
+      "gstAmount": 0,
+      "gst": 0,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 308,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "razorpay",
+      "status": "paid",
+      "amountDue": 308,
+      "razorpay": {
+        "orderId": "order_T6aHCgrpUy2FEl",
+        "paymentId": "pay_T6aHScnFbJITgx",
+        "signature": ""
+      },
+      "refund": {
+        "status": "none",
+        "amount": 0,
+        "refundId": "",
+        "requestedAt": null,
+        "requestedByUser": false,
+        "reason": ""
+      }
+    },
+    "orderStatus": "delivered",
+    "dispatch": {
+      "modeAtCreation": "manual",
+      "status": "accepted",
+      "deliveryPartnerId": "6a242d8835547789fbc9eb21",
+      "offeredTo": [
+        {
+          "partnerId": "6a242d8835547789fbc9eb21",
+          "at": "2026-06-27T08:52:05.278Z",
+          "action": "offered"
+        },
+        {
+          "partnerId": "6a3f3d63cdfc56f7a6d99667",
+          "at": "2026-06-27T08:52:05.278Z",
+          "action": "offered"
+        },
+        {
+          "partnerId": "69b8053e60f4a642f86dcb62",
+          "at": "2026-06-27T08:52:05.278Z",
+          "action": "offered"
+        },
+        {
+          "partnerId": "6a3f3ba2cdfc56f7a6d99645",
+          "at": "2026-06-27T08:52:05.278Z",
+          "action": "offered"
+        }
+      ],
+      "acceptedAt": "2026-06-27T08:52:08.229Z",
+      "assignedAt": "2026-06-27T08:52:08.229Z"
+    },
+    "dispatchPlan": {
+      "strategy": "single",
+      "combinedPickupEligible": false,
+      "pickupDistanceKm": null,
+      "sameDirection": false,
+      "reason": "Pickup or delivery coordinates are unavailable",
+      "legs": [
+        {
+          "legId": "food:6a365b18b49d18854bcb2c9d",
+          "pickupType": "food",
+          "sourceId": "6a365b18b49d18854bcb2c9d",
+          "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+          "deliveryFee": 0,
+          "riderEarning": 0,
+          "deliveryPartnerId": null,
+          "assignedAt": null,
+          "partnerCandidates": []
+        }
+      ]
+    },
+    "statusHistory": [
+      {
+        "at": "2026-06-27T08:08:25.665Z",
+        "byRole": "SYSTEM",
+        "from": "",
+        "to": "created",
+        "note": "Order placed"
+      },
+      {
+        "at": "2026-06-27T08:09:57.507Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a365b18b49d18854bcb2c9d",
+        "from": "created",
+        "to": "preparing",
+        "note": ""
+      },
+      {
+        "at": "2026-06-27T08:45:57.223Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a365b18b49d18854bcb2c9d",
+        "from": "preparing",
+        "to": "ready_for_pickup",
+        "note": ""
+      },
+      {
+        "at": "2026-06-27T08:52:08.229Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "unassigned",
+        "to": "accepted",
+        "note": ""
+      },
+      {
+        "at": "2026-06-27T08:52:09.546Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "en_route_to_pickup",
+        "to": "reached_pickup",
+        "note": "Reached pickup location"
+      },
+      {
+        "at": "2026-06-27T08:52:25.202Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a242d8835547789fbc9eb21",
+        "from": "ready_for_pickup",
+        "to": "picked_up",
+        "note": "Order picked up"
+      }
+    ],
+    "note": "",
+    "restaurantNote": "",
+    "sendCutlery": true,
+    "deliveryFleet": "standard",
+    "scheduledAt": null,
+    "riderEarning": 30,
+    "platformProfit": 0,
+    "deliveryOtp": "",
+    "isCustomCake": false,
+    "customCakeRequestId": null,
+    "deliveryState": {
+      "currentPhase": "en_route_to_delivery",
+      "status": "picked_up",
+      "reachedPickupAt": "2026-06-27T08:52:09.546Z",
+      "reachedDropAt": null,
+      "pickedUpAt": "2026-06-27T08:52:25.201Z",
+      "deliveredAt": null
+    },
+    "deliveryVerification": {
+      "dropOtp": {
+        "required": false,
+        "verified": false
+      }
+    },
+    "createdAt": "2026-06-27T08:08:25.852Z",
+    "updatedAt": "2026-06-27T08:52:25.205Z",
+    "__v": 10,
+    "transactionId": "6a3f84f9954ca65f3fa3982e"
+  },
+  {
+    "_id": "6a3f7e84954ca65f3fa3811a",
+    "orderType": "food",
+    "orderId": "FOD-RAF7UR",
+    "sessionId": "",
+    "userId": "6a3f79b6954ca65f3fa37260",
+    "restaurantId": "6a365b18b49d18854bcb2c9d",
+    "zoneId": "6a363444b49d18854bcb06e6",
+    "items": [
+      {
+        "itemId": "6a3a7764c0e66a94884aee33",
+        "name": "Steam Momo",
+        "type": "food",
+        "sourceId": "6a365b18b49d18854bcb2c9d",
+        "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+        "price": 70,
+        "quantity": 4,
+        "isVeg": true,
+        "image": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782216547/appzeto/restaurant/menu-items/icxda7lo0xjhyvicdeih.webp",
+        "notes": ""
+      }
+    ],
+    "pickupPoints": [
+      {
+        "pickupType": "food",
+        "sourceId": "6a365b18b49d18854bcb2c9d",
+        "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+        "address": "8Q59+J9J, Kishtwar, 182204",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.768164,
+            33.309673
+          ]
+        },
+        "itemIds": [
+          "6a3a7764c0e66a94884aee33"
+        ]
+      }
+    ],
+    "deliveryAddress": {
+      "label": "Home",
+      "street": "Kishtwar, Jammu and Kashmir",
+      "additionalDetails": "Kishtwar",
+      "city": "Kishtwar",
+      "state": "Jammu and Kashmir",
+      "zipCode": "",
+      "phone": "9018427073",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          75.7784198,
+          33.3127976
+        ]
+      }
+    },
+    "pricing": {
+      "subtotal": 280,
+      "tax": 28,
+      "packagingFee": 0,
+      "handlingFee": 0,
+      "deliveryFee": 60,
+      "platformFee": 50,
+      "gstAmount": 0,
+      "gst": 0,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 418,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "paid",
+      "amountDue": 418,
+      "refund": {
+        "status": "none",
+        "amount": 0,
+        "refundId": "",
+        "requestedAt": null,
+        "requestedByUser": false,
+        "reason": ""
+      }
+    },
+    "orderStatus": "delivered",
+    "dispatch": {
+      "modeAtCreation": "manual",
+      "status": "accepted",
+      "deliveryPartnerId": "6a3f3d63cdfc56f7a6d99667",
+      "offeredTo": [
+        {
+          "partnerId": "6a242d8835547789fbc9eb21",
+          "at": "2026-06-27T08:06:12.693Z",
+          "action": "offered"
+        },
+        {
+          "partnerId": "6a3f3ba2cdfc56f7a6d99645",
+          "at": "2026-06-27T08:06:12.693Z",
+          "action": "offered"
+        },
+        {
+          "partnerId": "6a3f3b7dcdfc56f7a6d99631",
+          "at": "2026-06-27T08:06:12.693Z",
+          "action": "offered"
+        },
+        {
+          "partnerId": "6a3f3d63cdfc56f7a6d99667",
+          "at": "2026-06-27T08:06:12.693Z",
+          "action": "offered"
+        }
+      ],
+      "acceptedAt": "2026-06-27T08:06:30.120Z",
+      "assignedAt": "2026-06-27T08:06:30.120Z"
+    },
+    "dispatchPlan": {
+      "strategy": "single",
+      "combinedPickupEligible": false,
+      "pickupDistanceKm": null,
+      "sameDirection": false,
+      "reason": "Pickup or delivery coordinates are unavailable",
+      "legs": [
+        {
+          "legId": "food:6a365b18b49d18854bcb2c9d",
+          "pickupType": "food",
+          "sourceId": "6a365b18b49d18854bcb2c9d",
+          "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+          "deliveryFee": 0,
+          "riderEarning": 0,
+          "deliveryPartnerId": null,
+          "assignedAt": null,
+          "partnerCandidates": []
+        }
+      ]
+    },
+    "statusHistory": [
+      {
+        "at": "2026-06-27T07:40:52.030Z",
+        "byRole": "SYSTEM",
+        "from": "",
+        "to": "created",
+        "note": "Order placed"
+      },
+      {
+        "at": "2026-06-27T07:41:57.715Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a365b18b49d18854bcb2c9d",
+        "from": "created",
+        "to": "preparing",
+        "note": ""
+      },
+      {
+        "at": "2026-06-27T07:58:41.994Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a365b18b49d18854bcb2c9d",
+        "from": "preparing",
+        "to": "ready_for_pickup",
+        "note": ""
+      },
+      {
+        "at": "2026-06-27T08:06:30.120Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a3f3d63cdfc56f7a6d99667",
+        "from": "unassigned",
+        "to": "accepted",
+        "note": ""
+      },
+      {
+        "at": "2026-06-27T08:20:53.569Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a3f3d63cdfc56f7a6d99667",
+        "from": "en_route_to_pickup",
+        "to": "reached_pickup",
+        "note": "Reached pickup location"
+      },
+      {
+        "at": "2026-06-27T08:26:21.304Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a3f3d63cdfc56f7a6d99667",
+        "from": "ready_for_pickup",
+        "to": "picked_up",
+        "note": "Order picked up"
+      },
+      {
+        "at": "2026-06-27T08:36:38.921Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a3f3d63cdfc56f7a6d99667",
+        "from": "picked_up",
+        "to": "reached_drop",
+        "note": "Reached drop location"
+      }
+    ],
+    "note": "",
+    "restaurantNote": "",
+    "sendCutlery": true,
+    "deliveryFleet": "standard",
+    "scheduledAt": null,
+    "riderEarning": 30,
+    "platformProfit": 80,
+    "deliveryOtp": "9322",
+    "isCustomCake": false,
+    "customCakeRequestId": null,
+    "deliveryState": {
+      "currentPhase": "at_drop",
+      "status": "reached_drop",
+      "reachedPickupAt": "2026-06-27T08:20:53.569Z",
+      "reachedDropAt": "2026-06-27T08:36:38.920Z",
+      "pickedUpAt": "2026-06-27T08:26:21.303Z",
+      "deliveredAt": null
+    },
+    "deliveryVerification": {
+      "dropOtp": {
+        "required": true,
+        "verified": false
+      }
+    },
+    "createdAt": "2026-06-27T07:40:52.036Z",
+    "updatedAt": "2026-06-27T08:36:38.925Z",
+    "__v": 11,
+    "transactionId": "6a3f7e84954ca65f3fa3811c"
+  },
+  {
+    "_id": "6a3f7a9a954ca65f3fa3751b",
+    "orderType": "food",
+    "orderId": "FOD-VEGRDF",
+    "sessionId": "",
+    "userId": "6a3f79b6954ca65f3fa37260",
+    "restaurantId": "6a38fac5c0e66a94884a55e4",
+    "zoneId": "6a363444b49d18854bcb06e6",
+    "items": [
+      {
+        "itemId": "6a3cf2b4aeaa41965a58b384",
+        "name": "Steam Momo",
+        "type": "food",
+        "sourceId": "6a38fac5c0e66a94884a55e4",
+        "sourceName": "SHAGGY KITCHEN DAK BANGLWO",
+        "price": 120,
+        "quantity": 2,
+        "isVeg": true,
+        "image": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782216547/appzeto/restaurant/menu-items/icxda7lo0xjhyvicdeih.webp",
+        "notes": ""
+      }
+    ],
+    "pickupPoints": [
+      {
+        "pickupType": "food",
+        "sourceId": "6a38fac5c0e66a94884a55e4",
+        "sourceName": "SHAGGY KITCHEN DAK BANGLWO",
+        "address": "8Q96+RRW, Shaktinagar, Kishtwar, 182204",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.762097,
+            33.319619
+          ]
+        },
+        "itemIds": [
+          "6a3cf2b4aeaa41965a58b384"
+        ]
+      }
+    ],
+    "deliveryAddress": {
+      "label": "Home",
+      "street": "Kishtwar, Jammu and Kashmir",
+      "additionalDetails": "Kishtwar",
+      "city": "Kishtwar",
+      "state": "Jammu and Kashmir",
+      "zipCode": "",
+      "phone": "9018427073",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          75.7784267,
+          33.3127417
+        ]
+      }
+    },
+    "pricing": {
+      "subtotal": 240,
+      "tax": 24,
+      "packagingFee": 0,
+      "handlingFee": 0,
+      "deliveryFee": 60,
+      "platformFee": 50,
+      "gstAmount": 0,
+      "gst": 0,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 374,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "cod_pending",
+      "amountDue": 374,
+      "refund": {
+        "status": "none",
+        "amount": 0,
+        "refundId": "",
+        "requestedAt": null,
+        "requestedByUser": false,
+        "reason": ""
+      }
+    },
+    "orderStatus": "cancelled_by_restaurant",
+    "dispatch": {
+      "modeAtCreation": "manual",
+      "status": "unassigned",
+      "deliveryPartnerId": null,
+      "offeredTo": []
+    },
+    "dispatchPlan": {
+      "strategy": "single",
+      "combinedPickupEligible": false,
+      "pickupDistanceKm": null,
+      "sameDirection": false,
+      "reason": "Pickup or delivery coordinates are unavailable",
+      "legs": [
+        {
+          "legId": "food:6a38fac5c0e66a94884a55e4",
+          "pickupType": "food",
+          "sourceId": "6a38fac5c0e66a94884a55e4",
+          "sourceName": "SHAGGY KITCHEN DAK BANGLWO",
+          "deliveryFee": 0,
+          "riderEarning": 0,
+          "deliveryPartnerId": null,
+          "assignedAt": null,
+          "partnerCandidates": []
+        }
+      ]
+    },
+    "statusHistory": [
+      {
+        "at": "2026-06-27T07:24:10.399Z",
+        "byRole": "SYSTEM",
+        "from": "",
+        "to": "created",
+        "note": "Order placed"
+      },
+      {
+        "at": "2026-06-27T07:36:26.501Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a38fac5c0e66a94884a55e4",
+        "from": "created",
+        "to": "preparing",
+        "note": ""
+      },
+      {
+        "at": "2026-06-27T07:36:48.084Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a38fac5c0e66a94884a55e4",
+        "from": "preparing",
+        "to": "cancelled_by_restaurant",
+        "note": ""
+      }
+    ],
+    "note": "",
+    "restaurantNote": "",
+    "sendCutlery": true,
+    "deliveryFleet": "standard",
+    "scheduledAt": null,
+    "riderEarning": 30,
+    "platformProfit": 80,
+    "deliveryOtp": "",
+    "isCustomCake": false,
+    "customCakeRequestId": null,
+    "deliveryState": {
+      "currentPhase": "en_route_to_pickup",
+      "status": "",
+      "reachedPickupAt": null,
+      "reachedDropAt": null,
+      "pickedUpAt": null,
+      "deliveredAt": null
+    },
+    "deliveryVerification": {
+      "dropOtp": {
+        "required": false,
+        "verified": false
+      }
+    },
+    "createdAt": "2026-06-27T07:24:10.408Z",
+    "updatedAt": "2026-06-27T07:36:48.086Z",
+    "__v": 2,
+    "transactionId": "6a3f7a9a954ca65f3fa3751d"
+  },
+  {
+    "_id": "6a3f7a4b954ca65f3fa37448",
+    "orderType": "food",
+    "orderId": "FOD-7TT2XC",
+    "sessionId": "",
+    "userId": "6a3f79b6954ca65f3fa37260",
+    "restaurantId": "6a38fac5c0e66a94884a55e4",
+    "zoneId": "6a363444b49d18854bcb06e6",
+    "items": [
+      {
+        "itemId": "6a3cf2b4aeaa41965a58b3aa",
+        "name": "Afghani Chicken",
+        "type": "food",
+        "sourceId": "6a38fac5c0e66a94884a55e4",
+        "sourceName": "SHAGGY KITCHEN DAK BANGLWO",
+        "price": 400,
+        "quantity": 1,
+        "isVeg": true,
+        "image": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782220876/appzeto/restaurant/menu-items/alsgvvmecrezajtt6har.webp",
+        "notes": ""
+      }
+    ],
+    "pickupPoints": [
+      {
+        "pickupType": "food",
+        "sourceId": "6a38fac5c0e66a94884a55e4",
+        "sourceName": "SHAGGY KITCHEN DAK BANGLWO",
+        "address": "8Q96+RRW, Shaktinagar, Kishtwar, 182204",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.762097,
+            33.319619
+          ]
+        },
+        "itemIds": [
+          "6a3cf2b4aeaa41965a58b3aa"
+        ]
+      }
+    ],
+    "deliveryAddress": {
+      "label": "Home",
+      "street": "Kishtwar, Jammu and Kashmir",
+      "additionalDetails": "Kishtwar",
+      "city": "Kishtwar",
+      "state": "Jammu and Kashmir",
+      "zipCode": "",
+      "phone": "9018427073",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          75.7784267,
+          33.3127417
+        ]
+      }
+    },
+    "pricing": {
+      "subtotal": 400,
+      "tax": 40,
+      "packagingFee": 0,
+      "handlingFee": 0,
+      "deliveryFee": 60,
+      "platformFee": 50,
+      "gstAmount": 0,
+      "gst": 0,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 550,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "cod_pending",
+      "amountDue": 550,
+      "refund": {
+        "status": "none",
+        "amount": 0,
+        "refundId": "",
+        "requestedAt": null,
+        "requestedByUser": false,
+        "reason": ""
+      }
+    },
+    "orderStatus": "cancelled_by_restaurant",
+    "dispatch": {
+      "modeAtCreation": "manual",
+      "status": "accepted",
+      "deliveryPartnerId": "6a3f3ba2cdfc56f7a6d99645",
+      "offeredTo": [],
+      "acceptedAt": "2026-06-27T07:37:33.914Z",
+      "assignedAt": "2026-06-27T07:37:33.914Z"
+    },
+    "dispatchPlan": {
+      "strategy": "single",
+      "combinedPickupEligible": false,
+      "pickupDistanceKm": null,
+      "sameDirection": false,
+      "reason": "Pickup or delivery coordinates are unavailable",
+      "legs": [
+        {
+          "legId": "food:6a38fac5c0e66a94884a55e4",
+          "pickupType": "food",
+          "sourceId": "6a38fac5c0e66a94884a55e4",
+          "sourceName": "SHAGGY KITCHEN DAK BANGLWO",
+          "deliveryFee": 0,
+          "riderEarning": 0,
+          "deliveryPartnerId": null,
+          "assignedAt": null,
+          "partnerCandidates": []
+        }
+      ]
+    },
+    "statusHistory": [
+      {
+        "at": "2026-06-27T07:22:51.838Z",
+        "byRole": "SYSTEM",
+        "from": "",
+        "to": "created",
+        "note": "Order placed"
+      },
+      {
+        "at": "2026-06-27T07:37:26.618Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a38fac5c0e66a94884a55e4",
+        "from": "created",
+        "to": "preparing",
+        "note": ""
+      },
+      {
+        "at": "2026-06-27T07:37:33.914Z",
+        "byRole": "DELIVERY_PARTNER",
+        "byId": "6a3f3ba2cdfc56f7a6d99645",
+        "from": "unassigned",
+        "to": "accepted",
+        "note": ""
+      },
+      {
+        "at": "2026-06-27T07:38:13.630Z",
+        "byRole": "RESTAURANT",
+        "byId": "6a38fac5c0e66a94884a55e4",
+        "from": "preparing",
+        "to": "cancelled_by_restaurant",
+        "note": ""
+      }
+    ],
+    "note": "",
+    "restaurantNote": "",
+    "sendCutlery": true,
+    "deliveryFleet": "standard",
+    "scheduledAt": null,
+    "riderEarning": 30,
+    "platformProfit": 80,
+    "deliveryOtp": "",
+    "isCustomCake": false,
+    "customCakeRequestId": null,
+    "deliveryState": {
+      "currentPhase": "en_route_to_pickup",
+      "status": "",
+      "reachedPickupAt": null,
+      "reachedDropAt": null,
+      "pickedUpAt": null,
+      "deliveredAt": null
+    },
+    "deliveryVerification": {
+      "dropOtp": {
+        "required": false,
+        "verified": false
+      }
+    },
+    "createdAt": "2026-06-27T07:22:51.846Z",
+    "updatedAt": "2026-06-27T07:38:13.634Z",
+    "__v": 3,
+    "transactionId": "6a3f7a4b954ca65f3fa3744a"
+  },
+  {
+    "_id": "6a3e9eb920cc91db8e389f55",
+    "orderType": "food",
+    "orderId": "FOD-3TM7RJ",
+    "sessionId": "",
+    "userId": "6a0172f9a66d7677b04af682",
+    "restaurantId": "6a365b18b49d18854bcb2c9d",
+    "zoneId": "6a363444b49d18854bcb06e6",
+    "items": [
+      {
+        "itemId": "6a3a88ae4e9b1b6a795203b5",
+        "name": "Tawa Roasted Chicken",
+        "type": "food",
+        "sourceId": "6a365b18b49d18854bcb2c9d",
+        "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+        "price": 350,
+        "quantity": 1,
+        "isVeg": true,
+        "image": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782220973/appzeto/restaurant/menu-items/v8ln4megjtni5ylzigsz.webp",
+        "notes": ""
+      }
+    ],
+    "pickupPoints": [
+      {
+        "pickupType": "food",
+        "sourceId": "6a365b18b49d18854bcb2c9d",
+        "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+        "address": "8Q59+J9J, Kishtwar, 182204",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.768164,
+            33.309673
+          ]
+        },
+        "itemIds": [
+          "6a3a88ae4e9b1b6a795203b5"
+        ]
+      }
+    ],
+    "deliveryAddress": {
+      "label": "Home",
+      "street": "Kishtwar",
+      "additionalDetails": "",
+      "city": "Kishtwar",
+      "state": "Jammu and Kashmir",
+      "zipCode": "182204",
+      "phone": "9770133149",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          75.77109251883034,
+          33.31511428273244
+        ]
+      }
+    },
+    "pricing": {
+      "subtotal": 350,
+      "tax": 35,
+      "packagingFee": 0,
+      "handlingFee": 0,
+      "deliveryFee": 60,
+      "platformFee": 50,
+      "gstAmount": 0,
+      "gst": 0,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 495,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "razorpay",
+      "status": "cancelled",
+      "amountDue": 495,
+      "razorpay": {
+        "orderId": "order_T6JXSuyPv5cZV3",
+        "paymentId": "",
+        "signature": ""
+      },
+      "refund": {
+        "status": "none",
+        "amount": 0,
+        "refundId": "",
+        "requestedAt": null,
+        "requestedByUser": false,
+        "reason": ""
+      }
+    },
+    "orderStatus": "cancelled_by_user",
+    "dispatch": {
+      "modeAtCreation": "manual",
+      "status": "unassigned",
+      "deliveryPartnerId": null,
+      "offeredTo": []
+    },
+    "dispatchPlan": {
+      "strategy": "single",
+      "combinedPickupEligible": false,
+      "pickupDistanceKm": null,
+      "sameDirection": false,
+      "reason": "Pickup or delivery coordinates are unavailable",
+      "legs": [
+        {
+          "legId": "food:6a365b18b49d18854bcb2c9d",
+          "pickupType": "food",
+          "sourceId": "6a365b18b49d18854bcb2c9d",
+          "sourceName": "SHAGGY KITCHEN KICHLOO MOHALLA",
+          "deliveryFee": 0,
+          "riderEarning": 0,
+          "deliveryPartnerId": null,
+          "assignedAt": null,
+          "partnerCandidates": []
+        }
+      ]
+    },
+    "statusHistory": [
+      {
+        "at": "2026-06-26T15:46:01.905Z",
+        "byRole": "SYSTEM",
+        "from": "",
+        "to": "created",
+        "note": "Order placed"
+      },
+      {
+        "at": "2026-06-26T15:46:34.925Z",
+        "byRole": "USER",
+        "byId": "6a0172f9a66d7677b04af682",
+        "from": "created",
+        "to": "cancelled_by_user",
+        "note": "Payment Cancelled"
+      }
+    ],
+    "note": "",
+    "restaurantNote": "",
+    "sendCutlery": true,
+    "deliveryFleet": "standard",
+    "scheduledAt": null,
+    "riderEarning": 30,
+    "platformProfit": 80,
+    "deliveryOtp": "",
+    "isCustomCake": false,
+    "customCakeRequestId": null,
+    "deliveryState": {
+      "currentPhase": "en_route_to_pickup",
+      "status": "",
+      "reachedPickupAt": null,
+      "reachedDropAt": null,
+      "pickedUpAt": null,
+      "deliveredAt": null
+    },
+    "deliveryVerification": {
+      "dropOtp": {
+        "required": false,
+        "verified": false
+      }
+    },
+    "createdAt": "2026-06-26T15:46:02.088Z",
+    "updatedAt": "2026-06-26T15:46:34.930Z",
+    "__v": 1,
+    "transactionId": "6a3e9eba20cc91db8e389f57"
+  },
+  {
+    "_id": "6a3e85688b6a205bb70a8674",
+    "orderType": "quick",
+    "orderId": "QC82280245",
+    "sessionId": "",
+    "userId": "6a16d20099f1e0145b99bbcb",
+    "restaurantId": null,
+    "items": [
+      {
+        "itemId": "6a3e286f8b6a205bb70a4287",
+        "name": "ALPNIO HIGH PROTEIN OATS (1 kg)",
+        "type": "quick",
+        "sourceId": "6a3cc63c28f467bbdd29c1ee",
+        "sourceName": "",
+        "price": 430,
+        "quantity": 1,
+        "isVeg": true,
+        "image": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782458474/seller/products/ntvdu5afpemsvuokikpf.webp",
+        "notes": ""
+      }
+    ],
+    "pickupPoints": [
+      {
+        "pickupType": "quick",
+        "sourceId": "6a3cc63c28f467bbdd29c1ee",
+        "sourceName": "Mahaveer super store",
+        "address": "8QC7+JJF, Shaktinagar, Kishtwar, 182204",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.763855,
+            33.323281
+          ]
+        },
+        "itemIds": [
+          "6a3e286f8b6a205bb70a4287"
+        ]
+      }
+    ],
+    "deliveryAddress": {
+      "label": "Home",
+      "street": "Kishtwar",
+      "additionalDetails": "Kishtwar",
+      "city": "Kishtwar",
+      "state": "NA",
+      "zipCode": "",
+      "phone": "9149500373",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          75.763131,
+          33.3234287
+        ]
+      }
+    },
+    "pricing": {
+      "subtotal": 430,
+      "tax": 0,
+      "packagingFee": 0,
+      "handlingFee": 10,
+      "deliveryFee": 90,
+      "platformFee": 25,
+      "gstAmount": 86,
+      "gst": 86,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 641,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "razorpay",
+      "status": "refunded",
+      "amountDue": 641,
+      "refund": {
+        "status": "processed",
+        "amount": 641,
+        "refundId": "rfnd_T6Hj7Y0xq1mcjR",
+        "processedAt": "2026-06-26T13:59:41.853Z"
+      },
+      "razorpay": {
+        "orderId": "order_T6HhM3IwEclicA",
+        "paymentId": "pay_T6HhYgBh4GvyXS",
+        "signature": "f31171eaa347a8d2de175ae0169e3c531f052ee11c79f293c5a56b361e7858c3"
+      }
+    },
+    "orderStatus": "cancelled_by_restaurant",
+    "statusHistory": [
+      {
+        "byRole": "SYSTEM",
+        "from": "",
+        "to": "placed",
+        "note": "Quick commerce order placed",
+        "at": "2026-06-26T13:58:00.274Z"
+      },
+      {
+        "at": "2026-06-26T13:59:39.792Z",
+        "byRole": "SELLER",
+        "byId": "6a3cc63c28f467bbdd29c1ee",
+        "from": "placed",
+        "to": "cancelled_by_restaurant",
+        "note": "Seller updated status to cancelled"
+      }
+    ],
+    "note": "",
+    "restaurantNote": "",
+    "sendCutlery": true,
+    "deliveryFleet": "standard",
+    "scheduledAt": null,
+    "riderEarning": 27,
+    "platformProfit": 88,
+    "deliveryOtp": "",
+    "isCustomCake": false,
+    "customCakeRequestId": null,
+    "dispatch": {
+      "modeAtCreation": "manual",
+      "status": "unassigned",
+      "deliveryPartnerId": null,
+      "offeredTo": []
+    },
+    "dispatchPlan": {
+      "strategy": "single",
+      "combinedPickupEligible": false,
+      "pickupDistanceKm": null,
+      "sameDirection": false,
+      "reason": "",
+      "legs": []
+    },
+    "deliveryState": {
+      "currentPhase": "en_route_to_pickup",
+      "status": "",
+      "reachedPickupAt": null,
+      "reachedDropAt": null,
+      "pickedUpAt": null,
+      "deliveredAt": null
+    },
+    "deliveryVerification": {
+      "dropOtp": {
+        "required": false,
+        "verified": false
+      }
+    },
+    "createdAt": "2026-06-26T13:58:00.289Z",
+    "updatedAt": "2026-06-26T13:59:41.863Z",
+    "__v": 1
+  },
+  {
+    "_id": "6a3e77b68b6a205bb70a8160",
+    "orderType": "quick",
+    "orderId": "QC78774077",
+    "sessionId": "",
+    "userId": "6a16cfd299f1e0145b99ba66",
+    "restaurantId": null,
+    "items": [
+      {
+        "itemId": "6a3e286f8b6a205bb70a4287",
+        "name": "ALPNIO HIGH PROTEIN OATS (1 kg)",
+        "type": "quick",
+        "sourceId": "6a3cc63c28f467bbdd29c1ee",
+        "sourceName": "",
+        "price": 430,
+        "quantity": 1,
+        "isVeg": true,
+        "image": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782458474/seller/products/ntvdu5afpemsvuokikpf.webp",
+        "notes": ""
+      }
+    ],
+    "pickupPoints": [
+      {
+        "pickupType": "quick",
+        "sourceId": "6a3cc63c28f467bbdd29c1ee",
+        "sourceName": "Mahaveer super store",
+        "address": "8QC7+JJF, Shaktinagar, Kishtwar, 182204",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.763855,
+            33.323281
+          ]
+        },
+        "itemIds": [
+          "6a3e286f8b6a205bb70a4287"
+        ]
+      }
+    ],
+    "deliveryAddress": {
+      "label": "Home",
+      "street": "Kishtwar",
+      "additionalDetails": "Kishtwar",
+      "city": "Kishtwar",
+      "state": "NA",
+      "zipCode": "",
+      "phone": "7051102822",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          75.7641076,
+          33.3226819
+        ]
+      }
+    },
+    "pricing": {
+      "subtotal": 430,
+      "tax": 0,
+      "packagingFee": 0,
+      "handlingFee": 10,
+      "deliveryFee": 90,
+      "platformFee": 25,
+      "gstAmount": 86,
+      "gst": 86,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 641,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "cod_pending",
+      "amountDue": 641,
+      "refund": {
+        "status": "none",
+        "amount": 0,
+        "refundId": "",
+        "requestedAt": null,
+        "requestedByUser": false,
+        "reason": ""
+      }
+    },
+    "orderStatus": "cancelled_by_restaurant",
+    "statusHistory": [
+      {
+        "byRole": "SYSTEM",
+        "from": "",
+        "to": "placed",
+        "note": "Quick commerce order placed",
+        "at": "2026-06-26T12:59:34.116Z"
+      },
+      {
+        "at": "2026-06-26T12:59:50.156Z",
+        "byRole": "SELLER",
+        "byId": "6a3cc63c28f467bbdd29c1ee",
+        "from": "placed",
+        "to": "cancelled_by_restaurant",
+        "note": "Seller updated status to cancelled"
+      }
+    ],
+    "note": "",
+    "restaurantNote": "",
+    "sendCutlery": true,
+    "deliveryFleet": "standard",
+    "scheduledAt": null,
+    "riderEarning": 27,
+    "platformProfit": 88,
+    "deliveryOtp": "",
+    "isCustomCake": false,
+    "customCakeRequestId": null,
+    "dispatch": {
+      "modeAtCreation": "manual",
+      "status": "unassigned",
+      "deliveryPartnerId": null,
+      "offeredTo": []
+    },
+    "dispatchPlan": {
+      "strategy": "single",
+      "combinedPickupEligible": false,
+      "pickupDistanceKm": null,
+      "sameDirection": false,
+      "reason": "",
+      "legs": []
+    },
+    "deliveryState": {
+      "currentPhase": "en_route_to_pickup",
+      "status": "",
+      "reachedPickupAt": null,
+      "reachedDropAt": null,
+      "pickedUpAt": null,
+      "deliveredAt": null
+    },
+    "deliveryVerification": {
+      "dropOtp": {
+        "required": false,
+        "verified": false
+      }
+    },
+    "createdAt": "2026-06-26T12:59:34.121Z",
+    "updatedAt": "2026-06-26T12:59:50.168Z",
+    "__v": 1
+  }
+]

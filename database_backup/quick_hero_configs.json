@@ -1,0 +1,75 @@
+[
+  {
+    "_id": "69b8ddaf75099ff930c8c87a",
+    "__v": 0,
+    "banners": {
+      "items": [
+        {
+          "imageUrl": "https://res.cloudinary.com/appzeto-master-product/image/upload/f_webp,q_auto/v1777038271/quick-commerce/settings/experience/geiqvzwinojcck86mxjx.webp",
+          "title": "",
+          "subtitle": "",
+          "linkType": "none",
+          "linkValue": "",
+          "status": "active",
+          "_id": "69eb73c29bd8bfbf371f37fc"
+        }
+      ]
+    },
+    "categoryIds": [
+      "699b5331683721d007fc4f28",
+      "699b531f683721d007fc4f0d",
+      "699b531d683721d007fc4f07",
+      "699b54701bc47c3e4517e15c",
+      "699b4d9bbdd7f3ef4dbd7cf8",
+      "699b531b683721d007fc4f04",
+      "699b532f683721d007fc4f25"
+    ],
+    "createdAt": "2026-03-17T04:50:56.110Z",
+    "headerId": "699b2b283858bd13797179b2",
+    "pageType": "header",
+    "updatedAt": "2026-04-24T13:44:34.897Z"
+  },
+  {
+    "_id": "69bbd67575099ff930c93087",
+    "__v": 0,
+    "banners": {
+      "items": [
+        {
+          "imageUrl": "https://res.cloudinary.com/dv1l9sb4p/image/upload/v1773917773/experience-banners/cpawscabl7lszojmgka9.jpg",
+          "title": "",
+          "subtitle": "",
+          "linkType": "none",
+          "linkValue": "",
+          "status": "active"
+        },
+        {
+          "imageUrl": "https://res.cloudinary.com/dv1l9sb4p/image/upload/v1773917788/experience-banners/hemtag82nljssqbiy0lm.jpg",
+          "title": "",
+          "subtitle": "",
+          "linkType": "none",
+          "linkValue": "",
+          "status": "active"
+        },
+        {
+          "imageUrl": "https://res.cloudinary.com/dv1l9sb4p/image/upload/v1773917803/experience-banners/igtd2nczxpqmweesxn9d.jpg",
+          "title": "",
+          "subtitle": "",
+          "linkType": "none",
+          "linkValue": "",
+          "status": "active"
+        }
+      ]
+    },
+    "categoryIds": [
+      "699b531b683721d007fc4f04",
+      "699b4d9bbdd7f3ef4dbd7cf8",
+      "699b54701bc47c3e4517e15c",
+      "699b5327683721d007fc4f16",
+      "699b5331683721d007fc4f28"
+    ],
+    "createdAt": "2026-03-19T10:56:53.064Z",
+    "headerId": null,
+    "pageType": "home",
+    "updatedAt": "2026-03-19T10:56:53.064Z"
+  }
+]

@@ -163,6 +163,7 @@ const normalizeDeliveryAddress = (address) => {
     state: 'NA',
     zipCode: '',
     phone,
+    instructions: String(address.instructions || '').trim(),
     ...(Number.isFinite(lat) && Number.isFinite(lng)
       ? {
           location: {
@@ -911,6 +912,7 @@ export const getOrderById = async (req, res) => {
           address: deliveryAddress.street || '',
           city: deliveryAddress.city || '',
           phone: deliveryAddress.phone || '',
+          instructions: deliveryAddress.instructions || '',
           ...(deliveryCoords ? { location: deliveryCoords } : {}),
         },
         seller: seller

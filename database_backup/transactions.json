@@ -1,0 +1,23 @@
+[
+  {
+    "_id": "6a3a85844e9b1b6a7951fde8",
+    "paymentId": null,
+    "orderId": null,
+    "entityType": "deliveryBoy",
+    "entityId": "6a2d0a80cabfce527e985073",
+    "type": "debit",
+    "amount": 140,
+    "balanceAfter": -140,
+    "currency": "INR",
+    "status": "completed",
+    "description": "Withdrawal Approved - 6a391f36c0e66a94884a9045",
+    "category": "settlement_payout",
+    "module": "food",
+    "metadata": {
+      "withdrawalId": "6a391f36c0e66a94884a9045"
+    },
+    "createdAt": "2026-06-23T13:09:24.745Z",
+    "updatedAt": "2026-06-23T13:09:24.745Z",
+    "__v": 0
+  }
+]

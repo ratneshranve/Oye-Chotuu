@@ -1,0 +1,132 @@
+[
+  {
+    "_id": "69edcb94a46a0c31bb3641d5",
+    "companyName": "OyeChotuu",
+    "email": "admin@gmail.com",
+    "phone": {
+      "countryCode": "+91",
+      "number": "6261387233"
+    },
+    "address": "Sheetla Nagar ,Kishtwar",
+    "state": "",
+    "pincode": "",
+    "region": "India",
+    "logo": {
+      "url": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1781156501/business/logos/ej05bsnlwriofbqilfqf.webp",
+      "publicId": "business/logos/ej05bsnlwriofbqilfqf"
+    },
+    "favicon": {
+      "url": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1781156539/business/favicons/d9z6vqz1ddl064hg7wni.webp",
+      "publicId": "business/favicons/d9z6vqz1ddl064hg7wni"
+    },
+    "themeColor": "#0a0a0a",
+    "modules": {
+      "food": true,
+      "homeBakery": true,
+      "quickCommerce": true,
+      "dudhwala": false
+    },
+    "createdAt": "2026-04-26T08:23:48.959Z",
+    "updatedAt": "2026-06-29T05:56:02.270Z",
+    "__v": 3,
+    "bannedNumbers": [
+      "9541030106"
+    ],
+    "codEnabled": true,
+    "showLocationPopup": true,
+    "onlinePaymentEnabled": true
+  },
+  {
+    "_id": "69b1c3f005dee67375879af1",
+    "__v": 0,
+    "address": "",
+    "appName": "pack & pure ",
+    "appStoreLink": "",
+    "companyName": "",
+    "createdAt": "2026-03-11T19:35:12.334Z",
+    "currencyCode": "INR",
+    "currencySymbol": "₹",
+    "facebook": "",
+    "faviconUrl": "https://res.cloudinary.com/dlu9q4dk9/image/upload/v1774462387/WhatsApp_Image_2026-03-25_at_3.13.56_PM_meq8cd.jpg",
+    "instagram": "",
+    "keywords": [],
+    "linkedin": "",
+    "logoUrl": "https://res.cloudinary.com/dlu9q4dk9/image/upload/v1774462387/WhatsApp_Image_2026-03-25_at_3.13.56_PM_meq8cd.jpg",
+    "metaDescription": "",
+    "metaKeywords": "",
+    "metaTitle": "",
+    "playStoreLink": "",
+    "primaryColor": "#ff0000",
+    "returnDeliveryCommission": 20,
+    "secondaryColor": "#ffffff",
+    "supportEmail": "support@packnpure.com",
+    "supportPhone": "",
+    "taxId": "",
+    "timezone": "Asia/Kolkata",
+    "twitter": "",
+    "updatedAt": "2026-03-25T18:20:04.795Z",
+    "youtube": ""
+  },
+  {
+    "_id": "69edcdca3bdc0d4f64b0c529",
+    "__v": 0,
+    "address": "",
+    "companyName": "Appzeto",
+    "createdAt": "2026-04-26T08:33:14.558Z",
+    "email": "admin@appzeto.com",
+    "favicon": {
+      "url": "",
+      "publicId": ""
+    },
+    "logo": {
+      "url": "",
+      "publicId": ""
+    },
+    "phone": {
+      "countryCode": "+91",
+      "number": ""
+    },
+    "pincode": "",
+    "region": "India",
+    "state": "",
+    "themeColor": "#0a0a0a",
+    "updatedAt": "2026-04-26T08:33:14.558Z"
+  },
+  {
+    "_id": "69bd27cdf6982958e0bc13b1",
+    "__v": 5,
+    "address": "Bholaram Ustad Marg Indore",
+    "companyName": "OyeChotuu",
+    "createdAt": "2026-03-20T10:56:13.327Z",
+    "email": "admin@gmail.com",
+    "favicon": {
+      "url": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1778409505/business/favicons/gvrq7fgfrffela77p7ru.webp",
+      "publicId": "business/favicons/gvrq7fgfrffela77p7ru"
+    },
+    "logo": {
+      "url": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1778409492/business/logos/egg1vzhzryv8sgofryoa.webp",
+      "publicId": "business/logos/egg1vzhzryv8sgofryoa"
+    },
+    "phone": {
+      "countryCode": "+91",
+      "number": "9999999999"
+    },
+    "pincode": "450001",
+    "region": "India",
+    "state": "Madhya Pradesh",
+    "updatedAt": "2026-06-20T12:05:30.924Z",
+    "modules": {
+      "food": true,
+      "homeBakery": true,
+      "quickCommerce": true,
+      "dudhwala": true
+    },
+    "themeColor": "#0a0a0a",
+    "codEnabled": true,
+    "bannedNumbers": [
+      "6006623007"
+    ],
+    "showLocationPopup": false,
+    "onlinePaymentEnabled": true
+  }
+]

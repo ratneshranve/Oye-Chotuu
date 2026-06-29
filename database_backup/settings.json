@@ -1,0 +1,33 @@
+[
+  {
+    "_id": "69b1c3f005dee67375879af1",
+    "appName": "pack & pure ",
+    "supportEmail": "support@packnpure.com",
+    "supportPhone": "",
+    "currencySymbol": "₹",
+    "currencyCode": "INR",
+    "timezone": "Asia/Kolkata",
+    "primaryColor": "#ff0000",
+    "returnDeliveryCommission": 20,
+    "createdAt": "2026-03-11T19:35:12.334Z",
+    "updatedAt": "2026-03-25T18:20:04.795Z",
+    "__v": 0,
+    "address": "",
+    "appStoreLink": "",
+    "companyName": "",
+    "facebook": "",
+    "faviconUrl": "https://res.cloudinary.com/dlu9q4dk9/image/upload/f_webp,q_auto/v1774462387/WhatsApp_Image_2026-03-25_at_3.13.56_PM_meq8cd.jpg",
+    "instagram": "",
+    "keywords": [],
+    "linkedin": "",
+    "logoUrl": "https://res.cloudinary.com/dlu9q4dk9/image/upload/f_webp,q_auto/v1774462387/WhatsApp_Image_2026-03-25_at_3.13.56_PM_meq8cd.jpg",
+    "metaDescription": "",
+    "metaKeywords": "",
+    "metaTitle": "",
+    "playStoreLink": "",
+    "secondaryColor": "#ffffff",
+    "taxId": "",
+    "twitter": "",
+    "youtube": ""
+  }
+]

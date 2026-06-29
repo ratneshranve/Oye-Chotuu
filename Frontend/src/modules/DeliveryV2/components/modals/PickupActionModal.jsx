@@ -130,7 +130,7 @@ export const PickupActionModal = ({
       <motion.div 
         initial={{ y: '100%' }}
         animate={{ y: 0 }}
-        className="w-full max-w-lg bg-white rounded-t-[2rem] shadow-[0_-15px_40px_rgba(0,0,0,0.2)] p-4 pb-8"
+        className="w-full max-w-lg bg-white rounded-t-[2rem] shadow-[0_-15px_40px_rgba(0,0,0,0.2)] p-4 pb-8 max-h-[85vh] overflow-y-auto"
       >
         {/* Handle / Minimize */}
         <div className="w-full flex justify-center pb-4 pt-1">

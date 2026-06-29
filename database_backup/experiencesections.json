@@ -1,0 +1,191 @@
+[
+  {
+    "_id": "69a83dddf0505f55a2acf45a",
+    "pageType": "header",
+    "headerId": "699b2b283858bd13797179b2",
+    "displayType": "categories",
+    "title": "Top Catagories",
+    "order": 1,
+    "status": "active",
+    "config": {
+      "banners": {
+        "items": []
+      },
+      "categories": {
+        "maxItems": 4,
+        "categoryIds": [
+          "699b4d9bbdd7f3ef4dbd7cf8",
+          "699b54701bc47c3e4517e15c",
+          "699b54951bc47c3e4517e15f",
+          "699b54c21bc47c3e4517e162"
+        ],
+        "rows": 1
+      },
+      "subcategories": {
+        "categoryIds": [],
+        "subcategoryIds": []
+      },
+      "products": {
+        "categoryIds": [],
+        "subcategoryIds": [],
+        "productIds": [],
+        "singleRowScrollable": false
+      }
+    },
+    "createdAt": "2026-03-04T14:12:45.874Z",
+    "updatedAt": "2026-03-04T16:27:54.817Z",
+    "__v": 1
+  },
+  {
+    "_id": "69a84f6098e7ac6f32c7eec3",
+    "pageType": "header",
+    "headerId": "699b2b283858bd13797179b2",
+    "displayType": "subcategories",
+    "title": "Top Subcatagories",
+    "order": 2,
+    "status": "active",
+    "config": {
+      "banners": {
+        "items": []
+      },
+      "categories": {
+        "categoryIds": []
+      },
+      "subcategories": {
+        "categoryIds": [
+          "699b4d9bbdd7f3ef4dbd7cf8",
+          "699b54701bc47c3e4517e15c"
+        ],
+        "subcategoryIds": [
+          "699b59a8f77564cd9e5052dc",
+          "699b59aaf77564cd9e5052df",
+          "699b59aef77564cd9e5052e8",
+          "699b59aff77564cd9e5052eb",
+          "699b59b1f77564cd9e5052f0",
+          "699b59b2f77564cd9e5052f3",
+          "699b59b5f77564cd9e5052f9",
+          "699b59b9f77564cd9e505302"
+        ],
+        "rows": 2
+      },
+      "products": {
+        "categoryIds": [],
+        "subcategoryIds": [],
+        "productIds": [],
+        "singleRowScrollable": false
+      }
+    },
+    "createdAt": "2026-03-04T15:27:28.494Z",
+    "updatedAt": "2026-03-04T16:27:40.738Z",
+    "__v": 0
+  },
+  {
+    "_id": "69a8512e98e7ac6f32c7eefb",
+    "pageType": "header",
+    "headerId": "699b2b283858bd13797179b2",
+    "displayType": "products",
+    "title": "Product Section",
+    "order": 3,
+    "status": "active",
+    "config": {
+      "banners": {
+        "items": []
+      },
+      "categories": {
+        "categoryIds": []
+      },
+      "subcategories": {
+        "categoryIds": [],
+        "subcategoryIds": []
+      },
+      "products": {
+        "categoryIds": [
+          "699b4d9bbdd7f3ef4dbd7cf8",
+          "699b54701bc47c3e4517e15c",
+          "699b54951bc47c3e4517e15f",
+          "699b54c21bc47c3e4517e162"
+        ],
+        "subcategoryIds": [
+          "699b597bf77564cd9e505275",
+          "699b597ef77564cd9e50527b",
+          "699b5982f77564cd9e505284",
+          "699b59a4f77564cd9e5052d3",
+          "699b59a5f77564cd9e5052d6",
+          "699b59a6f77564cd9e5052d9",
+          "699b59aaf77564cd9e5052df",
+          "699b59adf77564cd9e5052e5",
+          "699b59aef77564cd9e5052e8",
+          "699b59b1f77564cd9e5052f0",
+          "699b59b2f77564cd9e5052f3",
+          "699b59b8f77564cd9e5052ff",
+          "699b59b9f77564cd9e505302",
+          "699b59d5f77564cd9e505347",
+          "699b59d6f77564cd9e50534b",
+          "699b59daf77564cd9e505358"
+        ],
+        "productIds": [],
+        "rows": 2,
+        "columns": 2,
+        "singleRowScrollable": false
+      }
+    },
+    "createdAt": "2026-03-04T15:35:10.422Z",
+    "updatedAt": "2026-03-04T16:27:40.738Z",
+    "__v": 0
+  },
+  {
+    "_id": "69a8496b98e7ac6f32c7edef",
+    "pageType": "header",
+    "headerId": "699b2b283858bd13797179b2",
+    "displayType": "banners",
+    "title": "",
+    "order": 0,
+    "status": "active",
+    "config": {
+      "banners": {
+        "items": [
+          {
+            "imageUrl": "https://res.cloudinary.com/dv1l9sb4p/image/upload/f_webp,q_auto/v1772636430/experience-banners/aa90xtjuddkhbot8otej.png",
+            "title": "",
+            "subtitle": "",
+            "linkType": "none",
+            "linkValue": "",
+            "status": "active"
+          },
+          {
+            "imageUrl": "https://res.cloudinary.com/dv1l9sb4p/image/upload/f_webp,q_auto/v1772636482/experience-banners/aa2jfcydksfsri5x7hiz.png",
+            "title": "",
+            "subtitle": "",
+            "linkType": "none",
+            "linkValue": "",
+            "status": "active"
+          },
+          {
+            "imageUrl": "https://res.cloudinary.com/dv1l9sb4p/image/upload/f_webp,q_auto/v1772636507/experience-banners/fcatl1qm9ojiiijyh15p.png",
+            "title": "",
+            "subtitle": "",
+            "linkType": "none",
+            "linkValue": "",
+            "status": "active"
+          }
+        ]
+      },
+      "categories": {
+        "categoryIds": []
+      },
+      "subcategories": {
+        "categoryIds": [],
+        "subcategoryIds": []
+      },
+      "products": {
+        "categoryIds": [],
+        "subcategoryIds": [],
+        "productIds": [],
+        "singleRowScrollable": false
+      }
+    },
+    "createdAt": "2026-03-04T15:02:03.467Z",
+    "updatedAt": "2026-03-04T16:27:40.738Z",
+    "__v": 0
+  }
+]

@@ -209,5 +209,7 @@ router.put('/pages-social-media/:key', upsertAdminPageController);
 router.get('/sidebar-badges', adminController.getSidebarBadges);
 router.get('/notifications/fssai-expired', adminController.getExpiredFssaiNotifications);
 
+router.post('/restaurants/:id/menu/bulk-upload', upload.single('file'), adminController.bulkUploadMenu);
+
 export default router;
 

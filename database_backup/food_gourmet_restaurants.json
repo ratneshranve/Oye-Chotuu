@@ -1,0 +1,52 @@
+[
+  {
+    "_id": "69b8672f25ebb39610deb9f3",
+    "restaurantId": "69b805de9c070c51724618e6",
+    "tags": [],
+    "priority": 0,
+    "isActive": true,
+    "createdAt": "2026-03-16T20:25:19.758Z",
+    "updatedAt": "2026-03-16T20:25:19.758Z",
+    "__v": 0
+  },
+  {
+    "_id": "69c231285354412c90fa7be4",
+    "restaurantId": "69ba83b6f2a2e60a9ab85b93",
+    "tags": [],
+    "priority": 2,
+    "isActive": true,
+    "createdAt": "2026-03-24T06:37:28.251Z",
+    "updatedAt": "2026-03-24T06:37:28.251Z",
+    "__v": 0
+  },
+  {
+    "_id": "69c234bc4c5538450eee9ff7",
+    "restaurantId": "69b8f156f1ecccbb2e25d030",
+    "tags": [],
+    "priority": 2,
+    "isActive": true,
+    "createdAt": "2026-03-24T06:52:44.856Z",
+    "updatedAt": "2026-03-24T06:52:44.856Z",
+    "__v": 0
+  },
+  {
+    "_id": "69f1af100cc8e0f718e6bdef",
+    "restaurantId": "69ee02d573ac72cb55f41a0d",
+    "tags": [],
+    "priority": 0,
+    "isActive": true,
+    "createdAt": "2026-04-29T07:11:12.972Z",
+    "updatedAt": "2026-04-29T07:11:12.972Z",
+    "__v": 0
+  },
+  {
+    "_id": "69f1af180cc8e0f718e6be09",
+    "restaurantId": "69ee02d673ac72cb55f41a24",
+    "tags": [],
+    "priority": 1,
+    "isActive": true,
+    "createdAt": "2026-04-29T07:11:20.799Z",
+    "updatedAt": "2026-04-29T07:11:20.799Z",
+    "__v": 0
+  }
+]

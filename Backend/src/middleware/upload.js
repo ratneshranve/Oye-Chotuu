@@ -16,7 +16,10 @@ const ALLOWED_MIME_TYPES = new Set([
     'video/mp4',
     'video/webm',
     'video/quicktime',
-    'application/pdf'
+    'application/pdf',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
+    'application/vnd.ms-excel', // .xls
+    'text/csv' // .csv
 ]);
 
 const createFileFilter = (allowedTypes) => (_req, file, cb) => {

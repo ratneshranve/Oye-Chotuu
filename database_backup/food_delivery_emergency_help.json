@@ -1,0 +1,13 @@
+[
+  {
+    "_id": "69b93364895b520b9dcb6f85",
+    "medicalEmergency": "108",
+    "accidentHelpline": "111",
+    "contactPolice": "100",
+    "insurance": "8491800373",
+    "isActive": true,
+    "createdAt": "2026-03-17T10:56:36.868Z",
+    "updatedAt": "2026-06-27T10:00:40.333Z",
+    "__v": 0
+  }
+]

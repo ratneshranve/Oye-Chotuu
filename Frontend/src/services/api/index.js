@@ -210,6 +210,14 @@ export const dudhwalaAPI = {
 export const adminAPI = {
   searchUsers: (query) =>
     apiClient.get(`/food/admin/users/search?q=${encodeURIComponent(query)}`, { contextModule: "admin" }),
+  bulkUploadRestaurantMenu: (restaurantId, file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    return apiClient.post(`/food/admin/restaurants/${restaurantId}/menu/bulk-upload`, formData, {
+      contextModule: "admin",
+      headers: { "Content-Type": "multipart/form-data" }
+    });
+  },
   addMoneyToUserWallet: (userId, amount) =>
     apiClient.post(`/food/admin/wallet/add-money`, { userId, amount }, { contextModule: "admin" }),
   getSidebarBadges: () =>

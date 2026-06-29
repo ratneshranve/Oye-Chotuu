@@ -12,6 +12,10 @@ import { validateReferralSettingsUpsertDto } from '../validators/referralSetting
 // ----- Customers / Users -----
 import { addMoneyToUserWalletByAdmin } from '../../user/services/userWallet.service.js';
 
+import xlsx from 'xlsx';
+import { FoodItem } from '../models/food.model.js';
+import { FoodCategory } from '../models/category.model.js';
+
 export async function searchUsers(req, res, next) {
     try {
         const { q } = req.query;
@@ -1505,6 +1509,126 @@ export async function getExpiredFssaiNotifications(req, res, next) {
             success: true,
             message: 'Expired FSSAI notifications fetched successfully',
             data: { items }
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+export async function bulkUploadMenu(req, res, next) {
+    try {
+        const { id: restaurantId } = req.params;
+        if (!restaurantId || !mongoose.Types.ObjectId.isValid(restaurantId)) {
+            return res.status(400).json({ success: false, message: 'Invalid restaurant ID' });
+        }
+
+        if (!req.file) {
+            return res.status(400).json({ success: false, message: 'Excel file is required' });
+        }
+
+        const workbook = xlsx.read(req.file.buffer, { type: 'buffer' });
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const rawData = xlsx.utils.sheet_to_json(sheet);
+
+        let insertedCount = 0;
+        let skippedCount = 0;
+        const categoryCache = {};
+
+        for (let i = 0; i < rawData.length; i++) {
+            const row = rawData[i];
+            
+            const categoryName = String(row.category || row.Category || '').trim();
+            const itemName = String(row.itemname || row.ItemName || row['Item Name'] || row['item name'] || '').trim();
+            const description = String(row.description || row.Description || '').trim();
+            const price = parseFloat(row.price || row.Price || 0);
+            
+            const image = String(row.image || row.Image || '').trim();
+            const rawType = String(row.type || row.Type || row.FoodType || row['Food Type'] || '').trim().toLowerCase();
+            const foodType = (rawType === 'veg' || rawType === 'vegetarian') ? 'Veg' : 'Non-Veg';
+            const prepTime = String(row.time || row.Time || row.PrepTime || row['Preparation Time'] || '').trim();
+            
+            // Parse variants (Format: "Half:150, Full:250")
+            let parsedVariants = [];
+            const variantsStr = String(row.variants || row.Variants || '').trim();
+            if (variantsStr) {
+                const pairs = variantsStr.split(',');
+                pairs.forEach(pair => {
+                    // Support colon (:) or equals (=) or hyphen (-)
+                    let parts = pair.includes(':') ? pair.split(':') : (pair.includes('=') ? pair.split('=') : pair.split('-'));
+                    if (parts.length === 2) {
+                        const vName = parts[0].trim();
+                        const vPrice = parseFloat(parts[1].trim());
+                        if (vName && !isNaN(vPrice)) {
+                            parsedVariants.push({ name: vName, price: vPrice });
+                        }
+                    }
+                });
+            }
+
+            if (!itemName || !categoryName) {
+                continue;
+            }
+
+            const lowerCat = categoryName.toLowerCase();
+
+            let category;
+            if (categoryCache[lowerCat]) {
+                category = categoryCache[lowerCat];
+            } else {
+                category = await FoodCategory.findOne({
+                    name: { $regex: new RegExp(`^${categoryName}$`, 'i') },
+                    $or: [
+                        { restaurantId: restaurantId },
+                        { restaurantId: { $exists: false } },
+                        { restaurantId: null }
+                    ]
+                });
+
+                if (!category) {
+                    category = await FoodCategory.create({
+                        name: categoryName,
+                        restaurantId: restaurantId,
+                        createdByRestaurantId: restaurantId,
+                        approvalStatus: 'approved',
+                        isApproved: true,
+                        isActive: true,
+                        foodTypeScope: 'Both'
+                    });
+                }
+                categoryCache[lowerCat] = category;
+            }
+
+            let foodItem = await FoodItem.findOne({
+                restaurantId: restaurantId,
+                name: { $regex: new RegExp(`^${itemName}$`, 'i') }
+            });
+
+            if (!foodItem) {
+                await FoodItem.create({
+                    restaurantId: restaurantId,
+                    categoryId: category._id,
+                    categoryName: category.name,
+                    name: itemName,
+                    description: description,
+                    price: price,
+                    variants: parsedVariants,
+                    image: image,
+                    foodType: foodType,
+                    preparationTime: prepTime,
+                    isAvailable: true,
+                    approvalStatus: 'approved',
+                });
+                insertedCount++;
+            } else {
+                skippedCount++;
+            }
+        }
+
+        res.status(200).json({ 
+            success: true, 
+            message: 'Menu uploaded successfully',
+            data: { insertedCount, skippedCount }
         });
     } catch (error) {
         next(error);

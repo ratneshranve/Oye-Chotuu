@@ -1,0 +1,72 @@
+[
+  {
+    "_id": "6a01686d94cffc4bc7de3f00",
+    "productId": "6a00ce3e9f0a04c919c5ed5e",
+    "quantityId": "6a0167d594cffc4bc7de3eb9",
+    "pricePerDay": 35,
+    "isActive": true,
+    "createdAt": "2026-05-11T05:26:05.881Z",
+    "updatedAt": "2026-05-11T05:26:05.881Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a01687794cffc4bc7de3f06",
+    "productId": "6a00ce3e9f0a04c919c5ed5e",
+    "quantityId": "6a0167e194cffc4bc7de3ebd",
+    "pricePerDay": 60,
+    "isActive": true,
+    "createdAt": "2026-05-11T05:26:15.602Z",
+    "updatedAt": "2026-05-11T05:26:15.602Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a01688794cffc4bc7de3f21",
+    "productId": "6a00ce3e9f0a04c919c5ed5e",
+    "quantityId": "6a0167ed94cffc4bc7de3ec1",
+    "pricePerDay": 100,
+    "isActive": true,
+    "createdAt": "2026-05-11T05:26:31.117Z",
+    "updatedAt": "2026-05-11T05:26:31.117Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a01689194cffc4bc7de3f27",
+    "productId": "6a0167c894cffc4bc7de3ea0",
+    "quantityId": "6a0167d594cffc4bc7de3eb9",
+    "pricePerDay": 40,
+    "isActive": true,
+    "createdAt": "2026-05-11T05:26:41.439Z",
+    "updatedAt": "2026-05-11T05:26:41.439Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a01689894cffc4bc7de3f2d",
+    "productId": "6a0167c894cffc4bc7de3ea0",
+    "quantityId": "6a0167e194cffc4bc7de3ebd",
+    "pricePerDay": 70,
+    "isActive": true,
+    "createdAt": "2026-05-11T05:26:48.860Z",
+    "updatedAt": "2026-05-11T05:26:48.860Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a0168a494cffc4bc7de3f33",
+    "productId": "6a0167c894cffc4bc7de3ea0",
+    "quantityId": "6a0167ed94cffc4bc7de3ec1",
+    "pricePerDay": 150,
+    "isActive": true,
+    "createdAt": "2026-05-11T05:27:00.900Z",
+    "updatedAt": "2026-05-11T05:27:00.900Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a2fe4639f4cd52de41cce49",
+    "productId": "6a2fe4219f4cd52de41ccdf5",
+    "quantityId": "6a0167e194cffc4bc7de3ebd",
+    "pricePerDay": 20,
+    "isActive": true,
+    "createdAt": "2026-06-15T11:39:15.255Z",
+    "updatedAt": "2026-06-15T11:39:15.255Z",
+    "__v": 0
+  }
+]

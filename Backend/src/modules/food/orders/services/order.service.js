@@ -168,6 +168,7 @@ function normalizeDeliveryAddress(address) {
     state,
     zipCode: String(address.zipCode || address.postalCode || "").trim(),
     phone: String(address.phone || "").trim(),
+    instructions: String(address.instructions || "").trim(),
     location: address.location?.coordinates
       ? { type: "Point", coordinates: address.location.coordinates }
       : undefined,

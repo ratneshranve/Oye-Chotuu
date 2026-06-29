@@ -1,0 +1,26 @@
+[
+  {
+    "_id": "69fb18a6803f90ba3aa56f03",
+    "name": "0-4",
+    "minDistance": 0,
+    "maxDistance": 4,
+    "commissionPerKm": 0,
+    "basePayout": 27,
+    "status": true,
+    "createdAt": "2026-05-06T10:32:06.165Z",
+    "updatedAt": "2026-05-06T10:32:06.165Z",
+    "__v": 0
+  },
+  {
+    "_id": "69fb18cb803f90ba3aa56f25",
+    "name": "4-unlimted",
+    "minDistance": 4,
+    "maxDistance": null,
+    "commissionPerKm": 5,
+    "basePayout": 0,
+    "status": true,
+    "createdAt": "2026-05-06T10:32:43.338Z",
+    "updatedAt": "2026-05-06T10:32:43.338Z",
+    "__v": 0
+  }
+]

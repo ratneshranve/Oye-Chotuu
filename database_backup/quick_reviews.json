@@ -1,0 +1,15 @@
+[
+  {
+    "_id": "6a3e85fd8b6a205bb70a86f9",
+    "productId": "6a3e286f8b6a205bb70a4287",
+    "userId": "6a16d20099f1e0145b99bbcb",
+    "userName": "Brighu",
+    "userAvatar": "",
+    "rating": 5,
+    "comment": "Good",
+    "status": "approved",
+    "createdAt": "2026-06-26T14:00:29.506Z",
+    "updatedAt": "2026-06-26T14:00:29.506Z",
+    "__v": 0
+  }
+]

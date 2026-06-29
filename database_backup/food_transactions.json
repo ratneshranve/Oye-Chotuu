@@ -1,0 +1,1688 @@
+[
+  {
+    "_id": "6a3e9eba20cc91db8e389f57",
+    "orderId": "6a3e9eb920cc91db8e389f55",
+    "orderType": "food",
+    "userId": "6a0172f9a66d7677b04af682",
+    "restaurantId": "6a365b18b49d18854bcb2c9d",
+    "deliveryPartnerId": null,
+    "paymentMethod": "razorpay",
+    "status": "failed",
+    "currency": "INR",
+    "pricing": {
+      "subtotal": 350,
+      "tax": 35,
+      "packagingFee": 0,
+      "deliveryFee": 60,
+      "platformFee": 50,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 495,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "razorpay",
+      "status": "created",
+      "amountDue": 495,
+      "razorpay": {
+        "orderId": "order_T6JXSuyPv5cZV3",
+        "paymentId": "",
+        "signature": ""
+      },
+      "qr": {
+        "qrId": "",
+        "imageUrl": "",
+        "paymentLinkId": "",
+        "shortUrl": "",
+        "status": "",
+        "expiresAt": null
+      }
+    },
+    "amounts": {
+      "totalCustomerPaid": 495,
+      "restaurantShare": 350,
+      "restaurantCommission": 0,
+      "riderShare": 30,
+      "platformNetProfit": 80,
+      "taxAmount": 35
+    },
+    "gateway": {
+      "razorpayOrderId": "order_T6JXSuyPv5cZV3",
+      "provider": "razorpay"
+    },
+    "settlement": {
+      "isRestaurantSettled": false,
+      "isRiderSettled": false
+    },
+    "history": [
+      {
+        "kind": "created",
+        "amount": 495,
+        "note": "Initial transaction created with order",
+        "_id": "6a3e9eba20cc91db8e389f58",
+        "at": "2026-06-26T15:46:02.143Z"
+      },
+      {
+        "kind": "cancelled_by_user",
+        "amount": 495,
+        "at": "2026-06-26T15:46:34.949Z",
+        "note": "Order cancelled by user: Payment Cancelled",
+        "recordedBy": {
+          "role": "USER",
+          "id": "6a0172f9a66d7677b04af682"
+        },
+        "_id": "6a3e9eda20cc91db8e389f66"
+      }
+    ],
+    "createdAt": "2026-06-26T15:46:02.144Z",
+    "updatedAt": "2026-06-26T15:46:34.951Z",
+    "__v": 1
+  },
+  {
+    "_id": "6a3f7a4b954ca65f3fa3744a",
+    "orderId": "6a3f7a4b954ca65f3fa37448",
+    "orderType": "food",
+    "userId": "6a3f79b6954ca65f3fa37260",
+    "restaurantId": "6a38fac5c0e66a94884a55e4",
+    "deliveryPartnerId": "6a3f3ba2cdfc56f7a6d99645",
+    "paymentMethod": "cash",
+    "status": "failed",
+    "currency": "INR",
+    "pricing": {
+      "subtotal": 400,
+      "tax": 40,
+      "packagingFee": 0,
+      "deliveryFee": 60,
+      "platformFee": 50,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 550,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "cod_pending",
+      "amountDue": 550,
+      "razorpay": {
+        "orderId": "",
+        "paymentId": "",
+        "signature": ""
+      },
+      "qr": {
+        "qrId": "",
+        "imageUrl": "",
+        "paymentLinkId": "",
+        "shortUrl": "",
+        "status": "",
+        "expiresAt": null
+      }
+    },
+    "amounts": {
+      "totalCustomerPaid": 550,
+      "restaurantShare": 400,
+      "restaurantCommission": 0,
+      "riderShare": 30,
+      "platformNetProfit": 80,
+      "taxAmount": 40
+    },
+    "gateway": {
+      "provider": "razorpay"
+    },
+    "settlement": {
+      "isRestaurantSettled": false,
+      "isRiderSettled": false
+    },
+    "history": [
+      {
+        "kind": "created",
+        "amount": 550,
+        "note": "Initial transaction created with order",
+        "_id": "6a3f7a4b954ca65f3fa3744b",
+        "at": "2026-06-27T07:22:51.870Z"
+      },
+      {
+        "kind": "cancelled_by_restaurant",
+        "amount": 550,
+        "at": "2026-06-27T07:38:14.159Z",
+        "note": "Order cancelled by restaurant/admin",
+        "recordedBy": {
+          "role": "RESTAURANT",
+          "id": "6a38fac5c0e66a94884a55e4"
+        },
+        "_id": "6a3f7de6954ca65f3fa37ebd"
+      }
+    ],
+    "createdAt": "2026-06-27T07:22:51.871Z",
+    "updatedAt": "2026-06-27T07:38:14.161Z",
+    "__v": 1
+  },
+  {
+    "_id": "6a3f7a9a954ca65f3fa3751d",
+    "orderId": "6a3f7a9a954ca65f3fa3751b",
+    "orderType": "food",
+    "userId": "6a3f79b6954ca65f3fa37260",
+    "restaurantId": "6a38fac5c0e66a94884a55e4",
+    "deliveryPartnerId": null,
+    "paymentMethod": "cash",
+    "status": "pending",
+    "currency": "INR",
+    "pricing": {
+      "subtotal": 240,
+      "tax": 24,
+      "packagingFee": 0,
+      "deliveryFee": 60,
+      "platformFee": 50,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 374,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "cod_pending",
+      "amountDue": 374,
+      "razorpay": {
+        "orderId": "",
+        "paymentId": "",
+        "signature": ""
+      },
+      "qr": {
+        "qrId": "",
+        "imageUrl": "",
+        "paymentLinkId": "",
+        "shortUrl": "",
+        "status": "",
+        "expiresAt": null
+      }
+    },
+    "amounts": {
+      "totalCustomerPaid": 374,
+      "restaurantShare": 240,
+      "restaurantCommission": 0,
+      "riderShare": 30,
+      "platformNetProfit": 80,
+      "taxAmount": 24
+    },
+    "gateway": {
+      "provider": "razorpay"
+    },
+    "settlement": {
+      "isRestaurantSettled": false,
+      "isRiderSettled": false
+    },
+    "history": [
+      {
+        "kind": "created",
+        "amount": 374,
+        "note": "Initial transaction created with order",
+        "_id": "6a3f7a9a954ca65f3fa3751e",
+        "at": "2026-06-27T07:24:10.424Z"
+      }
+    ],
+    "createdAt": "2026-06-27T07:24:10.425Z",
+    "updatedAt": "2026-06-27T07:24:10.425Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a3f7e84954ca65f3fa3811c",
+    "orderId": "6a3f7e84954ca65f3fa3811a",
+    "orderType": "food",
+    "userId": "6a3f79b6954ca65f3fa37260",
+    "restaurantId": "6a365b18b49d18854bcb2c9d",
+    "deliveryPartnerId": "6a3f3d63cdfc56f7a6d99667",
+    "paymentMethod": "cash",
+    "status": "pending",
+    "currency": "INR",
+    "pricing": {
+      "subtotal": 280,
+      "tax": 28,
+      "packagingFee": 0,
+      "deliveryFee": 60,
+      "platformFee": 50,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 418,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "cod_pending",
+      "amountDue": 418,
+      "razorpay": {
+        "orderId": "",
+        "paymentId": "",
+        "signature": ""
+      },
+      "qr": {
+        "qrId": "",
+        "imageUrl": "",
+        "paymentLinkId": "",
+        "shortUrl": "",
+        "status": "",
+        "expiresAt": null
+      }
+    },
+    "amounts": {
+      "totalCustomerPaid": 418,
+      "restaurantShare": 280,
+      "restaurantCommission": 0,
+      "riderShare": 30,
+      "platformNetProfit": 80,
+      "taxAmount": 28
+    },
+    "gateway": {
+      "provider": "razorpay"
+    },
+    "settlement": {
+      "isRestaurantSettled": false,
+      "isRiderSettled": false
+    },
+    "history": [
+      {
+        "kind": "created",
+        "amount": 418,
+        "note": "Initial transaction created with order",
+        "_id": "6a3f7e84954ca65f3fa3811d",
+        "at": "2026-06-27T07:40:52.051Z"
+      }
+    ],
+    "createdAt": "2026-06-27T07:40:52.052Z",
+    "updatedAt": "2026-06-27T08:06:30.216Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a3f84f9954ca65f3fa3982e",
+    "orderId": "6a3f84f9954ca65f3fa3982c",
+    "orderType": "food",
+    "userId": "6a16cfd299f1e0145b99ba66",
+    "restaurantId": "6a365b18b49d18854bcb2c9d",
+    "deliveryPartnerId": "6a242d8835547789fbc9eb21",
+    "paymentMethod": "razorpay",
+    "status": "captured",
+    "currency": "INR",
+    "pricing": {
+      "subtotal": 180,
+      "tax": 18,
+      "packagingFee": 0,
+      "deliveryFee": 60,
+      "platformFee": 50,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 308,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "razorpay",
+      "status": "created",
+      "amountDue": 308,
+      "razorpay": {
+        "orderId": "order_T6aHCgrpUy2FEl",
+        "paymentId": "",
+        "signature": ""
+      },
+      "qr": {
+        "qrId": "",
+        "imageUrl": "",
+        "paymentLinkId": "",
+        "shortUrl": "",
+        "status": "",
+        "expiresAt": null
+      }
+    },
+    "amounts": {
+      "totalCustomerPaid": 308,
+      "restaurantShare": 180,
+      "restaurantCommission": 0,
+      "riderShare": 30,
+      "platformNetProfit": 80,
+      "taxAmount": 18
+    },
+    "gateway": {
+      "razorpayOrderId": "order_T6aHCgrpUy2FEl",
+      "provider": "razorpay",
+      "razorpayPaymentId": "pay_T6aHScnFbJITgx"
+    },
+    "settlement": {
+      "isRestaurantSettled": false,
+      "isRiderSettled": false
+    },
+    "history": [
+      {
+        "kind": "created",
+        "amount": 308,
+        "note": "Initial transaction created with order",
+        "_id": "6a3f84f9954ca65f3fa3982f",
+        "at": "2026-06-27T08:08:25.875Z"
+      },
+      {
+        "kind": "captured",
+        "amount": 308,
+        "at": "2026-06-27T08:09:17.163Z",
+        "note": "Payment status synced via Webhook (payment.captured)",
+        "recordedBy": {
+          "role": "SYSTEM"
+        },
+        "_id": "6a3f852d954ca65f3fa3988f"
+      }
+    ],
+    "createdAt": "2026-06-27T08:08:25.877Z",
+    "updatedAt": "2026-06-27T08:52:08.326Z",
+    "__v": 1
+  },
+  {
+    "_id": "6a3f88f8954ca65f3fa3a798",
+    "orderId": "6a3f88f8954ca65f3fa3a796",
+    "orderType": "food",
+    "userId": "6a16d20099f1e0145b99bbcb",
+    "restaurantId": "6a365b18b49d18854bcb2c9d",
+    "deliveryPartnerId": null,
+    "paymentMethod": "cash",
+    "status": "pending",
+    "currency": "INR",
+    "pricing": {
+      "subtotal": 400,
+      "tax": 40,
+      "packagingFee": 0,
+      "deliveryFee": 60,
+      "platformFee": 50,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 550,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "cod_pending",
+      "amountDue": 550,
+      "razorpay": {
+        "orderId": "",
+        "paymentId": "",
+        "signature": ""
+      },
+      "qr": {
+        "qrId": "",
+        "imageUrl": "",
+        "paymentLinkId": "",
+        "shortUrl": "",
+        "status": "",
+        "expiresAt": null
+      }
+    },
+    "amounts": {
+      "totalCustomerPaid": 550,
+      "restaurantShare": 400,
+      "restaurantCommission": 0,
+      "riderShare": 30,
+      "platformNetProfit": 80,
+      "taxAmount": 40
+    },
+    "gateway": {
+      "provider": "razorpay"
+    },
+    "settlement": {
+      "isRestaurantSettled": false,
+      "isRiderSettled": false
+    },
+    "history": [
+      {
+        "kind": "created",
+        "amount": 550,
+        "note": "Initial transaction created with order",
+        "_id": "6a3f88f8954ca65f3fa3a799",
+        "at": "2026-06-27T08:25:28.083Z"
+      }
+    ],
+    "createdAt": "2026-06-27T08:25:28.085Z",
+    "updatedAt": "2026-06-27T08:25:28.085Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a3fcae4ef820ecdd1892def",
+    "orderId": "6a3fcae4ef820ecdd1892ded",
+    "orderType": "food",
+    "userId": "6a3fcaaaef820ecdd1892c96",
+    "restaurantId": "6a365b18b49d18854bcb2c9d",
+    "deliveryPartnerId": null,
+    "paymentMethod": "cash",
+    "status": "failed",
+    "currency": "INR",
+    "pricing": {
+      "subtotal": 100,
+      "tax": 5,
+      "packagingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 130,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "cod_pending",
+      "amountDue": 130,
+      "razorpay": {
+        "orderId": "",
+        "paymentId": "",
+        "signature": ""
+      },
+      "qr": {
+        "qrId": "",
+        "imageUrl": "",
+        "paymentLinkId": "",
+        "shortUrl": "",
+        "status": "",
+        "expiresAt": null
+      }
+    },
+    "amounts": {
+      "totalCustomerPaid": 130,
+      "restaurantShare": 100,
+      "restaurantCommission": 0,
+      "riderShare": 30,
+      "platformNetProfit": -5,
+      "taxAmount": 5
+    },
+    "gateway": {
+      "provider": "razorpay"
+    },
+    "settlement": {
+      "isRestaurantSettled": false,
+      "isRiderSettled": false
+    },
+    "history": [
+      {
+        "kind": "created",
+        "amount": 130,
+        "note": "Initial transaction created with order",
+        "_id": "6a3fcae4ef820ecdd1892df0",
+        "at": "2026-06-27T13:06:44.596Z"
+      },
+      {
+        "kind": "cancelled_by_user",
+        "amount": 130,
+        "at": "2026-06-27T13:07:07.905Z",
+        "note": "Order cancelled by user: I changed my mind",
+        "recordedBy": {
+          "role": "USER",
+          "id": "6a3fcaaaef820ecdd1892c96"
+        },
+        "_id": "6a3fcafbef820ecdd1892e43"
+      }
+    ],
+    "createdAt": "2026-06-27T13:06:44.598Z",
+    "updatedAt": "2026-06-27T13:07:07.907Z",
+    "__v": 1
+  },
+  {
+    "_id": "6a3fcca2ef820ecdd18934db",
+    "orderId": "6a3fcca2ef820ecdd18934d9",
+    "orderType": "food",
+    "userId": "6a3fcc1eef820ecdd189331c",
+    "restaurantId": "6a365b18b49d18854bcb2c9d",
+    "deliveryPartnerId": "6a3f3d63cdfc56f7a6d99667",
+    "paymentMethod": "cash",
+    "status": "captured",
+    "currency": "INR",
+    "pricing": {
+      "subtotal": 200,
+      "tax": 10,
+      "packagingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 235,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "cod_pending",
+      "amountDue": 235,
+      "razorpay": {
+        "orderId": "",
+        "paymentId": "",
+        "signature": ""
+      },
+      "qr": {
+        "qrId": "",
+        "imageUrl": "",
+        "paymentLinkId": "",
+        "shortUrl": "",
+        "status": "",
+        "expiresAt": null
+      }
+    },
+    "amounts": {
+      "totalCustomerPaid": 235,
+      "restaurantShare": 200,
+      "restaurantCommission": 0,
+      "riderShare": 30,
+      "platformNetProfit": -5,
+      "taxAmount": 10
+    },
+    "gateway": {
+      "provider": "razorpay"
+    },
+    "settlement": {
+      "isRestaurantSettled": false,
+      "isRiderSettled": false
+    },
+    "history": [
+      {
+        "kind": "created",
+        "amount": 235,
+        "note": "Initial transaction created with order",
+        "_id": "6a3fcca2ef820ecdd18934dc",
+        "at": "2026-06-27T13:14:10.356Z"
+      },
+      {
+        "kind": "cod_marked_paid_on_delivery",
+        "amount": 235,
+        "at": "2026-06-27T13:55:34.768Z",
+        "note": "Delivery completed. Prev status: cod_pending",
+        "recordedBy": {
+          "role": "DELIVERY_PARTNER",
+          "id": "6a3f3d63cdfc56f7a6d99667"
+        },
+        "_id": "6a3fd656ef820ecdd1896408"
+      }
+    ],
+    "createdAt": "2026-06-27T13:14:10.357Z",
+    "updatedAt": "2026-06-27T13:55:34.769Z",
+    "__v": 1
+  },
+  {
+    "_id": "6a3fdfb4ef820ecdd189816f",
+    "orderId": "6a3fdfb4ef820ecdd189816d",
+    "orderType": "food",
+    "userId": "6a2ab903b3c7519e93a24735",
+    "restaurantId": "6a365b18b49d18854bcb2c9d",
+    "deliveryPartnerId": "6a3f3d17cdfc56f7a6d9965d",
+    "paymentMethod": "cash",
+    "status": "pending",
+    "currency": "INR",
+    "pricing": {
+      "subtotal": 100,
+      "tax": 5,
+      "packagingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 130,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "cod_pending",
+      "amountDue": 130,
+      "razorpay": {
+        "orderId": "",
+        "paymentId": "",
+        "signature": ""
+      },
+      "qr": {
+        "qrId": "",
+        "imageUrl": "",
+        "paymentLinkId": "",
+        "shortUrl": "",
+        "status": "",
+        "expiresAt": null
+      }
+    },
+    "amounts": {
+      "totalCustomerPaid": 130,
+      "restaurantShare": 100,
+      "restaurantCommission": 0,
+      "riderShare": 30,
+      "platformNetProfit": -5,
+      "taxAmount": 5
+    },
+    "gateway": {
+      "provider": "razorpay"
+    },
+    "settlement": {
+      "isRestaurantSettled": false,
+      "isRiderSettled": false
+    },
+    "history": [
+      {
+        "kind": "created",
+        "amount": 130,
+        "note": "Initial transaction created with order",
+        "_id": "6a3fdfb4ef820ecdd1898170",
+        "at": "2026-06-27T14:35:32.868Z"
+      },
+      {
+        "kind": "cod_collect_qr_created",
+        "amount": 130,
+        "at": "2026-06-27T15:23:43.546Z",
+        "note": "COD collection QR created",
+        "recordedBy": {
+          "role": "DELIVERY_PARTNER",
+          "id": "6a3f3d17cdfc56f7a6d9965d"
+        },
+        "_id": "6a3feaffef820ecdd189d57b"
+      },
+      {
+        "kind": "cod_collect_qr_created",
+        "amount": 130,
+        "at": "2026-06-27T15:29:09.896Z",
+        "note": "COD collection QR created",
+        "recordedBy": {
+          "role": "DELIVERY_PARTNER",
+          "id": "6a3f3d17cdfc56f7a6d9965d"
+        },
+        "_id": "6a3fec45ef820ecdd189dd87"
+      }
+    ],
+    "createdAt": "2026-06-27T14:35:32.870Z",
+    "updatedAt": "2026-06-27T15:29:09.900Z",
+    "__v": 2
+  },
+  {
+    "_id": "6a3fe0b4ef820ecdd189871c",
+    "orderId": "6a3fe0b4ef820ecdd189871a",
+    "orderType": "food",
+    "userId": "6a3fdc74ef820ecdd1897554",
+    "restaurantId": "6a365b18b49d18854bcb2c9d",
+    "deliveryPartnerId": "6a242d8835547789fbc9eb21",
+    "paymentMethod": "cash",
+    "status": "captured",
+    "currency": "INR",
+    "pricing": {
+      "subtotal": 100,
+      "tax": 5,
+      "packagingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 130,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "cod_pending",
+      "amountDue": 130,
+      "razorpay": {
+        "orderId": "",
+        "paymentId": "",
+        "signature": ""
+      },
+      "qr": {
+        "qrId": "",
+        "imageUrl": "",
+        "paymentLinkId": "",
+        "shortUrl": "",
+        "status": "",
+        "expiresAt": null
+      }
+    },
+    "amounts": {
+      "totalCustomerPaid": 130,
+      "restaurantShare": 100,
+      "restaurantCommission": 0,
+      "riderShare": 22,
+      "platformNetProfit": 3,
+      "taxAmount": 5
+    },
+    "gateway": {
+      "provider": "razorpay"
+    },
+    "settlement": {
+      "isRestaurantSettled": false,
+      "isRiderSettled": false
+    },
+    "history": [
+      {
+        "kind": "created",
+        "amount": 130,
+        "note": "Initial transaction created with order",
+        "_id": "6a3fe0b4ef820ecdd189871d",
+        "at": "2026-06-27T14:39:48.878Z"
+      },
+      {
+        "kind": "cod_marked_paid_on_delivery",
+        "amount": 130,
+        "at": "2026-06-27T15:27:49.445Z",
+        "note": "Delivery completed. Prev status: cod_pending",
+        "recordedBy": {
+          "role": "DELIVERY_PARTNER",
+          "id": "6a242d8835547789fbc9eb21"
+        },
+        "_id": "6a3febf5ef820ecdd189dbcc"
+      }
+    ],
+    "createdAt": "2026-06-27T14:39:48.881Z",
+    "updatedAt": "2026-06-27T15:27:49.447Z",
+    "__v": 1
+  },
+  {
+    "_id": "6a3fe0f1ef820ecdd1898a73",
+    "orderId": "6a3fe0f1ef820ecdd1898a71",
+    "orderType": "food",
+    "userId": "6a3fdc74ef820ecdd1897554",
+    "restaurantId": "6a365b18b49d18854bcb2c9d",
+    "deliveryPartnerId": "6a3f3d63cdfc56f7a6d99667",
+    "paymentMethod": "cash",
+    "status": "captured",
+    "currency": "INR",
+    "pricing": {
+      "subtotal": 180,
+      "tax": 9,
+      "packagingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 214,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "cod_pending",
+      "amountDue": 214,
+      "razorpay": {
+        "orderId": "",
+        "paymentId": "",
+        "signature": ""
+      },
+      "qr": {
+        "qrId": "",
+        "imageUrl": "",
+        "paymentLinkId": "",
+        "shortUrl": "",
+        "status": "",
+        "expiresAt": null
+      }
+    },
+    "amounts": {
+      "totalCustomerPaid": 214,
+      "restaurantShare": 180,
+      "restaurantCommission": 0,
+      "riderShare": 22,
+      "platformNetProfit": 3,
+      "taxAmount": 9
+    },
+    "gateway": {
+      "provider": "razorpay"
+    },
+    "settlement": {
+      "isRestaurantSettled": false,
+      "isRiderSettled": false
+    },
+    "history": [
+      {
+        "kind": "created",
+        "amount": 214,
+        "note": "Initial transaction created with order",
+        "_id": "6a3fe0f1ef820ecdd1898a74",
+        "at": "2026-06-27T14:40:49.148Z"
+      },
+      {
+        "kind": "cod_marked_paid_on_delivery",
+        "amount": 214,
+        "at": "2026-06-27T15:27:09.141Z",
+        "note": "Delivery completed. Prev status: cod_pending",
+        "recordedBy": {
+          "role": "DELIVERY_PARTNER",
+          "id": "6a3f3d63cdfc56f7a6d99667"
+        },
+        "_id": "6a3febcdef820ecdd189da55"
+      }
+    ],
+    "createdAt": "2026-06-27T14:40:49.149Z",
+    "updatedAt": "2026-06-27T15:27:09.144Z",
+    "__v": 1
+  },
+  {
+    "_id": "6a40da1a264c9701cd32c6be",
+    "orderId": "6a40da1a264c9701cd32c6bc",
+    "orderType": "food",
+    "userId": "6a16d20099f1e0145b99bbcb",
+    "restaurantId": "6a3a4af2c0e66a94884ad339",
+    "deliveryPartnerId": "6a242d8835547789fbc9eb21",
+    "paymentMethod": "cash",
+    "status": "captured",
+    "currency": "INR",
+    "pricing": {
+      "subtotal": 30,
+      "tax": 2,
+      "packagingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 57,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "cod_pending",
+      "amountDue": 57,
+      "razorpay": {
+        "orderId": "",
+        "paymentId": "",
+        "signature": ""
+      },
+      "qr": {
+        "qrId": "",
+        "imageUrl": "",
+        "paymentLinkId": "",
+        "shortUrl": "",
+        "status": "",
+        "expiresAt": null
+      }
+    },
+    "amounts": {
+      "totalCustomerPaid": 57,
+      "restaurantShare": 30,
+      "restaurantCommission": 0,
+      "riderShare": 27,
+      "platformNetProfit": -2,
+      "taxAmount": 2
+    },
+    "gateway": {
+      "provider": "razorpay"
+    },
+    "settlement": {
+      "isRestaurantSettled": false,
+      "isRiderSettled": false
+    },
+    "history": [
+      {
+        "kind": "created",
+        "amount": 57,
+        "note": "Initial transaction created with order",
+        "_id": "6a40da1a264c9701cd32c6bf",
+        "at": "2026-06-28T08:23:54.979Z"
+      },
+      {
+        "kind": "cod_marked_paid_on_delivery",
+        "amount": 57,
+        "at": "2026-06-28T08:32:14.306Z",
+        "note": "Delivery completed. Prev status: cod_pending",
+        "recordedBy": {
+          "role": "DELIVERY_PARTNER",
+          "id": "6a242d8835547789fbc9eb21"
+        },
+        "_id": "6a40dc0e264c9701cd32cc60"
+      }
+    ],
+    "createdAt": "2026-06-28T08:23:54.980Z",
+    "updatedAt": "2026-06-28T08:32:14.308Z",
+    "__v": 1
+  },
+  {
+    "_id": "6a40e05f264c9701cd32e116",
+    "orderId": "6a40e05f264c9701cd32e114",
+    "orderType": "food",
+    "userId": "6a40e013264c9701cd32ddf3",
+    "restaurantId": "6a3a4af2c0e66a94884ad339",
+    "deliveryPartnerId": "6a242d8835547789fbc9eb21",
+    "paymentMethod": "cash",
+    "status": "captured",
+    "currency": "INR",
+    "pricing": {
+      "subtotal": 160,
+      "tax": 8,
+      "packagingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 193,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "cod_pending",
+      "amountDue": 193,
+      "razorpay": {
+        "orderId": "",
+        "paymentId": "",
+        "signature": ""
+      },
+      "qr": {
+        "qrId": "",
+        "imageUrl": "",
+        "paymentLinkId": "",
+        "shortUrl": "",
+        "status": "",
+        "expiresAt": null
+      }
+    },
+    "amounts": {
+      "totalCustomerPaid": 193,
+      "restaurantShare": 160,
+      "restaurantCommission": 0,
+      "riderShare": 30,
+      "platformNetProfit": -5,
+      "taxAmount": 8
+    },
+    "gateway": {
+      "provider": "razorpay"
+    },
+    "settlement": {
+      "isRestaurantSettled": false,
+      "isRiderSettled": false
+    },
+    "history": [
+      {
+        "kind": "created",
+        "amount": 193,
+        "note": "Initial transaction created with order",
+        "_id": "6a40e05f264c9701cd32e117",
+        "at": "2026-06-28T08:50:39.096Z"
+      },
+      {
+        "kind": "cod_collect_qr_created",
+        "amount": 193,
+        "at": "2026-06-28T09:12:54.725Z",
+        "note": "COD collection QR created",
+        "recordedBy": {
+          "role": "DELIVERY_PARTNER",
+          "id": "6a242d8835547789fbc9eb21"
+        },
+        "_id": "6a40e596264c9701cd32f86e"
+      },
+      {
+        "kind": "payment_snapshot_sync",
+        "amount": 193,
+        "at": "2026-06-28T09:13:36.784Z",
+        "note": "Delivery completed. Prev status: paid",
+        "recordedBy": {
+          "role": "DELIVERY_PARTNER",
+          "id": "6a242d8835547789fbc9eb21"
+        },
+        "_id": "6a40e5c0264c9701cd32f8f3"
+      }
+    ],
+    "createdAt": "2026-06-28T08:50:39.098Z",
+    "updatedAt": "2026-06-28T09:13:36.785Z",
+    "__v": 2
+  },
+  {
+    "_id": "6a40f0ce264c9701cd3317f8",
+    "orderId": "6a40f0ce264c9701cd3317f6",
+    "orderType": "food",
+    "userId": "6a40b0d7264c9701cd324f1a",
+    "restaurantId": "6a3a4af2c0e66a94884ad339",
+    "deliveryPartnerId": "6a242d8835547789fbc9eb21",
+    "paymentMethod": "cash",
+    "status": "pending",
+    "currency": "INR",
+    "pricing": {
+      "subtotal": 190,
+      "tax": 10,
+      "packagingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 225,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "cod_pending",
+      "amountDue": 225,
+      "razorpay": {
+        "orderId": "",
+        "paymentId": "",
+        "signature": ""
+      },
+      "qr": {
+        "qrId": "",
+        "imageUrl": "",
+        "paymentLinkId": "",
+        "shortUrl": "",
+        "status": "",
+        "expiresAt": null
+      }
+    },
+    "amounts": {
+      "totalCustomerPaid": 225,
+      "restaurantShare": 190,
+      "restaurantCommission": 0,
+      "riderShare": 29,
+      "platformNetProfit": -4,
+      "taxAmount": 10
+    },
+    "gateway": {
+      "provider": "razorpay"
+    },
+    "settlement": {
+      "isRestaurantSettled": false,
+      "isRiderSettled": false
+    },
+    "history": [
+      {
+        "kind": "created",
+        "amount": 225,
+        "note": "Initial transaction created with order",
+        "_id": "6a40f0ce264c9701cd3317f9",
+        "at": "2026-06-28T10:00:46.233Z"
+      }
+    ],
+    "createdAt": "2026-06-28T10:00:46.235Z",
+    "updatedAt": "2026-06-28T10:04:28.318Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a40f7d2264c9701cd3331af",
+    "orderId": "6a40f7d2264c9701cd3331ad",
+    "orderType": "food",
+    "userId": "6a40f79e264c9701cd33308d",
+    "restaurantId": "6a3a4af2c0e66a94884ad339",
+    "deliveryPartnerId": "6a242d8835547789fbc9eb21",
+    "paymentMethod": "cash",
+    "status": "pending",
+    "currency": "INR",
+    "pricing": {
+      "subtotal": 190,
+      "tax": 10,
+      "packagingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 225,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "cod_pending",
+      "amountDue": 225,
+      "razorpay": {
+        "orderId": "",
+        "paymentId": "",
+        "signature": ""
+      },
+      "qr": {
+        "qrId": "",
+        "imageUrl": "",
+        "paymentLinkId": "",
+        "shortUrl": "",
+        "status": "",
+        "expiresAt": null
+      }
+    },
+    "amounts": {
+      "totalCustomerPaid": 225,
+      "restaurantShare": 190,
+      "restaurantCommission": 0,
+      "riderShare": 28,
+      "platformNetProfit": -3,
+      "taxAmount": 10
+    },
+    "gateway": {
+      "provider": "razorpay"
+    },
+    "settlement": {
+      "isRestaurantSettled": false,
+      "isRiderSettled": false
+    },
+    "history": [
+      {
+        "kind": "created",
+        "amount": 225,
+        "note": "Initial transaction created with order",
+        "_id": "6a40f7d2264c9701cd3331b0",
+        "at": "2026-06-28T10:30:42.291Z"
+      },
+      {
+        "kind": "cod_collect_qr_created",
+        "amount": 225,
+        "at": "2026-06-28T11:00:05.747Z",
+        "note": "COD collection QR created",
+        "recordedBy": {
+          "role": "DELIVERY_PARTNER",
+          "id": "6a242d8835547789fbc9eb21"
+        },
+        "_id": "6a40feb5264c9701cd33537c"
+      }
+    ],
+    "createdAt": "2026-06-28T10:30:42.292Z",
+    "updatedAt": "2026-06-28T11:00:05.755Z",
+    "__v": 1
+  },
+  {
+    "_id": "6a4101ca264c9701cd3364fa",
+    "orderId": "6a4101ca264c9701cd3364f8",
+    "orderType": "food",
+    "userId": "6a3fcaaaef820ecdd1892c96",
+    "restaurantId": "6a3a4af2c0e66a94884ad339",
+    "deliveryPartnerId": "6a242d8835547789fbc9eb21",
+    "paymentMethod": "cash",
+    "status": "captured",
+    "currency": "INR",
+    "pricing": {
+      "subtotal": 160,
+      "tax": 8,
+      "packagingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 193,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "cod_pending",
+      "amountDue": 193,
+      "razorpay": {
+        "orderId": "",
+        "paymentId": "",
+        "signature": ""
+      },
+      "qr": {
+        "qrId": "",
+        "imageUrl": "",
+        "paymentLinkId": "",
+        "shortUrl": "",
+        "status": "",
+        "expiresAt": null
+      }
+    },
+    "amounts": {
+      "totalCustomerPaid": 193,
+      "restaurantShare": 160,
+      "restaurantCommission": 0,
+      "riderShare": 24,
+      "platformNetProfit": 1,
+      "taxAmount": 8
+    },
+    "gateway": {
+      "provider": "razorpay"
+    },
+    "settlement": {
+      "isRestaurantSettled": false,
+      "isRiderSettled": false
+    },
+    "history": [
+      {
+        "kind": "created",
+        "amount": 193,
+        "note": "Initial transaction created with order",
+        "_id": "6a4101ca264c9701cd3364fb",
+        "at": "2026-06-28T11:13:14.676Z"
+      },
+      {
+        "kind": "cod_collect_qr_created",
+        "amount": 193,
+        "at": "2026-06-28T11:50:42.026Z",
+        "note": "COD collection QR created",
+        "recordedBy": {
+          "role": "DELIVERY_PARTNER",
+          "id": "6a242d8835547789fbc9eb21"
+        },
+        "_id": "6a410a92264c9701cd338f14"
+      },
+      {
+        "kind": "payment_snapshot_sync",
+        "amount": 193,
+        "at": "2026-06-28T11:52:03.973Z",
+        "note": "Delivery completed. Prev status: paid",
+        "recordedBy": {
+          "role": "DELIVERY_PARTNER",
+          "id": "6a242d8835547789fbc9eb21"
+        },
+        "_id": "6a410ae3264c9701cd3391b3"
+      }
+    ],
+    "createdAt": "2026-06-28T11:13:14.678Z",
+    "updatedAt": "2026-06-28T11:52:03.974Z",
+    "__v": 2
+  },
+  {
+    "_id": "6a411a70264c9701cd33e9bd",
+    "orderId": "6a411a70264c9701cd33e9bb",
+    "orderType": "food",
+    "userId": "6a411a3d264c9701cd33e8d4",
+    "restaurantId": "6a3a4af2c0e66a94884ad339",
+    "deliveryPartnerId": null,
+    "paymentMethod": "cash",
+    "status": "pending",
+    "currency": "INR",
+    "pricing": {
+      "subtotal": 30,
+      "tax": 2,
+      "packagingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 57,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "cod_pending",
+      "amountDue": 57,
+      "razorpay": {
+        "orderId": "",
+        "paymentId": "",
+        "signature": ""
+      },
+      "qr": {
+        "qrId": "",
+        "imageUrl": "",
+        "paymentLinkId": "",
+        "shortUrl": "",
+        "status": "",
+        "expiresAt": null
+      }
+    },
+    "amounts": {
+      "totalCustomerPaid": 57,
+      "restaurantShare": 30,
+      "restaurantCommission": 0,
+      "riderShare": 20,
+      "platformNetProfit": 5,
+      "taxAmount": 2
+    },
+    "gateway": {
+      "provider": "razorpay"
+    },
+    "settlement": {
+      "isRestaurantSettled": false,
+      "isRiderSettled": false
+    },
+    "history": [
+      {
+        "kind": "created",
+        "amount": 57,
+        "note": "Initial transaction created with order",
+        "_id": "6a411a70264c9701cd33e9be",
+        "at": "2026-06-28T12:58:24.966Z"
+      }
+    ],
+    "createdAt": "2026-06-28T12:58:24.968Z",
+    "updatedAt": "2026-06-28T12:58:24.968Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a414152264c9701cd343cdd",
+    "orderId": "6a414152264c9701cd343cdb",
+    "orderType": "food",
+    "userId": "6a40ae02264c9701cd3249e1",
+    "restaurantId": "6a365b18b49d18854bcb2c9d",
+    "deliveryPartnerId": null,
+    "paymentMethod": "razorpay",
+    "status": "failed",
+    "currency": "INR",
+    "pricing": {
+      "subtotal": 350,
+      "tax": 18,
+      "packagingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 393,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "razorpay",
+      "status": "created",
+      "amountDue": 393,
+      "razorpay": {
+        "orderId": "order_T76ZtHGFl3mYai",
+        "paymentId": "",
+        "signature": ""
+      },
+      "qr": {
+        "qrId": "",
+        "imageUrl": "",
+        "paymentLinkId": "",
+        "shortUrl": "",
+        "status": "",
+        "expiresAt": null
+      }
+    },
+    "amounts": {
+      "totalCustomerPaid": 393,
+      "restaurantShare": 350,
+      "restaurantCommission": 0,
+      "riderShare": 30,
+      "platformNetProfit": -5,
+      "taxAmount": 18
+    },
+    "gateway": {
+      "razorpayOrderId": "order_T76ZtHGFl3mYai",
+      "provider": "razorpay"
+    },
+    "settlement": {
+      "isRestaurantSettled": false,
+      "isRiderSettled": false
+    },
+    "history": [
+      {
+        "kind": "created",
+        "amount": 393,
+        "note": "Initial transaction created with order",
+        "_id": "6a414152264c9701cd343cde",
+        "at": "2026-06-28T15:44:18.970Z"
+      },
+      {
+        "kind": "cancelled_by_user",
+        "amount": 393,
+        "at": "2026-06-28T15:44:30.513Z",
+        "note": "Order cancelled by user: Payment Cancelled",
+        "recordedBy": {
+          "role": "USER",
+          "id": "6a40ae02264c9701cd3249e1"
+        },
+        "_id": "6a41415e264c9701cd343ce7"
+      }
+    ],
+    "createdAt": "2026-06-28T15:44:18.971Z",
+    "updatedAt": "2026-06-28T15:44:30.515Z",
+    "__v": 1
+  },
+  {
+    "_id": "6a4214a148d41cb004241739",
+    "orderId": "6a4214a148d41cb004241737",
+    "orderType": "food",
+    "userId": "6a16d20099f1e0145b99bbcb",
+    "restaurantId": "6a3a33cbc0e66a94884abd17",
+    "deliveryPartnerId": "6a242d8835547789fbc9eb21",
+    "paymentMethod": "cash",
+    "status": "captured",
+    "currency": "INR",
+    "pricing": {
+      "subtotal": 160,
+      "tax": 8,
+      "packagingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 193,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "cod_pending",
+      "amountDue": 193,
+      "razorpay": {
+        "orderId": "",
+        "paymentId": "",
+        "signature": ""
+      },
+      "qr": {
+        "qrId": "",
+        "imageUrl": "",
+        "paymentLinkId": "",
+        "shortUrl": "",
+        "status": "",
+        "expiresAt": null
+      }
+    },
+    "amounts": {
+      "totalCustomerPaid": 193,
+      "restaurantShare": 160,
+      "restaurantCommission": 0,
+      "riderShare": 25,
+      "platformNetProfit": 0,
+      "taxAmount": 8
+    },
+    "gateway": {
+      "provider": "razorpay"
+    },
+    "settlement": {
+      "isRestaurantSettled": false,
+      "isRiderSettled": false
+    },
+    "history": [
+      {
+        "kind": "created",
+        "amount": 193,
+        "note": "Initial transaction created with order",
+        "_id": "6a4214a148d41cb00424173a",
+        "at": "2026-06-29T06:45:53.865Z"
+      },
+      {
+        "kind": "cod_marked_paid_on_delivery",
+        "amount": 193,
+        "at": "2026-06-29T06:48:20.232Z",
+        "note": "Delivery completed. Prev status: cod_pending",
+        "recordedBy": {
+          "role": "DELIVERY_PARTNER",
+          "id": "6a242d8835547789fbc9eb21"
+        },
+        "_id": "6a42153448d41cb004241953"
+      }
+    ],
+    "createdAt": "2026-06-29T06:45:53.867Z",
+    "updatedAt": "2026-06-29T06:48:20.234Z",
+    "__v": 1
+  },
+  {
+    "_id": "6a421beb48d41cb004242c6d",
+    "orderId": "6a421beb48d41cb004242c6b",
+    "orderType": "food",
+    "userId": "6a16d20099f1e0145b99bbcb",
+    "restaurantId": "6a363ee6b49d18854bcb08d3",
+    "deliveryPartnerId": null,
+    "paymentMethod": "cash",
+    "status": "pending",
+    "currency": "INR",
+    "pricing": {
+      "subtotal": 99,
+      "tax": 5,
+      "packagingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 129,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "cod_pending",
+      "amountDue": 129,
+      "razorpay": {
+        "orderId": "",
+        "paymentId": "",
+        "signature": ""
+      },
+      "qr": {
+        "qrId": "",
+        "imageUrl": "",
+        "paymentLinkId": "",
+        "shortUrl": "",
+        "status": "",
+        "expiresAt": null
+      }
+    },
+    "amounts": {
+      "totalCustomerPaid": 129,
+      "restaurantShare": 99,
+      "restaurantCommission": 0,
+      "riderShare": 25,
+      "platformNetProfit": 0,
+      "taxAmount": 5
+    },
+    "gateway": {
+      "provider": "razorpay"
+    },
+    "settlement": {
+      "isRestaurantSettled": false,
+      "isRiderSettled": false
+    },
+    "history": [
+      {
+        "kind": "created",
+        "amount": 129,
+        "note": "Initial transaction created with order",
+        "_id": "6a421beb48d41cb004242c6e",
+        "at": "2026-06-29T07:16:59.780Z"
+      }
+    ],
+    "createdAt": "2026-06-29T07:16:59.782Z",
+    "updatedAt": "2026-06-29T07:16:59.782Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a421c5f48d41cb004242e15",
+    "orderId": "6a421c5f48d41cb004242e13",
+    "orderType": "food",
+    "userId": "6a16d20099f1e0145b99bbcb",
+    "restaurantId": "6a363ee6b49d18854bcb08d3",
+    "deliveryPartnerId": "6a242d8835547789fbc9eb21",
+    "paymentMethod": "cash",
+    "status": "captured",
+    "currency": "INR",
+    "pricing": {
+      "subtotal": 119,
+      "tax": 6,
+      "packagingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 150,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "cod_pending",
+      "amountDue": 150,
+      "razorpay": {
+        "orderId": "",
+        "paymentId": "",
+        "signature": ""
+      },
+      "qr": {
+        "qrId": "",
+        "imageUrl": "",
+        "paymentLinkId": "",
+        "shortUrl": "",
+        "status": "",
+        "expiresAt": null
+      }
+    },
+    "amounts": {
+      "totalCustomerPaid": 150,
+      "restaurantShare": 119,
+      "restaurantCommission": 0,
+      "riderShare": 25,
+      "platformNetProfit": 0,
+      "taxAmount": 6
+    },
+    "gateway": {
+      "provider": "razorpay"
+    },
+    "settlement": {
+      "isRestaurantSettled": false,
+      "isRiderSettled": false
+    },
+    "history": [
+      {
+        "kind": "created",
+        "amount": 150,
+        "note": "Initial transaction created with order",
+        "_id": "6a421c5f48d41cb004242e16",
+        "at": "2026-06-29T07:18:55.799Z"
+      },
+      {
+        "kind": "cod_marked_paid_on_delivery",
+        "amount": 150,
+        "at": "2026-06-29T07:21:56.085Z",
+        "note": "Delivery completed. Prev status: cod_pending",
+        "recordedBy": {
+          "role": "DELIVERY_PARTNER",
+          "id": "6a242d8835547789fbc9eb21"
+        },
+        "_id": "6a421d1448d41cb0042430a0"
+      }
+    ],
+    "createdAt": "2026-06-29T07:18:55.801Z",
+    "updatedAt": "2026-06-29T07:21:56.087Z",
+    "__v": 1
+  },
+  {
+    "_id": "6a42325d48d41cb004245e24",
+    "orderId": "6a42325d48d41cb004245e22",
+    "orderType": "food",
+    "userId": "6a413f44264c9701cd343705",
+    "restaurantId": "6a363ee6b49d18854bcb08d3",
+    "deliveryPartnerId": "6a242d8835547789fbc9eb21",
+    "paymentMethod": "cash",
+    "status": "captured",
+    "currency": "INR",
+    "pricing": {
+      "subtotal": 110,
+      "tax": 6,
+      "packagingFee": 0,
+      "deliveryFee": 20,
+      "platformFee": 5,
+      "restaurantCommission": 0,
+      "discount": 0,
+      "total": 141,
+      "currency": "INR"
+    },
+    "payment": {
+      "method": "cash",
+      "status": "cod_pending",
+      "amountDue": 141,
+      "razorpay": {
+        "orderId": "",
+        "paymentId": "",
+        "signature": ""
+      },
+      "qr": {
+        "qrId": "",
+        "imageUrl": "",
+        "paymentLinkId": "",
+        "shortUrl": "",
+        "status": "",
+        "expiresAt": null
+      }
+    },
+    "amounts": {
+      "totalCustomerPaid": 141,
+      "restaurantShare": 110,
+      "restaurantCommission": 0,
+      "riderShare": 5908,
+      "platformNetProfit": -5883,
+      "taxAmount": 6
+    },
+    "gateway": {
+      "provider": "razorpay"
+    },
+    "settlement": {
+      "isRestaurantSettled": false,
+      "isRiderSettled": false
+    },
+    "history": [
+      {
+        "kind": "created",
+        "amount": 141,
+        "note": "Initial transaction created with order",
+        "_id": "6a42325d48d41cb004245e25",
+        "at": "2026-06-29T08:52:45.471Z"
+      },
+      {
+        "kind": "cod_marked_paid_on_delivery",
+        "amount": 141,
+        "at": "2026-06-29T09:08:08.527Z",
+        "note": "Delivery completed. Prev status: cod_pending",
+        "recordedBy": {
+          "role": "DELIVERY_PARTNER",
+          "id": "6a242d8835547789fbc9eb21"
+        },
+        "_id": "6a4235f848d41cb004246b33"
+      }
+    ],
+    "createdAt": "2026-06-29T08:52:45.472Z",
+    "updatedAt": "2026-06-29T09:08:08.529Z",
+    "__v": 1
+  }
+]

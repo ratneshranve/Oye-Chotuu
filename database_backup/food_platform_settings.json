@@ -1,0 +1,15 @@
+[
+  {
+    "_id": "6967dad3f59726b062d5adff",
+    "__v": 0,
+    "bookingDisabledMessage": "Bookings are temporarily disabled. Please try again later.",
+    "createdAt": "2026-01-14T18:05:07.273Z",
+    "defaultCommission": 15,
+    "maintenanceMessage": "The platform is under scheduled maintenance. Please check back in some time.",
+    "maintenanceMode": false,
+    "maintenanceTitle": "We will be back soon.",
+    "platformOpen": true,
+    "taxRate": 2,
+    "updatedAt": "2026-03-21T08:06:10.297Z"
+  }
+]

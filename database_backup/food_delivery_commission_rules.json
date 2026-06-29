@@ -1,0 +1,26 @@
+[
+  {
+    "_id": "69ccd0f2d30b7590146f992b",
+    "name": "CITY",
+    "minDistance": 0,
+    "maxDistance": 1,
+    "commissionPerKm": 10,
+    "basePayout": 20,
+    "status": true,
+    "createdAt": "2026-04-01T08:01:54.247Z",
+    "updatedAt": "2026-06-27T09:21:14.682Z",
+    "__v": 0
+  },
+  {
+    "_id": "69ccd13ed30b7590146f9933",
+    "name": "WITH IN CITY",
+    "minDistance": 3,
+    "maxDistance": null,
+    "commissionPerKm": 5,
+    "basePayout": 0,
+    "status": true,
+    "createdAt": "2026-04-01T08:03:10.485Z",
+    "updatedAt": "2026-06-27T10:00:08.235Z",
+    "__v": 0
+  }
+]

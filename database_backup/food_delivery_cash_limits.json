@@ -1,0 +1,11 @@
+[
+  {
+    "_id": "69ccbab9d30b7590146f8b4c",
+    "deliveryCashLimit": 5000,
+    "deliveryWithdrawalLimit": 3000,
+    "isActive": true,
+    "createdAt": "2026-04-01T06:27:05.370Z",
+    "updatedAt": "2026-06-28T07:48:59.335Z",
+    "__v": 0
+  }
+]

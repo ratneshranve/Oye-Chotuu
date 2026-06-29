@@ -23,6 +23,7 @@ export default function Checkout() {
   const [selectedAddressId, setSelectedAddressId] = useState(getAddressId(getDefaultAddress()))
   const [selectedPayment, setSelectedPayment] = useState(getDefaultPaymentMethod()?.id || "")
   const [isPlacingOrder, setIsPlacingOrder] = useState(false)
+  const [addressInstructions, setAddressInstructions] = useState("")
 
   const selectedAddress = addresses.find(addr => getAddressId(addr) === selectedAddressId) || getDefaultAddress()
   const defaultPayment = paymentMethods.find(pm => pm.id === selectedPayment) || getDefaultPaymentMethod()
@@ -76,7 +77,11 @@ export default function Checkout() {
         deliveryFee,
         tax,
         total,
-        restaurant: cart[0]?.restaurant || cart[0]?.name || "Multiple Restaurants"
+        restaurant: cart[0]?.restaurant || cart[0]?.name || "Multiple Restaurants",
+        address: {
+          ...selectedAddress,
+          instructions: addressInstructions
+        }
       })
 
       clearCart()
@@ -184,6 +189,21 @@ export default function Checkout() {
                       </Button>
                     </div>
                   )}
+
+                  {/* Delivery Instructions Section */}
+                  <div className="pt-4 border-t mt-4">
+                    <Label htmlFor="address-instructions" className="mb-2 block text-sm font-medium text-gray-800 dark:text-gray-200">
+                      Address Details (Optional)
+                    </Label>
+                    <textarea
+                      id="address-instructions"
+                      rows={2}
+                      value={addressInstructions}
+                      onChange={(e) => setAddressInstructions(e.target.value)}
+                      placeholder="e.g., 5th floor, B block, Corporate house. Helps delivery boy find your location easily."
+                      className="w-full px-3 py-2 text-sm text-gray-700 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#cc2532] focus:border-transparent dark:bg-neutral-800 dark:border-neutral-700 dark:text-gray-300 resize-none transition-all"
+                    />
+                  </div>
                 </CardContent>
               </Card>
             </ScrollReveal>

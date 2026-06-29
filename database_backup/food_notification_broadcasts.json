@@ -1,0 +1,2934 @@
+[
+  {
+    "_id": "69f58eda53c1b26e7bc60827",
+    "title": "test",
+    "message": "hahahahahah",
+    "targetType": "RESTAURANT",
+    "targetIds": [],
+    "targets": [
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69f39cb92cf9be4835b8e1e7",
+        "label": "Tinku's Cafe",
+        "subLabel": "916266021868 • test145@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69f332c0939809221e778b1f",
+        "label": "Jain",
+        "subLabel": "919876543090 • vishalpatel58101@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69f30d709d1f0f98649d1b09",
+        "label": "Test res",
+        "subLabel": "917348419775 • hshdhdh@gmail.comv"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d673ac72cb55f41a29",
+        "label": "Bapat Chaat & Snacks",
+        "subLabel": "919001100010 • bapat.chaat@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d673ac72cb55f41a1f",
+        "label": "Scheme 140 Pizza Point",
+        "subLabel": "919001100008 • scheme140.pizza@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d673ac72cb55f41a1a",
+        "label": "AB Road Family Dhaba",
+        "subLabel": "919001100007 • abroad.familydhaba@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d673ac72cb55f41a15",
+        "label": "Rajwada Royal Biryani",
+        "subLabel": "919001100006 • rajwada.royal@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d573ac72cb55f41a0d",
+        "label": "Palasia Sandwich Cafe",
+        "subLabel": "919001100005 • palasia.sandwich@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d573ac72cb55f41a03",
+        "label": "Bhawarkua Momos Hub",
+        "subLabel": "919001100004 • bhawarkua.momos@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d573ac72cb55f419fa",
+        "label": "Chappan Pizza Studio",
+        "subLabel": "919001100003 • chappan.pizza@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d573ac72cb55f419f0",
+        "label": "Vijay Nagar Burger Joint",
+        "subLabel": "919001100002 • vijaynagar.burgers@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d573ac72cb55f419e1",
+        "label": "Sarafa Spice Kitchen",
+        "subLabel": "919001100001 • sarafa.spice.kitchen@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69cfbd1e04b1d76fb21bdf5a",
+        "label": "Captain",
+        "subLabel": "919568756563 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ca73e2376311192367d217",
+        "label": "Boss",
+        "subLabel": "918588434044 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ca0bac9efa09cab443667c",
+        "label": "Deni Cafe & bar",
+        "subLabel": "919988776655 • johnmex1121@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ba83b6f2a2e60a9ab85b93",
+        "label": "Raddison",
+        "subLabel": "917223077890 • om.parteki10@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69b8f156f1ecccbb2e25d030",
+        "label": "Sayaji",
+        "subLabel": "6261387233"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69b805de9c070c51724618e6",
+        "label": "Grand Sharaton",
+        "subLabel": "916268423925"
+      }
+    ],
+    "link": "",
+    "createdBy": "69b7d81bf5f15307df179d05",
+    "targetCount": 18,
+    "createdAt": "2026-05-02T05:42:50.640Z",
+    "__v": 0
+  },
+  {
+    "_id": "69f58fe853c1b26e7bc60912",
+    "title": "test",
+    "message": "hahhahahah",
+    "targetType": "USER",
+    "targetIds": [],
+    "targets": [
+      {
+        "ownerType": "USER",
+        "ownerId": "6973458554f7a1bd1d2b19df",
+        "label": "Test",
+        "subLabel": "6375095971 • test@gmail.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69df77dde60e82ed9dd019ab",
+        "label": "9993911855",
+        "subLabel": "9993911855"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69df77ede60e82ed9dd019bd",
+        "label": "Om Parteki",
+        "subLabel": "7223077890"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69b7ed5e3a00f61b2f1c36f0",
+        "label": "Vishal Patel",
+        "subLabel": "7724817688 • mrvishupatel28@gmail.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69b98175298ab11b90163503",
+        "label": "harshvardhan",
+        "subLabel": "6268423925"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69c78547f249b1e9ee44e22d",
+        "label": "9988776655",
+        "subLabel": "9988776655"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69ca6914e4662cd4607aff66",
+        "label": "6261387236",
+        "subLabel": "6261387236"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69ca6be9c72cff62587a3a39",
+        "label": "9999966666",
+        "subLabel": "9999966666"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69cae985619bc270534f6181",
+        "label": "John",
+        "subLabel": "9999999999 • johnmex1121@gmail.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69ccb3c7870f3c7e6933c8cb",
+        "label": "6655778899",
+        "subLabel": "6655778899"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69ce60abfbf72b7f969d36f1",
+        "label": "9888888888",
+        "subLabel": "9888888888"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69d0a3cd3bc4da9f0a6b5fde",
+        "label": "rituraj",
+        "subLabel": "9755633147"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69d3c8a4fea80a3d76f00b85",
+        "label": "9585509573",
+        "subLabel": "9585509573"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69d49be6868036e30fb25e37",
+        "label": "Aditi Parihar",
+        "subLabel": "6264560457"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69b7edeff86331e88da68466",
+        "label": "Shubham",
+        "subLabel": "6261387233"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69e72ed38e56d4bb7d248a77",
+        "label": "Devid mexton",
+        "subLabel": "7348419775"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69e9d03713d295e94b63c644",
+        "label": "Sahin",
+        "subLabel": "9641119590"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69e8eea91bc36e92f116df90",
+        "label": "8864646464",
+        "subLabel": "8864646464"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69e8f146d37ba48d8f115924",
+        "label": "7885656685",
+        "subLabel": "7885656685"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69dcc072e7fd81b1f23c193e",
+        "label": "Rishi dogne",
+        "subLabel": "7545849335 • new3@example.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69dcc071e7fd81b1f23c193c",
+        "label": "Rishi Dogne",
+        "subLabel": "7470311228 • rishidogne2004@gmail.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69dcc073e7fd81b1f23c1940",
+        "label": "kaps",
+        "subLabel": "9977202375 • kapilpatidar2049@gmail.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69dcc072e7fd81b1f23c193d",
+        "label": "Demo User",
+        "subLabel": "7470457328 • usergenzo@gmail.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6974c14b54f7a1bd1d2b1efa",
+        "label": "User",
+        "subLabel": ""
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69f0eeeeb8ff195dd6fe4d68",
+        "label": "7001365808",
+        "subLabel": "7001365808"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69f1b0600cc8e0f718e6bf8d",
+        "label": "6260491556",
+        "subLabel": "6260491556"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69f1b70b80c9a8fe6f89ac34",
+        "label": "hritik raghuwanshi",
+        "subLabel": "6260491558"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69f233bb77e6786e04380c35",
+        "label": "7999267233",
+        "subLabel": "7999267233"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69f4636e11dd55fa7712d81d",
+        "label": "ajay",
+        "subLabel": "7777777777"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69f4fbba74b24d1c1c1cca88",
+        "label": "ram",
+        "subLabel": "7722481768"
+      }
+    ],
+    "link": "",
+    "createdBy": "69b7d81bf5f15307df179d05",
+    "targetCount": 30,
+    "createdAt": "2026-05-02T05:47:20.892Z",
+    "__v": 0
+  },
+  {
+    "_id": "69f8360f68cdded4c26bf7fb",
+    "title": "Alll",
+    "message": "jkvhsgkdjgsdhsjkhsdfsdjhfsdjilfsjfsnmfsdpiofnmsdfnsfier",
+    "targetType": "USER",
+    "targetIds": [],
+    "targets": [
+      {
+        "ownerType": "USER",
+        "ownerId": "6973458554f7a1bd1d2b19df",
+        "label": "Test",
+        "subLabel": "6375095971 • test@gmail.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69df77dde60e82ed9dd019ab",
+        "label": "9993911855",
+        "subLabel": "9993911855"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69df77ede60e82ed9dd019bd",
+        "label": "Om Parteki",
+        "subLabel": "7223077890"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69b7ed5e3a00f61b2f1c36f0",
+        "label": "Vishal Patel",
+        "subLabel": "7724817688 • mrvishupatel28@gmail.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69b98175298ab11b90163503",
+        "label": "harshvardhan",
+        "subLabel": "6268423925"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69c78547f249b1e9ee44e22d",
+        "label": "9988776655",
+        "subLabel": "9988776655"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69ca6914e4662cd4607aff66",
+        "label": "6261387236",
+        "subLabel": "6261387236"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69ca6be9c72cff62587a3a39",
+        "label": "9999966666",
+        "subLabel": "9999966666"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69cae985619bc270534f6181",
+        "label": "John",
+        "subLabel": "9999999999 • johnmex1121@gmail.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69ccb3c7870f3c7e6933c8cb",
+        "label": "6655778899",
+        "subLabel": "6655778899"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69ce60abfbf72b7f969d36f1",
+        "label": "9888888888",
+        "subLabel": "9888888888"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69d0a3cd3bc4da9f0a6b5fde",
+        "label": "rituraj",
+        "subLabel": "9755633147"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69d3c8a4fea80a3d76f00b85",
+        "label": "9585509573",
+        "subLabel": "9585509573"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69d49be6868036e30fb25e37",
+        "label": "Aditi Parihar",
+        "subLabel": "6264560457"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69b7edeff86331e88da68466",
+        "label": "Shubham",
+        "subLabel": "6261387233"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69e72ed38e56d4bb7d248a77",
+        "label": "Devid mexton",
+        "subLabel": "7348419775"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69e9d03713d295e94b63c644",
+        "label": "Sahin",
+        "subLabel": "9641119590"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69e8eea91bc36e92f116df90",
+        "label": "8864646464",
+        "subLabel": "8864646464"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69e8f146d37ba48d8f115924",
+        "label": "7885656685",
+        "subLabel": "7885656685"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69dcc072e7fd81b1f23c193e",
+        "label": "Rishi dogne",
+        "subLabel": "7545849335 • new3@example.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69dcc071e7fd81b1f23c193c",
+        "label": "Rishi Dogne",
+        "subLabel": "7470311228 • rishidogne2004@gmail.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69dcc073e7fd81b1f23c1940",
+        "label": "kaps",
+        "subLabel": "9977202375 • kapilpatidar2049@gmail.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69dcc072e7fd81b1f23c193d",
+        "label": "Demo User",
+        "subLabel": "7470457328 • usergenzo@gmail.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6974c14b54f7a1bd1d2b1efa",
+        "label": "User",
+        "subLabel": ""
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69f0eeeeb8ff195dd6fe4d68",
+        "label": "7001365808",
+        "subLabel": "7001365808"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69f1b0600cc8e0f718e6bf8d",
+        "label": "6260491556",
+        "subLabel": "6260491556"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69f1b70b80c9a8fe6f89ac34",
+        "label": "hritik raghuwanshi",
+        "subLabel": "6260491558"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69f233bb77e6786e04380c35",
+        "label": "7999267233",
+        "subLabel": "7999267233"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69f4636e11dd55fa7712d81d",
+        "label": "ajay",
+        "subLabel": "7777777777"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69f4fbba74b24d1c1c1cca88",
+        "label": "ram",
+        "subLabel": "7722481768"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69f5940353c1b26e7bc60c09",
+        "label": "Nikita",
+        "subLabel": "9174083102"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69f5aef2a4a9ab46e1fa6067",
+        "label": "Sapna",
+        "subLabel": "9109599487"
+      }
+    ],
+    "link": "",
+    "createdBy": "69b7d81bf5f15307df179d05",
+    "targetCount": 32,
+    "createdAt": "2026-05-04T06:00:47.688Z",
+    "__v": 0
+  },
+  {
+    "_id": "69f8365968cdded4c26bf892",
+    "title": "vishu",
+    "message": "sh hqjskjas",
+    "targetType": "USER",
+    "targetIds": [],
+    "targets": [
+      {
+        "ownerType": "USER",
+        "ownerId": "6973458554f7a1bd1d2b19df",
+        "label": "Test",
+        "subLabel": "6375095971 • test@gmail.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69df77dde60e82ed9dd019ab",
+        "label": "9993911855",
+        "subLabel": "9993911855"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69df77ede60e82ed9dd019bd",
+        "label": "Om Parteki",
+        "subLabel": "7223077890"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69b7ed5e3a00f61b2f1c36f0",
+        "label": "Vishal Patel",
+        "subLabel": "7724817688 • mrvishupatel28@gmail.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69b98175298ab11b90163503",
+        "label": "harshvardhan",
+        "subLabel": "6268423925"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69c78547f249b1e9ee44e22d",
+        "label": "9988776655",
+        "subLabel": "9988776655"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69ca6914e4662cd4607aff66",
+        "label": "6261387236",
+        "subLabel": "6261387236"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69ca6be9c72cff62587a3a39",
+        "label": "9999966666",
+        "subLabel": "9999966666"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69cae985619bc270534f6181",
+        "label": "John",
+        "subLabel": "9999999999 • johnmex1121@gmail.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69ccb3c7870f3c7e6933c8cb",
+        "label": "6655778899",
+        "subLabel": "6655778899"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69ce60abfbf72b7f969d36f1",
+        "label": "9888888888",
+        "subLabel": "9888888888"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69d0a3cd3bc4da9f0a6b5fde",
+        "label": "rituraj",
+        "subLabel": "9755633147"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69d3c8a4fea80a3d76f00b85",
+        "label": "9585509573",
+        "subLabel": "9585509573"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69d49be6868036e30fb25e37",
+        "label": "Aditi Parihar",
+        "subLabel": "6264560457"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69b7edeff86331e88da68466",
+        "label": "Shubham",
+        "subLabel": "6261387233"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69e72ed38e56d4bb7d248a77",
+        "label": "Devid mexton",
+        "subLabel": "7348419775"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69e9d03713d295e94b63c644",
+        "label": "Sahin",
+        "subLabel": "9641119590"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69e8eea91bc36e92f116df90",
+        "label": "8864646464",
+        "subLabel": "8864646464"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69e8f146d37ba48d8f115924",
+        "label": "7885656685",
+        "subLabel": "7885656685"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69dcc072e7fd81b1f23c193e",
+        "label": "Rishi dogne",
+        "subLabel": "7545849335 • new3@example.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69dcc071e7fd81b1f23c193c",
+        "label": "Rishi Dogne",
+        "subLabel": "7470311228 • rishidogne2004@gmail.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69dcc073e7fd81b1f23c1940",
+        "label": "kaps",
+        "subLabel": "9977202375 • kapilpatidar2049@gmail.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69dcc072e7fd81b1f23c193d",
+        "label": "Demo User",
+        "subLabel": "7470457328 • usergenzo@gmail.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6974c14b54f7a1bd1d2b1efa",
+        "label": "User",
+        "subLabel": ""
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69f0eeeeb8ff195dd6fe4d68",
+        "label": "7001365808",
+        "subLabel": "7001365808"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69f1b0600cc8e0f718e6bf8d",
+        "label": "6260491556",
+        "subLabel": "6260491556"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69f1b70b80c9a8fe6f89ac34",
+        "label": "hritik raghuwanshi",
+        "subLabel": "6260491558"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69f233bb77e6786e04380c35",
+        "label": "7999267233",
+        "subLabel": "7999267233"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69f4636e11dd55fa7712d81d",
+        "label": "ajay",
+        "subLabel": "7777777777"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69f4fbba74b24d1c1c1cca88",
+        "label": "ram",
+        "subLabel": "7722481768"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69f5940353c1b26e7bc60c09",
+        "label": "Nikita",
+        "subLabel": "9174083102"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69f5aef2a4a9ab46e1fa6067",
+        "label": "Sapna",
+        "subLabel": "9109599487"
+      }
+    ],
+    "link": "",
+    "createdBy": "69b7d81bf5f15307df179d05",
+    "targetCount": 32,
+    "createdAt": "2026-05-04T06:02:01.236Z",
+    "__v": 0
+  },
+  {
+    "_id": "69fb6cca082f60cde49905da",
+    "title": "mj",
+    "message": "kllk",
+    "targetType": "USER",
+    "targetIds": [],
+    "targets": [
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb2b8139cfebbb0dd825e2",
+        "label": "Vishu",
+        "subLabel": "7724817688 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb55d6616775401f747d65",
+        "label": "AppZeto User",
+        "subLabel": "9641119590"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb6b1a616775401f748059",
+        "label": "Om",
+        "subLabel": "7223077890"
+      }
+    ],
+    "link": "",
+    "createdBy": "69b7d81bf5f15307df179d05",
+    "targetCount": 3,
+    "createdAt": "2026-05-06T16:31:06.521Z",
+    "__v": 0
+  },
+  {
+    "_id": "69fc531e24a13e111efc6c56",
+    "title": "ukh",
+    "message": "jj",
+    "targetType": "USER",
+    "targetIds": [],
+    "targets": [
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb2b8139cfebbb0dd825e2",
+        "label": "Vishu",
+        "subLabel": "7724817688 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb55d6616775401f747d65",
+        "label": "AppZeto User",
+        "subLabel": "9641119590"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb6b1a616775401f748059",
+        "label": "Om",
+        "subLabel": "7223077890"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fc473e7a0083db0e81f2fc",
+        "label": "Harshvardhan",
+        "subLabel": "6268423925"
+      }
+    ],
+    "link": "",
+    "createdBy": "69b7d81bf5f15307df179d05",
+    "targetCount": 4,
+    "createdAt": "2026-05-07T08:53:50.636Z",
+    "__v": 0
+  },
+  {
+    "_id": "69fc533724a13e111efc6cad",
+    "title": "yu73",
+    "message": "dqwe",
+    "targetType": "USER",
+    "targetIds": [],
+    "targets": [
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb2b8139cfebbb0dd825e2",
+        "label": "Vishu",
+        "subLabel": "7724817688 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb55d6616775401f747d65",
+        "label": "AppZeto User",
+        "subLabel": "9641119590"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb6b1a616775401f748059",
+        "label": "Om",
+        "subLabel": "7223077890"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fc473e7a0083db0e81f2fc",
+        "label": "Harshvardhan",
+        "subLabel": "6268423925"
+      }
+    ],
+    "link": "",
+    "createdBy": "69b7d81bf5f15307df179d05",
+    "targetCount": 4,
+    "createdAt": "2026-05-07T08:54:15.257Z",
+    "__v": 0
+  },
+  {
+    "_id": "69fc6282e41458ba98a794d3",
+    "title": "4R4R",
+    "message": "FEWE",
+    "targetType": "ALL",
+    "targetIds": [],
+    "targets": [
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb2b8139cfebbb0dd825e2",
+        "label": "Vishu",
+        "subLabel": "7724817688 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb55d6616775401f747d65",
+        "label": "AppZeto User",
+        "subLabel": "9641119590"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb6b1a616775401f748059",
+        "label": "Om",
+        "subLabel": "7223077890"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fc473e7a0083db0e81f2fc",
+        "label": "Harshvardhan",
+        "subLabel": "6268423925"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69f8871d7df72cbdfc46a703",
+        "label": "Test res",
+        "subLabel": "917348419775 • ghg@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69f746793047d896fdf2780d",
+        "label": "Rewa",
+        "subLabel": "917687568787 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69f39cb92cf9be4835b8e1e7",
+        "label": "Tinku's Cafe",
+        "subLabel": "916266021868 • test145@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69f332c0939809221e778b1f",
+        "label": "Jain",
+        "subLabel": "919876543090 • vishalpatel58101@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d673ac72cb55f41a29",
+        "label": "Bapat Chaat & Snacks",
+        "subLabel": "919001100010 • bapat.chaat@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d673ac72cb55f41a1f",
+        "label": "Scheme 140 Pizza Point",
+        "subLabel": "919001100008 • scheme140.pizza@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d673ac72cb55f41a1a",
+        "label": "AB Road Family Dhaba",
+        "subLabel": "919001100007 • abroad.familydhaba@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d673ac72cb55f41a15",
+        "label": "Rajwada Royal Biryani",
+        "subLabel": "919001100006 • rajwada.royal@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d573ac72cb55f41a0d",
+        "label": "Palasia Sandwich Cafe",
+        "subLabel": "919001100005 • palasia.sandwich@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d573ac72cb55f41a03",
+        "label": "Bhawarkua Momos Hub",
+        "subLabel": "919001100004 • bhawarkua.momos@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d573ac72cb55f419fa",
+        "label": "Chappan Pizza Studio",
+        "subLabel": "919001100003 • chappan.pizza@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d573ac72cb55f419f0",
+        "label": "Vijay Nagar Burger Joint",
+        "subLabel": "919001100002 • vijaynagar.burgers@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d573ac72cb55f419e1",
+        "label": "Sarafa Spice Kitchen",
+        "subLabel": "919001100001 • sarafa.spice.kitchen@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69cfbd1e04b1d76fb21bdf5a",
+        "label": "Captain",
+        "subLabel": "919568756563 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ca73e2376311192367d217",
+        "label": "Boss",
+        "subLabel": "918588434044 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ca0bac9efa09cab443667c",
+        "label": "Deni Cafe & bar",
+        "subLabel": "919988776655 • johnmex1121@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ba83b6f2a2e60a9ab85b93",
+        "label": "Raddison",
+        "subLabel": "917223077890 • om.parteki10@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69b8f156f1ecccbb2e25d030",
+        "label": "Sayaji",
+        "subLabel": "6261387233"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69b805de9c070c51724618e6",
+        "label": "Grand Sharaton",
+        "subLabel": "916268423925"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69b8053e60f4a642f86dcb62",
+        "label": "Vishal patel",
+        "subLabel": "6261387233"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69bbcc51df19086d6bfa44b5",
+        "label": "Om Parteki",
+        "subLabel": "7223077890 • om.parteki10@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69c4e110eae6e12480a17d30",
+        "label": "Tester",
+        "subLabel": "7348419775 • jiyajn1127@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69cb0da0619bc270534f7eb0",
+        "label": "John 43",
+        "subLabel": "7777777777 • johnmex1121@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69ccb39a870f3c7e6933c8b5",
+        "label": "Desie",
+        "subLabel": "6666666666 • desie@yopmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69c7be36ea35a9c5082d1ce8",
+        "label": "Devid",
+        "subLabel": "9988776655 • johnmex1121@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69cceada41eddbcc24fa6848",
+        "label": "dsdsds",
+        "subLabel": "8888877777 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69f0b1c742b0982617bb044c",
+        "label": "app delivery",
+        "subLabel": "6268423925 • whfjwjds@wdbfs.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69f2e84277e6786e04381003",
+        "label": "Test delivery",
+        "subLabel": "9109599487 • test@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69f8b26efc2dd000ade0c91e",
+        "label": "Hah",
+        "subLabel": "7878787877 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69f99c108b3c4e216592e2c0",
+        "label": "Gsh",
+        "subLabel": "6584678646 • vishalpatel581012@gmail.com"
+      }
+    ],
+    "link": "",
+    "createdBy": "69b7d81bf5f15307df179d05",
+    "targetCount": 34,
+    "createdAt": "2026-05-07T09:59:30.453Z",
+    "__v": 0
+  },
+  {
+    "_id": "69fc62b5e41458ba98a79534",
+    "title": "DWD",
+    "message": "DQWD",
+    "targetType": "USER",
+    "targetIds": [],
+    "targets": [
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb2b8139cfebbb0dd825e2",
+        "label": "Vishu",
+        "subLabel": "7724817688 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb55d6616775401f747d65",
+        "label": "AppZeto User",
+        "subLabel": "9641119590"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb6b1a616775401f748059",
+        "label": "Om",
+        "subLabel": "7223077890"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fc473e7a0083db0e81f2fc",
+        "label": "Harshvardhan",
+        "subLabel": "6268423925"
+      }
+    ],
+    "link": "",
+    "createdBy": "69b7d81bf5f15307df179d05",
+    "targetCount": 4,
+    "createdAt": "2026-05-07T10:00:21.057Z",
+    "__v": 0
+  },
+  {
+    "_id": "69fc6521fa44deda1d193545",
+    "title": "wdwedef",
+    "message": "tgtg",
+    "targetType": "USER",
+    "targetIds": [],
+    "targets": [
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb2b8139cfebbb0dd825e2",
+        "label": "Vishu",
+        "subLabel": "7724817688 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb55d6616775401f747d65",
+        "label": "AppZeto User",
+        "subLabel": "9641119590"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb6b1a616775401f748059",
+        "label": "Om",
+        "subLabel": "7223077890"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fc473e7a0083db0e81f2fc",
+        "label": "Harshvardhan",
+        "subLabel": "6268423925"
+      }
+    ],
+    "link": "",
+    "createdBy": "69b7d81bf5f15307df179d05",
+    "targetCount": 4,
+    "createdAt": "2026-05-07T10:10:41.552Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a23d1415045504749c930b8",
+    "title": "Free offer",
+    "message": "today 60% off on food",
+    "targetType": "ALL",
+    "targetIds": [],
+    "targets": [
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb2b8139cfebbb0dd825e2",
+        "label": "Vishu",
+        "subLabel": "7724817688 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb55d6616775401f747d65",
+        "label": "AppZeto User",
+        "subLabel": "9641119590"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb6b1a616775401f748059",
+        "label": "Om",
+        "subLabel": "7223077890"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fc473e7a0083db0e81f2fc",
+        "label": "Harshvardhan",
+        "subLabel": "6268423925"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fc79ac616775401f74a09e",
+        "label": "Rani Maheshwari",
+        "subLabel": "7880133936"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fc7d96616775401f74a4f5",
+        "label": "Vipin",
+        "subLabel": "6375095971"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fcc665616775401f74b4e3",
+        "label": "Raja",
+        "subLabel": "8888888888"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fccd045faff2b74809411b",
+        "label": "Afhjn",
+        "subLabel": "5555542289"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fd78e6f68a1d3347635b94",
+        "label": "Ritu",
+        "subLabel": "9755633147"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fd8910c8f52535c5ed126b",
+        "label": "payal",
+        "subLabel": "9993911855"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a0172f9a66d7677b04af682",
+        "label": "Ratnesh",
+        "subLabel": "9770133148"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a0eb30fdbddede522996f74",
+        "label": "Test Customer",
+        "subLabel": "9999999999 • test@example.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a0eb8e320c49c1e9666f399",
+        "label": "ratnesh",
+        "subLabel": "9770113148"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a1334d154c6ae45212b1288",
+        "label": "Trisha Mishra",
+        "subLabel": "9770133149"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a15861f60c63b5f9b6e5012",
+        "label": "Trishu",
+        "subLabel": "8787877676"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a16cfd299f1e0145b99ba66",
+        "label": "Naresh kumar Bhan",
+        "subLabel": "7051102822"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a16d20099f1e0145b99bbcb",
+        "label": "Brighu",
+        "subLabel": "9149500373"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a1ad2bc919a5393fc9d3a0d",
+        "label": "7348419775",
+        "subLabel": "7348419775"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a1fd44ec05cb7259d461a0f",
+        "label": "Prince",
+        "subLabel": "7878787878"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a23c60d2e76f0c8b9da540f",
+        "label": "Shyam",
+        "subLabel": "8787878787"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a23c94b2e76f0c8b9da54c8",
+        "label": "Kashmir Cafe",
+        "subLabel": "918686868686 • brighu@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a0ed8aa2410e4173e37888a",
+        "label": "GFGFGF",
+        "subLabel": "918787878787 • dfg@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a0ed40465051191284d3608",
+        "label": "titu cakes",
+        "subLabel": "917676767676 • sgd@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a0eb5ff20c49c1e9666f0ba",
+        "label": "papa bakery",
+        "subLabel": "916565656565 • papa@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a06c4b44f493cb3eed1c742",
+        "label": "Happy Bakery",
+        "subLabel": "919374234782 • trisha@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69f746793047d896fdf2780d",
+        "label": "Rewa",
+        "subLabel": "917687568787 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69f39cb92cf9be4835b8e1e7",
+        "label": "Tinku's Cafe",
+        "subLabel": "916266021868 • test145@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69f332c0939809221e778b1f",
+        "label": "Jain",
+        "subLabel": "919876543090 • vishalpatel58101@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d673ac72cb55f41a1a",
+        "label": "AB Road Family Dhaba",
+        "subLabel": "919001100007 • abroad.familydhaba@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d673ac72cb55f41a15",
+        "label": "Rajwada Royal Biryani",
+        "subLabel": "919770133148 • rajwada.royal@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d573ac72cb55f41a03",
+        "label": "Bhawarkua Momos Hub",
+        "subLabel": "919001100004 • bhawarkua.momos@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d573ac72cb55f419fa",
+        "label": "Chappan Pizza Studio",
+        "subLabel": "919001100003 • chappan.pizza@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d573ac72cb55f419f0",
+        "label": "Vijay Nagar Burger Joint",
+        "subLabel": "919001100002 • vijaynagar.burgers@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69cfbd1e04b1d76fb21bdf5a",
+        "label": "Captain",
+        "subLabel": "919568756563 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ba83b6f2a2e60a9ab85b93",
+        "label": "Raddison",
+        "subLabel": "917223077890 • om.parteki10@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69b8053e60f4a642f86dcb62",
+        "label": "Vishal patel",
+        "subLabel": "9770133148"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69bbcc51df19086d6bfa44b5",
+        "label": "Om Parteki",
+        "subLabel": "7223077890 • om.parteki10@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69c4e110eae6e12480a17d30",
+        "label": "Tester",
+        "subLabel": "7348419775 • jiyajn1127@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69cb0da0619bc270534f7eb0",
+        "label": "John 43",
+        "subLabel": "7777777777 • johnmex1121@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69ccb39a870f3c7e6933c8b5",
+        "label": "Desie",
+        "subLabel": "6666666666 • desie@yopmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69c7be36ea35a9c5082d1ce8",
+        "label": "Devid",
+        "subLabel": "9988776655 • johnmex1121@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69cbb50c10e4b2e0b464f01d",
+        "label": "Demo",
+        "subLabel": "9301988718 • demo12@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69cceada41eddbcc24fa6848",
+        "label": "dsdsds",
+        "subLabel": "8888877777 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69f0b1c742b0982617bb044c",
+        "label": "app delivery",
+        "subLabel": "6268423925 • whfjwjds@wdbfs.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69f2e84277e6786e04381003",
+        "label": "Test delivery",
+        "subLabel": "9109599487 • test@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69f8b26efc2dd000ade0c91e",
+        "label": "Hah",
+        "subLabel": "7878787877 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69f99c108b3c4e216592e2c0",
+        "label": "Gsh",
+        "subLabel": "6584678646 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69fc18b5d085aa34c83684b2",
+        "label": "harshvardhan",
+        "subLabel": "6266021868 • harsh@appzeto.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "6a1fdd48c05cb7259d462247",
+        "label": "Faah",
+        "subLabel": "7878787878 • chiii@gmail.com"
+      }
+    ],
+    "link": "",
+    "createdBy": "69b7d81bf5f15307df179d05",
+    "targetCount": 49,
+    "createdAt": "2026-06-06T07:50:25.747Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a26b3ea35547789fbca6bcb",
+    "title": "tests",
+    "message": "test",
+    "targetType": "USER",
+    "targetIds": [],
+    "targets": [
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb2b8139cfebbb0dd825e2",
+        "label": "Vishu",
+        "subLabel": "7724817688 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb55d6616775401f747d65",
+        "label": "AppZeto User",
+        "subLabel": "9641119590"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb6b1a616775401f748059",
+        "label": "Om",
+        "subLabel": "7223077890"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fc473e7a0083db0e81f2fc",
+        "label": "Harshvardhan",
+        "subLabel": "6268423925"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fc79ac616775401f74a09e",
+        "label": "Rani Maheshwari",
+        "subLabel": "7880133936"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fc7d96616775401f74a4f5",
+        "label": "Vipin",
+        "subLabel": "6375095971"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fcc665616775401f74b4e3",
+        "label": "Raja",
+        "subLabel": "8888888888"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fccd045faff2b74809411b",
+        "label": "Afhjn",
+        "subLabel": "5555542289"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fd78e6f68a1d3347635b94",
+        "label": "Ritu",
+        "subLabel": "9755633147"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fd8910c8f52535c5ed126b",
+        "label": "payal",
+        "subLabel": "9993911855"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a0172f9a66d7677b04af682",
+        "label": "Ratnesh",
+        "subLabel": "9770133148"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a0eb30fdbddede522996f74",
+        "label": "Test Customer",
+        "subLabel": "9999999999 • test@example.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a0eb8e320c49c1e9666f399",
+        "label": "ratnesh",
+        "subLabel": "9770113148"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a1334d154c6ae45212b1288",
+        "label": "Trisha Mishra",
+        "subLabel": "9770133149"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a15861f60c63b5f9b6e5012",
+        "label": "Trishu",
+        "subLabel": "8787877676"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a16cfd299f1e0145b99ba66",
+        "label": "Naresh kumar Bhan",
+        "subLabel": "7051102822"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a16d20099f1e0145b99bbcb",
+        "label": "Brighu",
+        "subLabel": "9149500373"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a1ad2bc919a5393fc9d3a0d",
+        "label": "7348419775",
+        "subLabel": "7348419775"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a1fd44ec05cb7259d461a0f",
+        "label": "Prince",
+        "subLabel": "7878787878"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a23c60d2e76f0c8b9da540f",
+        "label": "Shyam",
+        "subLabel": "8787878787"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a23e6d32ba72825ce7ff8ba",
+        "label": "Ram singh",
+        "subLabel": "8686868686"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a265b0135547789fbc9fcf1",
+        "label": "Rimjhim Patidar+---_₹",
+        "subLabel": "9399231681 • rimjhin367@gmail.com"
+      }
+    ],
+    "link": "",
+    "createdBy": "69b7d81bf5f15307df179d05",
+    "targetCount": 22,
+    "createdAt": "2026-06-08T12:22:02.620Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a3510984f14c4c635352b1b",
+    "title": "hii",
+    "message": "hello vendors",
+    "targetType": "SELLER",
+    "targetIds": [],
+    "targets": [
+      {
+        "ownerType": "SELLER",
+        "ownerId": "6a2fa3399f4cd52de41c88f2",
+        "label": "Test store",
+        "subLabel": "7348419775 • jiyajn1127@gmail.comm"
+      },
+      {
+        "ownerType": "SELLER",
+        "ownerId": "6a33e3c7122b370a35dc529c",
+        "label": "Apna Store",
+        "subLabel": "9888888888 • jh@gmail.com"
+      },
+      {
+        "ownerType": "SELLER",
+        "ownerId": "6a34e6e01f3668d775e45af4",
+        "label": "Hiii",
+        "subLabel": "8989931140 • sharmahimanshi544@gmail.com"
+      }
+    ],
+    "link": "",
+    "createdBy": "69b7d81bf5f15307df179d05",
+    "targetCount": 3,
+    "createdAt": "2026-06-19T09:49:12.087Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a37a385b49d18854bcb3e6b",
+    "title": "hiiii",
+    "message": "KISHTWAR WALO READY HO???????",
+    "targetType": "ALL",
+    "targetIds": [],
+    "targets": [
+      {
+        "ownerType": "USER",
+        "ownerId": "69fc7d96616775401f74a4f5",
+        "label": "Vipin",
+        "subLabel": "6375095971"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb2b8139cfebbb0dd825e2",
+        "label": "Vishu",
+        "subLabel": "7724817688 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fc79ac616775401f74a09e",
+        "label": "Rani Maheshwari",
+        "subLabel": "7880133936"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fccd045faff2b74809411b",
+        "label": "Afhjn",
+        "subLabel": "5555542289"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fcc665616775401f74b4e3",
+        "label": "Raja",
+        "subLabel": "8888888888"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fd78e6f68a1d3347635b94",
+        "label": "Ritu",
+        "subLabel": "9755633147"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb6b1a616775401f748059",
+        "label": "Om",
+        "subLabel": "7223077890"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fc473e7a0083db0e81f2fc",
+        "label": "Harshvardhan",
+        "subLabel": "6268423925"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fd8910c8f52535c5ed126b",
+        "label": "payal",
+        "subLabel": "9993911855"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb55d6616775401f747d65",
+        "label": "AppZeto User",
+        "subLabel": "9641119590"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a0172f9a66d7677b04af682",
+        "label": "Ratnesh",
+        "subLabel": "9770133148"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a0eb30fdbddede522996f74",
+        "label": "Test Customer",
+        "subLabel": "9999999999 • test@example.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a0eb8e320c49c1e9666f399",
+        "label": "ratnesh",
+        "subLabel": "9770113148"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a1334d154c6ae45212b1288",
+        "label": "Trisha Mishra",
+        "subLabel": "9770133149"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a15861f60c63b5f9b6e5012",
+        "label": "Trishu",
+        "subLabel": "8787877676"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a16cfd299f1e0145b99ba66",
+        "label": "Naresh kumar Bhan",
+        "subLabel": "7051102822"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a16d20099f1e0145b99bbcb",
+        "label": "Brighu",
+        "subLabel": "9149500373"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a1ad2bc919a5393fc9d3a0d",
+        "label": "Jiya",
+        "subLabel": "7348419775"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a23c60d2e76f0c8b9da540f",
+        "label": "Shyam",
+        "subLabel": "8787878787"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a23e6d32ba72825ce7ff8ba",
+        "label": "Ram singh",
+        "subLabel": "8686868686"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a28087239a5e34fb5ec2f21",
+        "label": "ratnhh",
+        "subLabel": "7877979797"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a294d5ab3c7519e93a1fa14",
+        "label": "Yadhu",
+        "subLabel": "9622002822"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a294e8cf4e676f8787f4dfa",
+        "label": "prince",
+        "subLabel": "7974161582"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a2ab805b3c7519e93a243f8",
+        "label": "Chiranjeevi Vimal",
+        "subLabel": "9103201763"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a2ab903b3c7519e93a24735",
+        "label": "Navjot",
+        "subLabel": "7889357021"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a2be340c2a32590d217c3a2",
+        "label": "Ajay Sharma",
+        "subLabel": "7973384592"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a2ea7bf8772f43270717b14",
+        "label": "Raja",
+        "subLabel": "6546767645"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a2fe2e178fa30a84f72b3f9",
+        "label": "hazle",
+        "subLabel": "7978979797"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a2fe4d778fa30a84f72b4d0",
+        "label": "ratnnn",
+        "subLabel": "9778797979"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a34d6f32d5eb91a119b82ac",
+        "label": "Himanshi Sharma",
+        "subLabel": "8989931140"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a351c15f0f006d756de04d5",
+        "label": "Trishu",
+        "subLabel": "8788686786"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a35218c4c39a76b72274e6c",
+        "label": "Himanshi Sharma -",
+        "subLabel": "8989931144"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a3521a14c39a76b72274ecb",
+        "label": "Isha",
+        "subLabel": "8989931444"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a3521e64c39a76b72274f6d",
+        "label": "Suhani",
+        "subLabel": "2222222222"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a3522484c39a76b7227501d",
+        "label": "9109577187",
+        "subLabel": "9109577187"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a36584fb49d18854bcb29be",
+        "label": "Gazala Andleeb",
+        "subLabel": "7051019739"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a369248bca47078cd38fd4b",
+        "label": "Ratnesh",
+        "subLabel": "918768768768 • fgf@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a365b18b49d18854bcb2c9d",
+        "label": "SHAGGY KITCHEN KICHLOO MOHALLA",
+        "subLabel": "917006931967 • sageer.zarger19@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a363ee6b49d18854bcb08d3",
+        "label": "Grill in Kishtwar",
+        "subLabel": "917051223339 • grillinnkishtwar@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a351e674c39a76b72274af9",
+        "label": "Vhh",
+        "subLabel": "918989931145 • sharmahimanshi544@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a34d8792d5eb91a119b84af",
+        "label": "Apna sweets",
+        "subLabel": "918989931140 • sharmahimanshi544@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a2d2511d0e58738aec1d393",
+        "label": "Test res",
+        "subLabel": "917348419775 • jiyajn1127@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a294d00b3c7519e93a1f909",
+        "label": "Patidar Restaurant",
+        "subLabel": "919399231682 • patidar5@gmqil.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a2911ecb3c7519e93a1ac05",
+        "label": "restaurant toppppp",
+        "subLabel": "919396396399 • hdnh2@gmaio.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a26534035547789fbc9f3b3",
+        "label": "Raja home",
+        "subLabel": "917878787878 • raja@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a0ed8aa2410e4173e37888a",
+        "label": "GFGFGF",
+        "subLabel": "918787878787 • dfg@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a0ed40465051191284d3608",
+        "label": "titu cakes",
+        "subLabel": "917676767676 • sgd@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a0eb5ff20c49c1e9666f0ba",
+        "label": "papa bakery",
+        "subLabel": "916565656565 • papa@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a06c4b44f493cb3eed1c742",
+        "label": "Happy Bakery",
+        "subLabel": "919374234782 • trisha@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69f39cb92cf9be4835b8e1e7",
+        "label": "Tinku's Cafe",
+        "subLabel": "916266021868 • test145@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69f332c0939809221e778b1f",
+        "label": "Jain",
+        "subLabel": "919876543090 • vishalpatel58101@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d673ac72cb55f41a1a",
+        "label": "AB Road Family Dhaba",
+        "subLabel": "919001100007 • abroad.familydhaba@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d673ac72cb55f41a15",
+        "label": "Rajwada Royal Biryani",
+        "subLabel": "919770133148 • rajwada.royal@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d573ac72cb55f41a03",
+        "label": "Bhawarkua Momos Hub",
+        "subLabel": "919001100004 • bhawarkua.momos@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d573ac72cb55f419fa",
+        "label": "Chappan Pizza Studio",
+        "subLabel": "919001100003 • chappan.pizza@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69cfbd1e04b1d76fb21bdf5a",
+        "label": "Captain",
+        "subLabel": "919568756563 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ba83b6f2a2e60a9ab85b93",
+        "label": "Raddison",
+        "subLabel": "917223077890 • om.parteki10@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69b8053e60f4a642f86dcb62",
+        "label": "Vishal patel",
+        "subLabel": "9770133148"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69cceada41eddbcc24fa6848",
+        "label": "dsdsds",
+        "subLabel": "8888877777 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69cb0da0619bc270534f7eb0",
+        "label": "John 43",
+        "subLabel": "7777777777 • johnmex1121@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69f99c108b3c4e216592e2c0",
+        "label": "Gsh",
+        "subLabel": "6584678646 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69bbcc51df19086d6bfa44b5",
+        "label": "Om Parteki",
+        "subLabel": "7223077890 • om.parteki10@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69f0b1c742b0982617bb044c",
+        "label": "app delivery",
+        "subLabel": "6268423925 • whfjwjds@wdbfs.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69cbb50c10e4b2e0b464f01d",
+        "label": "Demo",
+        "subLabel": "9301988718 • demo12@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69f2e84277e6786e04381003",
+        "label": "Test delivery",
+        "subLabel": "9109599487 • test@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69f8b26efc2dd000ade0c91e",
+        "label": "Hah",
+        "subLabel": "7878787877 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69fc18b5d085aa34c83684b2",
+        "label": "harshvardhan",
+        "subLabel": "6266021868 • harsh@appzeto.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69ccb39a870f3c7e6933c8b5",
+        "label": "Desie",
+        "subLabel": "6666666666 • desie@yopmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69c7be36ea35a9c5082d1ce8",
+        "label": "Devid",
+        "subLabel": "9988776655 • johnmex1121@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "6a2d0a80cabfce527e985073",
+        "label": "Test del",
+        "subLabel": "7348419775 • jiyajn1127@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "6a350ce84c39a76b72272b79",
+        "label": "Himanshi",
+        "subLabel": "8989931140"
+      }
+    ],
+    "link": "",
+    "createdBy": "6a362d32c1cf744c7f61d93d",
+    "targetCount": 71,
+    "createdAt": "2026-06-21T08:40:37.016Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a37a75eb49d18854bcb4199",
+    "title": "NARAZ HOO????",
+    "message": "NARAZ MT HOWO JALDI AANE WALA HUNNN",
+    "targetType": "ALL",
+    "targetIds": [],
+    "targets": [
+      {
+        "ownerType": "USER",
+        "ownerId": "69fc7d96616775401f74a4f5",
+        "label": "Vipin",
+        "subLabel": "6375095971"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb2b8139cfebbb0dd825e2",
+        "label": "Vishu",
+        "subLabel": "7724817688 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fc79ac616775401f74a09e",
+        "label": "Rani Maheshwari",
+        "subLabel": "7880133936"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fccd045faff2b74809411b",
+        "label": "Afhjn",
+        "subLabel": "5555542289"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fcc665616775401f74b4e3",
+        "label": "Raja",
+        "subLabel": "8888888888"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fd78e6f68a1d3347635b94",
+        "label": "Ritu",
+        "subLabel": "9755633147"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb6b1a616775401f748059",
+        "label": "Om",
+        "subLabel": "7223077890"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fc473e7a0083db0e81f2fc",
+        "label": "Harshvardhan",
+        "subLabel": "6268423925"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fd8910c8f52535c5ed126b",
+        "label": "payal",
+        "subLabel": "9993911855"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb55d6616775401f747d65",
+        "label": "AppZeto User",
+        "subLabel": "9641119590"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a0172f9a66d7677b04af682",
+        "label": "Ratnesh",
+        "subLabel": "9770133148"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a0eb30fdbddede522996f74",
+        "label": "Test Customer",
+        "subLabel": "9999999999 • test@example.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a0eb8e320c49c1e9666f399",
+        "label": "ratnesh",
+        "subLabel": "9770113148"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a1334d154c6ae45212b1288",
+        "label": "Trisha Mishra",
+        "subLabel": "9770133149"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a15861f60c63b5f9b6e5012",
+        "label": "Trishu",
+        "subLabel": "8787877676"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a16cfd299f1e0145b99ba66",
+        "label": "Naresh kumar Bhan",
+        "subLabel": "7051102822"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a16d20099f1e0145b99bbcb",
+        "label": "Brighu",
+        "subLabel": "9149500373"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a1ad2bc919a5393fc9d3a0d",
+        "label": "Jiya",
+        "subLabel": "7348419775"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a23c60d2e76f0c8b9da540f",
+        "label": "Shyam",
+        "subLabel": "8787878787"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a23e6d32ba72825ce7ff8ba",
+        "label": "Ram singh",
+        "subLabel": "8686868686"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a28087239a5e34fb5ec2f21",
+        "label": "ratnhh",
+        "subLabel": "7877979797"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a294d5ab3c7519e93a1fa14",
+        "label": "Yadhu",
+        "subLabel": "9622002822"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a294e8cf4e676f8787f4dfa",
+        "label": "prince",
+        "subLabel": "7974161582"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a2ab805b3c7519e93a243f8",
+        "label": "Chiranjeevi Vimal",
+        "subLabel": "9103201763"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a2ab903b3c7519e93a24735",
+        "label": "Navjot",
+        "subLabel": "7889357021"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a2be340c2a32590d217c3a2",
+        "label": "Ajay Sharma",
+        "subLabel": "7973384592"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a2ea7bf8772f43270717b14",
+        "label": "Raja",
+        "subLabel": "6546767645"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a2fe2e178fa30a84f72b3f9",
+        "label": "hazle",
+        "subLabel": "7978979797"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a2fe4d778fa30a84f72b4d0",
+        "label": "ratnnn",
+        "subLabel": "9778797979"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a34d6f32d5eb91a119b82ac",
+        "label": "Himanshi Sharma",
+        "subLabel": "8989931140"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a351c15f0f006d756de04d5",
+        "label": "Trishu",
+        "subLabel": "8788686786"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a35218c4c39a76b72274e6c",
+        "label": "Himanshi Sharma -",
+        "subLabel": "8989931144"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a3521a14c39a76b72274ecb",
+        "label": "Isha",
+        "subLabel": "8989931444"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a3521e64c39a76b72274f6d",
+        "label": "Suhani",
+        "subLabel": "2222222222"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a3522484c39a76b7227501d",
+        "label": "9109577187",
+        "subLabel": "9109577187"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a36584fb49d18854bcb29be",
+        "label": "Gazala Andleeb",
+        "subLabel": "7051019739"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a369248bca47078cd38fd4b",
+        "label": "Ratnesh",
+        "subLabel": "918768768768 • fgf@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a365b18b49d18854bcb2c9d",
+        "label": "SHAGGY KITCHEN KICHLOO MOHALLA",
+        "subLabel": "917006931967 • sageer.zarger19@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a363ee6b49d18854bcb08d3",
+        "label": "Grill in Kishtwar",
+        "subLabel": "917051223339 • grillinnkishtwar@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a351e674c39a76b72274af9",
+        "label": "Vhh",
+        "subLabel": "918989931145 • sharmahimanshi544@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a34d8792d5eb91a119b84af",
+        "label": "Apna sweets",
+        "subLabel": "918989931140 • sharmahimanshi544@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a2d2511d0e58738aec1d393",
+        "label": "Test res",
+        "subLabel": "917348419775 • jiyajn1127@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a294d00b3c7519e93a1f909",
+        "label": "Patidar Restaurant",
+        "subLabel": "919399231682 • patidar5@gmqil.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a2911ecb3c7519e93a1ac05",
+        "label": "restaurant toppppp",
+        "subLabel": "919396396399 • hdnh2@gmaio.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a26534035547789fbc9f3b3",
+        "label": "Raja home",
+        "subLabel": "917878787878 • raja@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a0ed8aa2410e4173e37888a",
+        "label": "GFGFGF",
+        "subLabel": "918787878787 • dfg@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a0ed40465051191284d3608",
+        "label": "titu cakes",
+        "subLabel": "917676767676 • sgd@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a0eb5ff20c49c1e9666f0ba",
+        "label": "papa bakery",
+        "subLabel": "916565656565 • papa@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "6a06c4b44f493cb3eed1c742",
+        "label": "Happy Bakery",
+        "subLabel": "919374234782 • trisha@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69f39cb92cf9be4835b8e1e7",
+        "label": "Tinku's Cafe",
+        "subLabel": "916266021868 • test145@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69f332c0939809221e778b1f",
+        "label": "Jain",
+        "subLabel": "919876543090 • vishalpatel58101@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d673ac72cb55f41a1a",
+        "label": "AB Road Family Dhaba",
+        "subLabel": "919001100007 • abroad.familydhaba@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d673ac72cb55f41a15",
+        "label": "Rajwada Royal Biryani",
+        "subLabel": "919770133148 • rajwada.royal@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d573ac72cb55f41a03",
+        "label": "Bhawarkua Momos Hub",
+        "subLabel": "919001100004 • bhawarkua.momos@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ee02d573ac72cb55f419fa",
+        "label": "Chappan Pizza Studio",
+        "subLabel": "919001100003 • chappan.pizza@example.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69cfbd1e04b1d76fb21bdf5a",
+        "label": "Captain",
+        "subLabel": "919568756563 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "RESTAURANT",
+        "ownerId": "69ba83b6f2a2e60a9ab85b93",
+        "label": "Raddison",
+        "subLabel": "917223077890 • om.parteki10@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69b8053e60f4a642f86dcb62",
+        "label": "Vishal patel",
+        "subLabel": "9770133148"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69cceada41eddbcc24fa6848",
+        "label": "dsdsds",
+        "subLabel": "8888877777 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69cb0da0619bc270534f7eb0",
+        "label": "John 43",
+        "subLabel": "7777777777 • johnmex1121@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69f99c108b3c4e216592e2c0",
+        "label": "Gsh",
+        "subLabel": "6584678646 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69bbcc51df19086d6bfa44b5",
+        "label": "Om Parteki",
+        "subLabel": "7223077890 • om.parteki10@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69f0b1c742b0982617bb044c",
+        "label": "app delivery",
+        "subLabel": "6268423925 • whfjwjds@wdbfs.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69cbb50c10e4b2e0b464f01d",
+        "label": "Demo",
+        "subLabel": "9301988718 • demo12@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69f2e84277e6786e04381003",
+        "label": "Test delivery",
+        "subLabel": "9109599487 • test@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69f8b26efc2dd000ade0c91e",
+        "label": "Hah",
+        "subLabel": "7878787877 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69fc18b5d085aa34c83684b2",
+        "label": "harshvardhan",
+        "subLabel": "6266021868 • harsh@appzeto.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69ccb39a870f3c7e6933c8b5",
+        "label": "Desie",
+        "subLabel": "6666666666 • desie@yopmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69c7be36ea35a9c5082d1ce8",
+        "label": "Devid",
+        "subLabel": "9988776655 • johnmex1121@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "6a2d0a80cabfce527e985073",
+        "label": "Test del",
+        "subLabel": "7348419775 • jiyajn1127@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "6a350ce84c39a76b72272b79",
+        "label": "Himanshi",
+        "subLabel": "8989931140"
+      }
+    ],
+    "link": "",
+    "createdBy": "6a362d32c1cf744c7f61d93d",
+    "targetCount": 71,
+    "createdAt": "2026-06-21T08:57:02.695Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a40de3c264c9701cd32d480",
+    "title": "WE ARE LIVE !!!!!",
+    "message": "OYECHOTUU IS NOW SERVING KISHTWAR.",
+    "targetType": "USER",
+    "targetIds": [],
+    "targets": [
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb2b8139cfebbb0dd825e2",
+        "label": "Vishu",
+        "subLabel": "7724817688 • vishalpatel581012@gmail.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb55d6616775401f747d65",
+        "label": "AppZeto User",
+        "subLabel": "9641119590"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fb6b1a616775401f748059",
+        "label": "Om",
+        "subLabel": "7223077890"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fc473e7a0083db0e81f2fc",
+        "label": "Harshvardhan",
+        "subLabel": "6268423925"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fc79ac616775401f74a09e",
+        "label": "Rani Maheshwari",
+        "subLabel": "7880133936"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fc7d96616775401f74a4f5",
+        "label": "Vipin",
+        "subLabel": "6375095971"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fcc665616775401f74b4e3",
+        "label": "Raja",
+        "subLabel": "8888888888"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fccd045faff2b74809411b",
+        "label": "Afhjn",
+        "subLabel": "5555542289"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fd78e6f68a1d3347635b94",
+        "label": "Ritu",
+        "subLabel": "9755633147"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "69fd8910c8f52535c5ed126b",
+        "label": "payal",
+        "subLabel": "9993911855"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a0172f9a66d7677b04af682",
+        "label": "Ratnesh",
+        "subLabel": "9770133150"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a0eb30fdbddede522996f74",
+        "label": "Test Customer",
+        "subLabel": "9999999999 • test@example.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a0eb8e320c49c1e9666f399",
+        "label": "ratnesh",
+        "subLabel": "9770113148"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a1334d154c6ae45212b1288",
+        "label": "Trisha Mishra",
+        "subLabel": "9770133149"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a15861f60c63b5f9b6e5012",
+        "label": "Trishu",
+        "subLabel": "8787877676"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a16cfd299f1e0145b99ba66",
+        "label": "Naresh kumar Bhan",
+        "subLabel": "7051102822"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a16d20099f1e0145b99bbcb",
+        "label": "Brighu",
+        "subLabel": "9149500373"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a23c60d2e76f0c8b9da540f",
+        "label": "Shyam",
+        "subLabel": "8787878787"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a23e6d32ba72825ce7ff8ba",
+        "label": "Ram singh",
+        "subLabel": "8686868686"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a28087239a5e34fb5ec2f21",
+        "label": "ratnhh",
+        "subLabel": "7877979797"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a294d5ab3c7519e93a1fa14",
+        "label": "Yadhu",
+        "subLabel": "9622002822"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a294e8cf4e676f8787f4dfa",
+        "label": "prince",
+        "subLabel": "7974161582"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a2ab805b3c7519e93a243f8",
+        "label": "Chiranjeevi Vimal",
+        "subLabel": "9103201763"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a2ab903b3c7519e93a24735",
+        "label": "Navjot",
+        "subLabel": "7889357021"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a2be340c2a32590d217c3a2",
+        "label": "Ajay Sharma",
+        "subLabel": "7973384592"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a2ea7bf8772f43270717b14",
+        "label": "Raja",
+        "subLabel": "6546767645"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a2fe2e178fa30a84f72b3f9",
+        "label": "hazle",
+        "subLabel": "7978979797"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a2fe4d778fa30a84f72b4d0",
+        "label": "ratnnn",
+        "subLabel": "9778797979"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a34d6f32d5eb91a119b82ac",
+        "label": "Himanshi Sharma",
+        "subLabel": "8989931140"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a351c15f0f006d756de04d5",
+        "label": "Trishu",
+        "subLabel": "8788686786"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a35218c4c39a76b72274e6c",
+        "label": "Himanshi Sharma -",
+        "subLabel": "8989931144"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a3521a14c39a76b72274ecb",
+        "label": "Isha",
+        "subLabel": "8989931444"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a3521e64c39a76b72274f6d",
+        "label": "Suhani",
+        "subLabel": "2222222222"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a3522484c39a76b7227501d",
+        "label": "9109577187",
+        "subLabel": "9109577187"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a36584fb49d18854bcb29be",
+        "label": "Gazala Andleeb",
+        "subLabel": "7051019739"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a38e3cc6ae6a0c8415189fb",
+        "label": "Joyaa",
+        "subLabel": "7458947838"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a38e82c6ae6a0c841519da2",
+        "label": "8770552411",
+        "subLabel": "8770552411"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a3a5e5fc0e66a94884ae32b",
+        "label": "Rohan",
+        "subLabel": "7889486783"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a3f68f7cdfc56f7a6d9a955",
+        "label": "Ravi Manhas",
+        "subLabel": "7051493226"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a3f7269954ca65f3fa36879",
+        "label": "Ranjeet",
+        "subLabel": "9797312716"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a3f79b6954ca65f3fa37260",
+        "label": "Rashid Gulshan",
+        "subLabel": "9018427073 • rashidsheikh918@gmail.com"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a3fa830954ca65f3fa40b0a",
+        "label": "Huriya naik",
+        "subLabel": "6006249959"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a3fcaaaef820ecdd1892c96",
+        "label": "Simran Rathore",
+        "subLabel": "8082053151"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a3fcc1eef820ecdd189331c",
+        "label": "Vinod kumar",
+        "subLabel": "8493924501"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a3fd006ef820ecdd189454f",
+        "label": "sharikmalik",
+        "subLabel": "9541573994"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a3fd3a0ef820ecdd189554e",
+        "label": "sam",
+        "subLabel": "7006595586"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a3fd3c7ef820ecdd18955ed",
+        "label": "Tanees Ahmed",
+        "subLabel": "9682191652"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a3fdc74ef820ecdd1897554",
+        "label": "Yukta Sharma",
+        "subLabel": "9906187490"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a3fe1fcef820ecdd18992e1",
+        "label": "rahi ji",
+        "subLabel": "8493059442"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a3fed52ef820ecdd189e3a7",
+        "label": "Haseem Mir",
+        "subLabel": "8491008351"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a3ff1e7ef820ecdd189f35a",
+        "label": "Asif Bashir",
+        "subLabel": "7006317188"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a409e19264c9701cd323f40",
+        "label": "Ayaan dar",
+        "subLabel": "8493959145"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a40a3d2264c9701cd324347",
+        "label": "Neha Ratho",
+        "subLabel": "9797762807"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a40ae02264c9701cd3249e1",
+        "label": "Umar",
+        "subLabel": "9697723380"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a40afe5264c9701cd324d05",
+        "label": "Ahmed",
+        "subLabel": "7006273818"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a40b0d7264c9701cd324f1a",
+        "label": "Mehboob zargar",
+        "subLabel": "9541030106"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a40b1a5264c9701cd3250f3",
+        "label": "Zamrooda",
+        "subLabel": "9622827850"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a40b2c4264c9701cd32539b",
+        "label": "Samad Devv",
+        "subLabel": "9320659226"
+      },
+      {
+        "ownerType": "USER",
+        "ownerId": "6a40b839264c9701cd327487",
+        "label": "Atufa Zargar",
+        "subLabel": "9103536942"
+      }
+    ],
+    "link": "",
+    "createdBy": "6a362d32c1cf744c7f61d93d",
+    "targetCount": 59,
+    "createdAt": "2026-06-28T08:41:32.090Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a4113a6264c9701cd33c2d6",
+    "title": "RIDERSS",
+    "message": "SAB LOG TYAR HO JAO KOI HI ORDER MISS YA LATE NA HO JAYE",
+    "targetType": "DELIVERY",
+    "targetIds": [],
+    "targets": [
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "69b8053e60f4a642f86dcb62",
+        "label": "Vishal patel",
+        "subLabel": "9770133149"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "6a242d8835547789fbc9eb21",
+        "label": "Brighu",
+        "subLabel": "9149500373"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "6a3f3b7dcdfc56f7a6d99631",
+        "label": "Arjun singh",
+        "subLabel": "8082692859"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "6a3f3ba2cdfc56f7a6d99645",
+        "label": "AAMIR BASHIR LONE",
+        "subLabel": "8492004133 • rahilone730@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "6a3f3d17cdfc56f7a6d9965d",
+        "label": "Imtayaz Ahmed",
+        "subLabel": "8492002752 • rahieimtayaz1997@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "6a3f3d63cdfc56f7a6d99667",
+        "label": "Waseem hassan khaja",
+        "subLabel": "6006644279 • waseemkhaja38@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "6a3f45c1cdfc56f7a6d99da8",
+        "label": "Irshad Ahmad",
+        "subLabel": "9906043121 • mughalirshad057@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "6a3f474bcdfc56f7a6d99dbb",
+        "label": "Ashu shan",
+        "subLabel": "7051310450 • ashushan259@gmail.com"
+      },
+      {
+        "ownerType": "DELIVERY_PARTNER",
+        "ownerId": "6a3fe8a4ef820ecdd189c8e6",
+        "label": "Asif Bashir",
+        "subLabel": "7006317188 • asiflone73@gmail.com"
+      }
+    ],
+    "link": "",
+    "createdBy": "6a362d32c1cf744c7f61d93d",
+    "targetCount": 9,
+    "createdAt": "2026-06-28T12:29:26.854Z",
+    "__v": 0
+  }
+]

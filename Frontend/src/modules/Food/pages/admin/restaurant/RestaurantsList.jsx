@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect, useRef } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
-import { Search, Download, ChevronDown, Eye, Settings, ArrowUpDown, Loader2, X, MapPin, Phone, Mail, Clock, Star, Building2, User, FileText, CreditCard, Calendar, Image as ImageIcon, ExternalLink, ShieldX, AlertTriangle, Trash2, Plus } from "lucide-react"
+import { Search, Download, ChevronDown, Eye, Settings, ArrowUpDown, Loader2, X, MapPin, Phone, Mail, Clock, Star, Building2, User, FileText, CreditCard, Calendar, Image as ImageIcon, ExternalLink, ShieldX, AlertTriangle, Trash2, Plus, Upload } from "lucide-react"
 import { adminAPI, restaurantAPI, uploadAPI } from "@food/api"
 import { clearModuleAuth } from "@food/utils/auth"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@food/components/ui/dropdown-menu"
@@ -117,6 +117,9 @@ export default function RestaurantsList() {
   const [banning, setBanning] = useState(false)
   const [deleteConfirmDialog, setDeleteConfirmDialog] = useState(null) // { restaurant }
   const [deleting, setDeleting] = useState(false)
+  const [uploadingMenuFor, setUploadingMenuFor] = useState(null)
+  const [isUploadingMenu, setIsUploadingMenu] = useState(false)
+  const menuFileInputRef = useRef(null)
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" })
   const [isEditingDetails, setIsEditingDetails] = useState(false)
   const [savingDetails, setSavingDetails] = useState(false)
@@ -1242,6 +1245,49 @@ export default function RestaurantsList() {
     setDeleteConfirmDialog({ restaurant })
   }
 
+  const handleUploadMenuClick = (restaurant) => {
+    setUploadingMenuFor(restaurant)
+    if (menuFileInputRef.current) {
+      menuFileInputRef.current.value = ""
+      menuFileInputRef.current.click()
+    }
+  }
+
+  const handleMenuFileSelect = async (e) => {
+    const file = e.target.files[0]
+    if (!file || !uploadingMenuFor) return
+
+    // Limit to 10MB
+    if (file.size > 10 * 1024 * 1024) {
+      alert("File size exceeds 10MB limit.")
+      return
+    }
+
+    try {
+      setIsUploadingMenu(true)
+      const restId = uploadingMenuFor.originalData?._id || uploadingMenuFor._id || uploadingMenuFor.id
+      const response = await adminAPI.bulkUploadRestaurantMenu(restId, file)
+      if (response?.data?.success || response?.success) {
+         alert(`Menu uploaded successfully! Added ${response?.data?.data?.insertedCount || 0} items.`)
+      } else {
+         alert(response?.data?.message || "Failed to upload menu")
+      }
+    } catch (err) {
+      console.error(err)
+      alert(err.response?.data?.message || "Error uploading menu")
+    } finally {
+      setIsUploadingMenu(false)
+      setUploadingMenuFor(null)
+      if (menuFileInputRef.current) {
+        menuFileInputRef.current.value = ""
+      }
+    }
+  }
+
+  const closeDeleteDialog = () => {
+    setDeleteConfirmDialog(null)
+  }
+
   const confirmDeleteRestaurant = async () => {
     if (!deleteConfirmDialog) return
 
@@ -1389,6 +1435,14 @@ export default function RestaurantsList() {
               </DropdownMenu>
             </div>
           </div>
+
+          <input 
+            type="file" 
+            accept=".xlsx, .xls, .csv" 
+            ref={menuFileInputRef} 
+            onChange={handleMenuFileSelect} 
+            className="hidden" 
+          />
 
           {/* Table */}
           <div className="overflow-x-auto">
@@ -1551,6 +1605,18 @@ export default function RestaurantsList() {
                               title="View Details"
                             >
                               <Eye className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => handleUploadMenuClick(restaurant)}
+                              className="p-1.5 rounded text-indigo-600 hover:bg-indigo-50 transition-colors disabled:opacity-50"
+                              title="Upload Menu (Excel)"
+                              disabled={isUploadingMenu && uploadingMenuFor?._id === restaurant._id}
+                            >
+                              {isUploadingMenu && uploadingMenuFor?._id === restaurant._id ? (
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                              ) : (
+                                <Upload className="w-4 h-4" />
+                              )}
                             </button>
                             <button
                               onClick={() => handleBanRestaurant(restaurant)}

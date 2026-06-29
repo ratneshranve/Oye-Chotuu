@@ -1,0 +1,41 @@
+[
+  {
+    "_id": "69edcbd0203aa4da59e5ab73",
+    "exploreMoreHeading": "Explore more",
+    "headerVideoUrl": "https://res.cloudinary.com/dpojoqfyj/video/upload/v1779864047/food/landing/header-video/ftb7pebajig4cm6oajrd.mp4",
+    "headerVideoPublicId": "food/landing/header-video/ftb7pebajig4cm6oajrd",
+    "recommendedRestaurantIds": [
+      "69ee02d573ac72cb55f41a0d",
+      "69ee02d673ac72cb55f41a15",
+      "69ee02d573ac72cb55f41a03"
+    ],
+    "showHeroBanners": true,
+    "showUnder250": true,
+    "showDining": true,
+    "showExploreIcons": true,
+    "showTop10": true,
+    "showGourmet": true,
+    "createdAt": "2026-04-26T08:24:48.814Z",
+    "updatedAt": "2026-06-06T07:01:01.491Z",
+    "__v": 0
+  },
+  {
+    "_id": "69b80da9a1cd98c811552b43",
+    "exploreMoreHeading": "Explore More",
+    "recommendedRestaurantIds": [
+      "69b8f156f1ecccbb2e25d030",
+      "69ca0bac9efa09cab443667c"
+    ],
+    "showHeroBanners": true,
+    "showUnder250": true,
+    "showDining": true,
+    "showExploreIcons": true,
+    "showTop10": true,
+    "showGourmet": true,
+    "createdAt": "2026-03-16T14:03:21.832Z",
+    "updatedAt": "2026-04-03T16:21:03.644Z",
+    "__v": 0,
+    "headerVideoPublicId": "food/landing/header-video/iwnezvqrqf5k99hgokkd",
+    "headerVideoUrl": "https://res.cloudinary.com/appzeto-master-product/video/upload/v1775233290/food/landing/header-video/iwnezvqrqf5k99hgokkd.mp4"
+  }
+]

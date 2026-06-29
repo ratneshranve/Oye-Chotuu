@@ -1,0 +1,308 @@
+[
+  {
+    "_id": "6a3a5e8c1a5d94947d79450d",
+    "userId": "6a3a5e5fc0e66a94884ae32b",
+    "__v": 0,
+    "createdAt": "2026-06-23T10:23:08.487Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-26T14:00:42.520Z"
+  },
+  {
+    "_id": "6a3b37551a5d94947d7947a0",
+    "userId": "6a36584fb49d18854bcb29be",
+    "__v": 0,
+    "createdAt": "2026-06-24T01:48:05.306Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-29T09:03:29.012Z"
+  },
+  {
+    "_id": "6a3b729f1a5d94947d7949c0",
+    "userId": "6a0172f9a66d7677b04af682",
+    "__v": 0,
+    "createdAt": "2026-06-24T06:01:03.518Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-28T19:04:50.650Z"
+  },
+  {
+    "_id": "6a3ce1e59d1773d30cf1b9a1",
+    "userId": "6a16d20099f1e0145b99bbcb",
+    "__v": 0,
+    "createdAt": "2026-06-25T08:08:05.177Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-29T04:45:31.351Z"
+  },
+  {
+    "_id": "6a3dedfa9d1773d30cf1be97",
+    "userId": "6a16cfd299f1e0145b99ba66",
+    "__v": 0,
+    "createdAt": "2026-06-26T03:11:54.114Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-28T19:08:00.363Z"
+  },
+  {
+    "_id": "6a3f642e9d1773d30cf1ca45",
+    "userId": "6a1334d154c6ae45212b1288",
+    "__v": 0,
+    "createdAt": "2026-06-27T05:48:30.863Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-27T07:22:27.315Z"
+  },
+  {
+    "_id": "6a3f9e139d1773d30cf1cbe7",
+    "userId": "6a3f79b6954ca65f3fa37260",
+    "__v": 0,
+    "createdAt": "2026-06-27T09:55:31.274Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-28T04:44:22.934Z"
+  },
+  {
+    "_id": "6a3fa8509d1773d30cf1cc20",
+    "userId": "6a3fa830954ca65f3fa40b0a",
+    "__v": 0,
+    "createdAt": "2026-06-27T10:39:12.197Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-28T12:48:25.629Z"
+  },
+  {
+    "_id": "6a3fdef29d1773d30cf1cd61",
+    "userId": "6a2ab805b3c7519e93a243f8",
+    "__v": 0,
+    "createdAt": "2026-06-27T14:32:18.956Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-27T14:32:18.956Z"
+  },
+  {
+    "_id": "6a40b0ec9d1773d30cf1cf58",
+    "userId": "6a40a3d2264c9701cd324347",
+    "__v": 0,
+    "createdAt": "2026-06-28T05:28:12.900Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-28T05:28:12.900Z"
+  },
+  {
+    "_id": "6a40b39e9d1773d30cf1cf64",
+    "userId": "6a40b0d7264c9701cd324f1a",
+    "__v": 0,
+    "createdAt": "2026-06-28T05:39:42.606Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-28T05:39:42.606Z"
+  },
+  {
+    "_id": "6a40b8759d1773d30cf1cf71",
+    "userId": "6a40b839264c9701cd327487",
+    "__v": 0,
+    "createdAt": "2026-06-28T06:00:21.520Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-28T06:01:30.382Z"
+  },
+  {
+    "_id": "6a40be6c9d1773d30cf1cfa6",
+    "userId": "6a409e19264c9701cd323f40",
+    "__v": 0,
+    "createdAt": "2026-06-28T06:25:48.567Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-28T06:25:48.567Z"
+  },
+  {
+    "_id": "6a40de6a9d1773d30cf1d03d",
+    "userId": "6a40afe5264c9701cd324d05",
+    "__v": 0,
+    "createdAt": "2026-06-28T08:42:18.201Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-28T08:42:18.201Z"
+  },
+  {
+    "_id": "6a40ded79d1773d30cf1d03f",
+    "userId": "6a3ff1e7ef820ecdd189f35a",
+    "__v": 0,
+    "createdAt": "2026-06-28T08:44:07.648Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-29T06:24:52.810Z"
+  },
+  {
+    "_id": "6a40e1f59d1773d30cf1d04b",
+    "userId": "6a40e1d1264c9701cd32e8ff",
+    "__v": 0,
+    "createdAt": "2026-06-28T08:57:25.528Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-28T09:09:52.369Z"
+  },
+  {
+    "_id": "6a40e3169d1773d30cf1d052",
+    "userId": "6a40e275264c9701cd32eb6a",
+    "__v": 0,
+    "createdAt": "2026-06-28T09:02:14.698Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-28T09:02:14.698Z"
+  },
+  {
+    "_id": "6a40ef329d1773d30cf1d079",
+    "userId": "6a3fcaaaef820ecdd1892c96",
+    "__v": 0,
+    "createdAt": "2026-06-28T09:53:54.296Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-28T09:53:54.296Z"
+  },
+  {
+    "_id": "6a40f1d59d1773d30cf1d07b",
+    "userId": "6a3f7269954ca65f3fa36879",
+    "__v": 0,
+    "createdAt": "2026-06-28T10:05:09.129Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-28T10:05:09.129Z"
+  },
+  {
+    "_id": "6a41035f9d1773d30cf1d091",
+    "userId": "6a40f79e264c9701cd33308d",
+    "__v": 0,
+    "createdAt": "2026-06-28T11:19:59.864Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-28T11:19:59.864Z"
+  },
+  {
+    "_id": "6a4104d59d1773d30cf1d097",
+    "userId": "6a4104b4264c9701cd3373df",
+    "__v": 0,
+    "createdAt": "2026-06-28T11:26:13.490Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-28T11:35:47.229Z"
+  },
+  {
+    "_id": "6a41192e9d1773d30cf1d0e1",
+    "userId": "6a41191c264c9701cd33e18c",
+    "__v": 0,
+    "createdAt": "2026-06-28T12:53:02.683Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-28T12:53:02.683Z"
+  },
+  {
+    "_id": "6a41212d9d1773d30cf1d0eb",
+    "userId": "6a4120d5264c9701cd33fc5f",
+    "__v": 0,
+    "createdAt": "2026-06-28T13:27:09.616Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-28T13:27:09.616Z"
+  },
+  {
+    "_id": "6a4133cf9d1773d30cf1d17c",
+    "userId": "6a41338e264c9701cd341b35",
+    "__v": 0,
+    "createdAt": "2026-06-28T14:46:39.891Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-28T14:47:14.516Z"
+  },
+  {
+    "_id": "6a413d379d1773d30cf1d184",
+    "userId": "6a413cf3264c9701cd3432ac",
+    "__v": 0,
+    "createdAt": "2026-06-28T15:26:47.723Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-28T15:28:37.953Z"
+  },
+  {
+    "_id": "6a413f969d1773d30cf1d18a",
+    "userId": "6a413f44264c9701cd343705",
+    "__v": 0,
+    "createdAt": "2026-06-28T15:36:54.936Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-28T15:39:09.393Z"
+  },
+  {
+    "_id": "6a4141749d1773d30cf1d190",
+    "userId": "6a40ae02264c9701cd3249e1",
+    "__v": 0,
+    "createdAt": "2026-06-28T15:44:52.497Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-28T15:47:28.560Z"
+  },
+  {
+    "_id": "6a4159cc9d1773d30cf1d1c6",
+    "userId": "6a410b92264c9701cd339402",
+    "__v": 0,
+    "createdAt": "2026-06-28T17:28:44.527Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-29T07:47:56.767Z"
+  },
+  {
+    "_id": "6a4203999d1773d30cf1d2ee",
+    "userId": "6a42037048d41cb00423f525",
+    "__v": 0,
+    "createdAt": "2026-06-29T05:33:13.484Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-29T05:35:58.456Z"
+  },
+  {
+    "_id": "6a4204069d1773d30cf1d2ef",
+    "userId": "6a4203a248d41cb00423f584",
+    "__v": 0,
+    "createdAt": "2026-06-29T05:35:02.585Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-29T05:35:02.585Z"
+  },
+  {
+    "_id": "6a422baf9d1773d30cf1d7c6",
+    "userId": "6a2ab903b3c7519e93a24735",
+    "__v": 0,
+    "createdAt": "2026-06-29T08:24:15.475Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-29T08:24:15.475Z"
+  },
+  {
+    "_id": "6a422dd29d1773d30cf1d82b",
+    "userId": "6a422b7f48d41cb004245206",
+    "__v": 0,
+    "createdAt": "2026-06-29T08:33:22.924Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-29T08:33:56.568Z"
+  },
+  {
+    "_id": "6a423c849d1773d30cf1d86e",
+    "userId": "6a423c7d48d41cb004247aef",
+    "__v": 0,
+    "createdAt": "2026-06-29T09:36:04.742Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-29T09:36:23.667Z"
+  },
+  {
+    "_id": "6a4240049d1773d30cf1d885",
+    "userId": "6a411c51264c9701cd33ef55",
+    "__v": 0,
+    "createdAt": "2026-06-29T09:51:00.760Z",
+    "products": [],
+    "sessionId": "",
+    "updatedAt": "2026-06-29T09:52:37.750Z"
+  }
+]

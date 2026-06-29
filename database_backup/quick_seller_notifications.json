@@ -1,0 +1,50 @@
+[
+  {
+    "_id": "6a41067a9d1773d30cf1d09c",
+    "key": "inventory:6a41067a264c9701cd337cfc:low",
+    "sellerId": "6a3cc63c28f467bbdd29c1ee",
+    "__v": 0,
+    "createdAt": "2026-06-28T11:33:14.546Z",
+    "isRead": false,
+    "message": "Only 3 unit(s) are left for High protein oats dark chocolate.",
+    "metadata": {
+      "productId": "6a41067a264c9701cd337cfc",
+      "stock": 3
+    },
+    "title": "Low stock: High protein oats dark chocolate",
+    "type": "inventory",
+    "updatedAt": "2026-06-28T11:33:14.546Z"
+  },
+  {
+    "_id": "6a4108f29d1773d30cf1d0a0",
+    "key": "inventory:6a4108f2264c9701cd338907:low",
+    "sellerId": "6a3cc63c28f467bbdd29c1ee",
+    "__v": 0,
+    "createdAt": "2026-06-28T11:43:46.765Z",
+    "isRead": false,
+    "message": "Only 4 unit(s) are left for Oats.",
+    "metadata": {
+      "productId": "6a4108f2264c9701cd338907",
+      "stock": 4
+    },
+    "title": "Low stock: Oats",
+    "type": "inventory",
+    "updatedAt": "2026-06-28T11:43:46.765Z"
+  },
+  {
+    "_id": "6a410a029d1773d30cf1d0a4",
+    "key": "inventory:6a410a02264c9701cd338d18:low",
+    "sellerId": "6a3cc63c28f467bbdd29c1ee",
+    "__v": 0,
+    "createdAt": "2026-06-28T11:48:18.057Z",
+    "isRead": false,
+    "message": "Only 3 unit(s) are left for Masala oats.",
+    "metadata": {
+      "productId": "6a410a02264c9701cd338d18",
+      "stock": 3
+    },
+    "title": "Low stock: Masala oats",
+    "type": "inventory",
+    "updatedAt": "2026-06-28T11:48:18.057Z"
+  }
+]

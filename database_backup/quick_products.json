@@ -1,0 +1,244 @@
+[
+  {
+    "_id": "6a3e286f8b6a205bb70a4287",
+    "sellerId": "6a3cc63c28f467bbdd29c1ee",
+    "name": "ALPNIO HIGH PROTEIN OATS",
+    "slug": "alpnio-high-protein-oats",
+    "sku": "SKU-ULR957-UL5F",
+    "description": "Alpine high protein oats no sugar with 27gm of protein",
+    "price": 649,
+    "salePrice": 430,
+    "stock": 7,
+    "lowStockAlert": 5,
+    "brand": "ALPINO",
+    "weight": "",
+    "tags": [],
+    "mainImage": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782458474/seller/products/ntvdu5afpemsvuokikpf.webp",
+    "galleryImages": [
+      "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782458477/seller/products/zze5dgq4pwf9ektr8vya.webp"
+    ],
+    "headerId": "699b2b283858bd13797179b2",
+    "categoryId": "699b54951bc47c3e4517e15f",
+    "subcategoryId": "699b599ef77564cd9e5052c1",
+    "status": "active",
+    "variants": [
+      {
+        "name": "1 kg",
+        "price": 649,
+        "salePrice": 430,
+        "stock": 7,
+        "sku": "SKU-ULR957-UL5F",
+        "_id": "6a3e286f8b6a205bb70a4288"
+      }
+    ],
+    "createdAt": "2026-06-26T07:21:19.660Z",
+    "updatedAt": "2026-06-26T07:21:19.660Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a4104d4264c9701cd3374d8",
+    "sellerId": "6a3cc63c28f467bbdd29c1ee",
+    "name": "High protein oats",
+    "slug": "high-protein-oats",
+    "sku": "SKU-XPDVMN-NHGP",
+    "description": "Pintola High protein oats  protein 26 gm per 100 gm",
+    "price": 620,
+    "salePrice": 420,
+    "stock": 20,
+    "lowStockAlert": 5,
+    "brand": "Pintola",
+    "weight": "",
+    "tags": [],
+    "mainImage": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782645966/seller/products/hlzxqgnnbheqgpywlxcq.webp",
+    "galleryImages": [
+      "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782645969/seller/products/pusc51omab62ngh7clcm.webp",
+      "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782645970/seller/products/riblwvexs1sswoyx3prs.webp"
+    ],
+    "headerId": "699b2b283858bd13797179b2",
+    "categoryId": "699b54951bc47c3e4517e15f",
+    "subcategoryId": "699b599ef77564cd9e5052c1",
+    "status": "active",
+    "commission": {
+      "type": "percentage",
+      "value": 0
+    },
+    "variants": [
+      {
+        "name": "1kg",
+        "price": 620,
+        "salePrice": 420,
+        "stock": 20,
+        "sku": "SKU-XPDVMN-NHGP",
+        "_id": "6a4104d4264c9701cd3374d9"
+      }
+    ],
+    "createdAt": "2026-06-28T11:26:12.594Z",
+    "updatedAt": "2026-06-28T11:26:12.594Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a41067a264c9701cd337cfc",
+    "sellerId": "6a3cc63c28f467bbdd29c1ee",
+    "name": "High protein oats dark chocolate",
+    "slug": "high-protein-oats-dark-chocolate",
+    "sku": "SKU-XPMX6V-CB9F",
+    "description": "Health ninja high protein oats 24 % protein",
+    "price": 625,
+    "salePrice": 425,
+    "stock": 3,
+    "lowStockAlert": 5,
+    "brand": "Health ninja",
+    "weight": "",
+    "tags": [],
+    "mainImage": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782646388/seller/products/clllsaobktef19xathbf.webp",
+    "galleryImages": [
+      "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782646391/seller/products/tk2tbkrp58ycreni0z2g.webp",
+      "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782646392/seller/products/myjzsjlpkyjhbhmiumfi.webp"
+    ],
+    "headerId": "699b2b283858bd13797179b2",
+    "categoryId": "699b54951bc47c3e4517e15f",
+    "subcategoryId": "699b599ef77564cd9e5052c1",
+    "status": "active",
+    "commission": {
+      "type": "percentage",
+      "value": 0
+    },
+    "variants": [
+      {
+        "name": "900gm",
+        "price": 625,
+        "salePrice": 425,
+        "stock": 3,
+        "sku": "SKU-XPMX6V-CB9F",
+        "_id": "6a41067a264c9701cd337cfd"
+      }
+    ],
+    "createdAt": "2026-06-28T11:33:14.521Z",
+    "updatedAt": "2026-06-28T11:33:14.521Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a410794264c9701cd33827c",
+    "sellerId": "6a3cc63c28f467bbdd29c1ee",
+    "name": "Cold coffee high protein oats",
+    "slug": "cold-coffee-high-protein-oats",
+    "sku": "SKU-XPSYSB-5I19",
+    "description": "Health Ninja high protein oats 22%protein",
+    "price": 625,
+    "salePrice": 425,
+    "stock": 8,
+    "lowStockAlert": 5,
+    "brand": "Health Ninja",
+    "weight": "",
+    "tags": [],
+    "mainImage": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782646670/seller/products/deqoymhtwbrkbwsjjkjd.webp",
+    "galleryImages": [
+      "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782646674/seller/products/v4fqxjdbwhuxcgradt3u.webp",
+      "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782646674/seller/products/aowuuxt4lxwlflu3bo6r.webp"
+    ],
+    "headerId": "699b2b283858bd13797179b2",
+    "categoryId": "699b54951bc47c3e4517e15f",
+    "subcategoryId": "699b599ef77564cd9e5052c1",
+    "status": "active",
+    "commission": {
+      "type": "percentage",
+      "value": 0
+    },
+    "variants": [
+      {
+        "name": "900gm",
+        "price": 625,
+        "salePrice": 425,
+        "stock": 8,
+        "sku": "SKU-XPSYSB-5I19",
+        "_id": "6a410794264c9701cd33827d"
+      }
+    ],
+    "createdAt": "2026-06-28T11:37:56.525Z",
+    "updatedAt": "2026-06-28T11:37:56.525Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a4108f2264c9701cd338907",
+    "sellerId": "6a3cc63c28f467bbdd29c1ee",
+    "name": "Oats",
+    "slug": "oats",
+    "sku": "SKU-XQ0H0G-ZQIE",
+    "description": "Quaker Oats",
+    "price": 170,
+    "salePrice": 170,
+    "stock": 4,
+    "lowStockAlert": 5,
+    "brand": "Quaker",
+    "weight": "",
+    "tags": [],
+    "mainImage": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782647020/seller/products/u79wjs2ipkhkz2d6roic.webp",
+    "galleryImages": [
+      "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782647023/seller/products/gfupwxunhw8howzrul5v.webp",
+      "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782647024/seller/products/k0rclgllbhwx61dbds6l.webp",
+      "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782647024/seller/products/o82siupdkevyqgxgnmmw.webp"
+    ],
+    "headerId": "699b2b283858bd13797179b2",
+    "categoryId": "699b54951bc47c3e4517e15f",
+    "subcategoryId": "699b599ef77564cd9e5052c1",
+    "status": "active",
+    "commission": {
+      "type": "percentage",
+      "value": 0
+    },
+    "variants": [
+      {
+        "name": "850gm",
+        "price": 170,
+        "salePrice": 170,
+        "stock": 4,
+        "sku": "SKU-XQ0H0G-ZQIE",
+        "_id": "6a4108f2264c9701cd338908"
+      }
+    ],
+    "createdAt": "2026-06-28T11:43:46.734Z",
+    "updatedAt": "2026-06-28T11:43:46.734Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a410a02264c9701cd338d18",
+    "sellerId": "6a3cc63c28f467bbdd29c1ee",
+    "name": "Masala oats",
+    "slug": "masala-oats",
+    "sku": "SKU-XQ6ACR-RV7U",
+    "description": "Classic masala oats",
+    "price": 220,
+    "salePrice": 220,
+    "stock": 3,
+    "lowStockAlert": 5,
+    "brand": "Saffola masala oats",
+    "weight": "",
+    "tags": [],
+    "mainImage": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782647291/seller/products/zrdos8skunl3voamtfal.webp",
+    "galleryImages": [
+      "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782647296/seller/products/rn77hkqve6sejh7mdtqb.webp",
+      "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782647295/seller/products/lgmo75xjeuu0htgy0zj6.webp"
+    ],
+    "headerId": "699b2b283858bd13797179b2",
+    "categoryId": "699b54951bc47c3e4517e15f",
+    "subcategoryId": "699b599ef77564cd9e5052c1",
+    "status": "active",
+    "commission": {
+      "type": "percentage",
+      "value": 0
+    },
+    "variants": [
+      {
+        "name": "500gm",
+        "price": 220,
+        "salePrice": 220,
+        "stock": 3,
+        "sku": "SKU-XQ6ACR-RV7U",
+        "_id": "6a410a02264c9701cd338d19"
+      }
+    ],
+    "createdAt": "2026-06-28T11:48:18.043Z",
+    "updatedAt": "2026-06-28T11:48:18.043Z",
+    "__v": 0
+  }
+]

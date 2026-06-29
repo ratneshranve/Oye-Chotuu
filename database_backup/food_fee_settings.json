@@ -1,0 +1,22 @@
+[
+  {
+    "_id": "69ccbd6ad30b7590146f8b83",
+    "__v": 0,
+    "createdAt": "2026-04-01T06:38:34.466Z",
+    "deliveryFee": 20,
+    "deliveryFeeRanges": [
+      {
+        "min": 0,
+        "max": 399,
+        "fee": 20
+      }
+    ],
+    "freeDeliveryThreshold": 399,
+    "gstRate": 5,
+    "isActive": true,
+    "platformFee": 5,
+    "updatedAt": "2026-06-27T09:59:23.807Z",
+    "mixedOrderAngleLimit": 122.5,
+    "mixedOrderDistanceLimit": 7
+  }
+]

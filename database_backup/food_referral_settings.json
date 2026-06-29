@@ -1,0 +1,19 @@
+[
+  {
+    "_id": "69f5ae82a4a9ab46e1fa601b",
+    "isActive": true,
+    "createdAt": "2026-05-02T07:57:54.262Z",
+    "updatedAt": "2026-06-28T07:48:21.912Z",
+    "__v": 0,
+    "delivery": {
+      "referrerReward": 0,
+      "refereeReward": 0,
+      "limit": 0
+    },
+    "user": {
+      "referrerReward": 0,
+      "refereeReward": 0,
+      "limit": 0
+    }
+  }
+]

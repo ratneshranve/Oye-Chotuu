@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, User, Store, MapPin, Phone } from 'lucide-react';
+import { ChevronDown, ChevronUp, User, Store, MapPin, Phone, FileText } from 'lucide-react';
 
 const firstText = (...values) => {
   for (const value of values) {
@@ -10,6 +10,20 @@ const firstText = (...values) => {
 };
 
 const joinAddress = (...parts) => parts.map((part) => String(part || '').trim()).filter(Boolean).join(', ');
+
+const formatDeliveryAddress = (address = {}) => firstText(
+  address.formattedAddress,
+  address.address,
+  address.addressLine1,
+  joinAddress(
+    address.street,
+    address.additionalDetails,
+    address.area,
+    address.city,
+    address.state,
+    address.zipCode || address.postalCode || address.pincode,
+  ),
+);
 
 const dialNumberFrom = (phone) => String(phone || '').replace(/[^+\d]/g, '');
 
@@ -55,13 +69,22 @@ export const OrderDetailsDropdown = ({ order }) => {
   );
   const customerPhone = firstText(order.userPhone, order.user?.phone, order.userId?.phone, order.customer?.phone, order.customerPhone, 'Not available');
   const customerAddress = firstText(
-    order.deliveryAddress?.address,
-    order.deliveryAddress?.street,
-    order.deliveryAddress?.formattedAddress,
+    order.customerAddress,
+    formatDeliveryAddress(order.deliveryAddress),
     order.deliveryLocation?.address,
+    formatDeliveryAddress(order.address),
     order.user?.address,
     'Address not available',
   );
+
+  const customerInstructions = firstText(
+    order.deliveryAddress?.instructions,
+    order.deliveryLocation?.instructions,
+    order.address?.instructions,
+    order.instructions,
+    ''
+  );
+
 
   const isQuickOrder = String(order?.orderType || order?.serviceType || order?.type || '').trim().toLowerCase() === 'quick';
   const restaurantName = isQuickOrder
@@ -136,6 +159,12 @@ export const OrderDetailsDropdown = ({ order }) => {
               <span className="font-medium text-gray-800 flex-1 min-w-0 break-words">{customerPhone}</span>
               <ContactCallButton phone={customerPhone} label="Call customer" />
             </div>
+            {customerInstructions && (
+              <div className="flex items-start gap-2">
+                <FileText className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                <span className="font-medium text-gray-800">{customerInstructions}</span>
+              </div>
+            )}
             <div className="flex items-start gap-2">
               <MapPin className="w-4 h-4 text-gray-400 shrink-0 mt-0.5" />
               <span className="font-medium text-gray-800">{customerAddress}</span>

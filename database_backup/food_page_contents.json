@@ -1,0 +1,329 @@
+[
+  {
+    "_id": "69ba777ba123cd3399be5856",
+    "key": "privacy",
+    "__v": 0,
+    "createdAt": "2026-03-18T09:59:22.949Z",
+    "legal": {
+      "title": "Privacy Policy",
+      "content": "<h1><span class=\"bg-amber-100/70 px-2 py-1 rounded-md inline-block\">Privacy Policy</span></h1><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">1. Introduction</span></h2><p><br></p><p>This Privacy Policy explains how we collect, use, store, and protect your information when you use our platform (including Admin Panel, User App, Vendor Panel, and Delivery Partner App).</p><p><br></p><p>By using our services, you agree to the collection and use of information in accordance with this policy.</p><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">2. Information We Collect</span></h2><p><br></p><h3><span class=\"bg-amber-100/30 px-2 py-0.5 rounded-md inline-block\">a) Personal Information</span></h3><p><br></p><p>We may collect the following:</p><p><br></p><ul><li>Name</li><li>Email Address</li><li>Mobile Number</li><li>Profile Details</li><li>Address & Location</li></ul><p><br></p><h3><span class=\"bg-amber-100/30 px-2 py-0.5 rounded-md inline-block\">b) Account Information</span></h3><p><br></p><ul><li>Login credentials (encrypted)</li><li>Role (User / Admin / Vendor / Delivery Partner)</li></ul><p><br></p><h3><span class=\"bg-amber-100/30 px-2 py-0.5 rounded-md inline-block\">c) Transaction Data</span></h3><p><br></p><ul><li>Orders, bookings, payments</li><li>Wallet and commission details</li></ul><p><br></p><h3><span class=\"bg-amber-100/30 px-2 py-0.5 rounded-md inline-block\">d) Device & Technical Data</span></h3><p><br></p><ul><li>IP address</li><li>Browser type</li><li>Device information</li><li>App usage logs</li></ul><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">3. How We Use Your Information</span></h2><p><br></p><p>We use your data to:</p><p><br></p><ul><li>Provide and manage services</li><li>Process orders and payments</li><li>Verify user identity (OTP / Email verification)</li><li>Improve platform performance</li><li>Prevent fraud and misuse</li><li>Send notifications (email, SMS, push notifications)</li></ul><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">4. Data Sharing & Disclosure</span></h2><p><br></p><p>We do NOT sell your personal data.</p><p><br></p><p>We may share data with:</p><p><br></p><ul><li>Service providers (payment gateway, SMS, email services like MSG91)</li><li>Vendors / Delivery partners (only required order details)</li><li>Legal authorities (if required by law)</li></ul><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">5. Data Security</span></h2><p><br></p><p>We implement strong security measures such as:</p><p><br></p><ul><li>Password hashing (bcrypt)</li><li>JWT authentication</li><li>HTTPS encryption</li><li>Secure database storage</li></ul><p><br></p><p>Admins must ensure data is not misused or leaked.</p><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">6. Cookies & Tracking</span></h2><p><br></p><p>We may use cookies and similar technologies to:</p><p><br></p><ul><li>Improve user experience</li><li>Track usage and analytics</li><li>Maintain login sessions</li></ul><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">7. User Rights</span></h2><p><br></p><p>Users have the right to:</p><p><br></p><ul><li>Access their data</li><li>Update or correct information</li><li>Request account deletion</li><li>Opt-out of communications</li></ul><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">8. Data Retention</span></h2><p><br></p><p>We retain user data only as long as necessary for:</p><p><br></p><ul><li>Service operation</li><li>Legal compliance</li><li>Dispute resolution</li></ul><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">9. Third-Party Services</span></h2><p><br></p><p>We may use third-party services like:</p><p><br></p><ul><li>Payment gateways (Razorpay, Stripe, etc.)</li><li>Email/SMS providers (MSG91, Nodemailer)</li></ul><p><br></p><p>These services have their own privacy policies.</p><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">10. Children's Privacy</span></h2><p><br></p><p>Our platform is not intended for users under the age of 18. We do not knowingly collect data from minors.</p><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">11. Changes to Privacy Policy</span></h2><p><br></p><p>We may update this Privacy Policy at any time.</p><p>Users will be notified of significant changes.</p><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">12. Contact Us</span></h2><p><br></p><p>If you have any questions regarding this Privacy Policy, you can contact us at:</p><p>📧 [Your Email Here]</p><p><br></p><p>---</p><p><br></p><p><strong>Last Updated:</strong> [Add Date Here]</p><p><br></p>"
+    },
+    "updatedAt": "2026-03-18T10:18:01.717Z",
+    "updatedBy": "69b7d81bf5f15307df179d05",
+    "updatedByRole": "ADMIN"
+  },
+  {
+    "_id": "69ba7812a123cd3399be587c",
+    "key": "terms",
+    "__v": 0,
+    "createdAt": "2026-03-18T10:01:54.025Z",
+    "legal": {
+      "title": "Terms and Conditions",
+      "content": "<p>Terms and Conditions – Admin Panel</p><p><br></p><p>1. Acceptance of Terms</p><p><br></p><p>By accessing and using the Admin Panel of this platform, you agree to comply with and be bound by these Terms and Conditions. If you do not agree, you must not use the Admin Panel.</p><p><br></p><p>2. Admin Access & Responsibilities</p><p><br></p><ul><li>Admin access is provided only to authorized personnel.</li><li>You are responsible for maintaining the confidentiality of your login credentials.</li><li>Any activity performed using your account will be considered your responsibility.</li></ul><p><br></p><p>3. User & Data Management</p><p><br></p><ul><li>Admins have the authority to manage users, vendors, delivery partners, and services.</li><li>Admin must ensure that user data is handled securely and not misused.</li><li>Unauthorized sharing of sensitive data is strictly prohibited.</li></ul><p><br></p><p>4. Service Control</p><p><br></p><ul><li>Admin has the right to approve, suspend, or remove any user, restaurant, or delivery partner.</li><li>Admin can manage listings, pricing, commissions, and service availability.</li></ul><p><br></p><p>5. Payments & Transactions</p><p><br></p><ul><li>Admin is responsible for monitoring transactions, commissions, and payouts.</li><li>Any suspicious activity must be reviewed and appropriate action must be taken.</li></ul><p><br></p><p>6. Prohibited Activities</p><p><br></p><p>Admins must NOT:</p><p><br></p><ul><li>Misuse platform data for personal gain</li><li>Perform unauthorized changes in system settings</li><li>Abuse access rights or manipulate transactions</li><li>Engage in fraudulent activities</li></ul><p><br></p><p>7. System Security</p><p><br></p><ul><li>Admin must ensure proper use of security practices.</li><li>Sharing admin credentials with unauthorized persons is strictly prohibited.</li><li>Any security breach must be reported immediately.</li></ul><p><br></p><p>8. Logs & Monitoring</p><p><br></p><ul><li>All admin activities are logged and monitored.</li><li>Any suspicious or malicious activity may lead to account suspension or termination.</li></ul><p><br></p><p>9. Account Suspension</p><p><br></p><ul><li>The platform reserves the right to suspend or terminate admin access if any violation of these terms is detected.</li></ul><p><br></p><p>10. Updates to Terms</p><p><br></p><ul><li>These Terms and Conditions may be updated at any time without prior notice.</li><li>Continued use of the Admin Panel means acceptance of updated terms.</li></ul><p><br></p><p>11. Liability</p><p><br></p><ul><li>The platform is not responsible for any loss caused due to admin misuse or negligence.</li></ul><p><br></p><p>12. Governing</p><p><br></p><ul><li>These terms shall be governed by applicable laws of the country in which the platform operates.</li></ul><p><br></p><p>---</p><p><br></p><p>Last Updated: [Add Date Here]</p>"
+    },
+    "updatedAt": "2026-03-26T08:54:36.684Z",
+    "updatedBy": "69b7d81bf5f15307df179d05",
+    "updatedByRole": "ADMIN"
+  },
+  {
+    "_id": "69ba7938a123cd3399be58a6",
+    "key": "refund",
+    "__v": 0,
+    "createdAt": "2026-03-18T10:06:48.061Z",
+    "legal": {
+      "title": "Refund Policy",
+      "content": "<h1><span class=\"bg-amber-100/70 px-2 py-1 rounded-md inline-block\">Refund Policy</span></h1><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">1. Introduction</span></h2><p><br></p><p>This Refund Policy outlines the terms under which refunds may be issued for orders, bookings, and transactions made on our platform.</p><p><br></p><p>By using our services, you agree to this Refund Policy.</p><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">2. Eligibility for Refund</span></h2><p><br></p><p>Refunds may be provided under the following conditions:</p><p><br></p><h3><span class=\"bg-amber-100/30 px-2 py-0.5 rounded-md inline-block\">a) Order Issues (Food / Quick Commerce)</span></h3><p><br></p><ul><li>Order not delivered</li><li>Wrong item delivered</li><li>Missing items</li><li>Damaged or spoiled items</li></ul><p><br></p><h3><span class=\"bg-amber-100/30 px-2 py-0.5 rounded-md inline-block\">b) Service Issues (Taxi / Delivery)</span></h3><p><br></p><ul><li>Ride canceled by driver</li><li>Driver not arriving</li><li>Incorrect charges</li></ul><p><br></p><h3><span class=\"bg-amber-100/30 px-2 py-0.5 rounded-md inline-block\">c) Payment Issues</span></h3><p><br></p><ul><li>Duplicate payment</li><li>Payment deducted but order not confirmed</li></ul><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">3. Non-Refundable Cases</span></h2><p><br></p><p>Refunds will NOT be provided in the following cases:</p><p><br></p><ul><li>Order canceled after preparation has started</li><li>Incorrect address provided by user</li><li>Delay due to unavoidable circumstances (traffic, weather, etc.)</li><li>User not available at delivery location</li><li>Change of mind after order confirmation</li></ul><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">4. Refund Process</span></h2><p><br></p><ul><li>User must raise a refund request within <strong>24 hours</strong> of the issue.</li><li>Admin team will review the request.</li><li>Verification may include order logs, delivery details, and communication records.</li><li>Once approved, refund will be processed.</li></ul><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">5. Refund Mode</span></h2><p><br></p><p>Refunds will be processed through:</p><p><br></p><ul><li>Original payment method (UPI / Card / Wallet)</li><li>Or platform wallet (if applicable)</li></ul><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">6. Refund Time</span></h2><p><br></p><ul><li>Wallet refunds → Instant or within 24 hours</li><li>Bank / UPI refunds → 3–7 business days</li><li>Card refunds → 5–10 business days</li></ul><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">7. Partial Refunds</span></h2><p><br></p><ul><li>In case of missing or damaged items, partial refunds may be issued.</li><li>Admin has the final authority to decide refund amount.</li></ul><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">8. Cancellation Policy</span></h2><p><br></p><h3><span class=\"bg-amber-100/30 px-2 py-0.5 rounded-md inline-block\">a) User Cancellation</span></h3><p><br></p><ul><li>Before order acceptance → Full refund</li><li>After acceptance → Partial or no refund</li></ul><p><br></p><h3><span class=\"bg-amber-100/30 px-2 py-0.5 rounded-md inline-block\">b) Platform Cancellation</span></h3><p><br></p><ul><li>Full refund will be provided</li></ul><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">9. Fraud & Abuse</span></h2><p><br></p><ul><li>Any misuse of refund policy (fake claims, repeated requests) may result in:</li></ul><p><br></p><ul><li>Account suspension</li><li>Permanent ban</li></ul><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">10. Admin Rights</span></h2><p><br></p><ul><li>Admin reserves the right to approve or reject any refund request.</li><li>Decision will be based on available evidence and platform rules.</li></ul><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">11. Changes to Policy</span></h2><p><br></p><ul><li>This policy may be updated at any time without prior notice.</li></ul><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">12. Contact Support</span></h2><p><br></p><p>For refund-related queries, contact:</p><p>📧 [Your Support Email]</p><p><br></p><p>---</p><p><br></p><p><strong>Last Updated:</strong> [Add Date Here]</p>"
+    },
+    "updatedAt": "2026-03-18T10:17:18.165Z",
+    "updatedBy": "69b7d81bf5f15307df179d05",
+    "updatedByRole": "ADMIN"
+  },
+  {
+    "_id": "69ba7971a123cd3399be58b8",
+    "key": "cancellation",
+    "__v": 0,
+    "createdAt": "2026-03-18T10:07:44.779Z",
+    "legal": {
+      "title": "Cancellation Policy",
+      "content": "<h1><span class=\"bg-amber-100/70 px-2 py-1 rounded-md inline-block\">Cancellation Policy</span></h1><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">1. Introduction</span></h2><p><br></p><p>This Cancellation Policy defines the rules for canceling orders, bookings, and services on our platform.</p><p><br></p><p>By using our services, you agree to this Cancellation Policy.</p><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">2. User Cancellation</span></h2><p><br></p><h3><span class=\"bg-amber-100/30 px-2 py-0.5 rounded-md inline-block\">a) Food / Quick Commerce Orders</span></h3><p><br></p><ul><li>Before restaurant/vendor accepts the order → <strong>Full cancellation allowed</strong></li><li>After acceptance but before preparation → <strong>Partial cancellation allowed</strong></li><li>After preparation has started → <strong>Cancellation not allowed</strong></li></ul><p><br></p><h3><span class=\"bg-amber-100/30 px-2 py-0.5 rounded-md inline-block\">b) Taxi / Ride Booking</span></h3><p><br></p><ul><li>Before driver is assigned → <strong>Free cancellation</strong></li><li>After driver is assigned → <strong>Cancellation charges may apply</strong></li><li>If driver has arrived → <strong>Full/partial charge applicable</strong></li></ul><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">3. Platform Cancellation</span></h2><p><br></p><p>The platform may cancel orders in the following cases:</p><p><br></p><ul><li>Restaurant/vendor unavailable</li><li>Delivery partner not assigned</li><li>Technical issues</li><li>Safety or policy violations</li></ul><p><br></p><p>👉 In such cases → <strong>Full refund will be provided</strong></p><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">4. Vendor / Driver Cancellation</span></h2><p><br></p><h3><span class=\"bg-amber-100/30 px-2 py-0.5 rounded-md inline-block\">a) Restaurant / Vendor</span></h3><p><br></p><ul><li>If vendor cancels order → <strong>Full refund to user</strong></li><li>Repeated cancellations may lead to <strong>penalty or suspension</strong></li></ul><p><br></p><h3><span class=\"bg-amber-100/30 px-2 py-0.5 rounded-md inline-block\">b) Delivery Partner / Driver</span></h3><p><br></p><ul><li>If delivery partner cancels → reassignment will be attempted</li><li>If no partner available → order will be canceled with refund</li></ul><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">5. Cancellation Charges</span></h2><p><br></p><p>Cancellation charges may apply in the following cases:</p><p><br></p><ul><li>Late cancellation (after preparation / driver arrival)</li><li>Repeated cancellations by user</li><li>Misuse of cancellation feature</li></ul><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">6. Refund on Cancellation</span></h2><p><br></p><ul><li>Eligible cancellations → <strong>Refund processed as per Refund Policy</strong></li><li>Refund mode → original payment method or wallet</li><li>Refund time → as defined in Refund Policy</li></ul><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">7. No-Show Policy</span></h2><p><br></p><ul><li>If user is unavailable at delivery/pickup location →</li></ul><p><br></p><ul><li>Order may be canceled</li><li>No refund will be issued</li></ul><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">8. Admin Rights</span></h2><p><br></p><ul><li>Admin has full authority to:</li></ul><p><br></p><ul><li>Approve or reject cancellation requests</li><li>Apply charges or penalties</li><li>Take action against misuse</li></ul><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">9. Fraud & Misuse</span></h2><p><br></p><ul><li>Fake cancellations or abuse may result in:</li></ul><p><br></p><ul><li>Account suspension</li><li>Permanent ban</li></ul><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">10. Changes to Policy</span></h2><p><br></p><ul><li>This policy may be updated anytime without prior notice.</li></ul><p><br></p><p>---</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">11. Contact Support</span></h2><p><br></p><p>For cancellation-related queries, contact:</p><p>📧 [Your Support Email]</p><p><br></p><p>---</p><p><br></p><p><strong>Last Updated:</strong> [Add Date Here]</p>"
+    },
+    "updatedAt": "2026-03-18T10:17:25.900Z",
+    "updatedBy": "69b7d81bf5f15307df179d05",
+    "updatedByRole": "ADMIN"
+  },
+  {
+    "_id": "69ba79cba123cd3399be58d1",
+    "key": "shipping",
+    "__v": 0,
+    "createdAt": "2026-03-18T10:09:14.774Z",
+    "legal": {
+      "title": "Shipping Policy",
+      "content": "<p>Shipping & Delivery Policy</p><p><br></p><p>1. Introduction</p><p><br></p><p>This Shipping & Delivery Policy explains how orders are delivered through our platform, including timelines, charges, and responsibilities.</p><p><br></p><p>By using our services, you agree to this policy.</p><p><br></p><p>---</p><p><br></p><p>2. Delivery Areas</p><p><br></p><ul><li>We deliver only in selected serviceable areas.</li><li>Availability depends on vendor, delivery partners, and location.</li><li>Users can check service availability by entering their location on the app.</li></ul><p><br></p><p>---</p><p><br></p><p>3. Delivery Time</p><p><br></p><p>a) Food Orders</p><p><br></p><ul><li>Estimated delivery time: 20–45 minutes</li></ul><p><br></p><p>b) Quick Commerce (Groceries / Essentials)</p><p><br></p><ul><li>Estimated delivery time: 10–30 minutes</li></ul><p><br></p><p>c) Other Deliveries</p><p><br></p><ul><li>Delivery time may vary depending on distance and availability</li></ul><p><br></p><p>👉 Delivery times are estimates and may vary due to traffic, weather, or high demand.</p><p><br></p><p>---</p><p><br></p><p>4. Delivery Charges</p><p><br></p><ul><li>Delivery charges may apply based on:</li></ul><p><br></p><ul><li>Distance</li><li>Order value</li><li>Surge pricing (peak hours)</li></ul><p><br></p><ul><li>Charges will be shown before order confirmation.</li></ul><p><br></p><p>---</p><p><br></p><p>5. Order Tracking</p><p><br></p><ul><li>Users can track orders in real-time through the app.</li><li>Live tracking may include delivery partner location.</li></ul><p><br></p><p>---</p><p><br></p><p>6. Failed Delivery</p><p><br></p><p>Delivery may fail if:</p><p><br></p><ul><li>User is not available</li><li>Incorrect address is provided</li><li>Phone is unreachable</li></ul><p><br></p><p>👉 In such cases:</p><p><br></p><ul><li>Order may be canceled</li><li>No refund may be issued</li></ul><p><br></p><p>---</p><p><br></p><p>7. Contactless Delivery</p><p><br></p><ul><li>We may offer contactless delivery options for safety.</li><li>Delivery partner may leave the order at the doorstep.</li></ul><p><br></p><p>---</p><p><br></p><p>8. Responsibility</p><p><br></p><p>a) Vendor Responsibility</p><p><br></p><ul><li>Prepare order correctly and on time</li><li>Ensure proper packaging</li></ul><p><br></p><p>b) Delivery Partner Responsibility</p><p><br></p><ul><li>Deliver order safely and on time</li><li>Follow route and instructions</li></ul><p><br></p><p>c) User Responsibility</p><p><br></p><ul><li>Provide correct address and contact details</li><li>Be available at delivery location</li></ul><p><br></p><p>---</p><p><br></p><p>9. Delays</p><p><br></p><p>Delivery delays may happen due to:</p><p><br></p><ul><li>Traffic conditions</li><li>Weather issues</li><li>High order volume</li><li>Vendor delays</li></ul><p><br></p><p>👉 Platform is not liable for such unavoidable delays.</p><p><br></p><p>---</p><p><br></p><p>10. Damaged or Missing Items</p><p><br></p><ul><li>Users must report issues within 24 hours</li><li>Refund or replacement will be processed as per Refund Policy</li></ul><p><br></p><p>---</p><p><br></p><p>11. Cancellation During Delivery</p><p><br></p><ul><li>Once order is out for delivery → cancellation may not be allowed</li><li>Charges may apply</li></ul><p><br></p><p>---</p><p><br></p><p>12. Changes to Policy</p><p><br></p><ul><li>This policy may be updated at any time without prior notice</li></ul><p><br></p><p>---</p><p><br></p><p>13. Contact Support</p><p><br></p><p>For delivery-related queries, contact:</p><p>📧 [Your Support Email]</p><p><br></p><p>---</p><p><br></p><p>Last Updated: [Add Date Here]</p>"
+    },
+    "updatedAt": "2026-03-18T10:17:22.286Z",
+    "updatedBy": "69b7d81bf5f15307df179d05",
+    "updatedByRole": "ADMIN"
+  },
+  {
+    "_id": "69ba7a39a123cd3399be58f1",
+    "key": "about",
+    "__v": 0,
+    "about": {
+      "appName": "Appzeto Food",
+      "version": "1.0.0",
+      "description": "Best and good",
+      "logo": "https://cdn.vectorstock.com/i/1000v/17/80/lion-logo-emblem-regal-powerful-vector-37181780.jpg",
+      "features": [
+        {
+          "icon": "Heart",
+          "title": "Heartttt",
+          "description": "Effect",
+          "color": "text-pink-600 dark:text-pink-400",
+          "bgColor": "bg-pink-100 dark:bg-pink-900/30",
+          "order": 0
+        },
+        {
+          "icon": "Users",
+          "title": "Usersssss",
+          "description": "Best",
+          "color": "text-blue-600 dark:text-blue-400",
+          "bgColor": "bg-blue-100 dark:bg-blue-900/30",
+          "order": 1
+        }
+      ],
+      "stats": []
+    },
+    "createdAt": "2026-03-18T10:11:05.328Z",
+    "updatedAt": "2026-03-18T10:16:48.091Z",
+    "updatedBy": "69b7d81bf5f15307df179d05",
+    "updatedByRole": "ADMIN"
+  },
+  {
+    "_id": "6a119a2afaaef4a0c4bad4dc",
+    "role": "user",
+    "key": "terms",
+    "__v": 0,
+    "createdAt": "2026-05-23T12:14:34.236Z",
+    "legal": {
+      "title": "Terms and Conditions",
+      "content": "<p>Welcome to OyeChotuu! By using the OyeChotuu app or website as a customer, you agree to comply with and be bound by the following terms and conditions. Please read them carefully.</p><p><br></p><p>Account Registration To access our delivery services, you must register for an account using a valid phone number. You are responsible for keeping your login credentials secure.</p><p><br></p><p>Orders and Payments All orders placed through OyeChotuu are subject to availability and acceptance by the respective sellers/restaurants. Payment must be made at the time of order placement or upon delivery as applicable. Prices are subject to change without prior notice.</p><p><br></p><p>Delivery and Cancellations Delivery times are estimates and may vary due to traffic or weather conditions. Order cancellations are only permitted within the timeframe specified by the restaurant or seller before the order preparation begins.</p><p><br></p><p>User Conduct You agree not to use OyeChotuu for any unlawful purposes or in any way that might harm, disrupt, or impair the platform's functionality.</p><p><br></p><p>In case of any dispute arising, the matter shall be settled in the courts at Kishtwar only.</p>"
+    },
+    "updatedAt": "2026-06-22T07:26:59.261Z",
+    "updatedBy": "6a362d32c1cf744c7f61d93d",
+    "updatedByRole": "ADMIN"
+  },
+  {
+    "_id": "6a119a8dfaaef4a0c4bad4dd",
+    "key": "terms",
+    "role": "restaurant",
+    "__v": 0,
+    "createdAt": "2026-05-23T12:16:13.790Z",
+    "legal": {
+      "title": "Terms and Conditions",
+      "content": "<p>OyeChotuu Restaurant Partner Agreement By registering your restaurant on OyeChotuu, you agree to the following terms of partnership.</p><p><br></p><p>Listing and Menu Management You are responsible for maintaining accurate, up-to-date menus, pricing, and operational hours. Any discrepancy in pricing leading to customer disputes will be the restaurant's responsibility.</p><p><br></p><p>Food Quality and Safety You guarantee that all food prepared and packaged meets local food safety and hygiene regulations. OyeChotuu reserves the right to suspend restaurants that receive consistent quality complaints.</p><p><br></p><p>Order Fulfillment Restaurants must accept, prepare, and pack orders within the estimated preparation time. Delays must be communicated immediately to avoid customer dissatisfaction.</p><p><br></p><p>Commission and Payouts OyeChotuu will deduct the agreed-upon commission from total sales. Payouts will be processed on a weekly basis according to the settlement schedule.</p>"
+    },
+    "updatedAt": "2026-05-23T17:30:42.121Z",
+    "updatedBy": "69b7d81bf5f15307df179d05",
+    "updatedByRole": "ADMIN"
+  },
+  {
+    "_id": "6a119ac1faaef4a0c4bad4df",
+    "role": "delivery",
+    "key": "terms",
+    "__v": 0,
+    "createdAt": "2026-05-23T12:17:05.434Z",
+    "legal": {
+      "title": "Terms and Conditions",
+      "content": "<p>OyeChotuu Delivery Partner Terms Welcome to the OyeChotuu Delivery Fleet. Please review the terms of your engagement.</p><p><br></p><p>Independent Contractor Status As a Delivery Partner, you operate as an independent contractor. You are not considered an employee of OyeChotuu, and are responsible for your own vehicle, maintenance, and insurance.</p><p><br></p><p>Service Standards You agree to pick up and deliver orders promptly, maintain professional conduct with customers and restaurants, and handle all packages with care to prevent tampering or spilling.</p><p><br></p><p>Compliance and Documents You must maintain a valid driver's license, vehicle registration, and active insurance at all times. Failure to comply may result in immediate suspension from the platform.</p><p><br></p><p>Earnings and Incentives Your earnings are calculated per delivery based on distance and order volume, along with any applicable incentives. Payments are transferred directly to your registered bank account weekly.</p>"
+    },
+    "updatedAt": "2026-05-23T17:30:55.481Z",
+    "updatedBy": "69b7d81bf5f15307df179d05",
+    "updatedByRole": "ADMIN"
+  },
+  {
+    "_id": "6a119f2ffaaef4a0c4bad4e3",
+    "role": "vendor",
+    "key": "terms",
+    "__v": 0,
+    "createdAt": "2026-05-23T12:35:59.043Z",
+    "legal": {
+      "title": "Terms and Conditions",
+      "content": "<p>OyeChotuu Quick Commerce Seller Agreement By listing your store on the OyeChotuu platform, you agree to these operational guidelines.</p><p><br></p><p>Inventory Management Sellers are strictly required to keep inventory levels updated in real-time. Frequent cancellations due to \"Out of Stock\" items will negatively impact your store rating.</p><p><br></p><p>Packing and Handoff To meet our quick commerce standards, orders must be picked, securely packed, and ready for handoff within the stipulated SLA (Service Level Agreement) time.</p><p><br></p><p>Product Authenticity You guarantee that all products sold, especially FMCG and perishables, are authentic, unexpired, and safe for consumption or use.</p><p><br></p><p>Financial Settlements Payments for completed orders will be processed according to your signed agreement minus platform fees. Any customer refunds due to poor quality or missing items will be deducted from settlements.</p>"
+    },
+    "updatedAt": "2026-05-23T17:31:11.380Z",
+    "updatedBy": "69b7d81bf5f15307df179d05",
+    "updatedByRole": "ADMIN"
+  },
+  {
+    "_id": "6a11a586faaef4a0c4bad500",
+    "key": "privacy",
+    "role": "user",
+    "__v": 0,
+    "createdAt": "2026-05-23T13:03:02.593Z",
+    "legal": {
+      "title": "Privacy Policy",
+      "content": "<h1><span class=\"bg-amber-100/70 px-2 py-1 rounded-md inline-block\">OyeChotuu User Privacy Policy</span></h1><p><br></p><p>Last Updated: June 2026</p><p><br></p><p>OyeChotuu respects the privacy of its users. This Privacy Policy explains how we collect, use, and protect information provided by customers using the OyeChotuu platform.</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">Information We Collect</span></h2><p><br></p><p>We may collect:</p><p><br></p><ul><li>Full Name</li><li>Mobile Number</li><li>Email Address</li><li>Delivery Address</li><li>GPS Location</li><li>Order History</li><li>Payment Information</li><li>Device Information</li></ul><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">How We Use Information</span></h2><p><br></p><p>We use your information to:</p><p><br></p><ul><li>Process and deliver orders</li><li>Provide customer support</li><li>Send order updates and notifications</li><li>Improve platform performance</li><li>Prevent fraud and unauthorized activities</li></ul><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">Information Sharing</span></h2><p><br></p><p>Your information may be shared with:</p><p><br></p><ul><li>Restaurant Partners</li><li>Delivery Partners</li><li>Payment Service Providers</li><li>Government Authorities when legally required</li></ul><p><br></p><p>We do not sell or rent personal information.</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">Data Security</span></h2><p><br></p><p>We use reasonable technical and organizational measures to protect personal information from unauthorized access or disclosure.</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">Contact Information</span></h2><p><br></p><p>Business Name: OyeChotuu</p><p>Owner Name: Bhrigu Nandan Bhan</p><p>Email: [brighubhan62@gmail.com](mailto:brighubhan62@gmail.com)</p><p>Phone: +91 84918 00373</p><p><br></p><p>Address:</p><p>79, Ward No. 7, Near Govt Hospital Bhadarwah,</p><p>Gwari Bhadarwah, Udrana,</p><p>PO: Udrana, District Doda,</p><p>Jammu & Kashmir - 182221, India</p><p><br></p>"
+    },
+    "updatedAt": "2026-06-03T06:48:15.256Z",
+    "updatedBy": "69b7d81bf5f15307df179d05",
+    "updatedByRole": "ADMIN"
+  },
+  {
+    "_id": "6a11a58efaaef4a0c4bad501",
+    "key": "privacy",
+    "role": "restaurant",
+    "__v": 0,
+    "createdAt": "2026-05-23T13:03:10.587Z",
+    "legal": {
+      "title": "Privacy Policy",
+      "content": "<h1><span class=\"bg-amber-100/70 px-2 py-1 rounded-md inline-block\">OyeChotuu Restaurant Partner Privacy Policy</span></h1><p><br></p><p>Last Updated: June 2026</p><p><br></p><p>This Privacy Policy explains how OyeChotuu collects and processes information of restaurant partners.</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">Information We Collect</span></h2><p><br></p><ul><li>Restaurant Name</li><li>Owner Name</li><li>Contact Number</li><li>Email Address</li><li>Business Address</li><li>FSSAI License Information</li><li>GST Details (if applicable)</li><li>Bank Account Information</li><li>Transaction History</li></ul><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">How We Use Information</span></h2><p><br></p><p>We use partner information to:</p><p><br></p><ul><li>Manage restaurant accounts</li><li>Process settlements and payouts</li><li>Verify business identity</li><li>Provide operational support</li><li>Improve platform services</li></ul><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">Information Sharing</span></h2><p><br></p><p>Information may be shared with:</p><p><br></p><ul><li>Payment Service Providers</li><li>Regulatory Authorities</li><li>Service Providers assisting platform operations</li></ul><p><br></p><p>We do not sell partner information.</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">Data Security</span></h2><p><br></p><p>Restaurant information is protected using commercially reasonable security practices.</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">Contact Information</span></h2><p><br></p><p>Business Name: OyeChotuu</p><p>Owner Name: Bhrigu Nandan Bhan</p><p>Email: [brighubhan62@gmail.com](mailto:brighubhan62@gmail.com)</p><p>Phone: +91 84918 00373</p><p><br></p><p>Address:</p><p>79, Ward No. 7, Near Govt Hospital Bhadarwah,</p><p>Gwari Bhadarwah, Udrana,</p><p>PO: Udrana, District Doda,</p><p>Jammu & Kashmir - 182221, India</p><p><br></p>"
+    },
+    "updatedAt": "2026-06-03T06:48:28.956Z",
+    "updatedBy": "69b7d81bf5f15307df179d05",
+    "updatedByRole": "ADMIN"
+  },
+  {
+    "_id": "6a11a594faaef4a0c4bad502",
+    "key": "privacy",
+    "role": "delivery",
+    "__v": 0,
+    "createdAt": "2026-05-23T13:03:16.714Z",
+    "legal": {
+      "title": "Privacy Policy",
+      "content": "<h1><span class=\"bg-amber-100/70 px-2 py-1 rounded-md inline-block\">OyeChotuu Delivery Partner Privacy Policy</span></h1><p><br></p><p>Last Updated: June 2026</p><p><br></p><p>This Privacy Policy explains how OyeChotuu collects and processes information of delivery partners.</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">Information We Collect</span></h2><p><br></p><ul><li>Full Name</li><li>Mobile Number</li><li>Email Address</li><li>Residential Address</li><li>Vehicle Details</li><li>Driving License Information</li><li>GPS Location Data</li><li>Bank Account Information</li><li>Delivery History</li></ul><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">How We Use Information</span></h2><p><br></p><p>We use the information to:</p><p><br></p><ul><li>Verify identity</li><li>Assign deliveries</li><li>Track delivery performance</li><li>Process payouts</li><li>Provide operational support</li><li>Ensure platform security</li></ul><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">Information Sharing</span></h2><p><br></p><p>Information may be shared with:</p><p><br></p><ul><li>Customers (limited contact details required for delivery)</li><li>Restaurant Partners</li><li>Payment Service Providers</li><li>Government Authorities when legally required</li></ul><p><br></p><p>We do not sell delivery partner information.</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">Location Tracking</span></h2><p><br></p><p>Location data may be collected while the delivery application is active to facilitate order tracking, route optimization, and delivery management.</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">Data Security</span></h2><p><br></p><p>We use reasonable safeguards to protect delivery partner information.</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">Contact Information</span></h2><p><br></p><p>Business Name: OyeChotuu</p><p>Owner Name: Bhrigu Nandan Bhan</p><p>Email: [brighubhan62@gmail.com](mailto:brighubhan62@gmail.com)</p><p>Phone: +91 84918 00373</p><p><br></p><p>Address:</p><p>79, Ward No. 7, Near Govt Hospital Bhadarwah,</p><p>Gwari Bhadarwah, Udrana,</p><p>PO: Udrana, District Doda,</p><p>Jammu & Kashmir - 182221, India</p><p><br></p>"
+    },
+    "updatedAt": "2026-06-03T06:49:24.538Z",
+    "updatedBy": "69b7d81bf5f15307df179d05",
+    "updatedByRole": "ADMIN"
+  },
+  {
+    "_id": "6a11a7effaaef4a0c4bad507",
+    "role": "vendor",
+    "key": "privacy",
+    "__v": 0,
+    "createdAt": "2026-05-23T13:13:18.938Z",
+    "legal": {
+      "title": "Privacy Policy",
+      "content": "<h1><span class=\"bg-amber-100/70 px-2 py-1 rounded-md inline-block\">OyeChotuu Vendor Privacy Policy</span></h1><p><br></p><p>Last Updated: June 2026</p><p><br></p><p>This Privacy Policy governs the collection and use of information through the OyeChotuu Seller/Admin Panel.</p><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">Information We Collect</span></h2><p><br></p><ul><li>Administrator Name</li><li>Email Address</li><li>Mobile Number</li><li>Login Activity</li><li>Device Information</li><li>System Usage Data</li></ul><p><br></p><h2><span class=\"bg-amber-100/50 px-2 py-0.5 rounded-md inline-block\">Purpose of Collection</span></h2><p><br></p><p>Information is collected to:</p><p><br></p><ul><li>Manage platform operations</li><li>Monitor account activity</li><li>Improve system security</li><li>Prevent unauthorized access</li><li>Maintain audit records</li></ul><p><br></p><p>Data Sharing</p><p><br></p><p>Access to administrative information is limited to authorized personnel and service providers as necessary for business operations.</p><p><br></p><p>Security</p><p><br></p><p>OyeChotuu maintains security measures designed to protect administrative data from unauthorized access and misuse.</p><p><br></p><p>#Contact Information</p><p><br></p><p>Business Name: OyeChotuu</p><p>Owner Name: Bhrigu Nandan Bhan</p><p>Email: [brighubhan62@gmail.com](mailto:brighubhan62@gmail.com)</p><p>Phone: +91 84918 00373</p><p><br></p><p>Address:</p><p>79, Ward No. 7, Near Govt Hospital Bhadarwah,</p><p>Gwari Bhadarwah, Udrana,</p><p>PO: Udrana, District Doda,</p><p>Jammu & Kashmir - 182221, India</p><p><br></p>"
+    },
+    "updatedAt": "2026-06-03T06:49:11.031Z",
+    "updatedBy": "69b7d81bf5f15307df179d05",
+    "updatedByRole": "ADMIN"
+  },
+  {
+    "_id": "6a11e4affaaef4a0c4bad590",
+    "role": "user",
+    "key": "support",
+    "__v": 0,
+    "createdAt": "2026-05-23T17:32:31.156Z",
+    "legal": {
+      "title": "Support",
+      "content": "<p>We're Here to Help! If you have any questions regarding your order, payments, or account, please do not hesitate to reach out to our support team.</p><p><br></p><p>Contact Information: Email:</p><p>brighubhan62@gmail.com</p><p>Phone: +91 84918 00373, 6006623007</p><p><br></p><p><br></p><p>Our support executives are available from 9:00 AM to 11:00 PM to assist you with tracking orders, processing refunds, and resolving any app-related issues.</p>"
+    },
+    "updatedAt": "2026-06-22T07:28:49.218Z",
+    "updatedBy": "6a362d32c1cf744c7f61d93d",
+    "updatedByRole": "ADMIN"
+  },
+  {
+    "_id": "6a11e4c2faaef4a0c4bad591",
+    "role": "restaurant",
+    "key": "support",
+    "__v": 0,
+    "createdAt": "2026-05-23T17:32:49.891Z",
+    "legal": {
+      "title": "Support",
+      "content": "<p>Restaurant Partner Support Need assistance with your menu, payouts, or order disputes? The OyeChotuu Partner Support team is ready to assist you.</p><p><br></p><p>Dedicated Support Desk: Email:</p><p>brighubhan62@gmail.com</p><p>Partner Helpline: +91 84918 00373</p><p><br></p><p>Please mention your Restaurant ID and Order ID (if applicable) when contacting us to help expedite your resolution.</p>"
+    },
+    "updatedAt": "2026-05-23T17:32:49.891Z",
+    "updatedBy": "69b7d81bf5f15307df179d05",
+    "updatedByRole": "ADMIN"
+  },
+  {
+    "_id": "6a11e4cffaaef4a0c4bad592",
+    "key": "support",
+    "role": "delivery",
+    "__v": 0,
+    "createdAt": "2026-05-23T17:33:03.189Z",
+    "legal": {
+      "title": "Support",
+      "content": "<p>Rider Support Center Facing an issue on the road, with an order, or your payout? We've got your back.</p><p><br></p><p>Contact Fleet Support: Email:</p><p>brighubhan62@gmail.com</p><p>Rider Helpline: +91 84918 00373</p><p><br></p><p>If you are involved in an emergency on the road, please prioritize your safety and contact local emergency services immediately before notifying support.</p>"
+    },
+    "updatedAt": "2026-05-23T17:33:03.189Z",
+    "updatedBy": "69b7d81bf5f15307df179d05",
+    "updatedByRole": "ADMIN"
+  },
+  {
+    "_id": "6a11e4dafaaef4a0c4bad594",
+    "role": "vendor",
+    "key": "support",
+    "__v": 0,
+    "createdAt": "2026-05-23T17:33:14.728Z",
+    "legal": {
+      "title": "Support",
+      "content": "<p>Quick Commerce Seller Support For inventory issues, integration support, or settlement inquiries, please contact our dedicated seller success team.</p><p><br></p><p>Seller Success Desk: Email:</p><p>brighubhan62@gmail.com</p><p>Helpline: +91 84918 00373</p><p><br></p><p>Support is available 7 days a week. For immediate order escalations, please call the helpline directly.</p>"
+    },
+    "updatedAt": "2026-05-23T17:33:14.728Z",
+    "updatedBy": "69b7d81bf5f15307df179d05",
+    "updatedByRole": "ADMIN"
+  },
+  {
+    "_id": "6a1e7e07faaef4a0c4bb235e",
+    "key": "cancellation",
+    "role": "user",
+    "__v": 0,
+    "createdAt": "2026-06-02T06:53:59.087Z",
+    "legal": {
+      "title": "Cancellation Policy",
+      "content": "<p>CANCELLATION POLICY</p><p><br></p><p>1. Orders can be cancelled before they are processed or shipped.</p><p>2. Once an order has been dispatched, it cannot be cancelled.</p><p>3. If a prepaid order is cancelled before dispatch, the refund will be initiated to the original payment method.</p><p>4. Refund processing for cancelled orders may take 5-10 business days depending on the payment provider.</p><p>5. We reserve the right to cancel any order due to product unavailability, pricing errors, fraudulent activity, or other unforeseen circumstances.</p><p>6. In case of cancellation by us, a full refund will be provided.</p><p><br></p><p>For cancellation requests, please contact our support team as soon as possible.</p><p><br></p>"
+    },
+    "updatedAt": "2026-06-02T06:55:23.048Z",
+    "updatedBy": "69b7d81bf5f15307df179d05",
+    "updatedByRole": "ADMIN"
+  },
+  {
+    "_id": "6a1e7e50faaef4a0c4bb2366",
+    "role": "user",
+    "key": "refund",
+    "__v": 0,
+    "createdAt": "2026-06-02T06:55:12.061Z",
+    "legal": {
+      "title": "Refund Policy",
+      "content": "<p>REFUND POLICY</p><p><br></p><p>Thank you for shopping with us. Customer satisfaction is our priority.</p><p><br></p><p>1. Refund requests can be made within 7 days of receiving the product.</p><p>2. To be eligible for a refund, the item must be unused, in its original condition, and in its original packaging.</p><p>3. Refunds will be processed only after the returned product has been inspected and approved by our team.</p><p>4. Refunds will be credited to the original payment method used during purchase.</p><p>5. Processing time for refunds may take 5-10 business days after approval.</p><p>6. Products damaged due to misuse, negligence, or unauthorized modifications are not eligible for refunds.</p><p>7. Shipping charges, if applicable, are non-refundable unless the return is due to our error.</p><p><br></p><p>For any refund-related queries, please contact our customer support team.</p><p><br></p>"
+    },
+    "updatedAt": "2026-06-02T06:55:12.061Z",
+    "updatedBy": "69b7d81bf5f15307df179d05",
+    "updatedByRole": "ADMIN"
+  },
+  {
+    "_id": "6a1e7e64faaef4a0c4bb2369",
+    "key": "shipping",
+    "role": "user",
+    "__v": 0,
+    "createdAt": "2026-06-02T06:55:32.792Z",
+    "legal": {
+      "title": "Shipping Policy",
+      "content": "<p>SHIPPING POLICY</p><p><br></p><p>1. Orders are typically processed within 1-3 business days after successful payment confirmation.</p><p>2. Delivery timelines may vary depending on the customer's location and courier partner availability.</p><p>3. Estimated delivery time is generally 3-10 business days from the date of dispatch.</p><p>4. Shipping charges, if applicable, will be displayed during checkout before payment.</p><p>5. Customers will receive tracking details once the order has been shipped.</p><p>6. Delays caused by weather conditions, public holidays, natural disasters, or courier issues are beyond our control.</p><p>7. Customers are responsible for providing accurate shipping information. We are not responsible for delays or losses caused by incorrect address details.</p><p><br></p><p>For shipping-related assistance, please contact our customer support team.</p><p><br></p>"
+    },
+    "updatedAt": "2026-06-02T06:55:32.792Z",
+    "updatedBy": "69b7d81bf5f15307df179d05",
+    "updatedByRole": "ADMIN"
+  },
+  {
+    "_id": "6a34ef861a5d94947d77b3e7",
+    "key": "about",
+    "role": "all",
+    "__v": 0,
+    "about": {
+      "appName": "OyeChotuu",
+      "version": "1.0.0",
+      "description": "",
+      "logo": "",
+      "features": [],
+      "stats": []
+    },
+    "createdAt": "2026-06-19T07:28:06.620Z",
+    "updatedAt": "2026-06-19T07:28:06.620Z",
+    "updatedBy": "69b7d81bf5f15307df179d05",
+    "updatedByRole": "ADMIN"
+  }
+]

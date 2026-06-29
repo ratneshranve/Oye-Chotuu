@@ -1,0 +1,92 @@
+[
+  {
+    "_id": "6a3e77b69d1773d30cf1c4de",
+    "orderId": "QC78774077",
+    "sellerId": "6a3cc63c28f467bbdd29c1ee",
+    "__v": 0,
+    "address": {
+      "address": "Kishtwar",
+      "city": "Kishtwar",
+      "location": {
+        "lat": 33.3226819,
+        "lng": 75.7641076
+      }
+    },
+    "createdAt": "2026-06-26T12:59:34.176Z",
+    "customer": {
+      "name": "Naresh kumar Bhan",
+      "phone": "7051102822"
+    },
+    "deliveredAt": null,
+    "items": [
+      {
+        "productId": "6a3e286f8b6a205bb70a4287",
+        "name": "ALPNIO HIGH PROTEIN OATS (1 kg)",
+        "price": 430,
+        "quantity": 1,
+        "image": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782458474/seller/products/ntvdu5afpemsvuokikpf.webp"
+      }
+    ],
+    "orderType": "quick",
+    "parentOrderId": "6a3e77b68b6a205bb70a8160",
+    "payment": {
+      "method": "cash"
+    },
+    "pricing": {
+      "subtotal": 430,
+      "commission": 0,
+      "total": 520,
+      "receivable": 430
+    },
+    "sellerPendingExpiresAt": "2026-06-26T13:01:34.157Z",
+    "status": "cancelled",
+    "updatedAt": "2026-06-26T12:59:50.136Z",
+    "workflowStatus": "CANCELLED",
+    "workflowVersion": 1
+  },
+  {
+    "_id": "6a3e85689d1773d30cf1c52f",
+    "orderId": "QC82280245",
+    "sellerId": "6a3cc63c28f467bbdd29c1ee",
+    "__v": 0,
+    "address": {
+      "address": "Kishtwar",
+      "city": "Kishtwar",
+      "location": {
+        "lat": 33.3234287,
+        "lng": 75.763131
+      }
+    },
+    "createdAt": "2026-06-26T13:58:00.583Z",
+    "customer": {
+      "name": "Brighu",
+      "phone": "9149500373"
+    },
+    "deliveredAt": null,
+    "items": [
+      {
+        "productId": "6a3e286f8b6a205bb70a4287",
+        "name": "ALPNIO HIGH PROTEIN OATS (1 kg)",
+        "price": 430,
+        "quantity": 1,
+        "image": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782458474/seller/products/ntvdu5afpemsvuokikpf.webp"
+      }
+    ],
+    "orderType": "quick",
+    "parentOrderId": "6a3e85688b6a205bb70a8674",
+    "payment": {
+      "method": "online"
+    },
+    "pricing": {
+      "subtotal": 430,
+      "commission": 0,
+      "total": 520,
+      "receivable": 430
+    },
+    "sellerPendingExpiresAt": "2026-06-26T14:00:00.325Z",
+    "status": "cancelled",
+    "updatedAt": "2026-06-26T13:59:39.750Z",
+    "workflowStatus": "CANCELLED",
+    "workflowVersion": 1
+  }
+]

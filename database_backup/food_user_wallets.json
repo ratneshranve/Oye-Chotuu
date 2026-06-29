@@ -1,0 +1,120 @@
+[
+  {
+    "_id": "6a40b1a5264c9701cd3250fe",
+    "userId": "6a40b0d7264c9701cd324f1a",
+    "balance": 255,
+    "referralEarnings": 250,
+    "transactions": [
+      {
+        "type": "addition",
+        "amount": 5,
+        "status": "Completed",
+        "description": "Wallet top-up",
+        "metadata": {
+          "source": "wallet_topup",
+          "mode": "razorpay"
+        },
+        "razorpayOrderId": "order_T6wCWE52AvAkHJ",
+        "razorpayPaymentId": "pay_T6wCbCoOznWkXh",
+        "razorpaySignature": "0689c15d3f235733cd8f1229d21a1dcefe620ab49c9cd729918df8062bd7cc30",
+        "_id": "6a40b2e3264c9701cd3253ed",
+        "createdAt": "2026-06-28T05:36:35.892Z",
+        "updatedAt": "2026-06-28T05:36:35.892Z"
+      },
+      {
+        "type": "addition",
+        "amount": 250,
+        "status": "Completed",
+        "description": "Referral reward",
+        "metadata": {
+          "source": "referral_reward",
+          "role": "USER",
+          "refereeId": "6a40b1a5264c9701cd3250f3",
+          "referralLogId": "6a40b1a5264c9701cd3250f9",
+          "type": "referrer_reward"
+        },
+        "razorpayOrderId": null,
+        "razorpayPaymentId": null,
+        "razorpaySignature": null,
+        "_id": "6a40b1a5264c9701cd325104",
+        "createdAt": "2026-06-28T05:31:17.102Z",
+        "updatedAt": "2026-06-28T05:31:17.102Z"
+      }
+    ],
+    "createdAt": "2026-06-28T05:31:17.079Z",
+    "updatedAt": "2026-06-28T05:36:35.892Z",
+    "__v": 2
+  },
+  {
+    "_id": "6a40b1a5264c9701cd325100",
+    "userId": "6a40b1a5264c9701cd3250f3",
+    "balance": 70,
+    "referralEarnings": 70,
+    "transactions": [
+      {
+        "type": "addition",
+        "amount": 70,
+        "status": "Completed",
+        "description": "Referral reward",
+        "metadata": {
+          "source": "referral_reward",
+          "role": "USER",
+          "referrerId": "6a40b0d7264c9701cd324f1a",
+          "referralLogId": "6a40b1a5264c9701cd3250f9",
+          "type": "referee_reward"
+        },
+        "razorpayOrderId": null,
+        "razorpayPaymentId": null,
+        "razorpaySignature": null,
+        "_id": "6a40b1a5264c9701cd325106",
+        "createdAt": "2026-06-28T05:31:17.106Z",
+        "updatedAt": "2026-06-28T05:31:17.106Z"
+      }
+    ],
+    "createdAt": "2026-06-28T05:31:17.081Z",
+    "updatedAt": "2026-06-28T05:31:17.106Z",
+    "__v": 1
+  },
+  {
+    "_id": "6a40d2c7264c9701cd32b2fb",
+    "userId": "6a16cfd299f1e0145b99ba66",
+    "balance": 510,
+    "referralEarnings": 0,
+    "transactions": [
+      {
+        "type": "addition",
+        "amount": 500,
+        "status": "Completed",
+        "description": "Wallet top-up",
+        "metadata": {
+          "source": "wallet_topup",
+          "mode": "razorpay"
+        },
+        "razorpayOrderId": "order_T7A05i00ERMwpI",
+        "razorpayPaymentId": "pay_T7A0K8cCrFfHC9",
+        "razorpaySignature": "07c7bb5285e4b7afeaa27549a6a11de7ddfce69529b06fd8242f55f1fbdecb50",
+        "_id": "6a4170b148d41cb004238faa",
+        "createdAt": "2026-06-28T19:06:25.755Z",
+        "updatedAt": "2026-06-28T19:06:25.755Z"
+      },
+      {
+        "type": "addition",
+        "amount": 10,
+        "status": "Completed",
+        "description": "Added by Admin",
+        "metadata": {
+          "source": "admin_addition"
+        },
+        "razorpayOrderId": null,
+        "razorpayPaymentId": null,
+        "razorpaySignature": null,
+        "_id": "6a40d2c7264c9701cd32b2fe",
+        "createdAt": "2026-06-28T07:52:39.468Z",
+        "updatedAt": "2026-06-28T07:52:39.468Z"
+      }
+    ],
+    "createdAt": "2026-06-28T07:52:39.427Z",
+    "updatedAt": "2026-06-28T19:06:25.755Z",
+    "__v": 2
+  }
+]

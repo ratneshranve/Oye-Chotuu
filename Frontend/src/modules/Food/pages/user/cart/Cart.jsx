@@ -202,6 +202,7 @@ export default function Cart() {
   const [showCoupons, setShowCoupons] = useState(false)
   const [appliedCoupon, setAppliedCoupon] = useState(null)
   const [couponCode, setCouponCode] = useState("")
+  const [addressInstructions, setAddressInstructions] = useState("")
   const [manualCouponCode, setManualCouponCode] = useState("")
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("cash")
   const [showPaymentSheet, setShowPaymentSheet] = useState(false)
@@ -1738,7 +1739,10 @@ export default function Cart() {
 
       const orderPayload = {
         items: orderItems,
-        address: normalizedAddress,
+        address: {
+          ...normalizedAddress,
+          instructions: addressInstructions
+        },
         customerName: recipientName,
         customerPhone: normalizedAddress?.phone || "",
         restaurantId: finalRestaurantId,
@@ -2666,6 +2670,21 @@ export default function Cart() {
                   >
                     <ChevronRight className="h-5 w-5" />
                   </button>
+                </div>
+
+                {/* Delivery Instructions Section */}
+                <div className="mt-4 pt-4 border-t border-slate-100 dark:border-neutral-800">
+                  <label htmlFor="address-instructions" className="block text-[13px] font-bold text-gray-800 dark:text-gray-200 mb-2">
+                    Address Details (Optional)
+                  </label>
+                  <textarea
+                    id="address-instructions"
+                    rows={2}
+                    value={addressInstructions}
+                    onChange={(e) => setAddressInstructions(e.target.value)}
+                    placeholder="e.g., 5th floor, B block, Corporate house. Helps delivery boy find your location easily."
+                    className="w-full px-3 py-2 text-sm text-gray-700 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#cc2532] focus:border-transparent dark:bg-neutral-800 dark:border-neutral-700 dark:text-gray-300 resize-none transition-all"
+                  />
                 </div>
               </div>
 

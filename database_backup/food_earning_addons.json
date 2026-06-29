@@ -1,0 +1,62 @@
+[
+  {
+    "_id": "69ce0f174264d0fb56e10f4f",
+    "__v": 0,
+    "createdAt": "2026-04-02T06:39:19.975Z",
+    "currentRedemptions": 0,
+    "description": "",
+    "earningAmount": 300,
+    "endDate": "2026-04-05T00:00:00.000Z",
+    "maxRedemptions": 2,
+    "requiredOrders": 2,
+    "startDate": "2026-04-02T00:00:00.000Z",
+    "status": "active",
+    "title": "complete 2 offers",
+    "updatedAt": "2026-04-29T12:04:51.512Z"
+  },
+  {
+    "_id": "69f1f2e3b24e7550b4bf98b9",
+    "title": "complete 3 offers",
+    "description": "",
+    "requiredOrders": 5,
+    "earningAmount": 100,
+    "startDate": "2026-04-30T00:00:00.000Z",
+    "endDate": "2026-05-08T00:00:00.000Z",
+    "maxRedemptions": 1,
+    "currentRedemptions": 0,
+    "status": "inactive",
+    "createdAt": "2026-04-29T12:00:36.046Z",
+    "updatedAt": "2026-04-30T06:23:30.802Z",
+    "__v": 0
+  },
+  {
+    "_id": "69f2f54700cedc400f008e99",
+    "title": "complete 10 offers",
+    "description": "",
+    "requiredOrders": 4,
+    "earningAmount": 500,
+    "startDate": "2026-04-30T00:00:00.000Z",
+    "endDate": "2026-05-08T00:00:00.000Z",
+    "maxRedemptions": 2,
+    "currentRedemptions": 0,
+    "status": "active",
+    "createdAt": "2026-04-30T06:23:03.889Z",
+    "updatedAt": "2026-04-30T06:23:03.889Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a26b1e335547789fbca6a0f",
+    "title": "test offer",
+    "description": "",
+    "requiredOrders": 10,
+    "earningAmount": 300,
+    "startDate": "2026-06-08T00:00:00.000Z",
+    "endDate": "2026-06-15T00:00:00.000Z",
+    "maxRedemptions": 5,
+    "currentRedemptions": 0,
+    "status": "active",
+    "createdAt": "2026-06-08T12:13:23.879Z",
+    "updatedAt": "2026-06-08T12:13:23.879Z",
+    "__v": 0
+  }
+]

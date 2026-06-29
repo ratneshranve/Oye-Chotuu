@@ -1,0 +1,26 @@
+[
+  {
+    "_id": "69fb18d3803f90ba3aa56f29",
+    "deliveryFee": 0,
+    "deliveryFeeRanges": [
+      {
+        "min": 100,
+        "max": 1000,
+        "fee": 90
+      },
+      {
+        "min": 1000,
+        "max": 2000,
+        "fee": 120
+      }
+    ],
+    "freeDeliveryThreshold": 0,
+    "platformFee": 25,
+    "gstRate": 20,
+    "returnDeliveryCommission": 0,
+    "isActive": true,
+    "createdAt": "2026-05-06T10:32:51.877Z",
+    "updatedAt": "2026-06-16T10:50:26.021Z",
+    "__v": 0
+  }
+]

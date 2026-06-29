@@ -1,0 +1,4270 @@
+[
+  {
+    "_id": "69fb2b8139cfebbb0dd825e2",
+    "phone": "7724817688",
+    "countryCode": "+91",
+    "profileImage": "https://res.cloudinary.com/appzeto-master-product/image/upload/f_webp,q_auto/v1778068472/food/users/profile/h13yzrewhzxkfwy5z8rt.webp",
+    "fcmTokens": [
+      "foE6vNSvAuX0UoCzUJFZPo:APA91bG_CqhUZiAewOhppLmujc00tH1CR0LL5DD-0EBkgEeQ01Q2p6XDf43XknoC-nzcuDZiq21QlIzncG7jUYzuxfzwlLTxTQ3fn6e9dQubm7P_ZXHLpFM",
+      "c_4ygwcBxMBO551xu0mH6q:APA91bH88tCiFxYX_VKlzN0xyOy85ghK4JvZPGb7niEWg3-VhLZv8RHiGcBtDr9X83SErQgVmbryfThw-KbqEJmhBHSOIwJ3BMdlMD5AncqaHaWLfLqP3zM",
+      "dSHqr8HKZb3TyvPw6FoYnp:APA91bHQDVw3M33XnCuNbH1j6YwkQYm6v1DgIRdI0_TnD71OY0-lsgyLjuPDZw3zOdVp24ALtAxul69AHD3w53TXOnuLlCzmO1VP9ydTv3uk5Klb9j7B7vs"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": "2002-05-06T00:00:00.000Z",
+    "anniversary": "2011-11-11T00:00:00.000Z",
+    "gender": "male",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "isPartner": false,
+    "partnerApprovalStatus": "pending",
+    "partnerSince": null,
+    "savedHotels": [],
+    "hotelFcmTokens": {
+      "app": null,
+      "web": null
+    },
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "currentRideId": null,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-05-06T11:52:33.607Z",
+    "updatedAt": "2026-05-07T17:08:46.547Z",
+    "__v": 3,
+    "referralCode": "69fb2b8139cfebbb0dd825e2",
+    "name": "Vishu",
+    "active": true,
+    "deletedAt": null,
+    "deletion_reason": "",
+    "email": "vishalpatel581012@gmail.com",
+    "masterUserId": "69fb2b8139cfebbb0dd825e2"
+  },
+  {
+    "_id": "69fb55d6616775401f747d65",
+    "phone": "9641119590",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "isPartner": false,
+    "partnerApprovalStatus": "pending",
+    "partnerSince": null,
+    "savedHotels": [],
+    "hotelFcmTokens": {
+      "app": null,
+      "web": null
+    },
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "currentRideId": null,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-05-06T14:53:10.249Z",
+    "updatedAt": "2026-05-06T14:55:53.499Z",
+    "__v": 0,
+    "referralCode": "69fb55d6616775401f747d65",
+    "active": true,
+    "deletedAt": null,
+    "deletion_reason": "",
+    "email": "",
+    "masterUserId": "69fb55d6616775401f747d65",
+    "name": "AppZeto User"
+  },
+  {
+    "_id": "69fb6b1a616775401f748059",
+    "phone": "7223077890",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "isPartner": false,
+    "partnerApprovalStatus": "pending",
+    "partnerSince": null,
+    "savedHotels": [],
+    "hotelFcmTokens": {
+      "app": null,
+      "web": null
+    },
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "currentRideId": null,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-05-06T16:23:54.668Z",
+    "updatedAt": "2026-06-06T07:50:27.031Z",
+    "__v": 2,
+    "referralCode": "69fb6b1a616775401f748059",
+    "name": "Om"
+  },
+  {
+    "_id": "69fc473e7a0083db0e81f2fc",
+    "phone": "6268423925",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "fpisIDvJslU0nGK5IssYUv:APA91bGCQuOIldhxAR1UUY805qd-3TMyRMLI7fAicAb2cONGC8iw_dE_NObwNf0rHrOIHRNoZ3SvD3f4_1ociUIFI8HIGwatXc6D5CFwP3GlN5eaxEHBbgc",
+      "fb2MUk8m5_cj9W92bU7Jk7:APA91bG021XQdZUiJiDyNpoIkYXNct_VITZwqtSh1WYlETYFUB_CpLn1CeLLdQptG_SsPC_xDKY_-G7GEFcX6qX3W7EVsL14Ja68qbmflbHgLo9w9q4oAPQ",
+      "dVo9BgC5lR-G2su9yatUQb:APA91bEK0lsRoS8mu59YH_v_FSdNXO8olw_gnJskl49Q6sO4cKKAQyJtOfZ7zBE6fRobiCAJW4-nuAhpHxd7Ff84A1-TeTJz0NWp6hZ57Lg61aFg5Y4WfhY"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "isPartner": false,
+    "partnerApprovalStatus": "pending",
+    "partnerSince": null,
+    "savedHotels": [],
+    "hotelFcmTokens": {
+      "app": null,
+      "web": null
+    },
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "currentRideId": null,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [
+      {
+        "label": "Home",
+        "street": "Rajwada",
+        "additionalDetails": "Flat 101",
+        "city": "Indore",
+        "state": "Madhya Pradesh",
+        "zipCode": "",
+        "phone": "",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.8577,
+            22.7196
+          ]
+        },
+        "isDefault": true,
+        "_id": "69fd6837062b05aa8bca72c7",
+        "createdAt": "2026-05-08T04:36:07.801Z",
+        "updatedAt": "2026-05-08T04:36:07.801Z"
+      }
+    ],
+    "createdAt": "2026-05-07T08:03:10.835Z",
+    "updatedAt": "2026-05-08T04:36:07.808Z",
+    "__v": 3,
+    "referralCode": "69fc473e7a0083db0e81f2fc",
+    "name": "Harshvardhan"
+  },
+  {
+    "_id": "69fc79ac616775401f74a09e",
+    "phone": "7880133936",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [
+      "cIK8Vn3qTx2FiAYXyQ7JgW:APA91bFTpNbScC40mZy5jRZBFDp4UYOu2YSzvkt_DRtloXXbvkItGQjFjfWAEYQWuXE2f6dkRjsmXcRYYtDBnC4Pu3e_VQcnr8_RY3Fu2yhtT64_hfxI5pY"
+    ],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "isPartner": false,
+    "partnerApprovalStatus": "pending",
+    "partnerSince": null,
+    "savedHotels": [],
+    "hotelFcmTokens": {
+      "app": null,
+      "web": null
+    },
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "currentRideId": null,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-05-07T11:38:20.308Z",
+    "updatedAt": "2026-05-07T11:38:24.853Z",
+    "__v": 1,
+    "referralCode": "69fc79ac616775401f74a09e",
+    "name": "Rani Maheshwari"
+  },
+  {
+    "_id": "69fc7d96616775401f74a4f5",
+    "phone": "6375095971",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "dHEkmgSa_PUKlG7jy_fENU:APA91bF6dTmMKebSVIuCMEFg0A1vAX89pmEGPhDyJL6N5DL-hmwENO0KvBekzKPgQimpIJE5N1I5R7xuoHc_NLh4IzuwlwyGOfEXGSdBHyB0LHb9Wnbi-Vo"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "isPartner": false,
+    "partnerApprovalStatus": "pending",
+    "partnerSince": null,
+    "savedHotels": [],
+    "hotelFcmTokens": {
+      "app": null,
+      "web": null
+    },
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "currentRideId": null,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-05-07T11:55:02.480Z",
+    "updatedAt": "2026-05-20T11:52:31.468Z",
+    "__v": 1,
+    "referralCode": "69fc7d96616775401f74a4f5",
+    "name": "Vipin"
+  },
+  {
+    "_id": "69fcc665616775401f74b4e3",
+    "phone": "8888888888",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "dSHqr8HKZb3TyvPw6FoYnp:APA91bHQDVw3M33XnCuNbH1j6YwkQYm6v1DgIRdI0_TnD71OY0-lsgyLjuPDZw3zOdVp24ALtAxul69AHD3w53TXOnuLlCzmO1VP9ydTv3uk5Klb9j7B7vs"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 1,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 250,
+    "isPartner": false,
+    "partnerApprovalStatus": "pending",
+    "partnerSince": null,
+    "savedHotels": [],
+    "hotelFcmTokens": {
+      "app": null,
+      "web": null
+    },
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "currentRideId": null,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-05-07T17:05:41.880Z",
+    "updatedAt": "2026-05-07T17:33:56.452Z",
+    "__v": 1,
+    "referralCode": "69fcc665616775401f74b4e3",
+    "name": "Raja"
+  },
+  {
+    "_id": "69fccd045faff2b74809411b",
+    "phone": "5555542289",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": "69fcc665616775401f74b4e3",
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 70,
+    "isPartner": false,
+    "partnerApprovalStatus": "pending",
+    "partnerSince": null,
+    "savedHotels": [],
+    "hotelFcmTokens": {
+      "app": null,
+      "web": null
+    },
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "currentRideId": null,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-05-07T17:33:56.360Z",
+    "updatedAt": "2026-05-07T17:34:04.036Z",
+    "__v": 0,
+    "referralCode": "69fccd045faff2b74809411b",
+    "name": "Afhjn"
+  },
+  {
+    "_id": "69fd78e6f68a1d3347635b94",
+    "phone": "9755633147",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "isPartner": false,
+    "partnerApprovalStatus": "pending",
+    "partnerSince": null,
+    "savedHotels": [],
+    "hotelFcmTokens": {
+      "app": null,
+      "web": null
+    },
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "currentRideId": null,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-05-08T05:47:18.422Z",
+    "updatedAt": "2026-05-08T05:47:25.109Z",
+    "__v": 0,
+    "referralCode": "69fd78e6f68a1d3347635b94",
+    "name": "Ritu"
+  },
+  {
+    "_id": "69fd8910c8f52535c5ed126b",
+    "phone": "9993911855",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "isPartner": false,
+    "partnerApprovalStatus": "pending",
+    "partnerSince": null,
+    "savedHotels": [],
+    "hotelFcmTokens": {
+      "app": null,
+      "web": null
+    },
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "currentRideId": null,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-05-08T06:56:16.340Z",
+    "updatedAt": "2026-05-08T06:56:22.477Z",
+    "__v": 0,
+    "referralCode": "69fd8910c8f52535c5ed126b",
+    "name": "payal"
+  },
+  {
+    "_id": "6a0172f9a66d7677b04af682",
+    "phone": "9770133148",
+    "countryCode": "+91",
+    "profileImage": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782223102/food/users/profile/ylp4ne8a0wb018sc06fa.webp",
+    "fcmTokens": [
+      "f5SjGOWjsbeLdrZbzjUCfu:APA91bHZ4JU8muNkjGIBBctAftrLTzIWdS7EMS0Czr2YRms66TPS5n7A9fp1Q7Q0_Jlh5gV8H0o5EC7XeIT56Ren6X_ptph_9lYsYh8D-D4YXvpnl_fS5Oo",
+      "cG37aZh9QYy7Kdxcj3P5bh:APA91bEyOAWXwVG3MYu-YqtCxvFlsIoHDnEcKBwwp69SuyLHZoQcszpPK0MJgEazDnBU8YegMhpprCiU56E3QBlMXGB470ChIUG2DS7YkOxGnQWG3JvXBng",
+      "cs8cUJvoR5e4MdIuliV2PU:APA91bERItPym2qEGXr2DBKPGrjjoeOUl9H9yOXspMnwrCLGninq19rLESHbH5o8oehIm9JkaXbeC25IG0lHlbuqJAcnBPcMSs6ts2RhzBMWTLEC9dEksJ4",
+      "c5CwaJgEQdK9TB6q7Dbjfs:APA91bHwCY6nTzRfTag_onMKTVQpA9JpWm2FdvEqkTt_Z5TqrobnI4R9aSdesxnPdzkPrMSCDBil5kQ5hAORVmE-EGiPTjNHHd3tkOxKTGkJ3kXsuwriQHg",
+      "cdj5B3BPH4UYDvBv88JMkt:APA91bEijoKItLn2E-7fJCpj4jhYvLGfXPILcpg7pk9Y5w6Giz2TZIWi6qa6_u9G2Z5STkVrXPVQ-p4Nn3DwkyYfPBtXb_JcITp6J5TT330YDgRqSh-a1hg",
+      "cG37aZh9QYy7Kdxcj3P5bh:APA91bGjlzuOR0jtkwbCVJDhgaWasFYD_jJVcNyH74cVA8V64TR2wuFLpulxCnb27vNn0kx5abBBgF3E_8dF0MIVVDao6_rpn8cgeeQ04wbQ-6n-C1SkP_U",
+      "cG37aZh9QYy7Kdxcj3P5bh:APA91bGfzURYSHaEjgdVKkQjXkhFIsZu7TpRyrph8GT4ESEw7z1x_dTiQF7dTK-mf1d4XcnCfobnmXj2zGXNW-NufUgRHSJ4gLyJvD-p1xeus6ZiF9W6S-U"
+    ],
+    "fcmTokenMobile": [
+      "fcm_device_token_here"
+    ],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 4000,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [
+      {
+        "label": "Home",
+        "street": "Kishtwar",
+        "additionalDetails": "",
+        "city": "Kishtwar",
+        "state": "Jammu and Kashmir",
+        "zipCode": "182204",
+        "phone": "",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.7683504717886,
+            33.31528414246269
+          ]
+        },
+        "isDefault": true,
+        "_id": "6a2eb1b9d6879abccf6d30f3",
+        "createdAt": "2026-06-14T13:50:49.345Z",
+        "updatedAt": "2026-06-28T18:54:12.895Z"
+      },
+      {
+        "label": "Office",
+        "street": "Kishtwar Jammu and Kashmir India",
+        "additionalDetails": "",
+        "city": "Kishtwar",
+        "state": "Jammu and Kashmir",
+        "zipCode": "452001",
+        "phone": "",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.8171777,
+            33.293086200000005
+          ]
+        },
+        "isDefault": false,
+        "_id": "6a3e9e9520cc91db8e389ee5",
+        "createdAt": "2026-06-26T15:45:25.896Z",
+        "updatedAt": "2026-06-26T15:45:42.079Z"
+      }
+    ],
+    "createdAt": "2026-05-11T06:11:05.645Z",
+    "updatedAt": "2026-06-29T02:29:52.765Z",
+    "__v": 64,
+    "referralCode": "6a0172f9a66d7677b04af682",
+    "name": "Ratnesh"
+  },
+  {
+    "_id": "6a0eb30fdbddede522996f74",
+    "phone": "9999999999",
+    "countryCode": "+91",
+    "name": "Test Customer",
+    "email": "test@example.com",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-05-21T07:23:59.657Z",
+    "updatedAt": "2026-06-19T11:02:46.851Z",
+    "__v": 0,
+    "referralCode": "6a0eb30fdbddede522996f74"
+  },
+  {
+    "_id": "6a0eb8e320c49c1e9666f399",
+    "phone": "9770113148",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-05-21T07:48:51.180Z",
+    "updatedAt": "2026-06-06T07:50:29.232Z",
+    "__v": 2,
+    "referralCode": "6a0eb8e320c49c1e9666f399",
+    "name": "ratnesh"
+  },
+  {
+    "_id": "6a1334d154c6ae45212b1288",
+    "phone": "9770133149",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "eSgMSSgHQznEoREnrlu4Tn:APA91bFGiWY_guDn2tp0D_6HulHDhhkQNjb9Jf5XD2TtsltRJsLokhv7UiJlNJZQkAXKPg_QoNJ8jN_ReBCM3djrfqSxUubaDwaLa9Kt8uVPUSXTwH7vjHM"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 6000,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [
+      {
+        "label": "Home",
+        "street": "shakti nagar kishtwar",
+        "additionalDetails": "",
+        "city": "Qazigund",
+        "state": "Jammu and Kashmir",
+        "zipCode": "192221",
+        "phone": "",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.77007574499821,
+            33.31598672699129
+          ]
+        },
+        "isDefault": true,
+        "_id": "6a31421978e15888b6a14d7d",
+        "createdAt": "2026-06-16T12:31:21.478Z",
+        "updatedAt": "2026-06-27T07:21:36.160Z"
+      }
+    ],
+    "createdAt": "2026-05-24T17:26:41.379Z",
+    "updatedAt": "2026-06-28T08:41:33.863Z",
+    "__v": 13,
+    "referralCode": "6a1334d154c6ae45212b1288",
+    "name": "Trisha Mishra"
+  },
+  {
+    "_id": "6a15861f60c63b5f9b6e5012",
+    "phone": "8787877676",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-05-26T11:38:07.899Z",
+    "updatedAt": "2026-06-06T07:50:29.482Z",
+    "__v": 2,
+    "referralCode": "6a15861f60c63b5f9b6e5012",
+    "name": "Trishu"
+  },
+  {
+    "_id": "6a16cfd299f1e0145b99ba66",
+    "phone": "7051102822",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "cO8rDigESKKoDQ85ztp__B:APA91bEPA38hNLCx3N6jhEKPoBRC31m__XOZ1dPFgvaw1SYGLYUU2Szi_LjaP_HJCkAvgNpkEsUNakxsdTMkqMXCg-hsiKdwjxJNleQ7Obm_2jSbEVtYEtU",
+      "c9CDLHPtAcYOComGbVFxd4:APA91bG5DNc3hxk8k8fy86cp8p5QoHg4EY_P6S8GboRcCi8qCY-ydKDuE73vmI5P-tKaTewl1jMXQhnx7PiEF9J8SAYRcFhxqD5GlKCURf2YeT7z2Y2RBf8"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 510,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [
+      {
+        "label": "Home",
+        "street": "Kishtwar pandit gam near daffodil high school",
+        "additionalDetails": "",
+        "city": "Indore",
+        "state": "Madhya Pradesh",
+        "zipCode": "452001",
+        "phone": "",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.86819959999998,
+            22.72036160000001
+          ]
+        },
+        "isDefault": true,
+        "_id": "6a360e494c39a76b72276cc2",
+        "createdAt": "2026-06-20T03:51:37.308Z",
+        "updatedAt": "2026-06-27T08:08:00.910Z"
+      }
+    ],
+    "createdAt": "2026-05-27T11:04:50.976Z",
+    "updatedAt": "2026-06-29T02:05:42.442Z",
+    "__v": 2,
+    "referralCode": "6a16cfd299f1e0145b99ba66",
+    "name": "Naresh kumar Bhan"
+  },
+  {
+    "_id": "6a16d20099f1e0145b99bbcb",
+    "phone": "9149500373",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "fg6nXr0SQTeI5A7M7HYQKG:APA91bGC172GwjO1IetP_jXfx8ffPG_3blxAvQtxsVC8Xzk_xUD00R_i4esk6_vUU-0LSqTLKYAHFojYElSHoCQsWH_6T4nypX7bCrZWiI6RYuAzGiWsBy8"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [
+      {
+        "label": "Home",
+        "street": "Indore, Juni Indore Tahsil, Indore, Madhya Pradesh, 452001, India",
+        "additionalDetails": "",
+        "city": "Indore",
+        "state": "Madhya Pradesh",
+        "zipCode": "452001",
+        "phone": "",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.86819959999998,
+            22.72036160000001
+          ]
+        },
+        "isDefault": true,
+        "_id": "6a2fbedd9f4cd52de41c9a9d",
+        "createdAt": "2026-06-15T08:59:09.361Z",
+        "updatedAt": "2026-06-17T11:59:03.886Z"
+      }
+    ],
+    "createdAt": "2026-05-27T11:14:08.418Z",
+    "updatedAt": "2026-06-29T06:45:54.409Z",
+    "__v": 7,
+    "referralCode": "6a16d20099f1e0145b99bbcb",
+    "name": "Brighu"
+  },
+  {
+    "_id": "6a1ad2bc919a5393fc9d3a0d",
+    "phone": "7348419775",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "cB1iB9MTTaiPGeOuZo-YOK:APA91bH2eJY7JTa1D_I_mXrJnpkxeZNKCsMPyF9VRZAoUzR-expbl8ioDCHvwoRGitK5tr9FZ3HmZ65XQqEtGf8WvvjJZT7in9YZvtLD28cNDP8kGyvk6KU"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": false,
+    "role": "USER",
+    "walletBalance": 450,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [
+      {
+        "label": "Home",
+        "street": "Silicon City Gate, Agra-Bombay Road, Rau, Rau Tahsil, Indore, Madhya Pradesh, 452012, India",
+        "additionalDetails": "",
+        "city": "Rau Tahsil",
+        "state": "Madhya Pradesh",
+        "zipCode": "452012",
+        "phone": "",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.82769730000001,
+            22.645822899999978
+          ]
+        },
+        "isDefault": true,
+        "_id": "6a2d42e18772f432707151b6",
+        "createdAt": "2026-06-13T11:45:37.758Z",
+        "updatedAt": "2026-06-13T11:45:37.758Z"
+      }
+    ],
+    "createdAt": "2026-05-30T12:06:20.347Z",
+    "updatedAt": "2026-06-22T06:50:33.194Z",
+    "__v": 7,
+    "referralCode": "6a1ad2bc919a5393fc9d3a0d",
+    "name": "Jiya"
+  },
+  {
+    "_id": "6a1fd44ec05cb7259d461a0f",
+    "phone": "7878787878",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "cM5ixaM1RgEf0LvffeBv8v:APA91bEl_tfB3-_zztAsArRRG4_t5LU3p_ciQoTnPisiBFW7_RQy5Y54dqXzswWoknQbHtxNYp2OslrOtppnksMUbPpbjD48_JMKFZsjREDsYnjHFn_rens",
+      "cA2oabFqS2moaEmSiAmGGE:APA91bG3tEWJTk4iFDf9Nwiglhp_bGbA8UYWbjn7Dl0QJ-zHaRahNg_P_H1gwA0sYRvyYMFq5KkR5n36XsRUf1IcSv0h55K2g5dxhGUZfERagqSSt0Wsv90",
+      "dow4Dds4Ir86VTNxHv1GGb:APA91bEduYJC2iBpHaV1m1mesIDgyySzwQRNL-KIa2gmkPk0gqrREPeX7F8o41ijW4unUXaqwGJn8LjEa1mIHnGKNsZECMymLl4eyX-5JWgMbGiuCRRWL1E"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": false,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": true,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [
+      {
+        "label": "Home",
+        "street": "Indore City",
+        "additionalDetails": "",
+        "city": "Indore",
+        "state": "Madhya Pradesh",
+        "zipCode": "452001",
+        "phone": "",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.87200438237039,
+            22.717605568584293
+          ]
+        },
+        "isDefault": true,
+        "_id": "6a213de9c68dce7356dfa015",
+        "createdAt": "2026-06-04T08:57:13.072Z",
+        "updatedAt": "2026-06-04T08:57:13.072Z"
+      }
+    ],
+    "createdAt": "2026-06-03T07:14:22.026Z",
+    "updatedAt": "2026-06-11T09:59:46.769Z",
+    "__v": 5,
+    "referralCode": "6a1fd44ec05cb7259d461a0f",
+    "name": "Prince"
+  },
+  {
+    "_id": "6a23c60d2e76f0c8b9da540f",
+    "phone": "8787878787",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-06T07:02:37.436Z",
+    "updatedAt": "2026-06-21T08:40:40.671Z",
+    "__v": 2,
+    "referralCode": "6a23c60d2e76f0c8b9da540f",
+    "name": "Shyam"
+  },
+  {
+    "_id": "6a23e6d32ba72825ce7ff8ba",
+    "phone": "8686868686",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-06T09:22:27.862Z",
+    "updatedAt": "2026-06-21T08:40:41.725Z",
+    "__v": 2,
+    "referralCode": "6a23e6d32ba72825ce7ff8ba",
+    "name": "Ram singh"
+  },
+  {
+    "_id": "6a265b0135547789fbc9fcf1",
+    "phone": "9399231681",
+    "countryCode": "+91",
+    "profileImage": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1780904396/food/users/profile/wzckmnpo1kz4rwtvlnwv.webp",
+    "fcmTokens": [
+      "eUpLqyaITMO7v0ysZyftYQ:APA91bFdsCsrPeFrqAKRSr4svvltvYp7HmyCHfVAVzvxUEG07I4LihYEOsyRywDEQD60mYEuetENQ4dfFJTXdNdbppTLvR0pVm3j-9Jo4a_Fz8H1tmnBfGU"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": "2004-01-26T00:00:00.000Z",
+    "anniversary": null,
+    "gender": "female",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": false,
+    "role": "USER",
+    "walletBalance": 1100,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [
+      {
+        "label": "Home",
+        "street": "Bholaram Square Indore City Indore Juni Indore Tahsil Indore Madhya Pradesh 452001 India",
+        "additionalDetails": "",
+        "city": "Indore",
+        "state": "Madhya Pradesh",
+        "zipCode": "452001",
+        "phone": "",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.8635634,
+            22.680952500000004
+          ]
+        },
+        "isDefault": true,
+        "_id": "6a26728435547789fbca21aa",
+        "createdAt": "2026-06-08T07:43:00.331Z",
+        "updatedAt": "2026-06-10T10:10:03.573Z"
+      },
+      {
+        "label": "Office",
+        "street": "&--_#&&",
+        "additionalDetails": "-&₹_++",
+        "city": "Hfcg-&_-",
+        "state": "Mfy--_",
+        "zipCode": "246899755",
+        "phone": "",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.8577,
+            22.7196
+          ]
+        },
+        "isDefault": false,
+        "_id": "6a2672db35547789fbca2300",
+        "createdAt": "2026-06-08T07:44:27.175Z",
+        "updatedAt": "2026-06-10T10:10:03.573Z"
+      }
+    ],
+    "createdAt": "2026-06-08T06:02:41.442Z",
+    "updatedAt": "2026-06-11T05:40:30.944Z",
+    "__v": 5,
+    "referralCode": "6a265b0135547789fbc9fcf1",
+    "name": "Rimjhim Patidar",
+    "email": "rimjhin367@gmail.com"
+  },
+  {
+    "_id": "6a27e87fb3c7519e93a1209d",
+    "phone": "9399231682",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "ecuhomSIQ5iMgOsxmmSTiH:APA91bEcBsm-0otLNSBuXvJY4w9ECN8U9vgNOv997b9nIefolW9DOp1FilyEJqw3rWuUUoEkP_cIRUIuKBLKmicPIHMLqfTA8r4yw4vnjZuYuIEe3NH1K7s"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": false,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-09T10:18:39.521Z",
+    "updatedAt": "2026-06-09T10:18:55.879Z",
+    "__v": 1,
+    "referralCode": "6a27e87fb3c7519e93a1209d",
+    "name": "Rimjhim Patidarsnjdn(#+₹-₹+₹+₹(#("
+  },
+  {
+    "_id": "6a28087239a5e34fb5ec2f21",
+    "phone": "7877979797",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-09T12:34:58.730Z",
+    "updatedAt": "2026-06-09T12:35:02.745Z",
+    "__v": 0,
+    "referralCode": "6a28087239a5e34fb5ec2f21",
+    "name": "ratnhh"
+  },
+  {
+    "_id": "6a294d5ab3c7519e93a1fa14",
+    "phone": "9622002822",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-10T11:41:14.320Z",
+    "updatedAt": "2026-06-10T11:41:17.217Z",
+    "__v": 0,
+    "referralCode": "6a294d5ab3c7519e93a1fa14",
+    "name": "Yadhu"
+  },
+  {
+    "_id": "6a294e8cf4e676f8787f4dfa",
+    "phone": "7974161582",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "dJUMVGsiQxaA4XdmXJxYJd:APA91bG7QfxNF3R_kCLkb3yJ4XBiQ6DbgbIyxa7Cp1p-Mk8eHLsFJQAK75O0IgbMwp8iOneakOu05mL7uQxEEsOjiIsu0WSEdsFPnP5TcSzkEK8N16oiwFo",
+      "ePnGgPypQqi6-3ZFDh9niT:APA91bEJBR-PvMjZOh4kwORqNw5IBrwjPXP6oxDKNqMbnJJyGr4E97u-zkJ9Mdxfa4b3AtSCxu6TSNnLO4aE1TWRmhzZpa7xKOx5czx9bvhXaVFVVIHRBXA"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-10T11:46:20.067Z",
+    "updatedAt": "2026-06-29T06:19:56.827Z",
+    "__v": 4,
+    "referralCode": "6a294e8cf4e676f8787f4dfa",
+    "name": "prince"
+  },
+  {
+    "_id": "6a2ab805b3c7519e93a243f8",
+    "phone": "9103201763",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "dJdqgbfnS4W2uPLttdVtZS:APA91bGsCCzS-DG6hQh7hkKV3OWXYs4D-PmS9ggBADDB8qf_sIC7bkDSvigRc_m-z0DPM1z4g0EEpAas7D2qfqWGddsBwXfEBu_VmyZ-IwR2U9S5o-BmSxU"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-11T13:28:37.754Z",
+    "updatedAt": "2026-06-28T08:41:34.622Z",
+    "__v": 4,
+    "referralCode": "6a2ab805b3c7519e93a243f8",
+    "name": "Chiranjeevi Vimal"
+  },
+  {
+    "_id": "6a2ab903b3c7519e93a24735",
+    "phone": "7889357021",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "c7TpD67BQAKgK1Q7NnlHfZ:APA91bFc7c-WVGiOcZkYGeQ0dEuxEW3HVOsU4Uc8ctwRfBnP-3GuV4nfQ8UkX45VQ--1IYyzEXuYJtukNWLo7WOpKUoEMyzBKWQiWX-hHOSA8Tf7idSEI7E"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-11T13:32:51.307Z",
+    "updatedAt": "2026-06-28T18:46:08.008Z",
+    "__v": 2,
+    "referralCode": "6a2ab903b3c7519e93a24735",
+    "name": "Navjot"
+  },
+  {
+    "_id": "6a2b072c9207e21019273acf",
+    "phone": "9974937947",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "dow4Dds4Ir86VTNxHv1GGb:APA91bEduYJC2iBpHaV1m1mesIDgyySzwQRNL-KIa2gmkPk0gqrREPeX7F8o41ijW4unUXaqwGJn8LjEa1mIHnGKNsZECMymLl4eyX-5JWgMbGiuCRRWL1E"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": false,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": true,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-11T19:06:20.081Z",
+    "updatedAt": "2026-06-11T19:06:33.941Z",
+    "__v": 1,
+    "referralCode": "6a2b072c9207e21019273acf",
+    "name": "raja"
+  },
+  {
+    "_id": "6a2b07659207e21019273b3e",
+    "phone": "8989898989",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "dow4Dds4Ir86VTNxHv1GGb:APA91bEduYJC2iBpHaV1m1mesIDgyySzwQRNL-KIa2gmkPk0gqrREPeX7F8o41ijW4unUXaqwGJn8LjEa1mIHnGKNsZECMymLl4eyX-5JWgMbGiuCRRWL1E"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": false,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": true,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-11T19:07:17.533Z",
+    "updatedAt": "2026-06-11T19:07:27.564Z",
+    "__v": 1,
+    "referralCode": "6a2b07659207e21019273b3e",
+    "name": "ramu"
+  },
+  {
+    "_id": "6a2be340c2a32590d217c3a2",
+    "phone": "7973384592",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "dCe4eI-3SIC57ALOkk1wz7:APA91bFrUTPtw2-QVKXxGEmVgqMcUy9fXWXFBbr__a730LlktHByuJzhiSLxFEkw7fd9Tp_D544sxMo2ecGsOqoZe08BWyTczGhEuMXWfgeOj-Qfn8kqQCY"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-12T10:45:20.314Z",
+    "updatedAt": "2026-06-12T10:45:22.932Z",
+    "__v": 1,
+    "referralCode": "6a2be340c2a32590d217c3a2",
+    "name": "Ajay Sharma"
+  },
+  {
+    "_id": "6a2ea7bf8772f43270717b14",
+    "phone": "6546767645",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-14T13:08:15.787Z",
+    "updatedAt": "2026-06-28T08:41:35.311Z",
+    "__v": 2,
+    "referralCode": "6a2ea7bf8772f43270717b14",
+    "name": "Raja"
+  },
+  {
+    "_id": "6a2fe2e178fa30a84f72b3f9",
+    "phone": "7978979797",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-15T11:32:49.654Z",
+    "updatedAt": "2026-06-15T11:32:59.319Z",
+    "__v": 0,
+    "referralCode": "6a2fe2e178fa30a84f72b3f9",
+    "name": "hazle"
+  },
+  {
+    "_id": "6a2fe4d778fa30a84f72b4d0",
+    "phone": "9778797979",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-15T11:41:11.836Z",
+    "updatedAt": "2026-06-25T08:22:11.207Z",
+    "__v": 2,
+    "referralCode": "6a2fe4d778fa30a84f72b4d0",
+    "name": "ratnnn"
+  },
+  {
+    "_id": "6a34d6f32d5eb91a119b82ac",
+    "phone": "8989931140",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-19T05:43:15.178Z",
+    "updatedAt": "2026-06-21T08:40:43.095Z",
+    "__v": 4,
+    "referralCode": "6a34d6f32d5eb91a119b82ac",
+    "name": "Himanshi Sharma"
+  },
+  {
+    "_id": "6a351c15f0f006d756de04d5",
+    "phone": "8788686786",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-19T10:38:13.736Z",
+    "updatedAt": "2026-06-19T10:38:18.919Z",
+    "__v": 0,
+    "referralCode": "6a351c15f0f006d756de04d5",
+    "name": "Trishu"
+  },
+  {
+    "_id": "6a35218c4c39a76b72274e6c",
+    "phone": "8989931144",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-19T11:01:32.883Z",
+    "updatedAt": "2026-06-19T11:01:35.966Z",
+    "__v": 0,
+    "referralCode": "6a35218c4c39a76b72274e6c",
+    "name": "Himanshi Sharma -"
+  },
+  {
+    "_id": "6a3521a14c39a76b72274ecb",
+    "phone": "8989931444",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-19T11:01:53.873Z",
+    "updatedAt": "2026-06-19T11:02:03.163Z",
+    "__v": 0,
+    "referralCode": "6a3521a14c39a76b72274ecb",
+    "name": "Isha"
+  },
+  {
+    "_id": "6a3521e64c39a76b72274f6d",
+    "phone": "2222222222",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-19T11:03:02.976Z",
+    "updatedAt": "2026-06-19T11:03:12.709Z",
+    "__v": 0,
+    "referralCode": "6a3521e64c39a76b72274f6d",
+    "name": "Suhani"
+  },
+  {
+    "_id": "6a3522484c39a76b7227501d",
+    "phone": "9109577187",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-19T11:04:40.386Z",
+    "updatedAt": "2026-06-19T11:04:40.395Z",
+    "__v": 0,
+    "referralCode": "6a3522484c39a76b7227501d"
+  },
+  {
+    "_id": "6a36584fb49d18854bcb29be",
+    "phone": "7051019739",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "f0Az1yU9THuXFYbx_ub29E:APA91bFcMhwiuqkIvmEJll7oms_dlFwLXJ8oFHIKcs65tzZeypS6NOiZbXwMfhQ3aTGbBLXrqrYQ1MDGob3kgIGSYWdCyIlYWsQ_guMr6EsWm4QF7e28xLw"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [
+      {
+        "label": "Home",
+        "street": "Kishtwar Jammu and Kashmir 182204 India",
+        "additionalDetails": "",
+        "city": "Kishtwar",
+        "state": "Jammu and Kashmir",
+        "zipCode": "182204",
+        "phone": "",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.76942130000002,
+            33.31079079999999
+          ]
+        },
+        "isDefault": true,
+        "_id": "6a37afe5b49d18854bcb5230",
+        "createdAt": "2026-06-21T09:33:25.531Z",
+        "updatedAt": "2026-06-21T09:33:25.531Z"
+      }
+    ],
+    "createdAt": "2026-06-20T09:07:27.270Z",
+    "updatedAt": "2026-06-21T09:33:25.531Z",
+    "__v": 1,
+    "referralCode": "6a36584fb49d18854bcb29be",
+    "name": "Gazala Andleeb"
+  },
+  {
+    "_id": "6a38e3cc6ae6a0c8415189fb",
+    "phone": "7458947838",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-22T07:27:08.901Z",
+    "updatedAt": "2026-06-25T08:22:11.707Z",
+    "__v": 2,
+    "referralCode": "6a38e3cc6ae6a0c8415189fb",
+    "name": "Joyaa"
+  },
+  {
+    "_id": "6a38e82c6ae6a0c841519da2",
+    "phone": "8770552411",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-22T07:45:48.370Z",
+    "updatedAt": "2026-06-22T07:45:48.386Z",
+    "__v": 0,
+    "referralCode": "6a38e82c6ae6a0c841519da2"
+  },
+  {
+    "_id": "6a3a5e5fc0e66a94884ae32b",
+    "phone": "7889486783",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-23T10:22:23.651Z",
+    "updatedAt": "2026-06-23T10:22:27.128Z",
+    "__v": 0,
+    "referralCode": "6a3a5e5fc0e66a94884ae32b",
+    "name": "Rohan"
+  },
+  {
+    "_id": "6a3a852f4e9b1b6a7951fcfb",
+    "phone": "8082753623",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": false,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-23T13:07:59.496Z",
+    "updatedAt": "2026-06-25T08:16:02.351Z",
+    "__v": 0,
+    "referralCode": "6a3a852f4e9b1b6a7951fcfb",
+    "name": "Musharaf"
+  },
+  {
+    "_id": "6a3f68f7cdfc56f7a6d9a955",
+    "phone": "7051493226",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "dhsBH2AeRbeP4TpzHma2Yw:APA91bHmcrEuc9uIsX0FKSLmQspNLR-dIHz1moSQBffAhzRb-LqIdGfpnltl2frO7t3EJxz7H7Xjnpzvl0JgiTnRsE2ilor52y6Ushl7T1JPdCwq3J1ulVg"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-27T06:08:55.260Z",
+    "updatedAt": "2026-06-27T06:08:59.943Z",
+    "__v": 1,
+    "referralCode": "6a3f68f7cdfc56f7a6d9a955",
+    "name": "Ravi Manhas"
+  },
+  {
+    "_id": "6a3f7269954ca65f3fa36879",
+    "phone": "9797312716",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "dyssZs9dRxG_5XTUTg5t94:APA91bElUZCdh6tKClxOgIYVmA6Gd5qrY1h0znfGhDFKjOeBzXiQQyRpZ0bJQx6fpnI5bKa49LKe0SlfldE4CJuNfNomc2VV66LPoz6ykPrIVnDTG1KPtCU"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-27T06:49:13.357Z",
+    "updatedAt": "2026-06-27T06:49:24.111Z",
+    "__v": 1,
+    "referralCode": "6a3f7269954ca65f3fa36879",
+    "name": "Ranjeet"
+  },
+  {
+    "_id": "6a3f79b6954ca65f3fa37260",
+    "phone": "9018427073",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "dUD_MM9yQUG1l7IHNXfsE_:APA91bHaBrDPeMRT3hK1nPL7VBBCYE2QUH0N3x1ceI1Ejniqz7RGkUJST8KTzdYs7ZFyMi2vhQGEu2W0TQ_WNlvX8Dftg2p_mc0w99TNjaaHT4z7cE-rGvc"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": "1997-03-03T00:00:00.000Z",
+    "anniversary": null,
+    "gender": "male",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-27T07:20:22.323Z",
+    "updatedAt": "2026-06-27T10:01:01.922Z",
+    "__v": 1,
+    "referralCode": "6a3f79b6954ca65f3fa37260",
+    "name": "Rashid Gulshan",
+    "email": "rashidsheikh918@gmail.com"
+  },
+  {
+    "_id": "6a3fa830954ca65f3fa40b0a",
+    "phone": "6006249959",
+    "countryCode": "+91",
+    "profileImage": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1782650969/food/users/profile/th4bo3ebjxuz8ai43f43.webp",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": "2004-10-10T00:00:00.000Z",
+    "anniversary": null,
+    "gender": "female",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [
+      {
+        "label": "Home",
+        "street": "Kishtwar",
+        "additionalDetails": "",
+        "city": "Kishtwar",
+        "state": "Jammu and Kashmir",
+        "zipCode": "",
+        "phone": "",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.76794993579075,
+            33.313181590970316
+          ]
+        },
+        "isDefault": true,
+        "_id": "6a3fdd33ef820ecdd189785a",
+        "createdAt": "2026-06-27T14:24:51.934Z",
+        "updatedAt": "2026-06-27T14:24:51.934Z"
+      }
+    ],
+    "createdAt": "2026-06-27T10:38:40.489Z",
+    "updatedAt": "2026-06-28T12:49:30.350Z",
+    "__v": 0,
+    "referralCode": "6a3fa830954ca65f3fa40b0a",
+    "name": "Huriya naik",
+    "email": "naikhuriya7@gmail.com"
+  },
+  {
+    "_id": "6a3fcaaaef820ecdd1892c96",
+    "phone": "8082053151",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "fSjitZufT6GZtuk9qOWrl9:APA91bGbJ3KD5Ct_kd4qVmOxTuqR3qjyzOzIrK4Q2rgOnMkNts1QjFrhscFELWpv5RHR3_bqTNKGkPnDlPbIb6g_d_1f78UXrS4AYMuvsEY-4-8FyR3ml7I"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-27T13:05:46.395Z",
+    "updatedAt": "2026-06-27T13:05:49.356Z",
+    "__v": 1,
+    "referralCode": "6a3fcaaaef820ecdd1892c96",
+    "name": "Simran Rathore"
+  },
+  {
+    "_id": "6a3fcc1eef820ecdd189331c",
+    "phone": "8493924501",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "fOk2qFGCS3y0jaRUke6pqx:APA91bEVPGVYTM6VzpGiGtj-PM6xYfHZpRrx5OuOsdR41EKmToZyucVIUIZs3R9q7y-oOjXR1c_ba4yrLCj-6wPOh-VA1LIMR0Gtu_v4xdXQBo4HGonU4gM"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-27T13:11:58.516Z",
+    "updatedAt": "2026-06-27T13:12:17.409Z",
+    "__v": 1,
+    "referralCode": "6a3fcc1eef820ecdd189331c",
+    "name": "Vinod kumar"
+  },
+  {
+    "_id": "6a3fd006ef820ecdd189454f",
+    "phone": "9541573994",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-27T13:28:38.166Z",
+    "updatedAt": "2026-06-27T13:28:44.940Z",
+    "__v": 0,
+    "referralCode": "6a3fd006ef820ecdd189454f",
+    "name": "sharikmalik"
+  },
+  {
+    "_id": "6a3fd3a0ef820ecdd189554e",
+    "phone": "7006595586",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-27T13:44:00.858Z",
+    "updatedAt": "2026-06-27T13:44:04.642Z",
+    "__v": 0,
+    "referralCode": "6a3fd3a0ef820ecdd189554e",
+    "name": "sam"
+  },
+  {
+    "_id": "6a3fd3c7ef820ecdd18955ed",
+    "phone": "9682191652",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "frn_DmGHQce4bVRAY6f6vL:APA91bGGRzC9ndGwpybZCr9V0r1HE8f3gC6_xtwjEwyG23N6sjcA4L62nVGMdv92Xr3z_koWuicpPpfPlomJAZyVacMTGwhRudbIO81t9Qh-rngucZM0UGk"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-27T13:44:39.764Z",
+    "updatedAt": "2026-06-27T13:44:44.089Z",
+    "__v": 1,
+    "referralCode": "6a3fd3c7ef820ecdd18955ed",
+    "name": "Tanees Ahmed"
+  },
+  {
+    "_id": "6a3fdc74ef820ecdd1897554",
+    "phone": "9906187490",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "drF2V0mkSzmWDniWJOO0Hd:APA91bGdsW3hndh4T_WqWBjoAOWzgkQr1g_PRrfIuCIVDiDK_CSxoPKX6sCY5a4sLKa9VCTFUa4pHc1YghPJvQDlfWD7xahrZrLYUOL8uWZzSn7P0eQ2mLg"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [
+      {
+        "label": "Home",
+        "street": "Kishtwar Jammu and Kashmir 182204 India",
+        "additionalDetails": "Opposite Daffodil High School",
+        "city": "Kishtwar",
+        "state": "Jammu and Kashmir",
+        "zipCode": "182204",
+        "phone": "",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.76942130000002,
+            33.31079079999999
+          ]
+        },
+        "isDefault": true,
+        "_id": "6a3fdd6cef820ecdd18979a1",
+        "createdAt": "2026-06-27T14:25:48.480Z",
+        "updatedAt": "2026-06-27T14:25:48.480Z"
+      }
+    ],
+    "createdAt": "2026-06-27T14:21:40.044Z",
+    "updatedAt": "2026-06-27T14:25:48.480Z",
+    "__v": 1,
+    "referralCode": "6a3fdc74ef820ecdd1897554",
+    "name": "Yukta Sharma"
+  },
+  {
+    "_id": "6a3fe1fcef820ecdd18992e1",
+    "phone": "8493059442",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "fveKiM_FS4WauGc06ggAwV:APA91bEUIiTOBsgfRPZG6soZ2afediZq_escSzmh8sC1tWmlyGHhwiu3wt3iHVTpRlG5VSXaUYRZ1PHC893b5Dj7GbITBgKuXKBQ7sTtCzTCFaO0P8xOJbc"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-27T14:45:16.695Z",
+    "updatedAt": "2026-06-27T14:45:22.461Z",
+    "__v": 1,
+    "referralCode": "6a3fe1fcef820ecdd18992e1",
+    "name": "rahi ji"
+  },
+  {
+    "_id": "6a3fed52ef820ecdd189e3a7",
+    "phone": "8491008351",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "fJ_YEJw2T7StXz0jkm9vje:APA91bGLBCSXnRdDamvJpHSNY12caSXI0VqiG4keH1JwG3Hph30X4h60xcNZU93JxU4xXopsLmtNIu6DhV1s7SNhzWvZJUkXiMqnPwEQTwzTy6IeCEMz5Kw"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": "2008-06-24T00:00:00.000Z",
+    "anniversary": null,
+    "gender": "male",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-27T15:33:38.217Z",
+    "updatedAt": "2026-06-29T06:14:43.664Z",
+    "__v": 1,
+    "referralCode": "6a3fed52ef820ecdd189e3a7",
+    "name": "Haseem Mir",
+    "email": "haseemmir227@gmail.com"
+  },
+  {
+    "_id": "6a3ff1e7ef820ecdd189f35a",
+    "phone": "7006317188",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "cfcIVFrdRD2v9cCuYJ-E-y:APA91bGOa-1H1LA8-b2gqIQSL8fw85RuAdNNXZKJEykrOMq7OhQg_sEigyPg-ag4-CN3GcbLtATla1qpHUeI_cc1iYqXh-2HBCUnUjUgcBVlcLXy-Q0LyOg"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-27T15:53:11.186Z",
+    "updatedAt": "2026-06-27T15:53:15.322Z",
+    "__v": 1,
+    "referralCode": "6a3ff1e7ef820ecdd189f35a",
+    "name": "Asif Bashir"
+  },
+  {
+    "_id": "6a409e19264c9701cd323f40",
+    "phone": "8493959145",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-28T04:07:53.511Z",
+    "updatedAt": "2026-06-28T04:08:00.258Z",
+    "__v": 0,
+    "referralCode": "6a409e19264c9701cd323f40",
+    "name": "Ayaan dar"
+  },
+  {
+    "_id": "6a40a3d2264c9701cd324347",
+    "phone": "9797762807",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-28T04:32:18.450Z",
+    "updatedAt": "2026-06-28T04:32:24.228Z",
+    "__v": 0,
+    "referralCode": "6a40a3d2264c9701cd324347",
+    "name": "Neha Ratho"
+  },
+  {
+    "_id": "6a40ae02264c9701cd3249e1",
+    "phone": "9697723380",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "eTaMf6mMR8iHXh63ejLji1:APA91bH8IIUsHMNDhNWk1ndI_UbGxzJo-qENGvQkCtc_beE5PMXvn12hJb5Pjj93Q_XxcAIR4AKBvp3LD3W0KYxrj7s-eo6L81NTYtVoPNMGxCV99wGjGT4"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [
+      {
+        "label": "Home",
+        "street": "41 GB",
+        "additionalDetails": "",
+        "city": "40 GB",
+        "state": "Rajasthan",
+        "zipCode": "457119",
+        "phone": "",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.77846549676596,
+            33.31442634706051
+          ]
+        },
+        "isDefault": true,
+        "_id": "6a40ae43264c9701cd324a58",
+        "createdAt": "2026-06-28T05:16:51.126Z",
+        "updatedAt": "2026-06-28T05:16:51.126Z"
+      }
+    ],
+    "createdAt": "2026-06-28T05:15:46.780Z",
+    "updatedAt": "2026-06-28T05:16:51.126Z",
+    "__v": 1,
+    "referralCode": "6a40ae02264c9701cd3249e1",
+    "name": "Umar"
+  },
+  {
+    "_id": "6a40afe5264c9701cd324d05",
+    "phone": "7006273818",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "e6w0qh8GTbGgzvzdqaTAP0:APA91bF7iDbf0P_pypiSjXeA72PHomDjw3G27G1RyYUbOdBqCdIb3uEo646gwn8T2NDsu5d8Iq4TdUlxAKLrzI8wgkt7p4uwA4zwJKg3C2WTDiI04YA0ulY"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-28T05:23:49.294Z",
+    "updatedAt": "2026-06-28T05:23:55.670Z",
+    "__v": 1,
+    "referralCode": "6a40afe5264c9701cd324d05",
+    "name": "Ahmed"
+  },
+  {
+    "_id": "6a40b0d7264c9701cd324f1a",
+    "phone": "9541030106",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 1,
+    "isVerified": true,
+    "isActive": false,
+    "role": "USER",
+    "walletBalance": 255,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [
+      {
+        "label": "Home",
+        "street": "NH244",
+        "additionalDetails": "",
+        "city": "Kishtwar",
+        "state": "Jammu and Kashmir",
+        "zipCode": "182204",
+        "phone": "",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.76983911861225,
+            33.30798248471717
+          ]
+        },
+        "isDefault": true,
+        "_id": "6a40b3f4264c9701cd3258ff",
+        "createdAt": "2026-06-28T05:41:08.139Z",
+        "updatedAt": "2026-06-28T05:41:08.139Z"
+      }
+    ],
+    "createdAt": "2026-06-28T05:27:51.284Z",
+    "updatedAt": "2026-06-29T05:56:02.356Z",
+    "__v": 0,
+    "referralCode": "6a40b0d7264c9701cd324f1a",
+    "name": "Mehboob zargar"
+  },
+  {
+    "_id": "6a40b1a5264c9701cd3250f3",
+    "phone": "9622827850",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "dofvDFGs7ka2R-5VeKkVJk:APA91bE8p0oX_6sXz0n2kz42_o3GIkjrDC1TJBsmyX-GliaQe5xafQKr2ZPwypd0FCaLOAR5LmJ8jto2pgFb8yE9j4T9nl7pMJsAVY-IOxigXtfX_uQFApU"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": "6a40b0d7264c9701cd324f1a",
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 70,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-28T05:31:17.019Z",
+    "updatedAt": "2026-06-28T05:31:46.816Z",
+    "__v": 1,
+    "referralCode": "6a40b1a5264c9701cd3250f3",
+    "name": "Zamrooda"
+  },
+  {
+    "_id": "6a40b2c4264c9701cd32539b",
+    "phone": "9320659226",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-28T05:36:04.369Z",
+    "updatedAt": "2026-06-28T05:36:10.852Z",
+    "__v": 0,
+    "referralCode": "6a40b2c4264c9701cd32539b",
+    "name": "Samad Devv"
+  },
+  {
+    "_id": "6a40b839264c9701cd327487",
+    "phone": "9103536942",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "ejypJC_Bsyw-mWiTtZdi-t:APA91bHFYgVFaKdOAtDr0dMQ_ojah83WvfCiRJKgoQs44eZylebrvsB-ngLm5nIqptyKMYR5d5zbRizmkaNTS9LifFLFqQkQWVrR2sX99VQIw93JIGNtzy4"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-28T05:59:21.322Z",
+    "updatedAt": "2026-06-28T06:00:02.620Z",
+    "__v": 1,
+    "referralCode": "6a40b839264c9701cd327487",
+    "name": "Atufa Zargar"
+  },
+  {
+    "_id": "6a40de96264c9701cd32d64a",
+    "phone": "9596828006",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "dKKR5PC6RwqEXa9WvEqKlG:APA91bFwxLg1aUV4kLxzSXdks_XNG27GYsJpyLgo6YzfQoaitpThk3I4idnK7wcphBRINTqZybiCoX67bmswDUHVXg658pZABdaiK7J-Fwn0yy1NgqEMg0M"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [
+      {
+        "label": "Home",
+        "street": "garas dhar",
+        "additionalDetails": "",
+        "city": "Kishtwar",
+        "state": "Jammu and Kashmir",
+        "zipCode": "182204",
+        "phone": "",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.76910738556604,
+            33.31727511129913
+          ]
+        },
+        "isDefault": true,
+        "_id": "6a40e12e264c9701cd32e598",
+        "createdAt": "2026-06-28T08:54:06.757Z",
+        "updatedAt": "2026-06-28T08:54:06.757Z"
+      }
+    ],
+    "createdAt": "2026-06-28T08:43:02.094Z",
+    "updatedAt": "2026-06-28T08:54:06.757Z",
+    "__v": 1,
+    "referralCode": "6a40de96264c9701cd32d64a",
+    "name": "Vikas Sharma"
+  },
+  {
+    "_id": "6a40dfac264c9701cd32dbd3",
+    "phone": "6006434964",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-28T08:47:40.919Z",
+    "updatedAt": "2026-06-28T08:47:48.016Z",
+    "__v": 0,
+    "referralCode": "6a40dfac264c9701cd32dbd3",
+    "name": "Anam"
+  },
+  {
+    "_id": "6a40e013264c9701cd32ddf3",
+    "phone": "7889566955",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "dSpW1EYsRs2U5M3FF0Y37v:APA91bFRbTsJXKBgvPqkHruBMF_V3xOeRceQ9ZpzSbCyyIcQJa6-gTB_K31u1xfYyEq0eZ59UGR03z4N-LONPVI83mfBLq7sRqm0cKCktE1Wa9OE-Dmk2xo"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-28T08:49:23.692Z",
+    "updatedAt": "2026-06-28T08:49:30.158Z",
+    "__v": 1,
+    "referralCode": "6a40e013264c9701cd32ddf3",
+    "name": "Anesh parihar"
+  },
+  {
+    "_id": "6a40e02e264c9701cd32df48",
+    "phone": "9103937628",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-28T08:49:50.484Z",
+    "updatedAt": "2026-06-28T08:50:02.396Z",
+    "__v": 0,
+    "referralCode": "6a40e02e264c9701cd32df48",
+    "name": "Majid Manzoor"
+  },
+  {
+    "_id": "6a40e1d1264c9701cd32e8ff",
+    "phone": "7006993364",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "cWUU4z4fSu2YK1KT_4kLfb:APA91bErtTONoGsXYfxCMn-x2zDhGppAoFOopwY_NLFCu54FlbBOxf16lDOyyZTkrhMKaGMRRmBudLbJCINB7b-hcSD9NXplehC-18OsJ9jmlxAiGjyALDo",
+      "dB8MxnIoQBSWTgTK4YRS0L:APA91bGE62lJdT_J0lZnsulRVvgLv8kbfAmB-CocffPHN0FRqEGIBynau5rOxHWwg6aRnzORAd4bIs3pi5f16Vyv1CsAcI88QBST6fSVDJl6IWpdFvyO_HM"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [
+      {
+        "label": "Home",
+        "street": "Hidyal kishtwar",
+        "additionalDetails": "Near sadeek shop",
+        "city": "Kishtwar",
+        "state": "JK",
+        "zipCode": "182204",
+        "phone": "",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.8577,
+            22.7196
+          ]
+        },
+        "isDefault": true,
+        "_id": "6a40e45c264c9701cd32f332",
+        "createdAt": "2026-06-28T09:07:40.111Z",
+        "updatedAt": "2026-06-28T09:07:40.111Z"
+      }
+    ],
+    "createdAt": "2026-06-28T08:56:49.453Z",
+    "updatedAt": "2026-06-28T14:53:01.215Z",
+    "__v": 2,
+    "referralCode": "6a40e1d1264c9701cd32e8ff",
+    "name": "Mehak"
+  },
+  {
+    "_id": "6a40e275264c9701cd32eb6a",
+    "phone": "6005527186",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [
+      {
+        "label": "Home",
+        "street": "Kishtwar, Jammu and Kashmir, 182204, India",
+        "additionalDetails": "",
+        "city": "Kishtwar",
+        "state": "Jammu and Kashmir",
+        "zipCode": "182204",
+        "phone": "",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.7694213,
+            33.3107908
+          ]
+        },
+        "isDefault": true,
+        "_id": "6a40e2ae264c9701cd32ec87",
+        "createdAt": "2026-06-28T09:00:30.168Z",
+        "updatedAt": "2026-06-28T09:00:30.168Z"
+      }
+    ],
+    "createdAt": "2026-06-28T08:59:33.781Z",
+    "updatedAt": "2026-06-28T09:00:30.169Z",
+    "__v": 0,
+    "referralCode": "6a40e275264c9701cd32eb6a",
+    "name": "Saksham"
+  },
+  {
+    "_id": "6a40e8df264c9701cd330347",
+    "phone": "9682331677",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "dcurAnjxRom4HfO3jSIEeD:APA91bEF87F-y83txIQwuFNGUuvsHi3nwqorLCEUP9HsNyZ2Q4TpaB_rwmYipxnn-HbpWuYSjWZH0wjQ3wuiJVSbpVnIn2m_Y1xta3jtRKlLQ1td6kIGhxc"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-28T09:26:55.049Z",
+    "updatedAt": "2026-06-28T09:26:57.823Z",
+    "__v": 1,
+    "referralCode": "6a40e8df264c9701cd330347",
+    "name": "Arvash Sharma"
+  },
+  {
+    "_id": "6a40eb92264c9701cd330a1a",
+    "phone": "9596207593",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "emfRN_dMQ8iqLgNR9H_LuZ:APA91bGnFqEK6nl2ZCW6b5W5M6y1eyvPOXhoqocMwbECZfu-74AkcV88Fwq7EpPtH7Dy0PsgWAw991R8fp1i9Er90Fkktly3DDK0W0fHkotlpvanh_RyWVk"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [
+      {
+        "label": "Home",
+        "street": "Kishtwar, Jammu and Kashmir, 182204, India",
+        "additionalDetails": "",
+        "city": "Kishtwar",
+        "state": "Jammu and Kashmir",
+        "zipCode": "182204",
+        "phone": "",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.76942130000002,
+            33.31079079999999
+          ]
+        },
+        "isDefault": true,
+        "_id": "6a40ebae264c9701cd330a79",
+        "createdAt": "2026-06-28T09:38:54.777Z",
+        "updatedAt": "2026-06-28T09:38:54.777Z"
+      }
+    ],
+    "createdAt": "2026-06-28T09:38:26.214Z",
+    "updatedAt": "2026-06-28T09:38:54.778Z",
+    "__v": 1,
+    "referralCode": "6a40eb92264c9701cd330a1a",
+    "name": "Ziyaan"
+  },
+  {
+    "_id": "6a40f074264c9701cd3316b3",
+    "phone": "9103349722",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-28T09:59:16.460Z",
+    "updatedAt": "2026-06-28T09:59:22.925Z",
+    "__v": 0,
+    "referralCode": "6a40f074264c9701cd3316b3",
+    "name": "irtika butt"
+  },
+  {
+    "_id": "6a40f4dd264c9701cd332767",
+    "phone": "7051602930",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "fjcLny4wSMO-ffqikSScPI:APA91bHZ-LN0zTePo0vJZOiANmtx6fTCup8cDFdmcdIHeMchLB6v3P5w1b03PNFull45aa1fcYoq_0N8gPzlGl4DxilYI27GX4Av_mUhCeMR2m1cqp5C_Jw"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-28T10:18:05.513Z",
+    "updatedAt": "2026-06-28T10:18:12.961Z",
+    "__v": 1,
+    "referralCode": "6a40f4dd264c9701cd332767",
+    "name": "Roma Thakur"
+  },
+  {
+    "_id": "6a40f79e264c9701cd33308d",
+    "phone": "8492004133",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "dQdO9fAsSiGuxY32bfmcQV:APA91bHDsGMKh8EuD7cBe5PV4VazQL8kiEbqlREeMyuRHDRdwiPlJG4sxkOD8yUE7Y9tBWX6olNZ-Gh1yaNeH21BaefMGQWci1aP1l8IGdK6jpRjzU06dZo"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-28T10:29:50.839Z",
+    "updatedAt": "2026-06-28T10:36:22.736Z",
+    "__v": 1,
+    "referralCode": "6a40f79e264c9701cd33308d",
+    "name": "AAMIR BASHIR LONE"
+  },
+  {
+    "_id": "6a40f936264c9701cd333ab8",
+    "phone": "9103346526",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "dQdO9fAsSiGuxY32bfmcQV:APA91bHDsGMKh8EuD7cBe5PV4VazQL8kiEbqlREeMyuRHDRdwiPlJG4sxkOD8yUE7Y9tBWX6olNZ-Gh1yaNeH21BaefMGQWci1aP1l8IGdK6jpRjzU06dZo"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-28T10:36:38.574Z",
+    "updatedAt": "2026-06-28T10:36:43.630Z",
+    "__v": 1,
+    "referralCode": "6a40f936264c9701cd333ab8",
+    "name": "Aamir"
+  },
+  {
+    "_id": "6a40fb98264c9701cd3346fa",
+    "phone": "6006083624",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "dDVZ-kSzQni3d3dp7YE10x:APA91bHTCmiAs1Nw5_GrI2CJI2Euvkx19N7bJkP4FhPVtcuH2TJ191XhKNw17uEkuy0Td8Mu7SAgEUyY-A6UheasELPsRzltH-6F427NS5n5wAXPzfARI2A"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-28T10:46:48.513Z",
+    "updatedAt": "2026-06-28T10:46:52.078Z",
+    "__v": 1,
+    "referralCode": "6a40fb98264c9701cd3346fa",
+    "name": "Rahul Rajput"
+  },
+  {
+    "_id": "6a4104b4264c9701cd3373df",
+    "phone": "9149585465",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "f58TpaBzQECrHOjChQJdYH:APA91bGglpX6TlRU49BqitOROzf3WRqllSVLfgAM8mJFDyUPA-rLYWzB2ll1g7OlQosny8n03sa_ZMM3pfxpw8P33OFPlSOhRNMHxh8YRATCVNM-2lr9kI0"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-28T11:25:40.641Z",
+    "updatedAt": "2026-06-28T11:25:44.238Z",
+    "__v": 1,
+    "referralCode": "6a4104b4264c9701cd3373df",
+    "name": "Rohit Sharma"
+  },
+  {
+    "_id": "6a41061b264c9701cd337acd",
+    "phone": "9596873073",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "d-Vx8Q7mQ_-kzi2TzCG5vQ:APA91bER-Hmh41RW5asvVPCXAcjf-EGmwiGJ3S2SBo2sHSImGz-X6Zj9Ht8cb-xVAYCPrFWSo9JR11IrhI4BRL1efnecTc8NzZXFGiB67n1qFSla6SMEbYs"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": "1984-07-16T00:00:00.000Z",
+    "anniversary": "2018-08-22T00:00:00.000Z",
+    "gender": "male",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-28T11:31:39.078Z",
+    "updatedAt": "2026-06-28T11:33:41.836Z",
+    "__v": 1,
+    "referralCode": "6a41061b264c9701cd337acd",
+    "name": "Rahul Goswami",
+    "email": "rahulgoswami.mba@gmail.com"
+  },
+  {
+    "_id": "6a410b92264c9701cd339402",
+    "phone": "9797739109",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "d5OnFpxeQzOW5MW7BaTxVz:APA91bH6bwInoWXxP3JFHDIY0fnMOIJkQ_xii-e-wN8x32JBXB8bP0khCuEAKfb2NAUKXx8fp0eZZMbvwBJ9u_h5IMME8rEbU9yn2eXFpv7i930zH3TD55A"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-28T11:54:58.916Z",
+    "updatedAt": "2026-06-28T12:06:36.386Z",
+    "__v": 1,
+    "referralCode": "6a410b92264c9701cd339402",
+    "name": "Amn"
+  },
+  {
+    "_id": "6a410d5f264c9701cd339d66",
+    "phone": "9541732819",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-28T12:02:39.054Z",
+    "updatedAt": "2026-06-28T12:02:49.007Z",
+    "__v": 0,
+    "referralCode": "6a410d5f264c9701cd339d66",
+    "name": "omaima mintoo"
+  },
+  {
+    "_id": "6a41184e264c9701cd33db8c",
+    "phone": "8082470683",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [
+      {
+        "label": "Home",
+        "street": "Kishtwar, Jammu and Kashmir, India",
+        "additionalDetails": "",
+        "city": "Kishtwar",
+        "state": "Jammu and Kashmir",
+        "zipCode": "182204",
+        "phone": "",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.8171777,
+            33.293086200000005
+          ]
+        },
+        "isDefault": true,
+        "_id": "6a4118a8264c9701cd33decb",
+        "createdAt": "2026-06-28T12:50:48.202Z",
+        "updatedAt": "2026-06-28T12:50:48.202Z"
+      }
+    ],
+    "createdAt": "2026-06-28T12:49:18.571Z",
+    "updatedAt": "2026-06-28T12:50:48.203Z",
+    "__v": 0,
+    "referralCode": "6a41184e264c9701cd33db8c",
+    "name": "Javeriyah"
+  },
+  {
+    "_id": "6a41191c264c9701cd33e18c",
+    "phone": "9906112140",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "fPAloYKyQDSwB56IalwCfa:APA91bG9Fi_PXwh8c40GhRMmYCpMghWC3bxWQgrovKLe6dnEFHKA8QSXIiLw2ahHMvJB_3rss1GuYBA20eOIFer_r19Pxb9YAmBVJ9cGG65_JlBOzyJwAWM"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-28T12:52:44.790Z",
+    "updatedAt": "2026-06-28T12:52:56.975Z",
+    "__v": 1,
+    "referralCode": "6a41191c264c9701cd33e18c",
+    "name": "Sanju parihar"
+  },
+  {
+    "_id": "6a411a3d264c9701cd33e8d4",
+    "phone": "9541869196",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "eF6VnWg0ZX591_g75yyFoz:APA91bEmPidifC_WYFWy_Vp89mk-ht5HvEgFQENv5yQeP1mfxuc4ylIWGMvO0CRhmAzcOuGv5tPBQQO5nn8vhKgMJZY-RcD0z_hl0aqA_IErMhR0m-v0e_s"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-28T12:57:33.966Z",
+    "updatedAt": "2026-06-28T12:57:47.053Z",
+    "__v": 1,
+    "referralCode": "6a411a3d264c9701cd33e8d4",
+    "name": "Ashwani Kumar"
+  },
+  {
+    "_id": "6a411c51264c9701cd33ef55",
+    "phone": "7780892668",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "d-s5I6HpS8iz5y66PL8aJm:APA91bGKsg0InYzwwVB73BWOxq8cSF49Hc5bwSMDVvRrMzPq-ccTnlFkGZbNsUqd6WsZv-2thsFSCDT1Ve0J4Sk77DJmDKPakFauN7DGWs4kTI3-AJJW-sQ"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "male",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [
+      {
+        "label": "Home",
+        "street": "Kishtwar Jammu and Kashmir 182204 India",
+        "additionalDetails": "Near filter plant semna colony",
+        "city": "Kishtwar",
+        "state": "Jammu and Kashmir",
+        "zipCode": "182204",
+        "phone": "",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.76942130000002,
+            33.31079079999999
+          ]
+        },
+        "isDefault": true,
+        "_id": "6a42402548d41cb004248541",
+        "createdAt": "2026-06-29T09:51:33.787Z",
+        "updatedAt": "2026-06-29T09:52:31.702Z"
+      }
+    ],
+    "createdAt": "2026-06-28T13:06:25.999Z",
+    "updatedAt": "2026-06-29T09:52:31.702Z",
+    "__v": 1,
+    "referralCode": "6a411c51264c9701cd33ef55",
+    "name": "Toufeeq Mintoo"
+  },
+  {
+    "_id": "6a4120d5264c9701cd33fc5f",
+    "phone": "8082860223",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-28T13:25:41.022Z",
+    "updatedAt": "2026-06-28T13:25:46.511Z",
+    "__v": 0,
+    "referralCode": "6a4120d5264c9701cd33fc5f",
+    "name": "isha hurain"
+  },
+  {
+    "_id": "6a41338e264c9701cd341b35",
+    "phone": "6005209689",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "f1nL7lNtStyVTKiXObpY_r:APA91bH7mIU32YRWDmRMklXW2OVB8T6pezeJyB1WpeGqF7izAnagNGewk88r360i-iJYPutaQObWFHye0j4M9guXLz0CC0MDhR6Ny-x53F-FoDY58aBoI0g"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [
+      {
+        "label": "Home",
+        "street": "Panditgam kishtwar near Ramesh kiriyana shop",
+        "additionalDetails": "",
+        "city": "Kishtwar",
+        "state": "Jammu and Kashmir",
+        "zipCode": "182204",
+        "phone": "",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.8577,
+            22.7196
+          ]
+        },
+        "isDefault": true,
+        "_id": "6a4133aa264c9701cd341bba",
+        "createdAt": "2026-06-28T14:46:02.242Z",
+        "updatedAt": "2026-06-28T14:46:02.242Z"
+      }
+    ],
+    "createdAt": "2026-06-28T14:45:34.463Z",
+    "updatedAt": "2026-06-28T14:46:02.242Z",
+    "__v": 1,
+    "referralCode": "6a41338e264c9701cd341b35",
+    "name": "Spursh Sharma"
+  },
+  {
+    "_id": "6a413cf3264c9701cd3432ac",
+    "phone": "9797405258",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-28T15:25:39.405Z",
+    "updatedAt": "2026-06-28T15:25:49.205Z",
+    "__v": 0,
+    "referralCode": "6a413cf3264c9701cd3432ac",
+    "name": "Afiya Rasool"
+  },
+  {
+    "_id": "6a413f44264c9701cd343705",
+    "phone": "8082859342",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "dobrdVkeR3GuBJ66cOyzOl:APA91bHsseHKS7yQ_TGq-v4H4sjLNDoj5IIvgs3Z3HegH2jB7c6P5S6lF4x9wN_gTV4L_KLAvRR2xvrnF1PSoSO4FLCTsgRiQyVsaywAp8XrARvmOlLehgM"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [
+      {
+        "label": "Home",
+        "street": "House no 128 ward no 9",
+        "additionalDetails": "Near pakeeza Enterprises opp Madrasa",
+        "city": "Kishtwar",
+        "state": "Jk",
+        "zipCode": "182204",
+        "phone": "",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.8577,
+            22.7196
+          ]
+        },
+        "isDefault": true,
+        "_id": "6a4231db48d41cb004245d72",
+        "createdAt": "2026-06-29T08:50:35.789Z",
+        "updatedAt": "2026-06-29T08:50:35.789Z"
+      }
+    ],
+    "createdAt": "2026-06-28T15:35:32.351Z",
+    "updatedAt": "2026-06-29T08:50:35.790Z",
+    "__v": 1,
+    "referralCode": "6a413f44264c9701cd343705",
+    "name": "Neena Kotwal"
+  },
+  {
+    "_id": "6a414f15264c9701cd3450fc",
+    "phone": "9596617295",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "d8lseIEWSZqtdZ4ghTuFsP:APA91bGHnVQTbvME34i0EpqyE9u2wXeJrD4EjAT-4aTYKa74sjmoXPRuWD12-apgH57T_ooPjAP2D7C1Wc-7Vd6LqYGX5aQC31rkRAvB7_zB1WBljUiBCf4"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": "1966-02-05T00:00:00.000Z",
+    "anniversary": "1995-05-12T00:00:00.000Z",
+    "gender": "male",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-28T16:43:01.434Z",
+    "updatedAt": "2026-06-28T16:45:06.218Z",
+    "__v": 1,
+    "referralCode": "6a414f15264c9701cd3450fc",
+    "name": "Javed iqbal",
+    "email": "javednhpc93@gmail.com"
+  },
+  {
+    "_id": "6a42037048d41cb00423f525",
+    "phone": "8899261438",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "fE_B-eXzSACvV9_02j0YJ-:APA91bFpeBMK8fmNEhao7ql5qTikFvglRWVjiDkrh-fhn847fM4sKK_FCgehTWCmAChTsOSkg0CYptyJV6U_C-tcLO65WsZfhH-xe4-pVUHZ_PfxTIwvdbY"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": "2007-02-06T00:00:00.000Z",
+    "anniversary": null,
+    "gender": "female",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-29T05:32:32.758Z",
+    "updatedAt": "2026-06-29T05:34:42.042Z",
+    "__v": 1,
+    "referralCode": "6a42037048d41cb00423f525",
+    "name": "Suhani",
+    "email": "11suhani1001@gmail.com"
+  },
+  {
+    "_id": "6a4203a248d41cb00423f584",
+    "phone": "9906768113",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "c7BOmTdrTGiQwOJPZFGawO:APA91bEAGKRn7hsesdytPDC8VlwWOJBuWh5z906E10vim-T7c9tmgSybUBHsx3kFKdQW1W4FLD7C_wSOrEc5PFoIu1_ATuVYubYuql5z2fBYvS3R7bSyW-I"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-29T05:33:22.386Z",
+    "updatedAt": "2026-06-29T05:33:31.630Z",
+    "__v": 1,
+    "referralCode": "6a4203a248d41cb00423f584",
+    "name": "Huma binte azad"
+  },
+  {
+    "_id": "6a422b7f48d41cb004245206",
+    "phone": "9541888529",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "eZHZeSs0Tke_WymIy7dzej:APA91bFtdPA6cvj6nu7Xn2Sdq5SFaZJawqndbnAT-EUl7cIfT-Hx7-dWVxpyAdaR8yo7p1tT1N4eBnU0hw4pZ5ZsqdSj9uBd5YFAqL2YfJmfbE_H6OL0pMg"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-29T08:23:27.168Z",
+    "updatedAt": "2026-06-29T08:24:29.703Z",
+    "__v": 1,
+    "referralCode": "6a422b7f48d41cb004245206",
+    "name": "Kalpana Sharma"
+  },
+  {
+    "_id": "6a423c7d48d41cb004247aef",
+    "phone": "9541877947",
+    "countryCode": "+91",
+    "profileImage": "",
+    "fcmTokens": [
+      "fb8gJolsQTuUra-B-xArEI:APA91bFe6yHLwGf16iAKwWqsui36m5v_gN4SlgwgzsZXzAteV7kapJYrXRnqc_fRtoXvkePXyf1WxNJsfV3n0-tKelA2J9K6S-vWbBtcv6V0Pl6TYrB8ORQ"
+    ],
+    "fcmTokenMobile": [],
+    "dateOfBirth": null,
+    "anniversary": null,
+    "gender": "",
+    "referredBy": null,
+    "referralCount": 0,
+    "isVerified": true,
+    "isActive": true,
+    "role": "USER",
+    "walletBalance": 0,
+    "address": {
+      "country": "India"
+    },
+    "termsAccepted": false,
+    "registrationStep": 1,
+    "profileImagePublicId": null,
+    "isBlocked": false,
+    "isDeleted": false,
+    "deletionRequest": {
+      "status": "none",
+      "reason": "",
+      "requestedAt": null,
+      "reviewedAt": null
+    },
+    "addresses": [],
+    "createdAt": "2026-06-29T09:35:57.183Z",
+    "updatedAt": "2026-06-29T09:36:01.055Z",
+    "__v": 1,
+    "referralCode": "6a423c7d48d41cb004247aef",
+    "name": "Deepali Shan"
+  }
+]

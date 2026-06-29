@@ -1,0 +1,26 @@
+[
+  {
+    "_id": "6a0f3a68d8c0ce3b9fa90e0e",
+    "imageUrl": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1779382887/food/hero-banners/gd0dvmhrtlucrs5z45a1.webp",
+    "publicId": "food/hero-banners/gd0dvmhrtlucrs5z45a1",
+    "zoneId": "",
+    "linkedRestaurantIds": [],
+    "sortOrder": 0,
+    "isActive": true,
+    "createdAt": "2026-05-21T17:01:28.552Z",
+    "updatedAt": "2026-06-25T08:18:08.396Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a11752a565fbe415fbad494",
+    "imageUrl": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1779529001/food/hero-banners/tqpzjopf4kbbfyrznuzy.webp",
+    "publicId": "food/hero-banners/tqpzjopf4kbbfyrznuzy",
+    "zoneId": "",
+    "linkedRestaurantIds": [],
+    "sortOrder": 0,
+    "isActive": true,
+    "createdAt": "2026-05-23T09:36:42.743Z",
+    "updatedAt": "2026-06-25T08:18:18.540Z",
+    "__v": 0
+  }
+]

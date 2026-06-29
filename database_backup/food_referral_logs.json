@@ -1,0 +1,72 @@
+[
+  {
+    "_id": "6a40b1a5264c9701cd3250f9",
+    "referrerId": "6a40b0d7264c9701cd324f1a",
+    "refereeId": "6a40b1a5264c9701cd3250f3",
+    "role": "USER",
+    "rewardAmount": 250,
+    "referrerRewardAmount": 250,
+    "refereeRewardAmount": 70,
+    "status": "credited",
+    "reason": "",
+    "createdAt": "2026-06-28T05:31:17.049Z",
+    "updatedAt": "2026-06-28T05:31:17.049Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a40b2c4264c9701cd3253a0",
+    "referrerId": "6a40b0d7264c9701cd324f1a",
+    "refereeId": "6a40b2c4264c9701cd32539b",
+    "role": "USER",
+    "rewardAmount": 250,
+    "referrerRewardAmount": 0,
+    "refereeRewardAmount": 0,
+    "status": "rejected",
+    "reason": "limit_reached",
+    "createdAt": "2026-06-28T05:36:04.394Z",
+    "updatedAt": "2026-06-28T05:36:04.394Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a40b839264c9701cd32748c",
+    "referrerId": "6a40b0d7264c9701cd324f1a",
+    "refereeId": "6a40b839264c9701cd327487",
+    "role": "USER",
+    "rewardAmount": 250,
+    "referrerRewardAmount": 0,
+    "refereeRewardAmount": 0,
+    "status": "rejected",
+    "reason": "limit_reached",
+    "createdAt": "2026-06-28T05:59:21.352Z",
+    "updatedAt": "2026-06-28T05:59:21.352Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a40e02e264c9701cd32df4d",
+    "referrerId": "6a3fd3c7ef820ecdd18955ed",
+    "refereeId": "6a40e02e264c9701cd32df48",
+    "role": "USER",
+    "rewardAmount": 0,
+    "referrerRewardAmount": 0,
+    "refereeRewardAmount": 0,
+    "status": "rejected",
+    "reason": "reward_disabled",
+    "createdAt": "2026-06-28T08:49:50.505Z",
+    "updatedAt": "2026-06-28T08:49:50.505Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a40f074264c9701cd3316b8",
+    "referrerId": "6a40b0d7264c9701cd324f1a",
+    "refereeId": "6a40f074264c9701cd3316b3",
+    "role": "USER",
+    "rewardAmount": 0,
+    "referrerRewardAmount": 0,
+    "refereeRewardAmount": 0,
+    "status": "rejected",
+    "reason": "reward_disabled",
+    "createdAt": "2026-06-28T09:59:16.490Z",
+    "updatedAt": "2026-06-28T09:59:16.490Z",
+    "__v": 0
+  }
+]

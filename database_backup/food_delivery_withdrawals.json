@@ -1,0 +1,21 @@
+[
+  {
+    "_id": "6a391f36c0e66a94884a9045",
+    "deliveryPartnerId": "6a2d0a80cabfce527e985073",
+    "amount": 140,
+    "status": "approved",
+    "paymentMethod": "bank_transfer",
+    "bankDetails": {
+      "accountNumber": "2782929273",
+      "ifscCode": "SHSK0626283",
+      "bankName": "Bdbdjf",
+      "accountHolderName": "Ebxbdhd"
+    },
+    "upiId": "Shkdkdk@ybl",
+    "upiQrCode": "https://res.cloudinary.com/dpojoqfyj/image/upload/f_webp,q_auto/v1781353426/food/delivery/upi/gicejhb71dfxmwd6ykgi.webp",
+    "createdAt": "2026-06-22T11:40:38.063Z",
+    "updatedAt": "2026-06-23T13:09:24.789Z",
+    "__v": 0,
+    "processedAt": "2026-06-23T13:09:24.718Z"
+  }
+]
