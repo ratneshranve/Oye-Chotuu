@@ -1392,6 +1392,24 @@ function RestaurantDetailsContent() {
     }
   }, [menuCategories, selectedMenuCategory])
 
+  const expandSectionByIndex = (sectionIndex) => {
+    if (sectionIndex === undefined || sectionIndex === null) return
+
+    setExpandedSections((prev) => {
+      const next = new Set(prev)
+      next.add(sectionIndex)
+
+      const section = restaurant?.menuSections?.[sectionIndex]
+      toRenderableArray(section?.subsections).forEach((subsection, subIndex) => {
+        if (toRenderableArray(subsection?.items).length > 0) {
+          next.add(`${sectionIndex}-${subIndex}`)
+        }
+      })
+
+      return next
+    })
+  }
+
   // Handle bookmark click
   const handleBookmarkClick = (item) => {
     const restaurantId = restaurant?.restaurantId || restaurant?._id || restaurant?.id
@@ -1836,6 +1854,27 @@ function RestaurantDetailsContent() {
     () => getFilteredSections(),
     [restaurant?.menuSections, showOnlyUnder250, searchQuery, vegMode, filters, selectedMenuCategory]
   )
+
+  useEffect(() => {
+    const firstVisibleSectionIndex = filteredSections[0]?.originalIndex
+    if (firstVisibleSectionIndex === undefined || firstVisibleSectionIndex === null) return
+
+    setExpandedSections((prev) => {
+      if (prev.has(firstVisibleSectionIndex)) return prev
+
+      const next = new Set(prev)
+      next.add(firstVisibleSectionIndex)
+
+      const section = restaurant?.menuSections?.[firstVisibleSectionIndex]
+      toRenderableArray(section?.subsections).forEach((subsection, subIndex) => {
+        if (toRenderableArray(subsection?.items).length > 0) {
+          next.add(`${firstVisibleSectionIndex}-${subIndex}`)
+        }
+      })
+
+      return next
+    })
+  }, [filteredSections, restaurant?.menuSections])
 
   useEffect(() => {
     if (!hasActiveMenuFilters) return
@@ -2882,6 +2921,7 @@ function RestaurantDetailsContent() {
                           className="w-full flex items-center justify-between py-3 px-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors text-left"
                           onClick={() => {
                             setShowMenuSheet(false)
+                            expandSectionByIndex(category.sectionIndex)
                             // Scroll to category section
                             setTimeout(() => {
                               const sectionId = `menu-section-${category.sectionIndex}`

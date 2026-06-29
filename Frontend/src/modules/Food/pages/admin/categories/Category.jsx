@@ -3,6 +3,8 @@ import { createPortal } from "react-dom"
 import { AnimatePresence, motion } from "framer-motion"
 import {
   BadgeCheck,
+  ChevronLeft,
+  ChevronRight,
   Download,
   Globe,
   Loader2,
@@ -55,6 +57,9 @@ export default function Category() {
   const [searchQuery, setSearchQuery] = useState("")
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
+  const [page, setPage] = useState(1)
+  const [limit, setLimit] = useState(10)
+  const [total, setTotal] = useState(0)
   const [showPendingOnly, setShowPendingOnly] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingCategory, setEditingCategory] = useState(null)
@@ -71,9 +76,7 @@ export default function Category() {
     if (!adminToken) {
       toast.error("Please login to access categories")
       setLoading(false)
-      return
     }
-    fetchCategories()
   }, [])
 
   useEffect(() => {
@@ -102,36 +105,37 @@ export default function Category() {
   }, [])
 
   useEffect(() => {
+    const adminToken = localStorage.getItem("admin_accessToken")
+    if (!adminToken) return
+
     const timer = window.setTimeout(() => {
       fetchCategories()
     }, 300)
     return () => window.clearTimeout(timer)
-  }, [searchQuery, showPendingOnly])
+  }, [searchQuery, showPendingOnly, page, limit])
 
-  const filteredCategories = useMemo(() => {
-    const query = String(searchQuery || "").trim().toLowerCase()
-    if (!query) return categories
-    return categories.filter((category) => {
-      const creator = category?.createdByRestaurant?.name || category?.restaurant?.name || ""
-      return (
-        String(category?.name || "").toLowerCase().includes(query) ||
-        String(category?.foodTypeScope || "").toLowerCase().includes(query) ||
-        String(creator || "").toLowerCase().includes(query) ||
-        String(category?.id || "").toLowerCase().includes(query)
-      )
-    })
-  }, [categories, searchQuery])
+  const filteredCategories = useMemo(() => categories, [categories])
+  const totalPages = Math.max(1, Math.ceil(total / limit))
+  const showingFrom = total === 0 ? 0 : (page - 1) * limit + 1
+  const showingTo = total === 0 ? 0 : Math.min(page * limit, total)
 
   const fetchCategories = async () => {
     try {
       setLoading(true)
-      const params = {}
+      const params = { page, limit }
       if (searchQuery) params.search = searchQuery
       if (showPendingOnly) params.approvalStatus = "pending"
 
       const response = await adminAPI.getCategories(params)
-      const list = response?.data?.data?.categories || response?.data?.categories || []
+      const data = response?.data?.data || response?.data || {}
+      const list = data?.categories || []
+      const nextTotal = Number(data?.total ?? list.length ?? 0)
+      if (Array.isArray(list) && list.length === 0 && nextTotal > 0 && page > 1) {
+        setPage((current) => Math.max(1, current - 1))
+        return
+      }
       setCategories(Array.isArray(list) ? list : [])
+      setTotal(Number.isFinite(nextTotal) ? nextTotal : 0)
     } catch (error) {
       if (error?.response?.status === 401) {
         toast.error("Authentication required. Please login again.")
@@ -145,6 +149,7 @@ export default function Category() {
         toast.error(error?.response?.data?.message || "Failed to load categories")
       }
       setCategories([])
+      setTotal(0)
     } finally {
       setLoading(false)
     }
@@ -383,14 +388,14 @@ export default function Category() {
             <div className="flex items-center gap-2 rounded-full border border-slate-200 p-1">
               <button
                 type="button"
-                onClick={() => setShowPendingOnly(false)}
+                onClick={() => { setPage(1); setShowPendingOnly(false) }}
                 className={`rounded-full px-3 py-2 text-xs font-semibold ${!showPendingOnly ? "bg-slate-900 text-white" : "text-slate-600"}`}
               >
                 All
               </button>
               <button
                 type="button"
-                onClick={() => setShowPendingOnly(true)}
+                onClick={() => { setPage(1); setShowPendingOnly(true) }}
                 className={`rounded-full px-3 py-2 text-xs font-semibold ${showPendingOnly ? "bg-amber-600 text-white" : "text-slate-600"}`}
               >
                 Pending
@@ -403,7 +408,7 @@ export default function Category() {
                 type="text"
                 placeholder="Search categories"
                 value={searchQuery}
-                onChange={(event) => setSearchQuery(event.target.value)}
+                onChange={(event) => { setPage(1); setSearchQuery(event.target.value) }}
                 className="w-full rounded-xl border border-slate-300 bg-white py-2.5 pl-10 pr-4 text-sm outline-none focus:border-slate-900"
               />
             </div>
@@ -585,6 +590,54 @@ export default function Category() {
               )}
             </tbody>
           </table>
+        </div>
+        <div className="flex flex-col gap-3 border-t border-slate-200 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm text-slate-500">
+            Showing <span className="font-semibold text-slate-800">{showingFrom}</span> to <span className="font-semibold text-slate-800">{showingTo}</span> of <span className="font-semibold text-slate-800">{total}</span> categories
+          </p>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <label className="flex items-center gap-2 text-sm text-slate-500">
+              Rows
+              <select
+                value={limit}
+                onChange={(event) => {
+                  setPage(1)
+                  setLimit(Number(event.target.value) || 10)
+                }}
+                className="rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-sm font-semibold text-slate-700 outline-none focus:border-slate-900"
+              >
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+                <option value={50}>50</option>
+                <option value={100}>100</option>
+              </select>
+            </label>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setPage((current) => Math.max(1, current - 1))}
+                disabled={loading || page <= 1}
+                className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-700 disabled:cursor-not-allowed disabled:opacity-40"
+                title="Previous page"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+              <span className="min-w-[92px] text-center text-sm font-semibold text-slate-700">
+                Page {page} of {totalPages}
+              </span>
+              <button
+                type="button"
+                onClick={() => setPage((current) => Math.min(totalPages, current + 1))}
+                disabled={loading || page >= totalPages}
+                className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-700 disabled:cursor-not-allowed disabled:opacity-40"
+                title="Next page"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
