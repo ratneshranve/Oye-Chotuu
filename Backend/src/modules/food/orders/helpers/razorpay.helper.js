@@ -45,6 +45,48 @@ export function createPaymentLink({ amountPaise, currency = 'INR', description, 
     });
 }
 
+export async function createDynamicQrCode({ amountPaise, description, orderId, customerName, customerPhone, closeBy }) {
+    const instance = getRazorpayInstance();
+    if (!instance) throw new Error('Razorpay not configured');
+    const orderRef = String(orderId || '').trim();
+    const nowSeconds = Math.floor(Date.now() / 1000);
+    const closeBySeconds = Number(closeBy) || (nowSeconds + 30 * 60);
+    const body = {
+        type: 'upi_qr',
+        name: customerName ? `${customerName} - ${orderRef}`.slice(0, 40) : `Order ${orderRef}`.slice(0, 40),
+        usage: 'single_use',
+        fixed_amount: true,
+        payment_amount: Math.round(amountPaise),
+        description: description || `Order ${orderRef}`,
+        close_by: closeBySeconds,
+        notes: {
+            foodOrderId: orderRef,
+            orderId: orderRef,
+            purpose: 'delivery_cod_collect',
+            customerPhone: customerPhone ? String(customerPhone).replace(/\D/g, '').slice(-10) : ''
+        }
+    };
+
+    try {
+        return await instance.qrCode.create(body);
+    } catch (error) {
+        const message = error?.error?.description || error?.description || error?.message;
+        throw new Error(message || 'Razorpay dynamic QR creation failed');
+    }
+}
+
+export async function fetchDynamicQrCode(qrCodeId) {
+    const instance = getRazorpayInstance();
+    if (!instance) throw new Error('Razorpay not configured');
+    if (!qrCodeId) throw new Error('qrCodeId is required');
+
+    try {
+        return await instance.qrCode.fetch(String(qrCodeId));
+    } catch (error) {
+        const message = error?.error?.description || error?.description || error?.message;
+        throw new Error(message || 'Razorpay dynamic QR fetch failed');
+    }
+}
 export function verifyPaymentSignature(orderId, paymentId, signature) {
     if (!KEY_SECRET) return false;
     const body = `${orderId}|${paymentId}`;
@@ -122,3 +164,4 @@ export async function initiateRazorpayRefund(paymentId, amount) {
         };
     }
 }
+

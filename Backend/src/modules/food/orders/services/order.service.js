@@ -26,11 +26,12 @@ import { Seller } from '../../../quick-commerce/seller/models/seller.model.js';
 import { SellerOrder } from '../../../quick-commerce/seller/models/sellerOrder.model.js';
 import {
     createRazorpayOrder,
-    createPaymentLink,
+    createDynamicQrCode,
     verifyPaymentSignature,
     getRazorpayKeyId,
     isRazorpayConfigured,
     fetchRazorpayPaymentLink,
+    fetchDynamicQrCode,
     initiateRazorpayRefund
 } from '../helpers/razorpay.helper.js';
 import { getIO, rooms } from '../../../../config/socket.js';
@@ -4311,13 +4312,11 @@ export async function createCollectQr(
 
   const amountPaise = Math.round(amountDue * 100);
   const user = order.userId || {};
-  const link = await createPaymentLink({
+  const qr = await createDynamicQrCode({
     amountPaise,
-    currency: "INR",
     description: `Order ${order.orderId} - COD collect`,
-    orderId: order.orderId,
+    orderId: String(order._id),
     customerName: customerInfo.name || user.name || "Customer",
-    customerEmail: customerInfo.email || user.email || "customer@example.com",
     customerPhone: customerInfo.phone || user.phone,
   });
 
@@ -4326,11 +4325,12 @@ export async function createCollectQr(
       "payment.method": "razorpay_qr",
       "payment.status": "pending_qr",
       "payment.qr": {
-        paymentLinkId: link.id,
-        shortUrl: link.short_url,
-        imageUrl: link.short_url,
-        status: link.status || "created",
-        expiresAt: link.expire_by ? new Date(link.expire_by * 1000) : null,
+        qrId: qr.id,
+        paymentLinkId: "",
+        shortUrl: "",
+        imageUrl: qr.image_url || qr.imageUrl || "",
+        status: qr.status || "active",
+        expiresAt: qr.close_by ? new Date(qr.close_by * 1000) : null,
       },
     },
   });
@@ -4340,7 +4340,7 @@ export async function createCollectQr(
         await foodTransactionService.updateTransactionStatus(order._id, 'cod_collect_qr_created', {
             recordedByRole: 'DELIVERY_PARTNER',
             recordedById: deliveryPartnerId,
-            note: 'COD collection QR created'
+            note: 'COD collection dynamic UPI QR created'
         });
     }
 
@@ -4348,39 +4348,26 @@ export async function createCollectQr(
         orderMongoId: String(orderId),
         orderId: updated?.orderId || null,
         deliveryPartnerId,
-        paymentLinkId: link.id,
-        shortUrl: link.short_url,
+        qrId: qr.id,
+        imageUrl: qr.image_url || qr.imageUrl || null,
         amountDue
     });
 
-  // IMPORTANT: return QR payload so frontend can render "Generate QR" / "Show QR".
-  const shortUrl =
-    link?.short_url ?? link?.shortUrl ?? link?.short_url_path ?? null;
-  const imageUrl =
-    link?.short_url ??
-    link?.image_url ??
-    link?.imageUrl ??
-    link?.image ??
-    null;
-
   return {
-    shortUrl,
-    imageUrl,
+    qrId: qr.id,
+    shortUrl: null,
+    imageUrl: qr.image_url || qr.imageUrl || null,
     amount: amountDue,
-    expiresAt:
-      link?.expire_by
-        ? new Date(link.expire_by * 1000)
-        : link?.expiresAt
-          ? new Date(link.expiresAt)
-          : null,
+    expiresAt: qr.close_by ? new Date(qr.close_by * 1000) : null,
   };
 }
 
 /**
  * Razorpay QR auto-verify:
- * - Fetch payment-link status from Razorpay
- * - Update `order.payment.status` to `paid` when Razorpay marks it paid
+ * - Fetch Dynamic QR status from Razorpay
+ * - Update `order.payment.status` to `paid` when Razorpay confirms full receipt
  * - Update `order.payment.qr.status` for UI/debugging
+ * - Keep Payment Link fallback for old delivery QR records
  *
  * IMPORTANT: Callers should `await` this before completing delivery.
  */
@@ -4388,33 +4375,69 @@ async function syncRazorpayQrPayment(orderDoc) {
   if (!orderDoc?.payment) return orderDoc?.payment;
   if (orderDoc.payment.method !== "razorpay_qr") return orderDoc.payment;
   if (orderDoc.payment.status === "paid") return orderDoc.payment;
+  if (!isRazorpayConfigured()) return orderDoc.payment;
+
+  const qrId = orderDoc.payment?.qr?.qrId;
+  if (qrId) {
+    let qr;
+    try {
+      qr = await fetchDynamicQrCode(qrId);
+    } catch (err) {
+      logger.warn(`Razorpay dynamic QR fetch failed for ${qrId}: ${err?.message || err}`);
+      return orderDoc.payment;
+    }
+
+    const qrStatus = String(qr?.status || "").toLowerCase();
+    const receivedPaise = Number(qr?.payments_amount_received || 0);
+    const amountDuePaise = Math.round(
+      Number(orderDoc.payment?.amountDue ?? orderDoc.pricing?.total ?? 0) * 100
+    );
+    const isPaid = amountDuePaise > 0 && receivedPaise >= amountDuePaise;
+
+    orderDoc.payment.qr = {
+      ...(orderDoc.payment.qr?.toObject?.() || orderDoc.payment.qr || {}),
+      qrId,
+      imageUrl: qr?.image_url || qr?.imageUrl || orderDoc.payment.qr?.imageUrl || "",
+      status: isPaid ? "paid" : (qrStatus || orderDoc.payment.qr?.status || "active"),
+      expiresAt: qr?.close_by ? new Date(qr.close_by * 1000) : orderDoc.payment.qr?.expiresAt,
+    };
+
+    if (isPaid) {
+      orderDoc.payment.status = "paid";
+      await orderDoc.save();
+      await foodTransactionService.updateTransactionStatus(orderDoc._id, "captured", {
+        status: "captured",
+        note: "Dynamic QR payment status synced from Razorpay",
+      });
+    } else if (["expired", "cancelled", "canceled", "failed"].includes(qrStatus)) {
+      orderDoc.payment.status = "failed";
+      await orderDoc.save();
+    } else {
+      await orderDoc.save();
+    }
+
+    return orderDoc.payment;
+  }
 
   const paymentLinkId = orderDoc.payment?.qr?.paymentLinkId;
   if (!paymentLinkId) return orderDoc.payment;
-  if (!isRazorpayConfigured()) return orderDoc.payment;
 
   let link;
   try {
     link = await fetchRazorpayPaymentLink(paymentLinkId);
   } catch (err) {
-    logger.warn(
-      `Razorpay payment-link fetch failed for ${paymentLinkId}: ${
-        err?.message || err
-      }`
-    );
+    logger.warn(`Razorpay payment-link fetch failed for ${paymentLinkId}: ${err?.message || err}`);
     return orderDoc.payment;
   }
 
   const linkStatus = String(link?.status || "").toLowerCase();
   if (!linkStatus) return orderDoc.payment;
 
-  // Update QR snapshot status.
   orderDoc.payment.qr = {
     ...(orderDoc.payment.qr?.toObject?.() || orderDoc.payment.qr || {}),
     status: linkStatus,
   };
 
-  // Mark paid only when Razorpay says it's paid/settled.
   if (["paid", "captured", "authorized"].includes(linkStatus)) {
     orderDoc.payment.status = "paid";
     await orderDoc.save();
@@ -4425,7 +4448,6 @@ async function syncRazorpayQrPayment(orderDoc) {
 
   return orderDoc.payment;
 }
-
 export async function getPaymentStatus(orderId, deliveryPartnerId) {
   // Support both short orderId strings and MongoDB _ids.
   const identity = buildOrderIdentityFilter(orderId);
@@ -4981,6 +5003,4 @@ export async function updateOrderInstructions(orderId, userId, instructions) {
 
   return sanitizeOrderForExternal(order);
 }
-
-
 

@@ -14,6 +14,7 @@ import { logger } from '../../../../utils/logger.js';
 import { getIO, rooms } from '../../../../config/socket.js';
 import { getFirebaseDB } from '../../../../config/firebase.js';
 import {
+  fetchDynamicQrCode,
   fetchRazorpayPaymentLink,
   isRazorpayConfigured,
 } from '../helpers/razorpay.helper.js';
@@ -172,19 +173,59 @@ async function syncRazorpayQrPayment(orderDoc) {
   if (!payment) return null;
   if (payment.method !== 'razorpay_qr') return payment;
   if (payment.status === 'paid') return payment;
+  if (!isRazorpayConfigured()) return payment;
+
+  const qrId = payment?.qr?.qrId;
+  if (qrId) {
+    let qr;
+    try {
+      qr = await fetchDynamicQrCode(qrId);
+    } catch (error) {
+      logger.warn(`Razorpay dynamic QR fetch failed for ${qrId}: ${error?.message || error}`);
+      return payment;
+    }
+
+    const qrStatus = String(qr?.status || '').toLowerCase();
+    const receivedPaise = Number(qr?.payments_amount_received || 0);
+    const amountDuePaise = Math.round(Number(payment?.amountDue ?? tx?.pricing?.total ?? 0) * 100);
+    const isPaid = amountDuePaise > 0 && receivedPaise >= amountDuePaise;
+
+    await FoodTransaction.updateOne(
+      { orderId: orderDoc?._id },
+      {
+        $set: {
+          'payment.qr.qrId': qrId,
+          'payment.qr.imageUrl': qr?.image_url || qr?.imageUrl || payment?.qr?.imageUrl || '',
+          'payment.qr.status': isPaid ? 'paid' : (qrStatus || payment?.qr?.status || 'active'),
+          'payment.qr.expiresAt': qr?.close_by ? new Date(qr.close_by * 1000) : payment?.qr?.expiresAt,
+          'payment.status': isPaid
+            ? 'paid'
+            : ['expired', 'cancelled', 'canceled', 'failed'].includes(qrStatus)
+              ? 'failed'
+              : (payment.status || 'pending_qr'),
+        },
+      },
+    );
+
+    if (isPaid) {
+      await foodTransactionService.updateTransactionStatus(orderDoc._id, 'captured', {
+        status: 'captured',
+        note: 'Dynamic QR payment status synced from Razorpay',
+      });
+    }
+
+    const updatedTx = await FoodTransaction.findOne({ orderId: orderDoc?._id }).lean();
+    return updatedTx?.payment || payment;
+  }
 
   const paymentLinkId = payment?.qr?.paymentLinkId;
-  if (!paymentLinkId || !isRazorpayConfigured()) return payment;
+  if (!paymentLinkId) return payment;
 
   let link;
   try {
     link = await fetchRazorpayPaymentLink(paymentLinkId);
   } catch (error) {
-    logger.warn(
-      `Razorpay payment-link fetch failed for ${paymentLinkId}: ${
-        error?.message || error
-      }`,
-    );
+    logger.warn(`Razorpay payment-link fetch failed for ${paymentLinkId}: ${error?.message || error}`);
     return orderDoc.payment;
   }
 
@@ -208,7 +249,6 @@ async function syncRazorpayQrPayment(orderDoc) {
   const updatedTx = await FoodTransaction.findOne({ orderId: orderDoc?._id }).lean();
   return updatedTx?.payment || payment;
 }
-
 export async function getCurrentTripDelivery(deliveryPartnerId) {
   if (!deliveryPartnerId) {
     throw new ValidationError('Delivery partner ID required');

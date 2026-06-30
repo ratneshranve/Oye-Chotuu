@@ -220,6 +220,7 @@ const OtpModal = ({ order, onVerified, onClose }) => {
 const PaymentModal = ({ order, otpString, onComplete, onClose }) => {
   const [showQrModal, setShowQrModal] = useState(false);
   const [collectQrLink, setCollectQrLink] = useState(null);
+  const [collectQrImage, setCollectQrImage] = useState(null);
   const [isGeneratingQr, setIsGeneratingQr] = useState(false);
   const isInitialPaid = ["paid", "captured", "authorized"].includes(
     String(order.payment?.status || "").toLowerCase(),
@@ -330,9 +331,12 @@ const PaymentModal = ({ order, otpString, onComplete, onClose }) => {
         name: order.userName || "Customer",
         phone: order.userPhone || "",
       });
-      const link = res?.data?.data?.shortUrl || res?.data?.shortUrl || null;
-      if (link) {
-        setCollectQrLink(link);
+      const payload = res?.data?.data || res?.data || {};
+      const image = payload?.imageUrl || payload?.image_url || payload?.qrImage || null;
+      const link = payload?.shortUrl || payload?.short_url || payload?.url || null;
+      if (image || link) {
+        setCollectQrImage(image || null);
+        setCollectQrLink(link || image || null);
         setPaymentStatus("pending");
         setShowQrModal(true);
       } else {
@@ -508,34 +512,36 @@ const PaymentModal = ({ order, otpString, onComplete, onClose }) => {
             <motion.div
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
-              className="bg-white w-full max-w-sm rounded-3xl p-8 flex flex-col items-center text-center shadow-2xl"
+              className="bg-white w-full max-w-[420px] rounded-[2rem] p-4 flex flex-col items-center text-center shadow-2xl"
               onClick={(e) => e.stopPropagation()}>
-              <h3 className="text-gray-950 font-bold text-xl mb-2">
-                Scan to Pay
-              </h3>
-              <p className="text-gray-500 text-sm mb-8 font-medium">
-                Order Total: ₹{amountToCollect.toFixed(2)}
-              </p>
-
-              <div className="relative p-6 bg-gray-50 rounded-3xl border-2 border-gray-100 mb-8">
-                <img
-                  src={`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(collectQrLink)}`}
-                  alt="Razorpay QR"
-                  className="w-56 h-56"
-                />
+              <div className="w-full flex items-center justify-between gap-3 mb-3 px-1">
+                <div className="text-left">
+                  <h3 className="text-gray-950 font-bold text-lg leading-tight">
+                    Scan to Pay
+                  </h3>
+                  <p className="text-gray-500 text-xs font-semibold">
+                    Rs {amountToCollect.toFixed(2)}
+                  </p>
+                </div>
                 <button
                   onClick={handleManualCheck}
                   disabled={isSyncing}
-                  className="absolute top-2 right-2 flex gap-1.5 items-center bg-green-500 text-white px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg active:scale-95 transition-all">
+                  className="shrink-0 flex gap-1.5 items-center bg-green-500 text-white px-3 py-2 rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg active:scale-95 transition-all">
                   {isSyncing ? (
                     <Loader2 className="w-3 h-3 animate-spin" />
                   ) : (
                     <RefreshCw className="w-3 h-3" />
                   )}
-                  Check Status
+                  Check
                 </button>
               </div>
-
+              <div className="relative w-full max-w-[390px] aspect-square bg-white rounded-3xl border border-gray-100 mb-4 overflow-hidden flex items-center justify-center">
+                <img
+                  src={collectQrImage || `https://api.qrserver.com/v1/create-qr-code/?size=420x420&data=${encodeURIComponent(collectQrLink || "")}`}
+                  alt="Razorpay QR"
+                  className={collectQrImage ? "w-full h-full object-cover object-center scale-[1.65]" : "w-full h-full object-contain p-4"}
+                />
+              </div>
               <button
                 onClick={() => setShowQrModal(false)}
                 className="w-full py-4 bg-gray-100 text-gray-500 rounded-2xl font-bold text-xs uppercase tracking-widest">
@@ -645,5 +651,4 @@ export const DeliveryVerificationModal = ({ order, onComplete, onClose }) => {
     </AnimatePresence>
   );
 };
-
 

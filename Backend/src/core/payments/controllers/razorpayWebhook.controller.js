@@ -1,6 +1,7 @@
 import crypto from 'crypto';
 import mongoose from 'mongoose';
 import { FoodOrder } from '../../../modules/food/orders/models/order.model.js';
+import { FoodTransaction } from '../../../modules/food/orders/models/foodTransaction.model.js';
 import * as foodTransactionService from '../../../modules/food/orders/services/foodTransaction.service.js';
 import { config } from '../../../config/env.js';
 import { logger } from '../../../utils/logger.js';
@@ -38,25 +39,103 @@ export const handleRazorpayWebhook = async (req, res) => {
             const paymentObj = payload.payment.entity;
             const rzOrderId = paymentObj.order_id;
             const rzPaymentId = paymentObj.id;
+            const notes = paymentObj.notes || {};
+            const qrId = paymentObj.qr_code_id || paymentObj.receiver_id || paymentObj.qr_code?.id || paymentObj.receiver?.id || '';
+            const noteOrderId = notes.foodOrderId || notes.orderId || notes.food_order_id || '';
 
-            // Atomic update to mark as paid if not already
-            const order = await FoodOrder.findOneAndUpdate(
-                { 
-                    "payment.razorpay.orderId": rzOrderId, 
-                    "payment.status": { $ne: 'paid' } 
-                },
-                { 
-                    $set: { 
-                        "payment.status": 'paid', 
-                        "payment.razorpay.paymentId": rzPaymentId 
-                    } 
-                },
-                { new: true }
-            );
+            let order = null;
+
+            if (rzOrderId) {
+                order = await FoodOrder.findOneAndUpdate(
+                    {
+                        "payment.razorpay.orderId": rzOrderId,
+                        "payment.status": { $ne: 'paid' }
+                    },
+                    {
+                        $set: {
+                            "payment.status": 'paid',
+                            "payment.razorpay.paymentId": rzPaymentId
+                        }
+                    },
+                    { new: true }
+                );
+            }
+
+            if (!order) {
+                const dynamicQrFilters = [];
+                if (noteOrderId && mongoose.Types.ObjectId.isValid(String(noteOrderId))) {
+                    dynamicQrFilters.push({ _id: new mongoose.Types.ObjectId(String(noteOrderId)) });
+                }
+                if (noteOrderId) dynamicQrFilters.push({ orderId: String(noteOrderId) });
+                if (qrId) dynamicQrFilters.push({ "payment.qr.qrId": String(qrId) });
+
+                for (const filter of dynamicQrFilters) {
+                    order = await FoodOrder.findOneAndUpdate(
+                        {
+                            ...filter,
+                            "payment.status": { $ne: 'paid' }
+                        },
+                        {
+                            $set: {
+                                "payment.status": 'paid',
+                                "payment.razorpay.paymentId": rzPaymentId,
+                                "payment.qr.status": 'paid',
+                                ...(qrId ? { "payment.qr.qrId": String(qrId) } : {})
+                            }
+                        },
+                        { new: true }
+                    );
+                    if (order) break;
+                }
+            }
+
+            if (!order && (qrId || noteOrderId)) {
+                const txFilters = [];
+                if (qrId) txFilters.push({ "payment.qr.qrId": String(qrId) });
+                if (noteOrderId && mongoose.Types.ObjectId.isValid(String(noteOrderId))) {
+                    txFilters.push({ orderId: new mongoose.Types.ObjectId(String(noteOrderId)) });
+                }
+
+                let tx = null;
+                for (const filter of txFilters) {
+                    tx = await FoodTransaction.findOne(filter).lean();
+                    if (tx) break;
+                }
+
+                if (tx?.orderId) {
+                    order = await FoodOrder.findOneAndUpdate(
+                        {
+                            _id: tx.orderId,
+                            "payment.status": { $ne: 'paid' }
+                        },
+                        {
+                            $set: {
+                                "payment.status": 'paid',
+                                "payment.razorpay.paymentId": rzPaymentId,
+                                "payment.qr.status": 'paid',
+                                ...(qrId ? { "payment.qr.qrId": String(qrId) } : {})
+                            }
+                        },
+                        { new: true }
+                    ) || await FoodOrder.findById(tx.orderId);
+                }
+            }
 
             if (order) {
-                // ✅ UPDATED: Wrapped in try-catch to prevent secondary failures from breaking the webhook response
                 try {
+                    await FoodTransaction.updateOne(
+                        { orderId: order._id },
+                        {
+                            $set: {
+                                status: 'captured',
+                                'payment.status': 'paid',
+                                'payment.razorpay.paymentId': rzPaymentId,
+                                'payment.qr.status': 'paid',
+                                ...(qrId ? { 'payment.qr.qrId': String(qrId) } : {}),
+                                'gateway.razorpayPaymentId': rzPaymentId
+                            }
+                        }
+                    );
                     await foodTransactionService.updateTransactionStatus(order._id, 'captured', {
                         status: 'captured',
                         razorpayPaymentId: rzPaymentId,
@@ -67,11 +146,9 @@ export const handleRazorpayWebhook = async (req, res) => {
                 }
                 logger.info(`Webhook [payment.captured]: Synced Order ${order.orderId} (Status=paid)`);
             } else {
-                // ✅ ADDED: Log warn if order not found but payment was captured
-                logger.warn(`Webhook [payment.captured]: Order not found or already paid for RZ-Order: ${rzOrderId}`);
+                logger.warn(`Webhook [payment.captured]: Order not found or already paid for RZ-Order: ${rzOrderId || 'n/a'}, QR: ${qrId || 'n/a'}`);
             }
         }
-
         // --- 🔴 Handle Refund Processed ---
         if (event === 'refund.processed') {
             const refundObj = payload.refund.entity;
@@ -113,3 +190,4 @@ export const handleRazorpayWebhook = async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
+
