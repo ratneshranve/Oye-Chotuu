@@ -15,7 +15,7 @@ import {
   CheckCircle,
   XCircle,
   Loader2,
-  Volume2,
+  Phone,
 } from "lucide-react"
 import ResendNotificationButton from "@food/components/restaurant/ResendNotificationButton"
 const debugLog = (...args) => {}
@@ -40,6 +40,57 @@ const firstText = (...values) => {
     if (typeof value === "string" && value.trim()) return value.trim()
   }
   return ""
+}
+
+const getDeliveryPartnerFields = (order = {}) => {
+  const dispatchPartner =
+    order.dispatch?.deliveryPartnerId && typeof order.dispatch.deliveryPartnerId === "object"
+      ? order.dispatch.deliveryPartnerId
+      : null
+  const directPartner =
+    order.deliveryPartnerId && typeof order.deliveryPartnerId === "object"
+      ? order.deliveryPartnerId
+      : null
+  const deliveryPartner =
+    order.deliveryPartner && typeof order.deliveryPartner === "object"
+      ? order.deliveryPartner
+      : null
+  const deliveryBoy =
+    order.deliveryBoy && typeof order.deliveryBoy === "object"
+      ? order.deliveryBoy
+      : null
+
+  return {
+    deliveryPartnerId:
+      deliveryPartner?._id ||
+      deliveryPartner?.id ||
+      directPartner?._id ||
+      directPartner?.id ||
+      dispatchPartner?._id ||
+      dispatchPartner?.id ||
+      deliveryBoy?._id ||
+      deliveryBoy?.id ||
+      (typeof order.deliveryPartnerId === "string" ? order.deliveryPartnerId : null) ||
+      (typeof order.deliveryBoyId === "string" ? order.deliveryBoyId : null) ||
+      null,
+    deliveryPartnerName: firstText(
+      order.deliveryPartnerName,
+      order.deliveryBoyName,
+      deliveryPartner?.name,
+      directPartner?.name,
+      dispatchPartner?.name,
+      deliveryBoy?.name
+    ),
+    deliveryPartnerPhone: firstText(
+      order.deliveryPartnerPhone,
+      order.deliveryBoyNumber,
+      order.deliveryBoyPhone,
+      deliveryPartner?.phone,
+      directPartner?.phone,
+      dispatchPartner?.phone,
+      deliveryBoy?.phone
+    )
+  }
 }
 
 const formatMoney = (value) => `₹${Number(value || 0).toFixed(2)}`
@@ -185,6 +236,7 @@ export default function OrderDetails() {
           }
           
           const statusLower = orderStatusRaw
+          const deliveryPartnerFields = getDeliveryPartnerFields(order)
           const reached = {
             confirmed: order.tracking?.confirmed?.status || ["confirmed", "preparing", "ready", "ready_for_pickup", "picked_up", "out_for_delivery", "delivered"].includes(statusLower),
             preparing: order.tracking?.preparing?.status || ["preparing", "ready", "ready_for_pickup", "picked_up", "out_for_delivery", "delivered"].includes(statusLower),
@@ -226,7 +278,7 @@ export default function OrderDetails() {
               paidAmount,
               paymentStatus
             },
-            deliveryPartnerId: order.deliveryPartnerId || order.dispatch?.deliveryPartnerId || null,
+            ...deliveryPartnerFields,
             dispatchStatus: order.dispatch?.status || null,
             reason: order.cancellationReason || '',
             restaurantNote: order.restaurantNote || '',
@@ -738,6 +790,37 @@ export default function OrderDetails() {
             <p className="text-sm text-red-600">{orderData.reason}</p>
           )}
         </div>
+
+        {(orderData.deliveryPartnerId || orderData.deliveryPartnerName || orderData.deliveryPartnerPhone) && (
+          <div>
+            <h2 className="text-base font-bold text-gray-900 mb-3">Delivery boy details</h2>
+            <div className="bg-white rounded-lg p-4 mb-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                  <Phone className="w-5 h-5 text-[#49AB14]" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-gray-900 truncate">
+                    {orderData.deliveryPartnerName || "Assigned"}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-0.5">
+                    {orderData.deliveryPartnerPhone || "Phone not available"}
+                  </p>
+                </div>
+                {orderData.deliveryPartnerPhone && (
+                  <a
+                    href={`tel:${orderData.deliveryPartnerPhone}`}
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#49AB14] text-white"
+                    aria-label="Call delivery boy"
+                  >
+                    <Phone className="w-4 h-4" />
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
 
         {/* Customer Details Section */}
         <div>
