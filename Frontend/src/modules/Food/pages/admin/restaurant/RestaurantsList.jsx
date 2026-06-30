@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect, useRef } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
-import { Search, Download, ChevronDown, Eye, Settings, ArrowUpDown, Loader2, X, MapPin, Phone, Mail, Clock, Star, Building2, User, FileText, CreditCard, Calendar, Image as ImageIcon, ExternalLink, ShieldX, AlertTriangle, Trash2, Plus, Upload } from "lucide-react"
+import { Search, Download, ChevronDown, Eye, Settings, ArrowUpDown, Loader2, X, MapPin, Phone, Mail, Clock, Star, Building2, User, FileText, CreditCard, Calendar, Image as ImageIcon, ExternalLink, ShieldX, AlertTriangle, Trash2, Plus, Upload, UtensilsCrossed } from "lucide-react"
 import { adminAPI, restaurantAPI, uploadAPI } from "@food/api"
 import { clearModuleAuth } from "@food/utils/auth"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@food/components/ui/dropdown-menu"
@@ -103,6 +103,19 @@ const getPrimaryRestaurantImage = (restaurant, fallback = "") => {
 }
 
 
+
+const normalizeBusinessType = (restaurant) => {
+  const raw = String(
+    restaurant?.businessType ||
+    restaurant?.type ||
+    restaurant?.onboarding?.step1?.businessType ||
+    "restaurant"
+  ).trim().toLowerCase().replace(/[\s-]+/g, "_")
+  return raw === "home_bakery" || raw === "homebakery" || raw === "bakery" ? "home_bakery" : "restaurant"
+}
+
+const getBusinessTypeLabel = (restaurant) =>
+  normalizeBusinessType(restaurant) === "home_bakery" ? "Home Bakery" : "Restaurant"
 
 export default function RestaurantsList() {
   const navigate = useNavigate()
@@ -232,6 +245,7 @@ export default function RestaurantsList() {
             ownerPhone: restaurant.ownerPhone || restaurant.phone || "N/A",
             zone: zoneLabelFromRestaurant(restaurant),
             approvalStatus: normalizeApprovalStatus(restaurant),
+            businessType: normalizeBusinessType(restaurant),
             isActive: restaurant.isActive !== false,
             rating: restaurant.ratings?.average || restaurant.rating || 0,
             logo: getPrimaryRestaurantImage(restaurant, PLACEHOLDER_40),
@@ -1661,7 +1675,7 @@ export default function RestaurantsList() {
             <div className="px-8 py-6 border-b border-slate-100 flex items-center justify-between bg-white/80 backdrop-blur-md sticky top-0 z-10">
               <div>
                 <h2 className="text-2xl font-bold text-slate-900">
-                  {selectedRestaurant?.originalData?.businessType === 'homebakery' || selectedRestaurant?.businessType === 'homebakery' ? 'Bakery' : 'Restaurant'} Details
+                  {getBusinessTypeLabel(selectedRestaurant?.originalData || selectedRestaurant)} Details
                 </h2>
                 <p className="text-sm text-slate-500 mt-1">Detailed overview and information</p>
               </div>
@@ -1823,6 +1837,7 @@ export default function RestaurantsList() {
               )}
               {!loadingDetails && !isEditingDetails && (restaurantDetails || selectedRestaurant) && (() => {
                 const r = restaurantDetails || selectedRestaurant?.originalData || selectedRestaurant
+                const businessTypeLabel = getBusinessTypeLabel(r)
                 const detailsApprovalStatus = normalizeApprovalStatus(r)
                 const profileImgUrl = normalizeImageUrl(r?.profileImage) || getPrimaryRestaurantImage(r)
                 const coverImages = Array.isArray(r?.coverImages) ? r.coverImages.map(normalizeImageUrl).filter(Boolean) : []
@@ -1915,6 +1930,10 @@ export default function RestaurantsList() {
                         <div className="flex items-center gap-2 text-slate-500 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-100">
                           <Building2 className="w-4 h-4" />
                           <span className="text-xs font-bold tracking-wider">{formatRestaurantId(r?.restaurantId || r?._id)}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-slate-500 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-100">
+                          <UtensilsCrossed className="w-4 h-4" />
+                          <span className="text-xs font-bold tracking-wider">{businessTypeLabel}</span>
                         </div>
                       </div>
                     </div>
@@ -2048,7 +2067,12 @@ export default function RestaurantsList() {
                           </div>
                         )}
                         <div>
+                          <p className="text-xs text-slate-500 mb-1">Business Type</p>
+                          <p className="text-sm font-medium text-slate-900">{businessTypeLabel}</p>
+                        </div>
+                        <div>
                           <p className="text-xs text-slate-500 mb-1">Status</p>
+
                           <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${approvalStatusBadgeClass(detailsApprovalStatus)}`}>
                             {approvalStatusLabel(detailsApprovalStatus)}
                           </span>

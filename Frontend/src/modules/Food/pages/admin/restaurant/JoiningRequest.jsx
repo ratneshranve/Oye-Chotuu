@@ -38,6 +38,19 @@ const formatRestaurantId = (id) => {
 }
 
 
+const normalizeBusinessType = (restaurant) => {
+  const raw = String(
+    restaurant?.businessType ||
+    restaurant?.type ||
+    restaurant?.onboarding?.step1?.businessType ||
+    "restaurant"
+  ).trim().toLowerCase().replace(/[\s-]+/g, "_")
+  return raw === "home_bakery" || raw === "homebakery" || raw === "bakery" ? "home_bakery" : "restaurant"
+}
+
+const getBusinessTypeLabel = (restaurant) =>
+  normalizeBusinessType(restaurant) === "home_bakery" ? "Home Bakery" : "Restaurant"
+
 export default function JoiningRequest() {
   const [activeTab, setActiveTab] = useState("pending")
   const [searchQuery, setSearchQuery] = useState("")
@@ -795,7 +808,7 @@ export default function JoiningRequest() {
                   <UtensilsCrossed className="w-5 h-5 text-blue-600" />
                 </div>
                 <h2 className="text-xl font-bold text-slate-900">
-                  {selectedRequest?.businessType === 'homebakery' ? 'Bakery' : 'Restaurant'} Details - {selectedRequest.restaurantName || "N/A"}
+                  {getBusinessTypeLabel(restaurantDetails || selectedRequest)} Details - {selectedRequest.restaurantName || "N/A"}
                 </h2>
               </div>
               <button
@@ -816,6 +829,7 @@ export default function JoiningRequest() {
               )}
               {!loadingDetails && (restaurantDetails || selectedRequest) && (() => {
                 const r = restaurantDetails || selectedRequest
+                const businessTypeLabel = getBusinessTypeLabel(r)
                 const restaurantPhotoList = Array.isArray(r?.coverImages) ? r.coverImages.filter(Boolean) : []
                 const profileImgUrl =
                   getNormalizedImageUrl(restaurantPhotoList[0]) ||
@@ -1052,7 +1066,10 @@ export default function JoiningRequest() {
                     <div>
                       <h4 className="text-lg font-semibold text-slate-900 mb-4">Cuisine & Details</h4>
                       <div className="space-y-3">
-
+                        <div>
+                          <p className="text-xs text-slate-500 mb-1">Business Type</p>
+                          <p className="text-sm font-medium text-slate-900">{businessTypeLabel}</p>
+                        </div>
                         {typeof r?.pureVegRestaurant === "boolean" && (
                           <div>
                             <p className="text-xs text-slate-500 mb-1">Food Type</p>
