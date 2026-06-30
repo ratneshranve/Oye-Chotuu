@@ -49,6 +49,7 @@ import AddToCartAnimation from "@food/components/user/AddToCartAnimation"
 import { getCompanyNameAsync } from "@common/utils/businessSettings"
 import { isModuleAuthenticated } from "@food/utils/auth"
 import { getRestaurantAvailabilityStatus } from "@food/utils/restaurantAvailability"
+import { formatDistance } from "@food/utils/distance"
 import useAppBackNavigation from "@food/hooks/useAppBackNavigation"
 import {
   buildCartLineId,
@@ -173,6 +174,12 @@ function RestaurantDetailsContent() {
   const fetchedRestaurantRef = useRef(false) // Track if restaurant has been fetched for current slug
   const fetchedSlugRef = useRef(null)
 
+  const getUserLocationParams = (loc) => {
+    const lat = Number(loc?.latitude)
+    const lng = Number(loc?.longitude)
+    return Number.isFinite(lat) && Number.isFinite(lng) ? { lat, lng } : {}
+  }
+
   useEffect(() => {
     const intervalId = setInterval(() => {
       setAvailabilityTick(Date.now())
@@ -202,6 +209,7 @@ function RestaurantDetailsContent() {
         setRestaurantError(null)
 
         debugLog('Fetching restaurant with slug:', slug)
+        const userLocationParams = getUserLocationParams(userLocation)
         let response = null
         let apiRestaurant = null
 
@@ -229,7 +237,7 @@ function RestaurantDetailsContent() {
           try {
             // First, try to get restaurant directly by slug/ID (no zoneId needed)
             try {
-              response = await restaurantAPI.getRestaurantById(slug)
+              response = await restaurantAPI.getRestaurantById(slug, { params: userLocationParams })
               if (response?.data?.success && response?.data?.data) {
                 apiRestaurant = response.data.data
                 debugLog('? Found restaurant in restaurant API by slug/ID:', apiRestaurant)
@@ -240,8 +248,8 @@ function RestaurantDetailsContent() {
               debugLog('? Direct lookup failed, trying search by name...')
 
                 const searchVariants = zoneId
-                  ? [{ limit: 100, zoneId: zoneId, _ts: Date.now() }, { limit: 100, _ts: Date.now() }]
-                  : [{ limit: 100, _ts: Date.now() }]
+                  ? [{ limit: 100, zoneId: zoneId, ...userLocationParams, _ts: Date.now() }, { limit: 100, ...userLocationParams, _ts: Date.now() }]
+                  : [{ limit: 100, ...userLocationParams, _ts: Date.now() }]
 
                 for (const searchParams of searchVariants) {
                   try {
@@ -258,7 +266,7 @@ function RestaurantDetailsContent() {
 
                     if (matchingRestaurant) {
                       // Get full restaurant details by ID
-                      const fullResponse = await restaurantAPI.getRestaurantById(matchingRestaurant._id || matchingRestaurant.restaurantId)
+                      const fullResponse = await restaurantAPI.getRestaurantById(matchingRestaurant._id || matchingRestaurant.restaurantId, { params: userLocationParams })
                       if (fullResponse.data && fullResponse.data.success && fullResponse.data.data) {
                         apiRestaurant = fullResponse.data.data
                         debugLog('? Found restaurant in restaurant API by name search:', apiRestaurant)
@@ -418,13 +426,7 @@ function RestaurantDetailsContent() {
           if (userLat && userLng && restaurantLat && restaurantLng &&
             !isNaN(userLat) && !isNaN(userLng) && !isNaN(restaurantLat) && !isNaN(restaurantLng)) {
             const distanceInKm = calculateDistance(userLat, userLng, restaurantLat, restaurantLng)
-            // Format distance: show 1 decimal place if >= 1km, otherwise show in meters
-            if (distanceInKm >= 1) {
-              calculatedDistance = `${distanceInKm.toFixed(1)} km`
-            } else {
-              const distanceInMeters = Math.round(distanceInKm * 1000)
-              calculatedDistance = `${distanceInMeters} m`
-            }
+            calculatedDistance = formatDistance(distanceInKm)
             debugLog('? Calculated distance from user to restaurant:', calculatedDistance, 'km:', distanceInKm)
           } else {
             debugWarn('? Cannot calculate distance - missing coordinates:', {
@@ -498,7 +500,7 @@ function RestaurantDetailsContent() {
             rating: actualRestaurant?.rating || apiRestaurant?.rating || actualRestaurant?.averageRating || apiRestaurant?.averageRating || 0,
             reviews: actualRestaurant?.totalRatings || apiRestaurant?.totalRatings || actualRestaurant?.reviewCount || apiRestaurant?.reviewCount || actualRestaurant?.reviews?.length || apiRestaurant?.reviews?.length || 0,
             deliveryTime: actualRestaurant?.estimatedDeliveryTime || apiRestaurant?.estimatedDeliveryTime || actualRestaurant?.deliveryTime || apiRestaurant?.deliveryTime || actualRestaurant?.avgDeliveryTime || apiRestaurant?.avgDeliveryTime || "25-30 mins",
-            distance: calculatedDistance || actualRestaurant?.distance || apiRestaurant?.distance || actualRestaurant?.distanceFromUser || apiRestaurant?.distanceFromUser || "1.2 km",
+            distance: formatDistance(actualRestaurant?.distanceInKm ?? apiRestaurant?.distanceInKm) || calculatedDistance || formatDistance(actualRestaurant?.distanceFromUser ?? apiRestaurant?.distanceFromUser ?? actualRestaurant?.distance ?? apiRestaurant?.distance),
             location: formattedAddress,
             locationObject: locationObj, // Store full location object for reference
             image: normalizedCoverImages?.[0]?.url
@@ -591,8 +593,8 @@ function RestaurantDetailsContent() {
             debugWarn('? No restaurant ID available, searching for restaurant by name...')
             try {
               const searchVariants = zoneId
-                ? [{ limit: 100, zoneId: zoneId, _ts: Date.now() }, { limit: 100, _ts: Date.now() }]
-                : [{ limit: 100, _ts: Date.now() }]
+                  ? [{ limit: 100, zoneId: zoneId, ...userLocationParams, _ts: Date.now() }, { limit: 100, ...userLocationParams, _ts: Date.now() }]
+                  : [{ limit: 100, ...userLocationParams, _ts: Date.now() }]
 
               for (const searchParams of searchVariants) {
                 const searchResponse = await restaurantAPI.getRestaurants(searchParams, { noCache: true })
@@ -1061,13 +1063,7 @@ function RestaurantDetailsContent() {
       const distanceInKm = calculateDistance(userLat, userLng, restaurantLat, restaurantLng)
       let calculatedDistance = null
 
-      // Format distance: show 1 decimal place if >= 1km, otherwise show in meters
-      if (distanceInKm >= 1) {
-        calculatedDistance = `${distanceInKm.toFixed(1)} km`
-      } else {
-        const distanceInMeters = Math.round(distanceInKm * 1000)
-        calculatedDistance = `${distanceInMeters} m`
-      }
+      calculatedDistance = formatDistance(distanceInKm)
 
       // Only update if distance actually changed
       if (calculatedDistance !== prevDistanceRef.current) {

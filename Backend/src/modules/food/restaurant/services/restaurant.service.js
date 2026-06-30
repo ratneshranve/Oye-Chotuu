@@ -1481,7 +1481,45 @@ const toRestaurantSummary = (doc) => {
         rating: normalizeRatingValue(doc.rating),
         totalRatings: normalizeTotalRatingsValue(doc.totalRatings),
         pureVegRestaurant: Boolean(doc.pureVegRestaurant),
+        location: doc.location || null,
         slug: doc.slug || doc.restaurantNameNormalized || ''
+    };
+};
+
+const getRestaurantLatLng = (restaurant = {}) => {
+    const loc = restaurant.location || {};
+    const lat = toFiniteNumber(
+        loc.latitude ?? (Array.isArray(loc.coordinates) ? loc.coordinates[1] : undefined)
+    );
+    const lng = toFiniteNumber(
+        loc.longitude ?? (Array.isArray(loc.coordinates) ? loc.coordinates[0] : undefined)
+    );
+    if (lat === null || lng === null) return null;
+    return { lat, lng };
+};
+
+const haversineKm = (lat1, lng1, lat2, lng2) => {
+    const R = 6371;
+    const dLat = ((lat2 - lat1) * Math.PI) / 180;
+    const dLng = ((lng2 - lng1) * Math.PI) / 180;
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos((lat1 * Math.PI) / 180) *
+            Math.cos((lat2 * Math.PI) / 180) *
+            Math.sin(dLng / 2) *
+            Math.sin(dLng / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+};
+
+const attachDistanceInKm = (restaurant, userLat, userLng) => {
+    if (!restaurant || userLat === null || userLng === null) return restaurant;
+    const point = getRestaurantLatLng(restaurant);
+    if (!point) return restaurant;
+    const distanceInKm = haversineKm(userLat, userLng, point.lat, point.lng);
+    return {
+        ...restaurant,
+        distanceInKm: Number(distanceInKm.toFixed(2))
     };
 };
 
@@ -1581,7 +1619,8 @@ export const listApprovedRestaurants = async (query = {}) => {
         closingTime: 1,
         openDays: 1,
         slug: 1,
-        restaurantNameNormalized: 1
+        restaurantNameNormalized: 1,
+        location: 1
     };
 
     // Use $geoNear only when geo is explicitly needed (radius filter or nearest sorting).
@@ -1663,24 +1702,27 @@ export const listApprovedRestaurants = async (query = {}) => {
         FoodRestaurant.countDocuments(filter)
     ]);
 
-    const restaurants = (restaurantsRaw || []).map(toRestaurantSummary);
+    const restaurants = (restaurantsRaw || [])
+        .map((doc) => attachDistanceInKm(toRestaurantSummary(doc), lat, lng));
 
     return { restaurants, total, page, limit };
 };
 
-export const getApprovedRestaurantByIdOrSlug = async (idOrSlug) => {
+export const getApprovedRestaurantByIdOrSlug = async (idOrSlug, query = {}) => {
     const value = String(idOrSlug || '').trim();
     if (!value) return null;
+    const lat = toFiniteNumber(query.lat);
+    const lng = toFiniteNumber(query.lng);
 
     // ObjectId path
     if (/^[0-9a-fA-F]{24}$/.test(value)) {
         const doc = await FoodRestaurant.findOne({ _id: value, status: 'approved' }).lean();
         if (!doc) return null;
-        return {
+        return attachDistanceInKm({
             ...doc,
             rating: normalizeRatingValue(doc.rating),
             totalRatings: normalizeTotalRatingsValue(doc.totalRatings)
-        };
+        }, lat, lng);
     }
 
     // Slug path: use normalized field for index-friendly exact match.
@@ -1692,11 +1734,11 @@ export const getApprovedRestaurantByIdOrSlug = async (idOrSlug) => {
         restaurantNameNormalized
     }).lean();
     if (!doc) return null;
-    return {
+    return attachDistanceInKm({
         ...doc,
         rating: normalizeRatingValue(doc.rating),
         totalRatings: normalizeTotalRatingsValue(doc.totalRatings)
-    };
+    }, lat, lng);
 };
 
 export const listPublicOffers = async () => {

@@ -3,6 +3,7 @@ import { publicGetOnce, restaurantAPI, adminAPI } from "@food/api";
 import { foodImages } from "@food/constants/images";
 import { getRestaurantAvailabilityStatus } from "@food/utils/restaurantAvailability";
 import * as imgUtils from "@food/utils/imageUtils";
+import { formatDistance } from "@food/utils/distance";
 
 /**
  * Custom hook to manage all data fetching and filtering for the Food Module Home Page.
@@ -229,9 +230,7 @@ export const useFoodHomeData = ({
             cuisine: restaurant.cuisines?.[0] || "Multi-cuisine",
             rating: Number(restaurant.rating) || 0,
             deliveryTime: restaurant.estimatedDeliveryTime || "25-30 mins",
-            distance: restaurant.distanceInKm 
-              ? `${restaurant.distanceInKm} km` 
-              : (restaurant.distance ? String(restaurant.distance).includes("km") ? restaurant.distance : `${restaurant.distance} km` : `${(2 + Math.random()).toFixed(1)} km`),
+            distance: formatDistance(restaurant.distanceInKm ?? restaurant.distanceFromUser ?? restaurant.distance),
             featuredDish: restaurant.featuredDish || "Special Dish",
             featuredPrice: restaurant.featuredPrice || (restaurant.restaurantName === "Sayaji" ? "249" : "199"),
             image: allImages[0] || "",
