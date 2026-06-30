@@ -2,6 +2,7 @@ import express from "express";
 import { authMiddleware } from "../../../../core/auth/auth.middleware.js";
 import { requireRoles } from "../../../../core/roles/role.middleware.js";
 import { upload } from "../../../../middleware/upload.js";
+import { invalidateCache } from "../../../../middleware/cache.js";
 import {
   adjustSellerStockController,
   approveSellerReturnController,
@@ -42,6 +43,11 @@ const sellerProfileUpload = upload.fields([
   { name: "shopLicenseImage", maxCount: 1 },
 ]);
 
+const invalidateQuickStoresCache = async (_req, _res, next) => {
+  await invalidateCache("qc_stores:*");
+  next();
+};
+
 router.post("/auth/request-otp", requestSellerOtpController);
 router.post("/auth/verify-otp", verifySellerOtpController);
 
@@ -66,6 +72,7 @@ router.put(
   "/profile",
   ...sellerOnly,
   sellerProfileUpload,
+  invalidateQuickStoresCache,
   updateSellerProfileController,
 );
 router.post("/profile/test-push", ...sellerOnly, testSellerPushController);

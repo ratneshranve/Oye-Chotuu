@@ -118,6 +118,7 @@ import {
   reverseGeocode,
 } from "../controllers/location.controller.js";
 
+import { cacheResponse, invalidateCache } from "../../../middleware/cache.js";
 import { authMiddleware } from "../../../core/auth/auth.middleware.js";
 import { requireRoles } from "../../../core/roles/role.middleware.js";
 import { verifyAccessToken } from "../../../core/auth/token.util.js";
@@ -141,26 +142,46 @@ const optionalAuth = (req, res, next) => {
 const router = express.Router();
 const adminOnly = [authMiddleware, requireRoles("ADMIN", "SUB_ADMIN")];
 
+const invalidateQuickCategoriesCache = async (_req, _res, next) => {
+  await invalidateCache("qc_categories:*");
+  next();
+};
+
+const invalidateQuickHeroCache = async (_req, _res, next) => {
+  await invalidateCache("qc_hero:*");
+  next();
+};
+
+const invalidateQuickZonesCache = async (_req, _res, next) => {
+  await invalidateCache("qc_zones_public:*");
+  next();
+};
+
+const invalidateQuickBillingSettingsCache = async (_req, _res, next) => {
+  await invalidateCache("qc_billing_settings:*");
+  next();
+};
+
 router.get("/health", (_req, res) =>
   res.json({ success: true, module: "quick-commerce", status: "ok" }),
 );
 
 router.get("/home", getHomeData);
 router.get("/experience", getHomeData); // Bridge experience to home data for now
-router.get("/experience/hero", getHomeData); // Bridge hero to home data for now
+router.get("/experience/hero", cacheResponse(300, "qc_hero"), getHomeData); // Bridge hero to home data for now
 router.get("/offer-sections", getHomeData); // Bridge offer-sections
-router.get("/offers", getOffers);
+router.get("/offers", cacheResponse(300, "qc_offers"), getOffers);
 router.get("/coupons", getCoupons);
 router.post("/coupons/apply", applyCoupon);
-router.get("/categories", getCategories);
+router.get("/categories", cacheResponse(600, "qc_categories"), getCategories);
 router.get("/products", getProducts);
-router.get("/stores", getStores);
-router.get("/stores/:storeId", getStoreDetails);
+router.get("/stores", cacheResponse(300, "qc_stores"), getStores);
+router.get("/stores/:storeId", cacheResponse(300, "qc_stores"), getStoreDetails);
 router.get("/products/:productId/reviews", getProductReviews);
 router.post("/products/reviews", optionalAuth, submitProductReview);
 router.get("/products/:productId", getProductById);
-router.get("/zones/public", listPublicZones);
-router.get("/billing/settings", getPublicBillingSettings);
+router.get("/zones/public", cacheResponse(600, "qc_zones_public"), listPublicZones);
+router.get("/billing/settings", cacheResponse(600, "qc_billing_settings"), getPublicBillingSettings);
 
 // Location endpoints
 router.get("/location/geocode", geocodeAddress);
@@ -192,15 +213,17 @@ router.post(
   "/admin/categories",
   ...adminOnly,
   upload.single("image"),
+  invalidateQuickCategoriesCache,
   createCategory,
 );
 router.put(
   "/admin/categories/:categoryId",
   ...adminOnly,
   upload.single("image"),
+  invalidateQuickCategoriesCache,
   updateCategory,
 );
-router.delete("/admin/categories/:categoryId", ...adminOnly, removeCategory);
+router.delete("/admin/categories/:categoryId", ...adminOnly, invalidateQuickCategoriesCache, removeCategory);
 router.get("/admin/products", ...adminOnly, getAdminProducts);
 router.post(
   "/admin/products",
@@ -290,9 +313,9 @@ router.put(
 );
 router.get("/admin/zones", ...adminOnly, getAdminZones);
 router.get("/admin/zones/:zoneId", ...adminOnly, getAdminZoneById);
-router.post("/admin/zones", ...adminOnly, createAdminZone);
-router.patch("/admin/zones/:zoneId", ...adminOnly, updateAdminZone);
-router.delete("/admin/zones/:zoneId", ...adminOnly, deleteAdminZone);
+router.post("/admin/zones", ...adminOnly, invalidateQuickZonesCache, createAdminZone);
+router.patch("/admin/zones/:zoneId", ...adminOnly, invalidateQuickZonesCache, updateAdminZone);
+router.delete("/admin/zones/:zoneId", ...adminOnly, invalidateQuickZonesCache, deleteAdminZone);
 
 // Experience Sections Management
 router.get(
@@ -322,7 +345,7 @@ router.post(
 );
 
 router.get("/admin/experience/hero", ...adminOnly, getAdminHeroConfig);
-router.post("/admin/experience/hero", ...adminOnly, setAdminHeroConfig);
+router.post("/admin/experience/hero", ...adminOnly, invalidateQuickHeroCache, setAdminHeroConfig);
 
 // Offer Sections Management
 router.get("/admin/offer-sections", ...adminOnly, getAdminOfferSections);
@@ -378,7 +401,7 @@ router.get("/admin/seller-commissions/:sellerId/products", ...adminOnly, getSell
 router.put("/admin/seller-commissions/products/bulk", ...adminOnly, bulkUpdateProductCommission);
 router.put("/admin/seller-commissions/products/:productId", ...adminOnly, updateProductCommission);
 router.get("/admin/fee-settings", ...adminOnly, getFeeSettings);
-router.put("/admin/fee-settings", ...adminOnly, createOrUpdateFeeSettings);
+router.put("/admin/fee-settings", ...adminOnly, invalidateQuickBillingSettingsCache, createOrUpdateFeeSettings);
 router.get(
   "/admin/delivery/commission-rules",
   ...adminOnly,
