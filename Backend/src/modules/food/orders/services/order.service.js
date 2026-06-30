@@ -45,6 +45,7 @@ const ORDER_ID_PREFIX = "FOD-";
 const ORDER_ID_LENGTH = 6;
 const USER_CANCEL_FULL_REFUND_WINDOW_MS = 30 * 1000;
 const USER_CANCEL_EDIT_WINDOW_MS = 60 * 1000;
+const MAX_ORDER_DELIVERY_DISTANCE_KM = 60;
 
 /**
  * Fire-and-forget BullMQ enqueue for order lifecycle events.
@@ -1328,6 +1329,51 @@ const resolveSourceZone = async (source) => {
   return zones.find((zone) => isPointInPolygon(coords.lat, coords.lng, zone.coordinates)) || null;
 };
 
+async function resolveOrderDeliveryZone({ dtoZoneId, sources = [], pickupPoints = [] } = {}) {
+  const explicitZoneId =
+    dtoZoneId && mongoose.Types.ObjectId.isValid(String(dtoZoneId))
+      ? dtoZoneId
+      : sources.map(getSourceZoneId).find((zoneId) => zoneId && mongoose.Types.ObjectId.isValid(String(zoneId)));
+
+  if (explicitZoneId) {
+    const zone = await FoodZone.findOne({ _id: explicitZoneId, isActive: true }).lean();
+    if (zone) return zone;
+  }
+
+  const pickupPoint = pickupPoints.map((point) => getPointLatLng(point.location)).find(Boolean);
+  if (!pickupPoint) return null;
+
+  const zones = await FoodZone.find({ isActive: true }).lean();
+  return zones.find((zone) => isPointInPolygon(pickupPoint.lat, pickupPoint.lng, zone.coordinates)) || null;
+}
+
+async function validateOrderDeliveryLocation({ deliveryAddress, pickupPoints = [], sources = [], dtoZoneId } = {}) {
+  const customerPoint = getPointLatLng(deliveryAddress?.location);
+  if (!customerPoint) {
+    throw new ValidationError("Please select a valid delivery location on the map before placing the order.");
+  }
+
+  const zone = await resolveOrderDeliveryZone({ dtoZoneId, sources, pickupPoints });
+  if (zone && !isPointInPolygon(customerPoint.lat, customerPoint.lng, zone.coordinates)) {
+    const zoneName = zone.serviceLocation || zone.zoneName || zone.name || "service area";
+    throw new ValidationError(`Delivery location is outside ${zoneName}. Please select an address inside the service area.`);
+  }
+
+  const distances = pickupPoints
+    .map((point) => {
+      const pickupPoint = getPointLatLng(point.location);
+      return pickupPoint
+        ? haversineKm(pickupPoint.lat, pickupPoint.lng, customerPoint.lat, customerPoint.lng)
+        : null;
+    })
+    .filter((distance) => Number.isFinite(distance));
+
+  const farthestDistance = distances.length ? Math.max(...distances) : null;
+  if (farthestDistance !== null && farthestDistance > MAX_ORDER_DELIVERY_DISTANCE_KM) {
+    throw new ValidationError("Delivery location is too far from the pickup location. Please select the correct delivery address.");
+  }
+}
+
 const hasFreshRiderLocation = (partner) => {
   if (!Number.isFinite(Number(partner?.lastLat)) || !Number.isFinite(Number(partner?.lastLng))) return false;
   if (!partner?.lastLocationAt) return false;
@@ -2025,6 +2071,12 @@ export async function createOrder(userId, dto) {
   const isCash = paymentMethod === "cash";
   const isWallet = paymentMethod === "wallet";
   const pickupPoints = buildPickupPointsFromItems(items, sourceMap);
+  await validateOrderDeliveryLocation({
+    deliveryAddress,
+    pickupPoints,
+    sources: [...sourceMap.values()],
+    dtoZoneId: dto.zoneId,
+  });
   const combinedPickup = await evaluateCombinedPickupEligibility(
     pickupPoints,
     deliveryAddress,
