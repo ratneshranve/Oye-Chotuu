@@ -5131,8 +5131,19 @@ export async function getSidebarBadges() {
             FoodDeliveryPartner.countDocuments({ status: 'pending' }),
             FoodItem.countDocuments({ status: 'pending' }),
             FoodAddon.countDocuments({ status: 'pending' }),
-            FoodOrder.countDocuments({ orderStatus: { $in: ['created', 'placed'] } }),
-            FoodOrder.countDocuments({ paymentMethod: 'offline_payment', orderStatus: { $in: ['created', 'placed'] } }),
+            FoodOrder.countDocuments({
+                orderType: { $in: ['food', 'mixed'] },
+                orderStatus: { $in: ['created', 'placed'] },
+                $or: [
+                    { 'payment.method': { $in: ['cash', 'wallet'] } },
+                    { 'payment.status': { $in: ['paid', 'authorized', 'captured', 'settled', 'refunded'] } }
+                ]
+            }),
+            FoodOrder.countDocuments({
+                orderType: { $in: ['food', 'mixed'] },
+                'payment.method': 'cash',
+                orderStatus: { $in: ['created', 'placed'] }
+            }),
             FoodRestaurantWithdrawal.countDocuments({ status: 'pending' }),
             FoodDeliveryWithdrawal.countDocuments({ status: 'pending' }),
             FoodSupportTicket.countDocuments({ status: 'open', userId: { $exists: true }, restaurantId: { $exists: false } }),

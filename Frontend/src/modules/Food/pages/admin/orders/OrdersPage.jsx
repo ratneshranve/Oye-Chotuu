@@ -461,8 +461,10 @@ export default function OrdersPage({ statusKey = "all" }) {
       const cancellationElapsedMs =
         createdAtMs !== null && cancelledAtMs !== null ? cancelledAtMs - createdAtMs : null
       let displayStatus = order.orderStatus
-      if (!backendStatus || backendStatus === "created" || backendStatus === "confirmed") {
+      if (!backendStatus || backendStatus === "created" || backendStatus === "placed") {
         displayStatus = "Pending"
+      } else if (backendStatus === "confirmed") {
+        displayStatus = "Accepted"
       } else if (backendStatus === "preparing" || backendStatus === "ready_for_pickup") {
         displayStatus = "Processing"
       } else if (backendStatus === "picked_up") {
@@ -1023,5 +1025,4 @@ export default function OrdersPage({ statusKey = "all" }) {
     </div>
   )
 }
-
 
